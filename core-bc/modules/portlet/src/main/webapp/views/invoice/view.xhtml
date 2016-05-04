@@ -9,14 +9,36 @@
 	<h:head />
 
 	<h:body>
+        <h1>Database content.</h1>
 
-		<h:outputText value="Hello world!" />
+        <ui:fragment rendered="#{not empty viewBean.suppliers}">
+            <h2>Supplier list:</h2>
+            <ul>
+                <ui:repeat id="suppliers" value="#{viewBean.suppliers}" var="supplier">
+                    <li><h:outputText id="supplier" value="#{supplier.name}" /></li>
+                </ui:repeat>
+            </ul>
+        </ui:fragment>
+        <ui:fragment rendered="#{empty viewBean.suppliers}">
+            <h2>No suppliers in the database.</h2>
+        </ui:fragment>
 
-        <ul>
-            <ui:repeat id="suppliers" value="#{viewBean.suppliers}" var="supplier">
-                <li><h:outputText id="supplier" value="#{supplier.name}" /></li>
-            </ui:repeat>
-        </ul>
+        <ui:fragment rendered="#{not empty viewBean.invoices}">
+            <h2>Invoices:</h2>
+
+            <ul>
+                <ui:repeat id="invoices" value="#{viewBean.invoices}" var="invoice">
+                    <li>
+                        <h:link value="#{invoice.toString()}" outcome="viewInvoice">
+                            <f:param name="invoiceId" value="#{invoice.id}" />
+                        </h:link>
+                    </li>
+                </ui:repeat>
+            </ul>
+        </ui:fragment>
+        <ui:fragment rendered="#{empty viewBean.invoices}">
+            <h2>No invoices in the database.</h2>
+        </ui:fragment>
 
 	</h:body>
 </f:view>

@@ -4,6 +4,7 @@
              version="2.0">
 
     <persistence-unit name="glasogonbidrag">
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
 
         <properties>

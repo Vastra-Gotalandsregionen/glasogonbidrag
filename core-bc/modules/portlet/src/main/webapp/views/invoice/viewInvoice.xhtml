@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+        <h1>Invoice: #{viewInvoiceBean.invoice.verificationNumber}</h1>
+
+        <table class="table table-bordered">
+            <tr>
+                <th scope="row">Invoice Date</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.invoiceDate}" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Verification Number</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.verificationNumber}" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Invoice Number</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.invoiceNumber}" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">VAT</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.vat}" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Amount</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.amount}" />
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Supplier</th>
+                <td>
+                    <h:outputText value="#{viewInvoiceBean.invoice.supplier.name}" />
+                </td>
+            </tr>
+        </table>
+
+        <h:link outcome="view" value="Back"/>
+    </h:body>
+</f:view>
