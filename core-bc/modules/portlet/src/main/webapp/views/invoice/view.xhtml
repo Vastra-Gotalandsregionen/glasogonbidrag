@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:bridge="http://liferay.com/faces/bridge">
+
+	<h:head />
+
+	<h:body>
+
+		<h:outputText value="Hello world!" />
+
+        <ul>
+            <ui:repeat id="suppliers" value="#{viewBean.suppliers}" var="supplier">
+                <li><h:outputText id="supplier" value="#{supplier.name}" /></li>
+            </ui:repeat>
+        </ul>
+
+	</h:body>
+</f:view>
