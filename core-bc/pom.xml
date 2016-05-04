@@ -33,6 +33,7 @@ Template version: 1.5
   <modules>
     <module>composites/types</module>
     <module>composites/svc</module>
+    <module>modules/portlet</module>
   </modules>
 
 
