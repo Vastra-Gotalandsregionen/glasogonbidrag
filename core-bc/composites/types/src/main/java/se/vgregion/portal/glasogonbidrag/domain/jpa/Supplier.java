@@ -1,6 +1,8 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -16,7 +18,7 @@ import javax.persistence.Table;
 public class Supplier {
 
     @Id
-    public String name;
+    private String name;
 
     public Supplier() {
     }

@@ -1,17 +1,23 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -26,7 +32,9 @@ import java.util.Date;
                 name = "glasogonbidrag.invoice.findWithParts",
                 query = "SELECT i " +
                         "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
+                        "LEFT JOIN FETCH i.adjustment " +
                         "WHERE i.id = :id")
 })
 public class Invoice {
@@ -62,8 +70,15 @@ public class Invoice {
 
     private int amount;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    private List<Grant> grants;
+
     @ManyToOne
     private Supplier supplier;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice")
+    private GrantAdjustment adjustment;
 
     public Invoice() {
 
@@ -141,12 +156,28 @@ public class Invoice {
         this.amount = amount;
     }
 
+    public List<Grant> getGrants() {
+        return grants;
+    }
+
+    public void setGrants(List<Grant> grants) {
+        this.grants = grants;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public GrantAdjustment getAdjustment() {
+        return adjustment;
+    }
+
+    public void setAdjustment(GrantAdjustment adjustment) {
+        this.adjustment = adjustment;
     }
 
     @Override
@@ -163,5 +194,23 @@ public class Invoice {
     @Override
     public int hashCode() {
         return verificationNumber.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", companyId=" + companyId +
+                ", groupId=" + groupId +
+                ", userId=" + userId +
+                ", invoiceDate=" + invoiceDate +
+                ", verificationNumber='" + verificationNumber + '\'' +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", vat=" + vat +
+                ", amount=" + amount +
+                ", grants=" + grants +
+                ", supplier=" + supplier +
+                ", adjustment=" + adjustment +
+                '}';
     }
 }
