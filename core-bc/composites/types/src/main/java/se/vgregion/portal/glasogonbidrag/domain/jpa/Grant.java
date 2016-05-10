@@ -2,6 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Grant {
 
     private int amount;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver")
     private Beneficiary beneficiary;
 

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class Beneficiary {
     @JoinColumn(name = "receiver", referencedColumnName = "id")
     private List<Grant> grants;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private Identification identification;
+
     public Beneficiary() {
 
     }
@@ -84,6 +88,14 @@ public class Beneficiary {
 
     public void setGrants(List<Grant> grants) {
         this.grants = grants;
+    }
+
+    public Identification getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(Identification identification) {
+        this.identification = identification;
     }
 
     @Override
