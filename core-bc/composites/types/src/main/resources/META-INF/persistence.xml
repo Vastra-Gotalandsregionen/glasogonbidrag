@@ -1,0 +1,22 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="glasogonbidrag">
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Grant</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Identification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification</class>
+
+        <properties>
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+        </properties>
+    </persistence-unit>
+
+</persistence>

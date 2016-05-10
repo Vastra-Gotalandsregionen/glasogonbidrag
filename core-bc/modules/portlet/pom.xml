@@ -125,6 +125,12 @@ Template version: 1.5
             <artifactId>ehcache</artifactId>
             <version>2.9.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>util-slf4j</artifactId>
+            <version>6.2.5</version>
+        </dependency>
     </dependencies>
 
     <build>
