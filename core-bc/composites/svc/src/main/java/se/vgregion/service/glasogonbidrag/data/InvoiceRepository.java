@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,6 +38,14 @@ public class InvoiceRepository {
     public List<Invoice> findAll() {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAll", Invoice.class);
+
+        return q.getResultList();
+    }
+
+    public List<Invoice> findAllBySupplier(Supplier supplier) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findAllBySupplier", Invoice.class);
+        q.setParameter("supplier", supplier);
 
         return q.getResultList();
     }

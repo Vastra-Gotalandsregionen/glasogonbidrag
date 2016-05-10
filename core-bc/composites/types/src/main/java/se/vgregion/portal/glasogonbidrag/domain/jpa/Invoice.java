@@ -26,16 +26,22 @@ import java.util.List;
 @Table(name = "vgr_glasogonbidrag_invoice")
 @NamedQueries({
         @NamedQuery(
-                name = "glasogonbidrag.invoice.findAll",
-                query = "SELECT i FROM Invoice i ORDER BY i.id ASC"),
-        @NamedQuery(
                 name = "glasogonbidrag.invoice.findWithParts",
                 query = "SELECT i " +
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
                         "LEFT JOIN FETCH i.adjustment " +
-                        "WHERE i.id = :id")
+                        "WHERE i.id = :id"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAll",
+                query = "SELECT i FROM Invoice i ORDER BY i.invoiceDate ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllBySupplier",
+                query = "SELECT i FROM Invoice i " +
+                        "WHERE i.supplier = :supplier " +
+                        "ORDER BY i.invoiceDate ASC")
 })
 public class Invoice {
 
