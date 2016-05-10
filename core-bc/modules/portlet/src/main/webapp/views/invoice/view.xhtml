@@ -9,27 +9,54 @@
 	<h:head />
 
 	<h:body>
-        <h1>Database content.</h1>
+        <div class="row-fluid">
+            <div class="span12">
+                <h1>Database content.</h1>
+            </div>
+        </div>
 
+        <h2>Suppliers</h2>
         <ui:fragment rendered="#{not empty viewBean.suppliers}">
-            <h2>Supplier list:</h2>
             <ul>
                 <ui:repeat id="suppliers" value="#{viewBean.suppliers}" var="supplier">
-                    <li><h:outputText id="supplier" value="#{supplier.name}" /></li>
+                    <li>
+                        <h:link value="#{supplier.name}" outcome="viewSupplier">
+                            <f:param name="supplierName" value="#{supplier.name}" />
+                        </h:link>
+                    </li>
                 </ui:repeat>
             </ul>
         </ui:fragment>
         <ui:fragment rendered="#{empty viewBean.suppliers}">
-            <h2>No suppliers in the database.</h2>
+            <div class="alert alert-warning">
+                No suppliers in the database.
+            </div>
         </ui:fragment>
 
-        <ui:fragment rendered="#{not empty viewBean.invoices}">
-            <h2>Invoices:</h2>
+        <h2>Beneficiaries</h2>
+        <ui:fragment rendered="#{not empty viewBean.beneficiaries}">
+            <ul>
+                <ui:repeat id="beneficiaries" value="#{viewBean.beneficiaries}" var="beneficiary">
+                    <li>
+                        <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})" outcome="viewBeneficiary">
+                            <f:param name="beneficiaryId" value="#{beneficiary.id}" />
+                        </h:link>
+                    </li>
+                </ui:repeat>
+            </ul>
+        </ui:fragment>
+        <ui:fragment rendered="#{empty viewBean.beneficiaries}">
+            <div class="alert alert-warning">
+                No beneficiareies in the database.
+            </div>
+        </ui:fragment>
 
+        <h2>Invoices</h2>
+        <ui:fragment rendered="#{not empty viewBean.invoices}">
             <ul>
                 <ui:repeat id="invoices" value="#{viewBean.invoices}" var="invoice">
                     <li>
-                        <h:link value="#{invoice.toString()}" outcome="viewInvoice">
+                        <h:link value="#{invoice.invoiceNumber} - #{invoice.verificationNumber}" outcome="viewInvoice">
                             <f:param name="invoiceId" value="#{invoice.id}" />
                         </h:link>
                     </li>
@@ -37,8 +64,20 @@
             </ul>
         </ui:fragment>
         <ui:fragment rendered="#{empty viewBean.invoices}">
-            <h2>No invoices in the database.</h2>
+            <div class="alert alert-warning">
+                No invoices in the database.
+            </div>
         </ui:fragment>
+
+        <h:form>
+            <h2>Controls:</h2>
+            <div class="btn-group">
+                <h:commandButton class="btn" action="#{viewBean.insertSupplier}" value=" supplier" />
+                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary1}" value="Beneficiary 1" />
+                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary2}" value="Beneficiary 2" />
+                <h:commandButton class="btn" action="#{viewBean.insertInvoice}" value="Invoice" />
+            </div>
+        </h:form>
 
 	</h:body>
 </f:view>
