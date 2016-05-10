@@ -9,6 +9,9 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Identification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification</class>
 
         <properties>
             <property name="hibernate.format_sql" value="true" />

@@ -7,12 +7,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "identity_type")
 @Table(name = "vgr_glasogonbidrag_identification")
+@NamedQueries({
+        @NamedQuery(
+                name = "glasogonbidrag.identification.findByPersonalNumber",
+                query = "SELECT i FROM PersonalIdentification i " +
+                        "WHERE i.number = :number"),
+        @NamedQuery(
+                name = "glasogonbidrag.identification.findByLMANumber",
+                query = "SELECT i FROM LMAIdentification i " +
+                        "WHERE i.number = :number")
+})
 public abstract class Identification {
 
     @Id

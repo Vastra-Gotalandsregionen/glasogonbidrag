@@ -23,6 +23,11 @@ import java.util.List;
                         "LEFT JOIN FETCH b.grants " +
                         "WHERE b.id = :id"),
         @NamedQuery(
+                name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
+                query = "SELECT b FROM Beneficiary b " +
+                        "WHERE b.identification = :id"),
+
+        @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAll",
                 query = "SELECT b FROM Beneficiary b " +
                         "ORDER BY b.id ASC"),
@@ -34,6 +39,7 @@ import java.util.List;
                 name = "glasogonbidrag.beneficiary.findAllOrderByLastName",
                 query = "SELECT b FROM Beneficiary b " +
                         "ORDER BY b.lastName, b.firstName ASC"),
+
 })
 public class Beneficiary {
 
