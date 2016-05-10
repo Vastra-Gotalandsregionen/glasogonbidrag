@@ -2,7 +2,7 @@ package se.vgregion.service.glasogonbidrag.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 
 import javax.persistence.EntityManager;
@@ -13,8 +13,9 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-@Service
+@Repository
 public class InvoiceRepository {
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(InvoiceRepository.class);
 

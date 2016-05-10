@@ -2,7 +2,7 @@ package se.vgregion.service.glasogonbidrag.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 
 import javax.persistence.EntityManager;
@@ -13,16 +13,17 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-@Service
+@Repository
 public class SupplierRepository {
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SupplierRepository.class);
 
     @PersistenceContext
     private EntityManager em;
 
-    public Supplier find(Long id) {
-        return em.find(Supplier.class, id);
+    public Supplier find(String name) {
+        return em.find(Supplier.class, name);
     }
 
     public List<Supplier> findAll() {
