@@ -3,6 +3,7 @@ package se.vgregion.glasogonbidrag.backingbean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.data.InvoiceRepository;
 
@@ -18,6 +19,9 @@ public class ViewInvoiceBackingBean {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private FacesUtil util;
+
     private Invoice invoice;
 
     public Invoice getInvoice() {
@@ -28,14 +32,7 @@ public class ViewInvoiceBackingBean {
     protected void init() {
         System.out.println("ViewInvoiceBackingBean - init");
 
-        ExternalContext externalContext =
-                FacesContext.getCurrentInstance().getExternalContext();
-
-        Map<String, String> parameterMap =
-                (Map<String, String>)externalContext.getRequestParameterMap();
-        Long id = Long.parseLong(parameterMap.get("invoiceId"));
-
-        System.out.println("ViewInvoiceBackingBean - find invoice: " + id);
+        Long id = util.fetchId("invoiceId");
 
         invoice = invoiceRepository.findWithParts(id);
     }
