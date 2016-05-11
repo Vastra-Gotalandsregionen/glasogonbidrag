@@ -34,12 +34,6 @@ Template version: 1.5
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>util-slf4j</artifactId>
-            <version>6.2.5</version>
-        </dependency>
     </dependencies>
 
 </project>

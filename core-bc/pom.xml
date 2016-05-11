@@ -34,8 +34,7 @@ Template version: 1.5
     <module>composites/types</module>
     <module>composites/svc</module>
     <module>modules/portlet</module>
+    <module>modules/intsvc</module>
   </modules>
-
-
 
 </project>

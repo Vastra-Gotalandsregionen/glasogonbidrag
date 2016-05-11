@@ -13,7 +13,7 @@ Template version: 1.5
 
     <parent>
         <groupId>se.vgregion.glasogonbidrag</groupId>
-        <artifactId>glasogonbidrag-system</artifactId>
+        <artifactId>glasogonbidrag-core-bc</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>

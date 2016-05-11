@@ -102,12 +102,6 @@
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>util-slf4j</artifactId>
-            <version>6.2.5</version>
-        </dependency>
     </dependencies>
 
 </project>
