@@ -3,7 +3,6 @@ package se.vgregion.glasogonbidrag.backingbean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
@@ -11,14 +10,14 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.data.BeneficiaryRepository;
-import se.vgregion.service.glasogonbidrag.data.IdentificationRepository;
-import se.vgregion.service.glasogonbidrag.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.data.SupplierRepository;
-import se.vgregion.service.glasogonbidrag.service.BeneficiaryService;
-import se.vgregion.service.glasogonbidrag.service.IdentificationService;
-import se.vgregion.service.glasogonbidrag.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.service.SupplierService;
+import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
+import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
+import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.api.service.IdentificationService;
+import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
+import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -89,7 +88,7 @@ public class ViewBackingBean {
         System.out.println("ViewBackingBean - insertBeneficiary1");
 
         PersonalIdentification i1 = new PersonalIdentification();
-        i1.setNumber("11996977-9927");
+        i1.setNumber("11294377-1834");
 
         Beneficiary b1 = new Beneficiary();
         b1.setFirstName("Ethel");
@@ -124,7 +123,7 @@ public class ViewBackingBean {
 
         Supplier supplier = supplierRepository.find("Specsavers");
 
-        Identification id1 = identificationRepository.findByPersonalNumber("11996977-9927");
+        Identification id1 = identificationRepository.findByPersonalNumber("11294377-1834");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Identification id2 = identificationRepository.findByLMANumber("50-008920/4");

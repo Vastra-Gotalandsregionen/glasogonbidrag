@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.service.glasogonbidrag.data.BeneficiaryRepository;
+import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 
 import javax.annotation.PostConstruct;
 

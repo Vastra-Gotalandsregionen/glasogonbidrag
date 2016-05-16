@@ -1,10 +1,11 @@
-package se.vgregion.service.glasogonbidrag.data;
+package se.vgregion.service.glasogonbidrag.internal.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
+import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,10 +16,10 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 @Repository
-public class BeneficiaryRepository {
+public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(BeneficiaryRepository.class);
+            LoggerFactory.getLogger(BeneficiaryRepositoryImpl.class);
 
     @PersistenceContext
     private EntityManager em;
