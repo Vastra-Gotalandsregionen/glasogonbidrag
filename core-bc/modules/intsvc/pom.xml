@@ -102,7 +102,7 @@ Template version: 1.5
     </dependencies>
 
     <build>
-        <finalName>glasogonbidrag-my-goal-service</finalName>
+        <finalName>glasogonbidrag-my-goal-web</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
