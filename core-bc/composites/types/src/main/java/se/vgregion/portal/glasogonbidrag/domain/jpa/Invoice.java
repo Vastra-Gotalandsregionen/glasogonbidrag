@@ -51,14 +51,22 @@ public class Invoice {
 
     // Liferay Related
 
-    @Column(name = "company_id")
-    private long companyId;
+    @Column(name = "user_id")
+    private long userId;
 
     @Column(name = "group_id")
     private long groupId;
 
-    @Column(name = "user_id")
-    private long userId;
+    @Column(name = "company_id")
+    private long companyId;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Column(name = "modified_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedDate;
 
     // Invoice Specific
 
@@ -98,12 +106,12 @@ public class Invoice {
         this.id = id;
     }
 
-    public long getCompanyId() {
-        return companyId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setCompanyId(long companyId) {
-        this.companyId = companyId;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public long getGroupId() {
@@ -114,12 +122,28 @@ public class Invoice {
         this.groupId = groupId;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getCompanyId() {
+        return companyId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Date getInvoiceDate() {

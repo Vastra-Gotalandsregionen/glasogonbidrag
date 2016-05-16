@@ -14,12 +14,13 @@
           http://www.springframework.org/schema/cache
           http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+    <context:annotation-config/>
+
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.api.data"/>
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.api.service"/>
-    
+
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.internal.data"/>
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.internal.service"/>
 
-    <context:annotation-config/>
 
 </beans>

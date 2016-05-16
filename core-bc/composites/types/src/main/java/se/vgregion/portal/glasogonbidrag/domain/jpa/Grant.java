@@ -8,21 +8,59 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
- *
+ * @author Martin Lind - Monator Technologies AB
  */
 @Entity
 @Table(name = "vgr_glasogonbidrag_grant")
+@NamedQueries({
+        @NamedQuery(
+                name = "glasogonbidrag.grant.findByUser",
+                query = "SELECT g " +
+                        "FROM Grant g " +
+                        "WHERE g.userId = :user " +
+                        "ORDER BY g.createDate"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.grant.currentProgressByUserAndDate",
+                query = "SELECT SUM(g.amount) " +
+                        "FROM Grant g " +
+                        "WHERE g.userId = :user " +
+                        "AND DATE_TRUNC('day', g.createDate) = :date")
+})
 public class Grant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Liferay Related
+
+    @Column(name = "user_id")
+    private long userId;
+
+    @Column(name = "group_id")
+    private long groupId;
+
+    @Column(name = "company_id")
+    private long companyId;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Column(name = "modified_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedDate;
+
+    // Grant Specific
 
     @Column(name = "delivery_date")
     @Temporal(TemporalType.DATE)
