@@ -23,6 +23,17 @@ Template version: 1.5
     <name>${project.artifactId}</name>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>glasogonbidrag-core-bc-composite-svc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>glasogonbidrag-core-bc-composite-types</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -61,7 +72,7 @@ Template version: 1.5
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>2.3.0</version>
+            <version>3.1.6</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -102,7 +113,7 @@ Template version: 1.5
     </dependencies>
 
     <build>
-        <finalName>glasogonbidrag-my-goal-web</finalName>
+        <finalName>glasogonbidrag-user-progress-web</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>

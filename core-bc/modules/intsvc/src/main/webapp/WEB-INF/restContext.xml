@@ -11,33 +11,25 @@
             http://www.springframework.org/schema/security
             http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <import resource="classpath:*/applicationContext.xml" />
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
     <jaxrs:server id="activationService" address="/">
+
         <jaxrs:serviceBeans>
-            <ref bean="myGoalRestService" />
+            <ref bean="userProgressBean" />
         </jaxrs:serviceBeans>
+
         <jaxrs:providers>
             <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
         </jaxrs:providers>
+
     </jaxrs:server>
 
-    <security:http>
-        <security:http-basic />
-    </security:http>
+    <import resource="classpath*:/databaseContext.xml" />
+    <import resource="classpath*:/serviceContext.xml" />
 
-    <security:global-method-security secured-annotations="enabled" />
-
-    <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <security:user name="restuser" password="restuser" authorities="ROLE_RESTCLIENT" />
-            </security:user-service>
-        </security:authentication-provider>
-    </security:authentication-manager>
+    <bean id="userProgressBean" class="se.vgregion.glasogonbidrag.rest.UserProgressRestService" />
 
 </beans>
