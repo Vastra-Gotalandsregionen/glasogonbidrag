@@ -5,12 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import java.util.Map;
 
 @Component(value = "viewInvoiceBean")
 @Scope(value = "request")
