@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<f:view
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:bridge="http://liferay.com/faces/bridge"
+		xmlns:portlet="http://java.sun.com/portlet_2_0"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+>
+
+	<h:head />
+	<h:body>
+
+		<div class="row-fluid">
+
+			<div class="span3">
+				<div class="dummy hide"></div>
+			</div>
+
+			<div class="span6">
+
+				<h:form id="form" pt:data-focus="true">
+
+					<div class="box">
+
+						<div class="field-row field-row-2">
+							<div class="field-element inline">
+								<h:outputLabel for="voucherNumber" value="Verifikationsnr:" />
+								<h:inputText id="voucherNumber" pt:placeholder="Skriv in verifikationsnr..." pt:autofocus="true" />
+							</div>
+
+							<div class="field-element inline">
+								<h:outputLabel for="supplier" value="Leverantör:" />
+
+								<select id="supplier" name="supplier" class="js-select-replace" data-placeholder="Väj leverantör">
+									<option value="-1"></option>
+									<option value="0">Synsam Alfa</option>
+									<option value="1">Synsam Beta</option>
+									<option value="3">Synsam Gamma</option>
+									<option value="4">Synsam Delta</option>
+									<option value="5">Specsavers Alfa</option>
+									<option value="6">Specsavers Beta</option>
+									<option value="7">Specsavers Gamma</option>
+									<option value="8">Specsavers Delta</option>
+									<option value="9">Wasaoptik</option>
+									<option value="10">Direktoptik</option>
+									<option value="11">Hendéns</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="field-row field-row-2">
+							<div class="field-element inline">
+								<h:outputLabel for="invoiceNumber" value="Fakturanr:" />
+								<h:inputText id="invoiceNumber" pt:placeholder="Fakturanr eller meddelande..."  />
+							</div>
+
+							<div class="field-element inline">
+								<h:outputLabel for="invoiceAmountIncludingVAT" value="Belopp inkl moms:" />
+								<h:inputText id="invoiceAmountIncludingVAT" pt:placeholder="Fakturabelopp inkl moms"  />
+							</div>
+						</div>
+
+						<div class="button-row">
+							<h:commandButton id="submitButton" value="Registrera faktura" styleClass="primary" action="#{registerInvoiceBackingBean.submitInvoiceRegistration}" />
+							<h:commandButton id="cancelButton" value="Avbryt" styleClass="cancel" action="#{registerInvoiceBackingBean.cancelInvoiceRegistration}" />
+						</div>
+
+					</div>
+
+
+				</h:form>
+
+			</div>
+
+			<div class="span3">
+				<div class="dummy hide"></div>
+			</div>
+
+
+		</div>
+
+	</h:body>
+</f:view>
