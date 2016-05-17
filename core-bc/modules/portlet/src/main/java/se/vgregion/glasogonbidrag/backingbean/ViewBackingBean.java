@@ -216,7 +216,7 @@ public class ViewBackingBean {
     }
 
     public String addGrant1() {
-        Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
+        Identification id1 = identificationRepository.findByPersonalNumber("67652979-0773");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
