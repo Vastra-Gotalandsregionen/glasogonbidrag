@@ -142,15 +142,19 @@ public class Beneficiary {
 
         Beneficiary that = (Beneficiary) o;
 
-        if (!firstName.equals(that.firstName)) return false;
-        return lastName.equals(that.lastName);
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
+            return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
+            return false;
+        return identification.equals(that.identification);
 
     }
 
     @Override
     public int hashCode() {
-        int result = firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + identification.hashCode();
         return result;
     }
 
@@ -158,8 +162,13 @@ public class Beneficiary {
     public String toString() {
         return "Beneficiary{" +
                 "id=" + id +
+                ", createDate=" + createDate +
+                ", modifiedDate=" + modifiedDate +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", grants=" + grants +
+                ", identification=" + identification +
                 '}';
     }
+
 }

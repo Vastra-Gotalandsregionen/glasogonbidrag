@@ -33,10 +33,29 @@ import java.util.List;
                         "LEFT JOIN FETCH i.supplier " +
                         "LEFT JOIN FETCH i.adjustment " +
                         "WHERE i.id = :id"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findByVerificationNumber",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
+                        "LEFT JOIN FETCH i.supplier " +
+                        "LEFT JOIN FETCH i.adjustment " +
+                        "WHERE i.verificationNumber = :number"),
 
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAll",
-                query = "SELECT i FROM Invoice i ORDER BY i.invoiceDate ASC"),
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "ORDER BY i.invoiceDate ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllByInvoiceNumber",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
+                        "LEFT JOIN FETCH i.supplier " +
+                        "LEFT JOIN FETCH i.adjustment " +
+                        "WHERE i.invoiceNumber = :number " +
+                        "ORDER BY i.invoiceDate ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllBySupplier",
                 query = "SELECT i FROM Invoice i " +
@@ -192,6 +211,14 @@ public class Invoice {
 
     public void setGrants(List<Grant> grants) {
         this.grants = grants;
+    }
+
+    public void addGrant(Grant grant) {
+        grants.add(grant);
+    }
+
+    public void removeGrant(Grant grant) {
+        grants.remove(grant);
     }
 
     public Supplier getSupplier() {

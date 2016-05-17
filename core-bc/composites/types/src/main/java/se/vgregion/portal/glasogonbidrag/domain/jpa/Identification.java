@@ -48,16 +48,19 @@ public abstract class Identification {
 
         Identification that = (Identification) o;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        return getString() != null ?
+                getString().equals(that.getString()) :
+                that.getString() == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return getString() != null ? getString().hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return getString();
     }
+
 }

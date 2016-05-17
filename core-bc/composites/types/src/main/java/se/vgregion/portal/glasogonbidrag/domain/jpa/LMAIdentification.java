@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = "vgr_glasogonbidrag_lma_identification")
 public class LMAIdentification extends Identification {
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String number;
 
     public String getNumber() {
@@ -44,4 +44,5 @@ public class LMAIdentification extends Identification {
         result = 31 * result + (number != null ? number.hashCode() : 0);
         return result;
     }
+
 }

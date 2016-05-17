@@ -1,0 +1,11 @@
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Synsam Alfa', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Synsam Beta', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Synsam Gamma', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Synsam Delta', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Specsavers Alfa', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Specsavers Beta', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Specsavers Gamma', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Specsavers Delta', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Wasaoptik', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Direktoptik', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Hendéns', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
