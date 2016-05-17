@@ -1,5 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,14 @@ import se.vgregion.service.glasogonbidrag.api.service.IdentificationService;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -50,9 +55,6 @@ public class ViewBackingBean {
 
     @Autowired
     private InvoiceService invoiceService;
-
-    @Autowired
-    private IdentificationService identificationService;
 
     @Autowired
     private BeneficiaryService beneficiaryService;
@@ -95,8 +97,7 @@ public class ViewBackingBean {
         b1.setLastName("Gonzalez");
         b1.setIdentification(i1);
 
-        identificationService.create(i1);
-        beneficiaryService.create(b1);
+        insert(b1);
 
         return "view?faces-redirect=true";
     }
@@ -104,18 +105,67 @@ public class ViewBackingBean {
     public String insertBeneficiary2() {
         System.out.println("ViewBackingBean - insertBeneficiary2");
 
-        LMAIdentification i2 = new LMAIdentification();
-        i2.setNumber("50-008920/4");
+        PersonalIdentification i2 = new PersonalIdentification();
+        i2.setNumber("67652979-0773");
 
         Beneficiary b2 = new Beneficiary();
-        b2.setFirstName("Muhammed");
-        b2.setLastName("Ali");
+        b2.setFirstName("Colin");
+        b2.setLastName("Little");
         b2.setIdentification(i2);
 
-        identificationService.create(i2);
-        beneficiaryService.create(b2);
+        insert(b2);
 
         return "view?faces-redirect=true";
+    }
+
+    public String insertBeneficiary3() {
+        System.out.println("ViewBackingBean - insertBeneficiary2");
+
+        PersonalIdentification i3 = new PersonalIdentification();
+        i3.setNumber("36386944-2631");
+
+        Beneficiary b3 = new Beneficiary();
+        b3.setFirstName("Larry");
+        b3.setLastName("Douglas");
+        b3.setIdentification(i3);
+
+        insert(b3);
+
+        return "view?faces-redirect=true";
+    }
+
+    public String insertBeneficiary4() {
+        System.out.println("ViewBackingBean - insertBeneficiary2");
+
+        LMAIdentification i4 = new LMAIdentification();
+        i4.setNumber("50-008920/4");
+
+        Beneficiary b4 = new Beneficiary();
+        b4.setFirstName("Muhammed");
+        b4.setLastName("Ali");
+        b4.setIdentification(i4);
+
+        insert(b4);
+
+        return "view?faces-redirect=true";
+    }
+
+    private void insert(Beneficiary beneficiary) {
+        FacesMessage message = null;
+
+        try {
+            beneficiaryService.create(beneficiary);
+        } catch (NoIdentificationException e) {
+            message = new FacesMessage("No identification added to user.");
+        } catch (PersistenceException e) {
+            message = new FacesMessage("Exception persisting beneficiary. " +
+                    "Got exception: " + e.getMessage());
+        }
+
+        if (message != null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, message);
+        }
     }
 
     public String insertInvoice() {
@@ -161,6 +211,48 @@ public class ViewBackingBean {
         invoice.setGroupId(20195);
 
         invoiceService.create(invoice);
+
+        return "view?faces-redirect=true";
+    }
+
+    public String addGrant1() {
+        Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
+        Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
+
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        Calendar cal = Calendar.getInstance();
+
+        Grant g1 = new Grant();
+        g1.setAmount(30000);
+        g1.setVat(7500);
+        g1.setBeneficiary(b1);
+        g1.setDeliveryDate(cal.getTime());
+        g1.setPrescriptionDate(cal.getTime());
+
+        inv.addGrant(g1);
+        invoiceService.update(inv);
+
+        return "view?faces-redirect=true";
+    }
+
+    public String addGrant2() {
+        Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
+        Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
+
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        Calendar cal = Calendar.getInstance();
+
+        Grant g1 = new Grant();
+        g1.setAmount(60000);
+        g1.setVat(15000);
+        g1.setBeneficiary(b1);
+        g1.setDeliveryDate(cal.getTime());
+        g1.setPrescriptionDate(cal.getTime());
+
+        inv.addGrant(g1);
+        invoiceService.update(inv);
 
         return "view?faces-redirect=true";
     }
