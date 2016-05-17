@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:sec="http://www.springframework.org/schema/security"
        xsi:schemaLocation="
             http://cxf.apache.org/jaxrs
             http://cxf.apache.org/schemas/jaxrs.xsd
@@ -31,5 +31,17 @@
     <import resource="classpath*:/serviceContext.xml" />
 
     <bean id="userProgressBean" class="se.vgregion.glasogonbidrag.rest.UserProgressRestService" />
+
+    <sec:authentication-manager>
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="restuser" password="restuser" authorities="ROLE_RESTCLIENT" />
+            </sec:user-service>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
+
+    <sec:http auto-config="true">
+        <sec:http-basic />
+    </sec:http>
 
 </beans>
