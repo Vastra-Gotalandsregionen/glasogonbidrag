@@ -1,5 +1,6 @@
 package se.vgregion.service.glasogonbidrag.api.service;
 
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 
 /**

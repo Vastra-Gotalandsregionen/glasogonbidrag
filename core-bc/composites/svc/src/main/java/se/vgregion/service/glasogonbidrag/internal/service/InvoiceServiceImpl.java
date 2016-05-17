@@ -47,4 +47,5 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         em.remove(invoice);
     }
+
 }

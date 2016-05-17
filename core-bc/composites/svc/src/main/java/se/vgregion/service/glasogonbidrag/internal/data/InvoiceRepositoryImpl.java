@@ -39,9 +39,29 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
+    public Invoice findByVerificationNumber(String number) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findByVerificationNumber",
+                Invoice.class);
+        q.setParameter("number", number);
+
+        return q.getSingleResult();
+    }
+
+    @Override
     public List<Invoice> findAll() {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAll", Invoice.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Invoice> findByInvoiceNumber(String number) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findByInvoiceNumber",
+                Invoice.class);
+        q.setParameter("number", number);
 
         return q.getResultList();
     }
