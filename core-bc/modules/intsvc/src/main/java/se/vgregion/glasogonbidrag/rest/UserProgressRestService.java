@@ -49,7 +49,10 @@ public class UserProgressRestService {
         try {
             date = sdf.parse(dateString);
         } catch (ParseException e) {
-            return Response.status(400).entity(e.getMessage()).build();
+            String message = "Parsing date failed, " +
+                    "please provide date in the format of 'yyyy-MM-dd'.";
+
+            return Response.status(400).entity(message).build();
         }
 
         long progress = repository.currentProgressByUserAndDate(userId, date);
