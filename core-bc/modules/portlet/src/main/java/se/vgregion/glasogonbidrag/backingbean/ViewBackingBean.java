@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification;
@@ -220,6 +221,8 @@ public class ViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        int amount = inv.getAmount();
+        int vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
@@ -231,6 +234,8 @@ public class ViewBackingBean {
         g1.setPrescriptionDate(cal.getTime());
 
         inv.addGrant(g1);
+        inv.setAmount(amount + 30000);
+        inv.setVat(vat + 7500);
         invoiceService.update(inv);
 
         return "view?faces-redirect=true";
@@ -241,6 +246,8 @@ public class ViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        int amount = inv.getAmount();
+        int vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
@@ -252,6 +259,20 @@ public class ViewBackingBean {
         g1.setPrescriptionDate(cal.getTime());
 
         inv.addGrant(g1);
+        inv.setAmount(amount + 40000);
+        inv.setVat(vat + 10000);
+        invoiceService.update(inv);
+
+        return "view?faces-redirect=true";
+    }
+
+    public String addGrantAdjustment() {
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        GrantAdjustment adjustment = new GrantAdjustment();
+        adjustment.setAmount(20000);
+
+        inv.setAdjustment(adjustment);
         invoiceService.update(inv);
 
         return "view?faces-redirect=true";
