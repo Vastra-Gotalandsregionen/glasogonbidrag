@@ -179,10 +179,12 @@ public class CreateInvoiceViewBackingBean {
 
         LOGGER.info("Persisted invoice, got id: {}", invoice.getId());
 
-        addGrantBackingBean.init(invoice);
+        //addGrantBackingBean.init(invoice);
 
-        return "add_grant?&faces-redirect=true" +
-                    "&includeViewParams=true";
+        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoice.getId());
+
+
+        return returnView;
     }
 
     public String cancel() {

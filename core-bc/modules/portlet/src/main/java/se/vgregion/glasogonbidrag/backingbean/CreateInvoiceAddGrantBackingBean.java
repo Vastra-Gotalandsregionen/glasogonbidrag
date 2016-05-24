@@ -40,7 +40,7 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "createInvoiceAddGrantBackingBean")
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CreateInvoiceAddGrantBackingBean {
 
     private static final Logger LOGGER =
@@ -357,9 +357,12 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     // Initializer
-
-    public void init(Invoice newInvoice) {
+    @PostConstruct
+    public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
+
+        long invoiceId = facesUtil.fetchId("invoiceId");
+        invoice = invoiceRepository.findWithParts(invoiceId);
 
         tabUtil = new TabUtil(Arrays.asList("Personnummer", "LMA-Nummer"), 0);
 
@@ -368,7 +371,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         newBeneficiary = false;
 
-        invoice = newInvoice;
+        //invoice = newInvoice;
 
         grant = new Grant();
         beneficiary = null;
