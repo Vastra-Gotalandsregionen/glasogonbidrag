@@ -30,7 +30,7 @@ import java.util.Date;
 
         @NamedQuery(
                 name = "glasogonbidrag.grant.currentProgressByUserAndDate",
-                query = "SELECT SUM(g.amount) " +
+                query = "SELECT SUM(g.amount + g.vat) " +
                         "FROM Grant g " +
                         "WHERE g.userId = :user " +
                         "AND DATE_TRUNC('day', g.createDate) = :date")
