@@ -7,6 +7,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -34,7 +35,11 @@ public class IdentificationRepositoryImpl implements IdentificationRepository {
                 Identification.class);
         q.setParameter("number", number);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -44,6 +49,10 @@ public class IdentificationRepositoryImpl implements IdentificationRepository {
                 Identification.class);
         q.setParameter("number", number);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
