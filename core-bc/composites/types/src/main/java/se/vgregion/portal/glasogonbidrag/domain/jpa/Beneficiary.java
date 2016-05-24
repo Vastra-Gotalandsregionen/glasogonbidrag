@@ -29,6 +29,7 @@ import java.util.List;
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
                 query = "SELECT b FROM Beneficiary b " +
+                        "LEFT JOIN FETCH b.grants " +
                         "WHERE b.identification = :id"),
 
         @NamedQuery(

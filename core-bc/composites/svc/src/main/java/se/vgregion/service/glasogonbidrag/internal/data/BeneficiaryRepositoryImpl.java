@@ -24,10 +24,12 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
     @PersistenceContext
     private EntityManager em;
 
+    @Override
     public Beneficiary find(Long id) {
         return em.find(Beneficiary.class, id);
     }
 
+    @Override
     public Beneficiary findWithParts(Long id) {
         TypedQuery<Beneficiary> q = em.createNamedQuery(
                 "glasogonbidrag.beneficiary.findWithParts", Beneficiary.class);
@@ -36,6 +38,7 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
         return q.getSingleResult();
     }
 
+    @Override
     public Beneficiary findWithPartsByIdent(Identification identification) {
         TypedQuery<Beneficiary> q = em.createNamedQuery(
                 "glasogonbidrag.beneficiary.findWithPartsByIdent",
@@ -45,6 +48,7 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
         return q.getSingleResult();
     }
 
+    @Override
     public List<Beneficiary> findAll() {
         TypedQuery<Beneficiary> q = em.createNamedQuery(
                 "glasogonbidrag.beneficiary.findAll", Beneficiary.class);

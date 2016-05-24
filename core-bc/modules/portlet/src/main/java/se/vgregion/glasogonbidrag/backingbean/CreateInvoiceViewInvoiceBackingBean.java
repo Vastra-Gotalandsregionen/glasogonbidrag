@@ -3,6 +3,7 @@ package se.vgregion.glasogonbidrag.backingbean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
@@ -14,7 +15,7 @@ import javax.annotation.PostConstruct;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "createInvoiceViewInvoiceBackingBean")
-@Scope(value = "request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CreateInvoiceViewInvoiceBackingBean {
     @Autowired
     private InvoiceRepository invoiceRepository;

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
@@ -22,7 +23,7 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "createInvoiceViewBackingBean")
-@Scope(value = "request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CreateInvoiceViewBackingBean {
 
     private static final Logger LOGGER =
