@@ -7,6 +7,26 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge">
 
-    <p>invoice meta</p>
+    <h:panelGroup id="invoiceMeta" layout="block">
+        <ui:fragment rendered="#{true}">
+            <div class="box box-sidebar box-collapsed js-box-collapsible">
+
+                <div class="box-hd">
+                    <h3 class="box-title">
+                        <h:outputText value="Fakturainformation" />
+                    </h3>
+                </div>
+
+                <div class="box-bd">
+                    <p>Fakturainfo här</p>
+                    <p>
+                        <a href="">Visa mer</a>
+                    </p>
+                </div>
+
+            </div>
+
+        </ui:fragment>
+    </h:panelGroup>
 
 </f:view>

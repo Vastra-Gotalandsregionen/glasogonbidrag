@@ -7,6 +7,77 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge">
 
-    <p>invoice summary</p>
+
+    <!-- Todo: get data from invoice -->
+
+    <h:panelGroup id="invoiceSummary" layout="block">
+        <ui:fragment rendered="#{true}">
+            <div class="box box-sidebar">
+
+                <div class="box-hd">
+                    <h3 class="box-title">
+                        <h:outputText value="Fakturasammanfattning" />
+                    </h3>
+                </div>
+
+
+                <div class="box-bd">
+                    <table class="simple-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <h:outputText value="" />
+                            </th>
+                            <th>
+                                <h:outputText value="Exkl. moms" />
+                            </th>
+                            <th>
+                                <h:outputText value="Inkl. moms" />
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <h:outputText value="Faktura" />
+                            </td>
+                            <td>
+                                <h:outputText value="1 600,00" />
+                            </td>
+                            <td>
+                                <h:outputText value="2 000,00" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Registrerade bidrag" />
+                            </td>
+                            <td>
+                                <h:outputText value="1 200,00" />
+                            </td>
+                            <td>
+                                <h:outputText value="1 500,00" />
+                            </td>
+                        </tr>
+                        <tr class="summary-row no-match">
+                            <td>
+                                <h:outputText value="" />
+                            </td>
+                            <td>
+                                <h:outputText value="400,00" />
+                            </td>
+                            <td>
+                                <h:outputText value="500,00" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </ui:fragment>
+    </h:panelGroup>
+
 
 </f:view>
