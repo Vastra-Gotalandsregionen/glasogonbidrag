@@ -1,5 +1,7 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
@@ -247,6 +250,13 @@ public class CreateInvoiceAddGrantBackingBean {
     // Actions
 
     public String saveGrant() {
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ThemeDisplay themeDisplay = (ThemeDisplay)externalContext.getRequestMap().get(WebKeys.THEME_DISPLAY);
+        long userId = themeDisplay.getUserId();
+        long scopeGroupid = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
         // Insert beneficiary first.
         if (newBeneficiary) {
             try {
@@ -291,8 +301,16 @@ public class CreateInvoiceAddGrantBackingBean {
         int amount = centDecimal.intValue();
         int vat = vatDecimal.intValue();
 
+        Calendar cal = Calendar.getInstance();
+        Date createDate = cal.getTime();
+
         grant.setAmount(amount);
         grant.setVat(vat);
+        grant.setUserId(userId);
+        grant.setGroupId(scopeGroupid);
+        grant.setCompanyId(companyId);
+        grant.setCreateDate(createDate);
+        grant.setModifiedDate(createDate);
         invoice.addGrant(grant);
 
         invoiceService.update(invoice);

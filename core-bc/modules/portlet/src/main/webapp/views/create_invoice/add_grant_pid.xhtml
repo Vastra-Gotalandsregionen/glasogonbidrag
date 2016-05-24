@@ -55,8 +55,8 @@
         </div>
         <div class="button-row">
             <h:commandLink styleClass="link-btn primary" value="Fortsätt">
-                <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
-                        render=":addGrantForm" onevent="function(data) {ajaxComplete(data)}" />
+                <f:ajax execute="@form" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
+                        render="@form" onevent="function(data) {ajaxComplete(data)}" />
             </h:commandLink>
         </div>
     </ui:fragment>

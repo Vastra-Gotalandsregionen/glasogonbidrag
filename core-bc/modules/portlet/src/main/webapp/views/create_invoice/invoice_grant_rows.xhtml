@@ -7,6 +7,40 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge">
 
-    <p>grant rows</p>
+    <!-- Todo: get data from invoice -->
+
+    <h:panelGroup id="invoiceGrantRows" layout="block">
+        <h:form id="invoiceGrantRowsForm">
+        <ui:fragment rendered="#{true}">
+            <div class="box box-sidebar box-collapsed_ js-box-collapsible">
+
+                <div class="box-hd">
+                    <h3 class="box-title">
+                        <h:outputText value="Inmatade bidrag" />
+                    </h3>
+                </div>
+
+                <div class="box-bd">
+                    <p>Visa inmatade bidragsrader här.</p>
+
+                    <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.invoice}">
+                        <ul>
+                            <ui:repeat value="#{createInvoiceAddGrantBackingBean.invoice.grants}" var="grant">
+                                <li>
+                                    Bidragsbelopp: #{grant.amount/100} kr exkl moms
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </ui:fragment>
+
+
+                </div>
+
+            </div>
+
+        </ui:fragment>
+
+        </h:form>
+    </h:panelGroup>
 
 </f:view>

@@ -192,6 +192,7 @@ public class ViewBackingBean {
         g1.setBeneficiary(b1);
         g1.setDeliveryDate(cal.getTime());
         g1.setPrescriptionDate(cal.getTime());
+        g1.setUserId(20159);
 
         Grant g2 = new Grant();
         g2.setAmount(20000);
@@ -199,6 +200,8 @@ public class ViewBackingBean {
         g2.setBeneficiary(b2);
         g2.setDeliveryDate(cal.getTime());
         g2.setPrescriptionDate(cal.getTime());
+        g2.setUserId(20159);
+
         List<Grant> grants = new ArrayList<>();
         grants.add(g1);
         grants.add(g2);
@@ -236,6 +239,7 @@ public class ViewBackingBean {
         g1.setBeneficiary(b1);
         g1.setDeliveryDate(cal.getTime());
         g1.setPrescriptionDate(cal.getTime());
+        g1.setUserId(20159);
 
         inv.addGrant(g1);
         invoiceService.update(inv);
@@ -259,6 +263,7 @@ public class ViewBackingBean {
         g1.setBeneficiary(b1);
         g1.setDeliveryDate(cal.getTime());
         g1.setPrescriptionDate(cal.getTime());
+        g1.setUserId(20159);
 
         inv.addGrant(g1);
         invoiceService.update(inv);
