@@ -10,6 +10,7 @@
     <!-- Todo: get data from invoice -->
 
     <h:panelGroup id="invoiceGrantRows" layout="block">
+        <h:form id="invoiceGrantRowsForm">
         <ui:fragment rendered="#{true}">
             <div class="box box-sidebar box-collapsed_ js-box-collapsible">
 
@@ -32,11 +33,14 @@
                         </ul>
                     </ui:fragment>
 
+
                 </div>
 
             </div>
 
         </ui:fragment>
+
+        </h:form>
     </h:panelGroup>
 
 </f:view>
