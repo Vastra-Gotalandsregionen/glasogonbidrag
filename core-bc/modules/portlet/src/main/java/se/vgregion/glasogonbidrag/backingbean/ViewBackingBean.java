@@ -1,6 +1,8 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,9 @@ import java.util.List;
 @Component(value = "viewBean")
 @Scope(value = "request")
 public class ViewBackingBean {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ViewBackingBean.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -76,7 +81,7 @@ public class ViewBackingBean {
     }
 
     public String insertSupplier() {
-        System.out.println("ViewBackingBean - insertSupplier");
+        LOGGER.info("ViewBackingBean - insertSupplier()");
 
         Supplier supplier = new Supplier();
         supplier.setName("Specsavers");
@@ -87,7 +92,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary1() {
-        System.out.println("ViewBackingBean - insertBeneficiary1");
+        LOGGER.info("ViewBackingBean - insertBeneficiary1()");
 
         PersonalIdentification i1 = new PersonalIdentification();
         i1.setNumber("11294377-1834");
@@ -103,7 +108,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary2() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("ViewBackingBean - insertBeneficiary2()");
 
         PersonalIdentification i2 = new PersonalIdentification();
         i2.setNumber("67652979-0773");
@@ -119,7 +124,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary3() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("ViewBackingBean - insertBeneficiary3()");
 
         PersonalIdentification i3 = new PersonalIdentification();
         i3.setNumber("36386944-2631");
@@ -135,7 +140,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary4() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("ViewBackingBean - insertBeneficiary4()");
 
         LMAIdentification i4 = new LMAIdentification();
         i4.setNumber("50-008920/4");
@@ -169,7 +174,7 @@ public class ViewBackingBean {
     }
 
     public String insertInvoice() {
-        System.out.println("ViewBackingBean - insertInvoice");
+        LOGGER.info("ViewBackingBean - insertInvoice()");
 
         Supplier supplier = supplierRepository.find("Specsavers");
 
@@ -216,6 +221,8 @@ public class ViewBackingBean {
     }
 
     public String addGrant1() {
+        LOGGER.info("ViewBackingBean - addGrant1()");
+
         Identification id1 = identificationRepository.findByPersonalNumber("67652979-0773");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
@@ -237,6 +244,8 @@ public class ViewBackingBean {
     }
 
     public String addGrant2() {
+        LOGGER.info("ViewBackingBean - addGrant2()");
+
         Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
@@ -259,7 +268,7 @@ public class ViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        System.out.println("ViewBackingBean - init");
+        LOGGER.info("ViewBackingBean - init()");
 
         fetchSuppliers();
         fetchInvoices();

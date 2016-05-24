@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
+
+        <script>
+			if(typeof gbJs == 'undefined') {
+			  gbJs = {};
+			}
+
+			gbJs.topBarHeading = 'Faktura';
+		</script>
+
+        <ui:fragment rendered="#{not empty invoice}">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="box box-tight">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th scope="row">Invoice Date</th>
+                                <td>
+                                    <h:outputText value="#{invoice.invoiceDate}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Verification Number</th>
+                                <td>
+                                    <h:outputText value="#{invoice.verificationNumber}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Invoice Number</th>
+                                <td>
+                                    <h:outputText value="#{invoice.invoiceNumber}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Amount</th>
+                                <td>
+                                    <h:outputText value="#{invoice.amount/100} kr" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">VAT</th>
+                                <td>
+                                    <h:outputText value="#{invoice.vat/100} kr" />
+                                </td>
+                            </tr>
+                            <ui:fragment rendered="#{not empty invoice.adjustment}">
+                                <tr>
+                                    <th scope="row">Grant Adjustments</th>
+                                    <td>
+                                        <h:outputText value="#{invoice.adjustment.amount/100} kr" />
+                                    </td>
+                                </tr>
+                            </ui:fragment>
+                            <tr>
+                                <th scope="row">Supplier</th>
+                                <td>
+                                    <h:outputText value="#{invoice.supplier.name}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="span6">
+                    <div class="box box-tight">
+                        <h2>Grants</h2>
+                        <ui:fragment rendered="#{not empty invoice.grants}">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Delivery Date</th>
+                                    <th scope="col">Prescription Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">VAT</th>
+                                    <th scope="col">Beneficiary</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat id="grants" value="#{invoice.grants}" var="grant">
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="#{grant.deliveryDate}" />
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{grant.prescriptionDate}" />
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{grant.amount/100} kr" />
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{grant.vat/100} kr" />
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{grant.beneficiary.identification}" />
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty invoice.grants}">
+                            <div class="alert alert-warning">
+                                No grants.
+                            </div>
+                        </ui:fragment>
+
+                        <div class=""></div>
+                        <h:form>
+                            <h:commandLink styleClass="btn btn-primary" action="#{createInvoiceViewInvoiceBackingBean.addNewGrant}" value="Add new grant">
+                                <f:param name="invoiceId" value="${invoice.id}" />
+                            </h:commandLink>
+                        </h:form>
+                    </div>
+                </div>
+
+                <div class="span3">
+                </div>
+            </div>
+        </ui:fragment>
+        <ui:fragment rendered="#{empty invoice}">
+            <h:link outcome="view" value="エラー！エラー！戻ってください。" />
+        </ui:fragment>
+    </h:body>
+</f:view>

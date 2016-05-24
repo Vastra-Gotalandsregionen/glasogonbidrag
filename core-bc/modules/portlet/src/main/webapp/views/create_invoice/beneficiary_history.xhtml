@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <c:set var="beneficiary" value="#{createInvoiceAddGrantBackingBean.beneficiary}" scope="request" />
+
+    <ui:fragment rendered="#{not empty beneficiary and not empty beneficiary.grants}">
+        <div class="box box-tight">
+            <h:dataTable var="grant" value="#{beneficiary.grants}">
+                <f:facet name="header">
+                    <h:outputText value="Grant history" />
+                </f:facet>
+
+                <f:facet name="caption">
+                    <h:outputText value="Grants received history." />
+                </f:facet>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Delivery date" />
+                    </f:facet>
+                    <h:outputText value="#{grant.deliveryDate}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Prescription date" />
+                    </f:facet>
+                    <h:outputText value="#{grant.prescriptionDate}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Amount" />
+                    </f:facet>
+                    <h:outputText value="#{grant.amount/100} kr" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="VAT" />
+                    </f:facet>
+                    <h:outputText value="#{grant.vat/100} kr" />
+                </h:column>
+            </h:dataTable>
+        </div>
+    </ui:fragment>
+
+</f:view>

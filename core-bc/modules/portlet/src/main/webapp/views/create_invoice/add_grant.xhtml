@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+        <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+        <c:set var="tabUtil" value="#{createInvoiceAddGrantBackingBean.tabUtil}" scope="request" />
+
+        <script>
+			if(typeof gbJs == 'undefined') {
+			  gbJs = {};
+			}
+
+			gbJs.topBarHeading = 'Faktura';
+		</script>
+
+        <div class="row-fluid">
+
+            <div class="span3">
+                <ui:include src="invoice_summary.xhtml" />
+                <ui:include src="invoice_grant_rows.xhtml" />
+                <ui:include src="invoice_meta.xhtml" />
+            </div>
+
+            <div class="span6">
+
+                <h:form id="addGrantForm" pt:data-focus_="true">
+                    <div class="box box-tight">
+                        <div class="gb-tabs">
+                            <ul class="tabs-list">
+                                <ui:repeat value="#{tabUtil.tabs}" var="tab">
+                                    <li class="#{tabUtil.activeIndex == tab.key ? 'active' : ''}">
+                                        <ui:fragment rendered="#{tabUtil.activeIndex != tab.key}">
+
+                                            <h:commandLink styleClass="tab" value="#{tab.value}">
+                                                <f:ajax listener="#{tabUtil.changeTabIndexListener(tab.key)}"
+                                                        render=":addGrantForm" />
+                                            </h:commandLink>
+
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{tabUtil.activeIndex == tab.key}">
+
+                                            <span class="tab">#{tab.value}</span>
+
+                                        </ui:fragment>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+
+                            <div class="tabs-content">
+                                <ui:fragment rendered="#{tabUtil.activeIndex == 0}">
+                                    <ui:include src="add_grant_pid.xhtml" />
+                                </ui:fragment>
+                                <ui:fragment rendered="#{tabUtil.activeIndex == 1}">
+                                    <ui:include src="add_grant_lma.xhtml" />
+                                </ui:fragment>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+
+            </div>
+
+            <div class="span3">
+                <h:panelGroup id="grantHistory" layout="block">
+                    <ui:include src="beneficiary_history.xhtml" />
+                </h:panelGroup>
+            </div>
+
+        </div>
+
+    </h:body>
+</f:view>

@@ -1,5 +1,7 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,9 @@ import javax.annotation.PostConstruct;
 @Component(value = "viewInvoiceBean")
 @Scope(value = "request")
 public class ViewInvoiceBackingBean {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ViewInvoiceBackingBean.class);
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -27,7 +32,7 @@ public class ViewInvoiceBackingBean {
 
     @PostConstruct
     protected void init() {
-        System.out.println("ViewInvoiceBackingBean - init");
+        LOGGER.info("ViewInvoiceBackingBean - init()");
 
         Long id = util.fetchId("invoiceId");
 
