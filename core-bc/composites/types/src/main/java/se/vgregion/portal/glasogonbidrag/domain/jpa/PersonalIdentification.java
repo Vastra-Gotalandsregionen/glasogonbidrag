@@ -13,6 +13,15 @@ public class PersonalIdentification extends Identification {
     @Column(unique = true, nullable = false)
     private String number;
 
+    // Default constructor
+    public PersonalIdentification() {
+
+    }
+
+    public PersonalIdentification(String number) {
+        this.number = number;
+    }
+
     public String getNumber() {
         return number;
     }

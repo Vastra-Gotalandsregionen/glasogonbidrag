@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class Invoice {
     private GrantAdjustment adjustment;
 
     public Invoice() {
-
+        grants = new ArrayList<>();
     }
 
     public Long getId() {
