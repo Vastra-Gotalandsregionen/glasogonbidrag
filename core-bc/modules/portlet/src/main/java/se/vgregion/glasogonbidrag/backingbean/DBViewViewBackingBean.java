@@ -22,6 +22,7 @@ import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
@@ -287,6 +288,29 @@ public class DBViewViewBackingBean {
             LOGGER.warn("Already inserted.");
         }
 
+        return "view?faces-redirect=true";
+    }
+
+    public String addGrantAdjustment() {
+        LOGGER.info("DBViewViewBackingBean - addGrantAdjustment()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        GrantAdjustment adjustment = new GrantAdjustment();
+        adjustment.setAmount(60000);
+
+        try {
+            invoiceService.updateAddGrantAdjustment(
+                    userId, groupId, companyId,
+                    inv, adjustment);
+        } catch (GrantAdjustmentAlreadySetException e) {
+            LOGGER.warn("Already present.");
+        }
         return "view?faces-redirect=true";
     }
 

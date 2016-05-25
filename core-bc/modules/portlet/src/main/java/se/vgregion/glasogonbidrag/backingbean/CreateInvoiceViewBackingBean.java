@@ -115,7 +115,6 @@ public class CreateInvoiceViewBackingBean {
         LOGGER.info("CreateInvoiceViewBackingBean - register()");
 
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
