@@ -1,151 +1,90 @@
 package se.vgregion.glasogonbidrag.flow;
 
-public class CreateInvoiceAddGrantPidFlow {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 
-    private boolean showPersonalNumberInput;
-    private boolean showPersonalNumberOutput;
-    private boolean showDeliveryDateInput;
-    private boolean showDeliveryDateOutput;
-    private boolean showGrantTypeInput;
-    private boolean showGrantTypeOutput;
-    private boolean showGrantTypeAgeSection;
-    private boolean showGrantTypeOtherSection;
-    private boolean showPrescriptionDateInput;
-    private boolean showPrescriptionDateOutput;
-    private boolean showAmountInput;
-    private boolean showAmountOutput;
+public abstract class CreateInvoiceAddGrantPidFlow {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(CreateInvoiceAddGrantPidFlow.class);
 
-    public CreateInvoiceAddGrantPidFlow() {
-        showPersonalNumberInput = true;
-        showPersonalNumberOutput = false;
-        showDeliveryDateInput = false;
-        showDeliveryDateOutput = false;
-        showGrantTypeInput = false;
-        showGrantTypeOutput = false;
-        showGrantTypeAgeSection = false;
-        showGrantTypeOtherSection = false;
-        showPrescriptionDateInput = false;
-        showPrescriptionDateOutput = false;
-        showAmountInput = false;
-        showAmountOutput = false;
+    // Methods for actions
+
+    public abstract CreateInvoiceAddGrantPidFlow nextState();
+
+    public CreateInvoiceAddGrantPidFlow nextState(AddGrantAction action) {
+        if (action == AddGrantAction.NATURAL) {
+            return nextState();
+        } else {
+            return null;
+        }
     }
+
+    // Default view settings
 
     public boolean getShowPersonalNumberInput() {
-        return showPersonalNumberInput;
-    }
-
-    public void setShowPersonalNumberInput(boolean showPersonalNumberInput) {
-        this.showPersonalNumberInput = showPersonalNumberInput;
+        return false;
     }
 
     public boolean getShowPersonalNumberOutput() {
-        return showPersonalNumberOutput;
-    }
-
-    public void setShowPersonalNumberOutput(boolean showPersonalNumberOutput) {
-        this.showPersonalNumberOutput = showPersonalNumberOutput;
+        return false;
     }
 
     public boolean getShowDeliveryDateInput() {
-        return showDeliveryDateInput;
-    }
-
-    public void setShowDeliveryDateInput(boolean showDeliveryDateInput) {
-        this.showDeliveryDateInput = showDeliveryDateInput;
+        return false;
     }
 
     public boolean getShowDeliveryDateOutput() {
-        return showDeliveryDateOutput;
-    }
-
-    public void setShowDeliveryDateOutput(boolean showDeliveryDateOutput) {
-        this.showDeliveryDateOutput = showDeliveryDateOutput;
+        return false;
     }
 
     public boolean getShowGrantTypeInput() {
-        return showGrantTypeInput;
-    }
-
-    public void setShowGrantTypeInput(boolean showGrantTypeInput) {
-        this.showGrantTypeInput = showGrantTypeInput;
+        return false;
     }
 
     public boolean getShowGrantTypeOutput() {
-        return showGrantTypeOutput;
-    }
-
-    public void setShowGrantTypeOutput(boolean showGrantTypeOutput) {
-        this.showGrantTypeOutput = showGrantTypeOutput;
-    }
-
-    public boolean getShowGrantTypeAgeSection() {
-        return showGrantTypeAgeSection;
-    }
-
-    public void setShowGrantTypeAgeSection(boolean showGrantTypeAgeSection) {
-        this.showGrantTypeAgeSection = showGrantTypeAgeSection;
+        return false;
     }
 
     public boolean getShowGrantTypeOtherSection() {
-        return showGrantTypeOtherSection;
-    }
-
-    public void setShowGrantTypeOtherSection(boolean showGrantTypeOtherSection) {
-        this.showGrantTypeOtherSection = showGrantTypeOtherSection;
+        return false;
     }
 
     public boolean getShowPrescriptionDateInput() {
-        return showPrescriptionDateInput;
-    }
-
-    public void setShowPrescriptionDateInput(boolean showPrescriptionDateInput) {
-        this.showPrescriptionDateInput = showPrescriptionDateInput;
+        return false;
     }
 
     public boolean getShowPrescriptionDateOutput() {
-        return showPrescriptionDateOutput;
+        return false;
     }
 
-    public void setShowPrescriptionDateOutput(boolean showPrescriptionDateOutput) {
-        this.showPrescriptionDateOutput = showPrescriptionDateOutput;
+    public boolean getShowGrantTypeAgeSection() {
+        return false;
     }
 
     public boolean getShowAmountInput() {
-        return showAmountInput;
-    }
-
-    public void setShowAmountInput(boolean showAmountInput) {
-        this.showAmountInput = showAmountInput;
+        return false;
     }
 
     public boolean getShowAmountOutput() {
-        return showAmountOutput;
+        return false;
     }
 
-    public void setShowAmountOutput(boolean showAmountOutput) {
-        this.showAmountOutput = showAmountOutput;
-    }
-
-    public void setAll(boolean visible) {
-        showPersonalNumberInput = visible;
-        showPersonalNumberOutput = visible;
-        showDeliveryDateInput = visible;
-        showDeliveryDateOutput = visible;
-        showGrantTypeInput = visible;
-        showGrantTypeOutput = visible;
-        showGrantTypeAgeSection = visible;
-        showGrantTypeOtherSection = visible;
-        showPrescriptionDateInput = visible;
-        showPrescriptionDateOutput = visible;
-        showAmountInput = visible;
-        showAmountOutput = visible;
-    }
-
-    public void setShowAll() {
-        setAll(true);
-    }
-
-    public void setHideAll() {
-        setAll(false);
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CreateInvoiceAddGrantPidFlow{");
+        sb.append("getShowPersonalNumberInput=").append(getShowPersonalNumberInput());
+        sb.append(",getShowPersonalNumberOutput=").append(getShowPersonalNumberOutput());
+        sb.append(",getShowDeliveryDateInput=").append(getShowDeliveryDateInput());
+        sb.append(",getShowDeliveryDateOutput=").append(getShowDeliveryDateOutput());
+        sb.append(",getShowGrantTypeInput=").append(getShowGrantTypeInput());
+        sb.append(",getShowGrantTypeOutput=").append(getShowGrantTypeOutput());
+        sb.append(",getShowGrantTypeOtherSection=").append(getShowGrantTypeOtherSection());
+        sb.append(",getShowPrescriptionDateInput=").append(getShowPrescriptionDateInput());
+        sb.append(",getShowPrescriptionDateOutput=").append(getShowPrescriptionDateOutput());
+        sb.append(",getShowAmountInput=").append(getShowAmountInput());
+        sb.append(",getShowAmountOutput=").append(getShowAmountOutput());
+        sb.append('}');
+        return sb.toString();
     }
 }

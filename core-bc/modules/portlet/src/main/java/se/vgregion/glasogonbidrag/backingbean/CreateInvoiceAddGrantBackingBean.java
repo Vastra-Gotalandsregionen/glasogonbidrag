@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
+import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
@@ -220,9 +222,7 @@ public class CreateInvoiceAddGrantBackingBean {
         grant.setBeneficiary(beneficiary);
 
         // Set flow
-        flow.setHideAll();
-        flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateInput(true);
+        flow = flow.nextState();
     }
 
     public void deliveryDateListener() {
@@ -242,10 +242,7 @@ public class CreateInvoiceAddGrantBackingBean {
         grant.setDeliveryDate(date);
 
         // Set flow
-        flow.setHideAll();
-        flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateOutput(true);
-        flow.setShowGrantTypeInput(true);
+        flow = flow.nextState();
     }
 
     public void grantTypeListener() {
@@ -257,19 +254,12 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         // Set flow
-        flow.setHideAll();
-        flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateOutput(true);
-        flow.setShowGrantTypeOutput(true);
-
-        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
-            flow.setShowGrantTypeAgeSection(true);
-            flow.setShowPrescriptionDateInput(true);
-        }
-
-
-        if (GRANT_TYPE_OTHER.equals(grantType)) {
-            flow.setShowGrantTypeOtherSection(true);
+        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
+            flow = flow.nextState(AddGrantAction.AGE_0_TO_15);
+        } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
+            flow = flow.nextState(AddGrantAction.AGE_0_TO_19);
+        } else {
+            flow = flow.nextState(AddGrantAction.OTHER);
         }
     }
 
@@ -295,22 +285,7 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         // Set flow
-        flow.setHideAll();
-        flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateOutput(true);
-        flow.setShowGrantTypeOutput(true);
-
-        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
-            flow.setShowGrantTypeAgeSection(true);
-            flow.setShowPrescriptionDateOutput(true);
-            flow.setShowAmountInput(true);
-        }
-
-
-        if (GRANT_TYPE_OTHER.equals(grantType)) {
-            flow.setShowGrantTypeOtherSection(true);
-        }
-
+        flow = flow.nextState();
 
     }
 
@@ -473,8 +448,8 @@ public class CreateInvoiceAddGrantBackingBean {
         // Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
-
-        flow = new CreateInvoiceAddGrantPidFlow();
+        flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
+        LOGGER.info("Current state: {}.", flow);
 
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceRepository.findWithParts(invoiceId);
