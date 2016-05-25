@@ -296,7 +296,24 @@ public class CreateInvoiceAddGrantBackingBean {
         String showSection = facesUtil.fetchProperty("showSection");
         LOGGER.info("stepBackListener(): showSection: {}", showSection);
 
+        AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
+        // Todo: better implementation
+        if(state == AddGrantFlowState.ENTER_PERSONAL_NUMBER) {
+            //number = null;
+            beneficiary = null;
+            deliveryDate = null;
+            grantType = null;
+            prescriptionDate = null;
+        } else if(state == AddGrantFlowState.ENTER_DELIVERY_DATE) {
+            //number = null;
+            //beneficiary = null;
+            //deliveryDate = null;
+            grantType = null;
+            prescriptionDate = null;
+        }
+
+        flow = state.getState();
     }
 
     // Actions
@@ -468,8 +485,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
         number = null;
         deliveryDate = null;
-        grantType = null;
         prescriptionDate = null;
+        grantType = null;
         amountWithVat = null;
     }
 

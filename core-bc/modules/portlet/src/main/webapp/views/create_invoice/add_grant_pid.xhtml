@@ -50,7 +50,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
                         </f:ajax>
-                        <f:param name="showSection" value="showPersonalNumberInput" />
+                        <f:param name="showSection" value="ENTER_PERSONAL_NUMBER" />
                         <span class="hide-accessible">Tillbaka</span>
                     </h:commandLink>
 
@@ -95,7 +95,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
                         </f:ajax>
-                        <f:param name="showSection" value="showDeliveryDateInput" />
+                        <f:param name="showSection" value="ENTER_DELIVERY_DATE" />
                         <span class="hide-accessible">Tillbaka</span>
                     </h:commandLink>
                 </div>
