@@ -27,6 +27,12 @@ import java.util.List;
 @Table(name = "vgr_glasogonbidrag_invoice")
 @NamedQueries({
         @NamedQuery(
+                name = "glasogonbidrag.invoice.findWithGrants",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
+                        "WHERE i.id = :id"),
+        @NamedQuery(
                 name = "glasogonbidrag.invoice.findWithParts",
                 query = "SELECT i " +
                         "FROM Invoice i " +
