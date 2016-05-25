@@ -30,11 +30,7 @@ import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -73,6 +69,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private TabUtil tabUtil;
     private String portletNamespace;
     private boolean newBeneficiary;
+    private Locale locale;
 
     // Flow
 
@@ -107,8 +104,15 @@ public class CreateInvoiceAddGrantBackingBean {
         this.portletNamespace = portletNamespace;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
 
-    // Getter and Setters for Main objects
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+// Getter and Setters for Main objects
 
     public Invoice getInvoice() {
         return invoice;
@@ -463,6 +467,12 @@ public class CreateInvoiceAddGrantBackingBean {
     @PostConstruct
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        locale = themeDisplay.getLocale();
+        // Temporary - make sure we always get Swedish locale
+        locale = Locale.forLanguageTag("sv-SE");
+
 
         flow = new CreateInvoiceAddGrantPidFlow();
 

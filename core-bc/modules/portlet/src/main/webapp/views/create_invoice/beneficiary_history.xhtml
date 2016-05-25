@@ -44,7 +44,7 @@
                                 <h:outputText value="Belopp" />
                             </f:facet>
                             <h:outputText value="#{(grant.amount+grant.vat)/100}">
-                                <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
                             </h:outputText>
                         </h:column>
 

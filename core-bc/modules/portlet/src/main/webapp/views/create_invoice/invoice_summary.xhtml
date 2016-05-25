@@ -12,6 +12,9 @@
 
     <h:body>
 
+        <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
+        <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+
         <!-- Todo: get data from invoice -->
 
         <h:panelGroup id="invoiceSummary" layout="block">
@@ -46,10 +49,14 @@
                                     <h:outputText value="Faktura" />
                                 </td>
                                 <td>
-                                    <h:outputText value="1 600,00" />
+                                    <h:outputText value="#{(invoice.amount)/100}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                                    </h:outputText>
                                 </td>
                                 <td>
-                                    <h:outputText value="2 000,00" />
+                                    <h:outputText value="#{(invoice.amount+invoice.vat)/100}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                                    </h:outputText>
                                 </td>
                             </tr>
                             <tr>
