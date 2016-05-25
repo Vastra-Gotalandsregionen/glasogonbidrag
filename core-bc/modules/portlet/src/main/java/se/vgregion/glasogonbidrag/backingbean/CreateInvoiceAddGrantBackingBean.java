@@ -47,6 +47,10 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CreateInvoiceViewBackingBean.class);
 
+    private static final String GRANT_TYPE_AGE_0_TO_15 = "0";
+    private static final String GRANT_TYPE_AGE_0_TO_19 = "1";
+    private static final String GRANT_TYPE_OTHER = "2";
+
     @Autowired
     private InvoiceRepository invoiceRepository;
 
@@ -213,18 +217,9 @@ public class CreateInvoiceAddGrantBackingBean {
         grant.setBeneficiary(beneficiary);
 
         // Set flow
-        flow.setShowPersonalNumberInput(false);
+        flow.setHideAll();
         flow.setShowPersonalNumberOutput(true);
         flow.setShowDeliveryDateInput(true);
-        flow.setShowDeliveryDateOutput(false);
-        flow.setShowGrantTypeInput(false);
-        flow.setShowGrantTypeOutput(false);
-        flow.setShowGrantTypeAgeSection(false);
-        flow.setShowGrantTypeOtherSection(false);
-        flow.setShowPrescriptionDateInput(false);
-        flow.setShowPrescriptionDateOutput(false);
-        flow.setShowAmountInput(false);
-        flow.setShowAmountOutput(false);
     }
 
     public void deliveryDateListener() {
@@ -244,41 +239,35 @@ public class CreateInvoiceAddGrantBackingBean {
         grant.setDeliveryDate(date);
 
         // Set flow
-        flow.setShowPersonalNumberInput(false);
+        flow.setHideAll();
         flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateInput(false);
         flow.setShowDeliveryDateOutput(true);
         flow.setShowGrantTypeInput(true);
-        flow.setShowGrantTypeOutput(false);
-        flow.setShowGrantTypeAgeSection(false);
-        flow.setShowGrantTypeOtherSection(false);
-        flow.setShowPrescriptionDateInput(false);
-        flow.setShowPrescriptionDateOutput(false);
-        flow.setShowAmountInput(false);
-        flow.setShowAmountOutput(false);
     }
 
     public void grantTypeListener() {
         LOGGER.info("grantTypeListener()");
 
-        if ("2".equals(grantType)) {
+        if (GRANT_TYPE_OTHER.equals(grantType)) {
             // TODO: make address check against deliveryDate
             LOGGER.info("grantTypeListener(): addressCheck=");
         }
 
         // Set flow
-        flow.setShowPersonalNumberInput(false);
+        flow.setHideAll();
         flow.setShowPersonalNumberOutput(true);
-        flow.setShowDeliveryDateInput(false);
         flow.setShowDeliveryDateOutput(true);
-        flow.setShowGrantTypeInput(false);
         flow.setShowGrantTypeOutput(true);
-        flow.setShowGrantTypeAgeSection(false);
-        flow.setShowGrantTypeOtherSection(false);
-        flow.setShowPrescriptionDateInput(false);
-        flow.setShowPrescriptionDateOutput(false);
-        flow.setShowAmountInput(false);
-        flow.setShowAmountOutput(false);
+
+        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
+            flow.setShowGrantTypeAgeSection(true);
+            flow.setShowPrescriptionDateInput(true);
+        }
+
+
+        if (GRANT_TYPE_OTHER.equals(grantType)) {
+            flow.setShowGrantTypeOtherSection(true);
+        }
     }
 
     public void prescriptionDateListener() {
@@ -297,10 +286,28 @@ public class CreateInvoiceAddGrantBackingBean {
 
         grant.setPrescriptionDate(date);
 
-        if ("0".equals(grantType) || "1".equals(grantType)) {
+        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             // TODO: make address check against prescriptionDate
             LOGGER.info("prescriptionDateListener(): addressCheck=");
         }
+
+        // Set flow
+        flow.setHideAll();
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateOutput(true);
+        flow.setShowGrantTypeOutput(true);
+
+        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
+            flow.setShowGrantTypeAgeSection(true);
+            flow.setShowPrescriptionDateOutput(true);
+        }
+
+
+        if (GRANT_TYPE_OTHER.equals(grantType)) {
+            flow.setShowGrantTypeOtherSection(true);
+        }
+
+
     }
 
     // Actions

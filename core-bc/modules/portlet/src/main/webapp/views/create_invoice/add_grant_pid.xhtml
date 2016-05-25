@@ -96,59 +96,54 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
-                                render=":addGrantForm:addGrantPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
-        <ui:fragment rendered="#{flow.showGrantTypeInput}">
+        <ui:fragment rendered="#{flow.showGrantTypeOutput}">
             <div class="grant-section">
                 <h:outputText value="Bidragstyp: #{createInvoiceAddGrantBackingBean.grantTypeOutput}" />
             </div>
         </ui:fragment>
 
         <!-- Grant Type 0-15 or 0-19 -->
-        <ui:fragment rendered="#{createInvoiceAddGrantBackingBean.grantType == 0 or createInvoiceAddGrantBackingBean.grantType == 1}">
-            <!-- Input prescription date -->
-            <ui:fragment rendered="#{not empty grant.beneficiary and not empty grant.deliveryDate and
-                                     empty grant.prescriptionDate}">
-                <div class="grant-section">
-                    <div class="field-row">
-                        <div class="field-element inline">
-                            <h:outputLabel for="prescriptionDate" value="Recept datum:" />
-                            <h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"
-                                         value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
-                                         pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />
-                        </div>
+        <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateInput}">
+            <div class="grant-section">
+                <div class="field-row">
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriptionDate" value="Recept datum:" />
+                        <h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"
+                                     value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                     pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />
                     </div>
                 </div>
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
-                                render=":addGrantForm:addGrantPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                 </div>
-            </ui:fragment>
-
-            <ui:fragment rendered="#{not empty grant.prescriptionDate}">
-                <div class="grant-section">
-                    Recept datum:
-                    <h:outputText value="#{grant.prescriptionDate}">
-                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-                    </h:outputText>
-                </div>
+            </div>
         </ui:fragment>
 
+        <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}">
+            <div class="grant-section">
+                Recept datum:
+                <h:outputText value="#{grant.prescriptionDate}">
+                    <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                </h:outputText>
+            </div>
+        </ui:fragment>
+
+
         <!-- Grant type others -->
-        <ui:fragment rendered="#{createInvoiceAddGrantBackingBean.grantType == 2}">
+        <ui:fragment rendered="#{flow.showGrantTypeOtherSection}">
             <!-- TODO: WHERE HERE -->
         </ui:fragment>
 
         <!-- Input amount -->
-        <ui:fragment rendered="#{((createInvoiceAddGrantBackingBean.grantType == 0 or
-                                   createInvoiceAddGrantBackingBean.grantType == 1) and
-                                  not empty grant.prescriptionDate) or
-                                  createInvoiceAddGrantBackingBean.grantType == 2}">
+        <ui:fragment rendered="#{flow.showAmountInput}">
             <div class="grant-section">
                 <div class="field-row">
                     <div class="field-element inline">
@@ -165,56 +160,5 @@
             </div>
         </ui:fragment>
 
-        </ui:fragment>
-
     </h:body>
 </f:view>
-
-    <!--<ui:fragment rendered="#{not empty grant.beneficiary and empty createInvoiceAddGrantBackingBean.grantType}">-->
-        <!--<div class="grant-section">-->
-            <!--<div class="field-row">-->
-                <!--<div class="field-element inline">-->
-
-                    <!--<h:outputLabel for="grantType" value="Bidragstyp:" />-->
-
-                    <!--<h:selectOneMenu id="grantType" value="#{createInvoiceAddGrantBackingBean.grantType}" pt:autofocus="true">-->
-                        <!--<f:selectItem itemValue="-1" itemLabel="" />-->
-                        <!--<f:selectItem itemValue="0" itemLabel="0-15" />-->
-                        <!--<f:selectItem itemValue="1" itemLabel="Övriga" />-->
-                    <!--</h:selectOneMenu>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="button-row">-->
-                <!--<h:commandLink styleClass="link-btn primary" value="Fortsätt">-->
-                    <!--<f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"-->
-                            <!--render=":addGrantForm" onevent="function(data) {ajaxComplete(data)}" />-->
-                <!--</h:commandLink>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</ui:fragment>-->
-    <!--<ui:fragment rendered="#{not empty grant.beneficiary and not empty createInvoiceAddGrantBackingBean.grantType}">-->
-        <!--<div class="grant-section">-->
-            <!--<p>-->
-                <!--<h:outputText value="Bidragstyp: #{registerGrantBackingBean.grant.grantType}" />-->
-            <!--</p>-->
-        <!--</div>-->
-    <!--</ui:fragment>-->
-    <!--<ui:fragment rendered="#{not empty grant.beneficiary and createInvoiceAddGrantBackingBean.grantType == 0}">-->
-        <!--<div class="grant-section">-->
-            <!--<p>Second grant type form elements</p>-->
-        <!--</div>-->
-    <!--</ui:fragment>-->
-    <!--<ui:fragment rendered="#{not empty grant.beneficiary and createInvoiceAddGrantBackingBean.grantType == 1}">-->
-
-        <!--<div class="grant-section">-->
-            <!--<div class="field-row field-row-2">-->
-                <!--<div class="field-element inline">-->
-                    <!--<h:outputLabel for="prescriptionDate" value="Receptdatum:" />-->
-                    <!--<h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"-->
-                                 <!--value="#{grant.prescriptionDate}"-->
-                                 <!--pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</ui:fragment>-->
-

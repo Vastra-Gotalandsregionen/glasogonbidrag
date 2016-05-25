@@ -125,4 +125,27 @@ public class CreateInvoiceAddGrantPidFlow {
     public void setShowAmountOutput(boolean showAmountOutput) {
         this.showAmountOutput = showAmountOutput;
     }
+
+    public void setAll(boolean visible) {
+        showPersonalNumberInput = visible;
+        showPersonalNumberOutput = visible;
+        showDeliveryDateInput = visible;
+        showDeliveryDateOutput = visible;
+        showGrantTypeInput = visible;
+        showGrantTypeOutput = visible;
+        showGrantTypeAgeSection = visible;
+        showGrantTypeOtherSection = visible;
+        showPrescriptionDateInput = visible;
+        showPrescriptionDateOutput = visible;
+        showAmountInput = visible;
+        showAmountOutput = visible;
+    }
+
+    public void setShowAll() {
+        setAll(true);
+    }
+
+    public void setHideAll() {
+        setAll(false);
+    }
 }
