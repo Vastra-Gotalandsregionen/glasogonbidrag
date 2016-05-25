@@ -27,10 +27,6 @@
                 </div>
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
-                        <!--
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
-                        -->
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
 
@@ -41,14 +37,25 @@
         <ui:fragment rendered="#{flow.showPersonalNumberOutput}">
             <div class="grant-section">
 
-                <div class="person-info-row">
-                    <div class="person-info-item personnumber">
-                        <h:outputText value="#{grant.beneficiary.identification}" />
+                <div class="grant-section-output">
+                    <div class="person-info-row">
+                        <div class="person-info-item personnumber">
+                            <h:outputText value="#{grant.beneficiary.identification}" />
+                        </div>
+                        <div class="person-info-item">
+                            <h:outputText value="#{grant.beneficiary.firstName} #{grant.beneficiary.lastName}" />
+                        </div>
                     </div>
-                    <div class="person-info-item">
-                        <h:outputText value="#{grant.beneficiary.firstName} #{grant.beneficiary.lastName}" />
-                    </div>
+
+                    <h:commandLink styleClass="grant-section-back" value="Tillbaka">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="showPersonalNumberInput" />
+                    </h:commandLink>
+
                 </div>
+
             </div>
         </ui:fragment>
 
@@ -58,7 +65,7 @@
 
                 <div class="field-row">
                     <div class="field-element inline">
-                        <h:outputLabel for="deliveryDate" value="Kvitterings datum:" />
+                        <h:outputLabel for="deliveryDate" value="Kvitteringsdatum:" />
                         <h:inputText id="deliveryDate" styleClass="js-input-mask js-input-mask-date"
                                      value="#{createInvoiceAddGrantBackingBean.deliveryDate}"
                                      pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />
@@ -74,10 +81,17 @@
         </ui:fragment>
         <ui:fragment rendered="${flow.showDeliveryDateOutput}">
             <div class="grant-section">
-                Kvitterings datum:
-                <h:outputText value="#{grant.deliveryDate}">
-                    <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-                </h:outputText>
+                <div class="grant-section-output">
+                    <span class="grant-section-label">
+                        Kvitteringsdatum:
+                    </span>
+                    <span class="grant-section-data">
+                        <h:outputText value="#{grant.deliveryDate}">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </span>
+                    <a class="grant-section-back" href="">Tillbaka</a>
+                </div>
             </div>
         </ui:fragment>
 
@@ -103,7 +117,14 @@
         </ui:fragment>
         <ui:fragment rendered="#{flow.showGrantTypeOutput}">
             <div class="grant-section">
-                <h:outputText value="Bidragstyp: #{createInvoiceAddGrantBackingBean.grantTypeOutput}" />
+                <div class="grant-section-output">
+                    <span class="grant-section-label">
+                        Bidragstyp:
+                    </span>
+                    <span class="grant-section-data">
+                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantType}" />
+                    </span>
+                </div>
             </div>
         </ui:fragment>
 
@@ -112,7 +133,7 @@
             <div class="grant-section">
                 <div class="field-row">
                     <div class="field-element inline">
-                        <h:outputLabel for="prescriptionDate" value="Recept datum:" />
+                        <h:outputLabel for="prescriptionDate" value="Receptdatum:" />
                         <h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"
                                      value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
                                      pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />
@@ -129,10 +150,16 @@
 
         <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}">
             <div class="grant-section">
-                Recept datum:
-                <h:outputText value="#{grant.prescriptionDate}">
-                    <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-                </h:outputText>
+                <div class="grant-section-output">
+                    <span class="grant-section-label">
+                        Receptdatum:
+                    </span>
+                    <span class="grant-section-data">
+                        <h:outputText value="#{grant.prescriptionDate}">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </span>
+                </div>
             </div>
         </ui:fragment>
 
@@ -156,7 +183,7 @@
                 <div class="button-row">
 
                     <h:commandLink styleClass="link-btn primary" value="Spara och registrera nytt"
-                                   action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
+                                   action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
                     <h:commandLink styleClass="link-btn" value="Spara och gå till översikt"
                                    action="#{createInvoiceAddGrantBackingBean.saveGrant}" />

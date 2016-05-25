@@ -310,22 +310,29 @@ public class CreateInvoiceAddGrantBackingBean {
 
     }
 
+    public void stepBackListener() {
+
+        LOGGER.info("stepBackListener()");
+
+        String showSection = facesUtil.fetchProperty("showSection");
+        LOGGER.info("stepBackListener(): showSection: {}", showSection);
+
+
+    }
+
     // Actions
 
     public String doSaveGrantAndAddNew() {
         saveGrant();
 
-        
+        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoice.getId());
 
-        return "";
+        return returnView;
     }
 
     public String doSaveGrantAndShowOverview() {
-        saveGrant();
-
-        return "";
+        return saveGrant();
     }
-
 
 
     public String saveGrant() {
