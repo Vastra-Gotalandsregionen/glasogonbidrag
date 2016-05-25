@@ -1,7 +1,9 @@
 package se.vgregion.service.glasogonbidrag.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.service.glasogonbidrag.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 
 /**
@@ -19,6 +21,10 @@ public interface InvoiceService {
     void updateAddGrant(long userId, long groupId, long companyId,
                         Invoice invoice, Grant grant)
             throws GrantAlreadyExistException;
+
+    void updateAddGrantAdjustment(long userId, long groupId, long companyId,
+                                  Invoice invoice, GrantAdjustment adjustment)
+        throws GrantAdjustmentAlreadySetException;
 
     void delete(Long id);
 }

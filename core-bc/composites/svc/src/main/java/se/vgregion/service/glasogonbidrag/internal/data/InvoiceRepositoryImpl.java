@@ -57,7 +57,7 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
-    public List<Invoice> findByInvoiceNumber(String number) {
+    public List<Invoice> findAllByInvoiceNumber(String number) {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findByInvoiceNumber",
                 Invoice.class);

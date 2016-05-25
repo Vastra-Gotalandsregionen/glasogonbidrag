@@ -47,4 +47,5 @@ public class SupplierServiceImpl implements SupplierService {
 
         em.remove(supplier);
     }
+
 }

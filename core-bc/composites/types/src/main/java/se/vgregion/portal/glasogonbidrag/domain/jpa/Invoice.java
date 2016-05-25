@@ -110,14 +110,17 @@ public class Invoice {
 
     private int amount;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private List<Grant> grants;
 
     @ManyToOne
     private Supplier supplier;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice")
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private GrantAdjustment adjustment;
 
     public Invoice() {
