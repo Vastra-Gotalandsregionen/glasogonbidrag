@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification;
@@ -21,6 +22,7 @@ import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
@@ -239,6 +241,8 @@ public class DBViewViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        int amount = inv.getAmount();
+        int vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
@@ -248,8 +252,6 @@ public class DBViewViewBackingBean {
         grant.setBeneficiary(b1);
         grant.setDeliveryDate(cal.getTime());
         grant.setPrescriptionDate(cal.getTime());
-
-        inv.addGrant(grant);
 
         invoiceService.updateWithGrants(userId, groupId, companyId, inv);
 
@@ -268,6 +270,8 @@ public class DBViewViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        int amount = inv.getAmount();
+        int vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
@@ -284,6 +288,29 @@ public class DBViewViewBackingBean {
             LOGGER.warn("Already inserted.");
         }
 
+        return "view?faces-redirect=true";
+    }
+
+    public String addGrantAdjustment() {
+        LOGGER.info("DBViewViewBackingBean - addGrantAdjustment()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        GrantAdjustment adjustment = new GrantAdjustment();
+        adjustment.setAmount(60000);
+
+        try {
+            invoiceService.updateAddGrantAdjustment(
+                    userId, groupId, companyId,
+                    inv, adjustment);
+        } catch (GrantAdjustmentAlreadySetException e) {
+            LOGGER.warn("Already present.");
+        }
         return "view?faces-redirect=true";
     }
 

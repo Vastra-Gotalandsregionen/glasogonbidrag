@@ -15,9 +15,9 @@ public interface InvoiceRepository {
 
     Invoice findByVerificationNumber(String number);
 
-    List<Invoice> findByInvoiceNumber(String number);
-
     List<Invoice> findAll();
 
     List<Invoice> findAllBySupplier(Supplier supplier);
+
+    List<Invoice> findAllByInvoiceNumber(String number);
 }
