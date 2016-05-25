@@ -12,14 +12,15 @@
     <h:body>
 
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
+        <c:set var="flow" value="#{createInvoiceAddGrantBackingBean.flow}" scope="request" />
 
         <!-- Insert beneficiary's identification number -->
-        <ui:fragment rendered="#{empty grant.beneficiary}">
+        <ui:fragment rendered="#{flow.showPersonalNumberInput}">
             <div class="grant-section">
                 <div class="field-row">
                     <div class="field-element inline">
-                        <h:outputLabel for="personNumber" value="Personnummer:" />
-                        <h:inputText id="personNumber" styleClass="js-input-mask js-input-mask-personnumber"
+                        <h:outputLabel for="personalNumber" value="Personnummer:" />
+                        <h:inputText id="personalNumber" styleClass="js-input-mask js-input-mask-personnumber"
                                      value="#{createInvoiceAddGrantBackingBean.number}"
                                      pt:placeholder="Skriv in personnummer..." pt:autofocus="true" />
                     </div>
@@ -30,14 +31,14 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
                         -->
-                        <f:ajax execute="@form" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render="@form" onevent="function(data) {ajaxComplete(data)}" />
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
 
                     </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
-        <ui:fragment rendered="#{not empty grant.beneficiary}">
+        <ui:fragment rendered="#{flow.showPersonalNumberOutput}">
             <div class="grant-section">
 
                 <div class="person-info-row">
@@ -52,10 +53,7 @@
         </ui:fragment>
 
         <!-- Input delivery date -->
-        <!--
-        <ui:fragment rendered="#{not empty grant.beneficiary and empty grant.deliveryDate}">
-        -->
-        <ui:fragment rendered="#{true}">
+        <ui:fragment rendered="#{flow.showDeliveryDateInput}">
             <div class="grant-section">
 
                 <div class="field-row">
@@ -69,31 +67,12 @@
             </div>
             <div class="button-row">
                 <h:commandLink styleClass="link-btn primary" value="Fortsätt">
-                    <!--
                     <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
                             render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
-                    -->
-                    <f:ajax execute="@form" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
-                            render="@form" onevent="function(data) {ajaxComplete(data)}" />
-
                 </h:commandLink>
-
-                <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Fortsätt2">
-                        <!--
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
-                        -->
-                        <f:ajax execute="@form" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render="@form" onevent="function(data) {ajaxComplete(data)}" />
-
-                    </h:commandLink>
-                </div>
-
-
             </div>
         </ui:fragment>
-        <ui:fragment rendered="${not empty grant.deliveryDate}">
+        <ui:fragment rendered="${flow.showDeliveryDateOutput}">
             <div class="grant-section">
                 Kvitterings datum:
                 <h:outputText value="#{grant.deliveryDate}">
@@ -103,8 +82,7 @@
         </ui:fragment>
 
         <!-- Choose the grant type -->
-        <ui:fragment rendered="#{not empty grant.beneficiary and not empty grant.deliveryDate and
-                                 empty createInvoiceAddGrantBackingBean.grantType}">
+        <ui:fragment rendered="#{flow.showGrantTypeInput}">
             <div class="grant-section">
                 <div class="field-row">
                     <div class="field-element inline">
@@ -123,7 +101,7 @@
                 </div>
             </div>
         </ui:fragment>
-        <ui:fragment rendered="#{not empty grant.beneficiary and not empty createInvoiceAddGrantBackingBean.grantType}">
+        <ui:fragment rendered="#{flow.showGrantTypeInput}">
             <div class="grant-section">
                 <h:outputText value="Bidragstyp: #{createInvoiceAddGrantBackingBean.grantTypeOutput}" />
             </div>

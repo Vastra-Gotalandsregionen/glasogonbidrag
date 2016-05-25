@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
@@ -70,6 +71,10 @@ public class CreateInvoiceAddGrantBackingBean {
     private String portletNamespace;
     private boolean newBeneficiary;
 
+    // Flow
+
+    private CreateInvoiceAddGrantPidFlow flow;
+
     // Main objects
 
     private Invoice invoice;
@@ -126,6 +131,15 @@ public class CreateInvoiceAddGrantBackingBean {
         this.beneficiary = beneficiary;
     }
 
+    // Getter and Setters for Flow
+
+    public CreateInvoiceAddGrantPidFlow getFlow() {
+        return flow;
+    }
+
+    public void setFlow(CreateInvoiceAddGrantPidFlow flow) {
+        this.flow = flow;
+    }
 
     // Getter and Setters for Session data
 
@@ -197,6 +211,20 @@ public class CreateInvoiceAddGrantBackingBean {
                 "personNumberListener(): {}", beneficiary);
 
         grant.setBeneficiary(beneficiary);
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(true);
+        flow.setShowDeliveryDateOutput(false);
+        flow.setShowGrantTypeInput(false);
+        flow.setShowGrantTypeOutput(false);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void deliveryDateListener() {
@@ -214,6 +242,20 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         grant.setDeliveryDate(date);
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(false);
+        flow.setShowDeliveryDateOutput(true);
+        flow.setShowGrantTypeInput(true);
+        flow.setShowGrantTypeOutput(false);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void grantTypeListener() {
@@ -223,6 +265,20 @@ public class CreateInvoiceAddGrantBackingBean {
             // TODO: make address check against deliveryDate
             LOGGER.info("grantTypeListener(): addressCheck=");
         }
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(false);
+        flow.setShowDeliveryDateOutput(true);
+        flow.setShowGrantTypeInput(false);
+        flow.setShowGrantTypeOutput(true);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void prescriptionDateListener() {
@@ -360,6 +416,8 @@ public class CreateInvoiceAddGrantBackingBean {
     @PostConstruct
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
+
+        flow = new CreateInvoiceAddGrantPidFlow();
 
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceRepository.findWithParts(invoiceId);
