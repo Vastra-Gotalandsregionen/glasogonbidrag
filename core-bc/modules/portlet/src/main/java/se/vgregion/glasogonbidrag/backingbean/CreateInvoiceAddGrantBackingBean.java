@@ -1,6 +1,5 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
@@ -20,11 +20,11 @@ import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
@@ -40,7 +40,7 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "createInvoiceAddGrantBackingBean")
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CreateInvoiceAddGrantBackingBean {
 
     private static final Logger LOGGER =
@@ -69,6 +69,10 @@ public class CreateInvoiceAddGrantBackingBean {
     private TabUtil tabUtil;
     private String portletNamespace;
     private boolean newBeneficiary;
+
+    // Flow
+
+    private CreateInvoiceAddGrantPidFlow flow;
 
     // Main objects
 
@@ -126,6 +130,15 @@ public class CreateInvoiceAddGrantBackingBean {
         this.beneficiary = beneficiary;
     }
 
+    // Getter and Setters for Flow
+
+    public CreateInvoiceAddGrantPidFlow getFlow() {
+        return flow;
+    }
+
+    public void setFlow(CreateInvoiceAddGrantPidFlow flow) {
+        this.flow = flow;
+    }
 
     // Getter and Setters for Session data
 
@@ -197,6 +210,20 @@ public class CreateInvoiceAddGrantBackingBean {
                 "personNumberListener(): {}", beneficiary);
 
         grant.setBeneficiary(beneficiary);
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(true);
+        flow.setShowDeliveryDateOutput(false);
+        flow.setShowGrantTypeInput(false);
+        flow.setShowGrantTypeOutput(false);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void deliveryDateListener() {
@@ -214,6 +241,20 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         grant.setDeliveryDate(date);
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(false);
+        flow.setShowDeliveryDateOutput(true);
+        flow.setShowGrantTypeInput(true);
+        flow.setShowGrantTypeOutput(false);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void grantTypeListener() {
@@ -223,6 +264,20 @@ public class CreateInvoiceAddGrantBackingBean {
             // TODO: make address check against deliveryDate
             LOGGER.info("grantTypeListener(): addressCheck=");
         }
+
+        // Set flow
+        flow.setShowPersonalNumberInput(false);
+        flow.setShowPersonalNumberOutput(true);
+        flow.setShowDeliveryDateInput(false);
+        flow.setShowDeliveryDateOutput(true);
+        flow.setShowGrantTypeInput(false);
+        flow.setShowGrantTypeOutput(true);
+        flow.setShowGrantTypeAgeSection(false);
+        flow.setShowGrantTypeOtherSection(false);
+        flow.setShowPrescriptionDateInput(false);
+        flow.setShowPrescriptionDateOutput(false);
+        flow.setShowAmountInput(false);
+        flow.setShowAmountOutput(false);
     }
 
     public void prescriptionDateListener() {
@@ -251,10 +306,11 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public String saveGrant() {
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        ThemeDisplay themeDisplay = (ThemeDisplay)externalContext.getRequestMap().get(WebKeys.THEME_DISPLAY);
+        // Fetch theme display
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+
         long userId = themeDisplay.getUserId();
-        long scopeGroupid = themeDisplay.getScopeGroupId();
+        long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
         // Insert beneficiary first.
@@ -265,7 +321,8 @@ public class CreateInvoiceAddGrantBackingBean {
                 LOGGER.warn("Beneficiary didn't have a identificaiton. " +
                         "Serious error in this flow.");
 
-                FacesMessage message = new FacesMessage("Generic fatal error...");
+                FacesMessage message =
+                        new FacesMessage("Generic fatal error...");
                 FacesContext.getCurrentInstance().addMessage(null, message);
 
                 return null;
@@ -294,32 +351,41 @@ public class CreateInvoiceAddGrantBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal centWithVatDecimal = amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal = centWithVatDecimal.multiply(new BigDecimal("0.8"));
+        BigDecimal centWithVatDecimal =
+                amountWithVatDecimal.multiply(new BigDecimal("100"));
+        BigDecimal centDecimal =
+                centWithVatDecimal.multiply(new BigDecimal("0.8"));
         BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
 
         int amount = centDecimal.intValue();
         int vat = vatDecimal.intValue();
 
-        Calendar cal = Calendar.getInstance();
-        Date createDate = cal.getTime();
-
         grant.setAmount(amount);
         grant.setVat(vat);
-        grant.setUserId(userId);
-        grant.setGroupId(scopeGroupid);
-        grant.setCompanyId(companyId);
-        grant.setCreateDate(createDate);
-        grant.setModifiedDate(createDate);
-        invoice.addGrant(grant);
 
-        invoiceService.update(invoice);
+        try {
+            invoiceService.updateAddGrant(userId, groupId, companyId,
+                    invoice, grant);
+        } catch (GrantAlreadyExistException e) {
+            LOGGER.warn("Cannot add the same grant twice.");
+
+            FacesMessage message =
+                    new FacesMessage("Cannot add the same grant twice.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return null;
+        }
 
         return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
     }
 
     // Facelet styling methods
 
+    /**
+     * Create list of grant types as a list of select items.
+     *
+     * @return a select item list with grant types.
+     */
     public List<SelectItem> getGrantTypes() {
         List<SelectItem> items = new ArrayList<>();
 
@@ -344,6 +410,11 @@ public class CreateInvoiceAddGrantBackingBean {
         return items;
     }
 
+    /**
+     * Pretty printing of the grant type.
+     *
+     * @return a string representation of grant type.
+     */
     public String getGrantTypeOutput() {
         if ("0".equals(grantType)) {
             return "0-15";
@@ -358,8 +429,14 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Initializer
 
-    public void init(Invoice newInvoice) {
+    @PostConstruct
+    public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
+
+        flow = new CreateInvoiceAddGrantPidFlow();
+
+        long invoiceId = facesUtil.fetchId("invoiceId");
+        invoice = invoiceRepository.findWithParts(invoiceId);
 
         tabUtil = new TabUtil(Arrays.asList("Personnummer", "LMA-Nummer"), 0);
 
@@ -368,7 +445,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         newBeneficiary = false;
 
-        invoice = newInvoice;
+        //invoice = newInvoice;
 
         grant = new Grant();
         beneficiary = null;
@@ -379,4 +456,5 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriptionDate = null;
         amountWithVat = null;
     }
+
 }

@@ -42,12 +42,13 @@ public class CreateInvoiceViewInvoiceBackingBean {
         Long invoiceId = facesUtil.fetchId("invoiceId");
 
         System.out.println("Invoice id: " + invoiceId);
-        invoice = invoiceRepository.findWithParts(invoiceId);
+        //invoice = invoiceRepository.findWithParts(invoiceId);
 
-        addGrantBackingBean.init(invoice);
+        //addGrantBackingBean.init(invoice);
 
-        return "add_grant?&faces-redirect=true" +
-                "&includeViewParams=true";
+        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoiceId);
+
+        return returnView;
     }
 
     @PostConstruct

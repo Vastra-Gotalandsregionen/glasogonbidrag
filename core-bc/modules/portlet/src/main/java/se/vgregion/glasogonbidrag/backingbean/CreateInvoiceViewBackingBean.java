@@ -1,11 +1,13 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
@@ -37,6 +39,9 @@ public class CreateInvoiceViewBackingBean {
 
     @Autowired
     private CreateInvoiceAddGrantBackingBean addGrantBackingBean;
+
+    @Autowired
+    private FacesUtil facesUtil;
 
     /**
      * List of suppliers that will be used to populate the
@@ -109,6 +114,12 @@ public class CreateInvoiceViewBackingBean {
     public String register() {
         LOGGER.info("CreateInvoiceViewBackingBean - register()");
 
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
         LOGGER.info("Verification: {}, Supplier: {}, Invoice: {}, Amount: {}",
                 new Object[] {
                         getVerificationNumber(),
@@ -117,7 +128,8 @@ public class CreateInvoiceViewBackingBean {
                         getAmountWithVat()});
 
         String verificationNumber = getVerificationNumber();
-        if (verificationNumber == null || verificationNumber.trim().isEmpty()) {
+        if (verificationNumber == null ||
+                verificationNumber.trim().isEmpty()) {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
 
@@ -159,8 +171,10 @@ public class CreateInvoiceViewBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal centWithVatDecimal = amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal = centWithVatDecimal.multiply(new BigDecimal("0.8"));
+        BigDecimal centWithVatDecimal =
+                amountWithVatDecimal.multiply(new BigDecimal("100"));
+        BigDecimal centDecimal =
+                centWithVatDecimal.multiply(new BigDecimal("0.8"));
         BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
 
         int amount = centDecimal.intValue();
@@ -175,14 +189,15 @@ public class CreateInvoiceViewBackingBean {
         invoice.setVat(vat);
         invoice.setSupplier(s1);
 
-        invoiceService.create(invoice);
+        invoiceService.create(userId, groupId, companyId, invoice);
 
         LOGGER.info("Persisted invoice, got id: {}", invoice.getId());
 
-        addGrantBackingBean.init(invoice);
-
-        return "add_grant?&faces-redirect=true" +
-                    "&includeViewParams=true";
+        return String.format(
+                "add_grant?invoiceId=%d" +
+                        "&faces-redirect=true" +
+                        "&includeViewParams=true",
+                invoice.getId());
     }
 
     public String cancel() {
@@ -191,10 +206,13 @@ public class CreateInvoiceViewBackingBean {
         return "view?faces-redirect=true";
     }
 
+    // Initializer
+
     @PostConstruct
     protected void init() {
         LOGGER.info("CreateInvoiceViewBackingBean - init()");
 
         suppliers = supplierRepository.findAll();
     }
+
 }
