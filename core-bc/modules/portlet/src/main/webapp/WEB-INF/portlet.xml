@@ -7,13 +7,13 @@
                 http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
     <portlet>
-        <portlet-name>glasogonbidrag-invoice</portlet-name>
-        <display-name>glasogonbidrag-invoice</display-name>
+        <portlet-name>glasogonbidrag-create-invoice</portlet-name>
+        <display-name>glasogonbidrag-create-invoice</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
-            <value>/views/invoice/view.xhtml</value>
+            <value>/views/create_invoice/view.xhtml</value>
         </init-param>
 
         <supports>
@@ -22,9 +22,32 @@
         </supports>
 
         <portlet-info>
-            <title>glasogonbidrag-invoice</title>
-            <short-title>glasogonbidrag-invoice</short-title>
-            <keywords>glasogonbidrag-invoice</keywords>
+            <title>glasogonbidrag-create-invoice</title>
+            <short-title>glasogonbidrag-create-invoice</short-title>
+            <keywords>glasogonbidrag-create-invoice</keywords>
+        </portlet-info>
+    </portlet>
+
+
+    <portlet>
+        <portlet-name>glasogonbidrag-db-view</portlet-name>
+        <display-name>glasogonbidrag-db-view</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/db_view/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-db-view</title>
+            <short-title>glasogonbidrag-db-view</short-title>
+            <keywords>glasogonbidrag-db-view</keywords>
         </portlet-info>
     </portlet>
 

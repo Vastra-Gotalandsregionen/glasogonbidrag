@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+
+
+        <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
+
+
+                <div class="box box-sidebar">
+
+                    <div class="box-hd">
+                        <h3 class="box-title">
+                            <h:outputText value="Historik Bidragstagare" />
+                        </h3>
+                    </div>
+
+                    <div class="box-bd"></div>
+
+
+                    <h:dataTable rendered="true" var="grant" value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" styleClass="simple-table">
+
+                        <!-- Todo: ver.nr should be fetched from invoice -->
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Ver.nr." />
+                            </f:facet>
+                            <a href="#invoice">
+                                <h:outputText value="A12345" />
+                            </a>
+                        </h:column>
+
+                        <!-- Todo: perhaps math should be done before view. -->
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Belopp" />
+                            </f:facet>
+                            <h:outputText value="#{(grant.amount+grant.vat)/100}">
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" />
+                            </h:outputText>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Datum" />
+                            </f:facet>
+                            <div>
+                                <h:outputText value="#{grant.deliveryDate}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </div>
+                            <div>
+                                <h:outputText value="#{grant.deliveryDate}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </div>
+                        </h:column>
+
+                        <!-- Todo: status should be fetched from invoice. -->
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Status" />
+                            </f:facet>
+                            <h:outputText value="Betalad" />
+                        </h:column>
+
+
+                    </h:dataTable>
+                </div>
+
+
+        </ui:fragment>
+
+    </h:body>
+
+</f:view>

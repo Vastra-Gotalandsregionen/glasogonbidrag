@@ -1,9 +1,12 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import org.hibernate.exception.ConstraintViolationException;
+import com.liferay.portal.theme.ThemeDisplay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
@@ -16,10 +19,10 @@ import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
-import se.vgregion.service.glasogonbidrag.api.service.IdentificationService;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
@@ -32,9 +35,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-@Component(value = "viewBean")
+@Component(value = "dbViewViewBackingBean")
 @Scope(value = "request")
-public class ViewBackingBean {
+public class DBViewViewBackingBean {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DBViewViewBackingBean.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -60,6 +66,9 @@ public class ViewBackingBean {
     @Autowired
     private BeneficiaryService beneficiaryService;
 
+    @Autowired
+    private FacesUtil facesUtil;
+
     private List<Supplier> suppliers;
     private List<Invoice> invoices;
     private List<Beneficiary> beneficiaries;
@@ -77,7 +86,7 @@ public class ViewBackingBean {
     }
 
     public String insertSupplier() {
-        System.out.println("ViewBackingBean - insertSupplier");
+        LOGGER.info("DBViewViewBackingBean - insertSupplier()");
 
         Supplier supplier = new Supplier();
         supplier.setName("Specsavers");
@@ -88,7 +97,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary1() {
-        System.out.println("ViewBackingBean - insertBeneficiary1");
+        LOGGER.info("DBViewViewBackingBean - insertBeneficiary1()");
 
         PersonalIdentification i1 = new PersonalIdentification();
         i1.setNumber("11294377-1834");
@@ -104,7 +113,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary2() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("DBViewViewBackingBean - insertBeneficiary2()");
 
         PersonalIdentification i2 = new PersonalIdentification();
         i2.setNumber("67652979-0773");
@@ -120,7 +129,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary3() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("DBViewViewBackingBean - insertBeneficiary3()");
 
         PersonalIdentification i3 = new PersonalIdentification();
         i3.setNumber("36386944-2631");
@@ -136,7 +145,7 @@ public class ViewBackingBean {
     }
 
     public String insertBeneficiary4() {
-        System.out.println("ViewBackingBean - insertBeneficiary2");
+        LOGGER.info("DBViewViewBackingBean - insertBeneficiary4()");
 
         LMAIdentification i4 = new LMAIdentification();
         i4.setNumber("50-008920/4");
@@ -170,7 +179,12 @@ public class ViewBackingBean {
     }
 
     public String insertInvoice() {
-        System.out.println("ViewBackingBean - insertInvoice");
+        LOGGER.info("DBViewViewBackingBean - insertInvoice()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
 
         Supplier supplier = supplierRepository.find("Specsavers");
 
@@ -195,6 +209,7 @@ public class ViewBackingBean {
         g2.setBeneficiary(b2);
         g2.setDeliveryDate(cal.getTime());
         g2.setPrescriptionDate(cal.getTime());
+
         List<Grant> grants = new ArrayList<>();
         grants.add(g1);
         grants.add(g2);
@@ -207,16 +222,20 @@ public class ViewBackingBean {
         invoice.setInvoiceDate(cal.getTime());
         invoice.setInvoiceNumber("10002");
         invoice.setVerificationNumber("E510396");
-        invoice.setUserId(20159);
-        invoice.setCompanyId(20155);
-        invoice.setGroupId(20195);
 
-        invoiceService.create(invoice);
+        invoiceService.create(userId, groupId, companyId, invoice);
 
         return "view?faces-redirect=true";
     }
 
     public String addGrant1() {
+        LOGGER.info("DBViewViewBackingBean - addGrant1()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
         Identification id1 = identificationRepository.findByPersonalNumber("67652979-0773");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
@@ -226,22 +245,26 @@ public class ViewBackingBean {
 
         Calendar cal = Calendar.getInstance();
 
-        Grant g1 = new Grant();
-        g1.setAmount(30000);
-        g1.setVat(7500);
-        g1.setBeneficiary(b1);
-        g1.setDeliveryDate(cal.getTime());
-        g1.setPrescriptionDate(cal.getTime());
+        Grant grant = new Grant();
+        grant.setAmount(30000);
+        grant.setVat(7500);
+        grant.setBeneficiary(b1);
+        grant.setDeliveryDate(cal.getTime());
+        grant.setPrescriptionDate(cal.getTime());
 
-        inv.addGrant(g1);
-        inv.setAmount(amount + 30000);
-        inv.setVat(vat + 7500);
-        invoiceService.update(inv);
+        invoiceService.updateWithGrants(userId, groupId, companyId, inv);
 
         return "view?faces-redirect=true";
     }
 
     public String addGrant2() {
+        LOGGER.info("DBViewViewBackingBean - addGrant2()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
         Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
@@ -251,36 +274,25 @@ public class ViewBackingBean {
 
         Calendar cal = Calendar.getInstance();
 
-        Grant g1 = new Grant();
-        g1.setAmount(60000);
-        g1.setVat(15000);
-        g1.setBeneficiary(b1);
-        g1.setDeliveryDate(cal.getTime());
-        g1.setPrescriptionDate(cal.getTime());
+        Grant grant = new Grant();
+        grant.setAmount(60000);
+        grant.setVat(15000);
+        grant.setBeneficiary(b1);
+        grant.setDeliveryDate(cal.getTime());
+        grant.setPrescriptionDate(cal.getTime());
 
-        inv.addGrant(g1);
-        inv.setAmount(amount + 40000);
-        inv.setVat(vat + 10000);
-        invoiceService.update(inv);
-
-        return "view?faces-redirect=true";
-    }
-
-    public String addGrantAdjustment() {
-        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
-
-        GrantAdjustment adjustment = new GrantAdjustment();
-        adjustment.setAmount(20000);
-
-        inv.setAdjustment(adjustment);
-        invoiceService.update(inv);
+        try {
+            invoiceService.updateAddGrant(userId, groupId, companyId, inv, grant);
+        } catch (GrantAlreadyExistException e) {
+            LOGGER.warn("Already inserted.");
+        }
 
         return "view?faces-redirect=true";
     }
 
     @PostConstruct
     protected void init() {
-        System.out.println("ViewBackingBean - init");
+        LOGGER.info("DBViewViewBackingBean - init()");
 
         fetchSuppliers();
         fetchInvoices();

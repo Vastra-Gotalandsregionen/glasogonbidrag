@@ -22,8 +22,20 @@
 
     <context:component-scan base-package="se.vgregion.glasogonbidrag.backingbean"/>
     <context:component-scan base-package="se.vgregion.glasogonbidrag.util"/>
+    <context:component-scan base-package="se.vgregion.miscibility.jsf"/>
 
     <context:annotation-config/>
+
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="view">
+                    <bean class="se.vgregion.glasogonbidrag.jsf.ViewScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
     <tx:annotation-driven />
 
 </beans>

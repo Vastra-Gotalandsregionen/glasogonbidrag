@@ -9,3 +9,22 @@ INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, cr
 INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Wasaoptik', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
 INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Direktoptik', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
 INSERT INTO vgr_glasogonbidrag_supplier (name, user_id, group_id, company_id, create_date, modified_date) VALUES ('Hendéns', 20159, 20195, 20155, '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
+
+INSERT INTO vgr_glasogonbidrag_identification (id, identity_type) VALUES (100, 'p');
+INSERT INTO vgr_glasogonbidrag_personal_identification (id, number) VALUES (100, '19990101-1111');
+INSERT INTO vgr_glasogonbidrag_identification (id, identity_type) VALUES (200, 'p');
+INSERT INTO vgr_glasogonbidrag_personal_identification (id, number) VALUES (200, '20101010-2010');
+INSERT INTO vgr_glasogonbidrag_identification (id, identity_type) VALUES (300, 'p');
+INSERT INTO vgr_glasogonbidrag_personal_identification (id, number) VALUES (300, '19801212-1212');
+
+INSERT INTO vgr_glasogonbidrag_beneficiary  (id, identification_id, create_date, modified_date, first_name, last_name) VALUES (110, 100, '2016-01-01 08:00:00.000', '2016-01-01 08:00:00.000', 'Karin', 'Bergqvist');
+INSERT INTO vgr_glasogonbidrag_beneficiary  (id, identification_id, create_date, modified_date, first_name, last_name) VALUES (210, 200, '2016-01-01 08:00:00.000', '2016-01-01 08:00:00.000', 'Kim', 'Grahn');
+INSERT INTO vgr_glasogonbidrag_beneficiary  (id, identification_id, create_date, modified_date, first_name, last_name) VALUES (310, 300, '2016-01-01 08:00:00.000', '2016-01-01 08:00:00.000', 'David', 'Alm');
+
+INSERT INTO vgr_glasogonbidrag_invoice (id, user_id, group_id, company_id, create_date, modified_date, amount, vat, invoice_date, invoice_number, verification_number, supplier_name) VALUES (1000, 20159, 20195, 20155, '2016-05-02 08:58:00.000', '2016-05-02 09:18:00.000', 100000, 25000, '2015-11-22', '10001', 'E510382', 'Direktoptik');
+INSERT INTO vgr_glasogonbidrag_invoice (id, user_id, group_id, company_id, create_date, modified_date, amount, vat, invoice_date, invoice_number, verification_number, supplier_name) VALUES (2000, 20159, 20195, 20155, '2016-05-03 08:58:00.000', '2016-05-02 09:18:00.000', 100000, 25000, '2015-11-22', '10124', 'E542343', 'Synsam Delta');
+
+INSERT INTO vgr_glasogonbidrag_grant (user_id, group_id, company_id, create_date, modified_date, delivery_date, prescription_date, amount, vat, receiver, invoice_id) VALUES (20159, 20195, 20155, '2016-05-02 08:58:00.000', '2016-05-02 08:58:00.000', '2015-11-21', '2016-01-26', 50000, 12500, 110, 1000);
+INSERT INTO vgr_glasogonbidrag_grant (user_id, group_id, company_id, create_date, modified_date, delivery_date, prescription_date, amount, vat, receiver, invoice_id) VALUES (20159, 20195, 20155, '2016-05-02 08:58:00.000', '2016-05-02 08:58:00.000', '2015-11-21', '2016-01-26', 50000, 12500, 210, 1000);
+INSERT INTO vgr_glasogonbidrag_grant (user_id, group_id, company_id, create_date, modified_date, delivery_date, prescription_date, amount, vat, receiver, invoice_id) VALUES (20159, 20195, 20155, '2016-05-02 08:58:00.000', '2016-05-02 08:58:00.000', '2015-11-21', '2016-01-26', 50000, 12500, 110, 2000);
+INSERT INTO vgr_glasogonbidrag_grant (user_id, group_id, company_id, create_date, modified_date, delivery_date, prescription_date, amount, vat, receiver, invoice_id) VALUES (20159, 20195, 20155, '2016-05-02 08:58:00.000', '2016-05-02 08:58:00.000', '2015-11-21', '2016-01-26', 50000, 12500, 310, 2000);

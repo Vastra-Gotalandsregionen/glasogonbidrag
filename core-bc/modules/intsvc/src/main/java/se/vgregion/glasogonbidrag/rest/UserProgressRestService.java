@@ -45,6 +45,7 @@ public class UserProgressRestService {
     public Response getDataOnDate(@PathParam("userId") long userId,
                                   @PathParam("date") String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         Date date;
         try {
             date = sdf.parse(dateString);

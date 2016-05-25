@@ -6,10 +6,17 @@
 <liferay-portlet-app>
 
     <portlet>
-        <portlet-name>glasogonbidrag-invoice</portlet-name>
+        <portlet-name>glasogonbidrag-create-invoice</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
-        <css-class-wrapper>glasogonbidrag-stub-portlet</css-class-wrapper>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-db-view</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
     </portlet>
 
 </liferay-portlet-app>

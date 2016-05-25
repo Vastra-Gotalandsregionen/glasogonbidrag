@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,12 @@ import java.util.List;
 @Entity
 @Table(name = "vgr_glasogonbidrag_invoice")
 @NamedQueries({
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findWithGrants",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
+                        "WHERE i.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findWithParts",
                 query = "SELECT i " +
@@ -117,7 +124,7 @@ public class Invoice {
     private GrantAdjustment adjustment;
 
     public Invoice() {
-
+        grants = new ArrayList<>();
     }
 
     public Long getId() {

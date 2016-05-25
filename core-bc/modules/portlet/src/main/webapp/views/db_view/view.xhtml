@@ -16,9 +16,9 @@
         </div>
 
         <h2>Suppliers</h2>
-        <ui:fragment rendered="#{not empty viewBean.suppliers}">
+        <ui:fragment rendered="#{not empty dbViewViewBackingBean.suppliers}">
             <ul>
-                <ui:repeat id="suppliers" value="#{viewBean.suppliers}" var="supplier">
+                <ui:repeat id="suppliers" value="#{dbViewViewBackingBean.suppliers}" var="supplier">
                     <li>
                         <h:link value="#{supplier.name}" outcome="viewSupplier">
                             <f:param name="supplierName" value="#{supplier.name}" />
@@ -27,16 +27,16 @@
                 </ui:repeat>
             </ul>
         </ui:fragment>
-        <ui:fragment rendered="#{empty viewBean.suppliers}">
+        <ui:fragment rendered="#{empty dbViewViewBackingBean.suppliers}">
             <div class="alert alert-warning">
                 No suppliers in the database.
             </div>
         </ui:fragment>
 
         <h2>Beneficiaries</h2>
-        <ui:fragment rendered="#{not empty viewBean.beneficiaries}">
+        <ui:fragment rendered="#{not empty dbViewViewBackingBean.beneficiaries}">
             <ul>
-                <ui:repeat id="beneficiaries" value="#{viewBean.beneficiaries}" var="beneficiary">
+                <ui:repeat id="beneficiaries" value="#{dbViewViewBackingBean.beneficiaries}" var="beneficiary">
                     <li>
                         <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})" outcome="viewBeneficiary">
                             <f:param name="beneficiaryId" value="#{beneficiary.id}" />
@@ -45,16 +45,16 @@
                 </ui:repeat>
             </ul>
         </ui:fragment>
-        <ui:fragment rendered="#{empty viewBean.beneficiaries}">
+        <ui:fragment rendered="#{empty dbViewViewBackingBean.beneficiaries}">
             <div class="alert alert-warning">
                 No beneficiareies in the database.
             </div>
         </ui:fragment>
 
         <h2>Invoices</h2>
-        <ui:fragment rendered="#{not empty viewBean.invoices}">
+        <ui:fragment rendered="#{not empty dbViewViewBackingBean.invoices}">
             <ul>
-                <ui:repeat id="invoices" value="#{viewBean.invoices}" var="invoice">
+                <ui:repeat id="invoices" value="#{dbViewViewBackingBean.invoices}" var="invoice">
                     <li>
                         <h:link value="#{invoice.invoiceNumber} - #{invoice.verificationNumber}" outcome="viewInvoice">
                             <f:param name="invoiceId" value="#{invoice.id}" />
@@ -63,25 +63,26 @@
                 </ui:repeat>
             </ul>
         </ui:fragment>
-        <ui:fragment rendered="#{empty viewBean.invoices}">
+        <ui:fragment rendered="#{empty dbViewViewBackingBean.invoices}">
             <div class="alert alert-warning">
                 No invoices in the database.
             </div>
         </ui:fragment>
 
         <h:form>
-            <h2>Controls:</h2>
+            <h2>Add basic data controls:</h2>
             <div class="btn-group">
-                <h:commandButton class="btn" action="#{viewBean.insertSupplier}" value=" supplier" />
-                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary1}" value="Beneficiary 1" />
-                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary2}" value="Beneficiary 2" />
-                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary3}" value="Beneficiary 3" />
-                <h:commandButton class="btn" action="#{viewBean.insertBeneficiary4}" value="Beneficiary 4" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertSupplier}" value="Supplier" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertBeneficiary1}" value="Beneficiary 1" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertBeneficiary2}" value="Beneficiary 2" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertBeneficiary3}" value="Beneficiary 3" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertBeneficiary4}" value="Beneficiary 4" />
             </div>
+            <h2>Add invoice controls:</h2>
             <div class="btn-group">
-                <h:commandButton class="btn" action="#{viewBean.insertInvoice}" value="Invoice" />
-                <h:commandButton class="btn" action="#{viewBean.addGrant1}" value="Extra Grant" />
-                <h:commandButton class="btn" action="#{viewBean.addGrant2}" value="One more Grant" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.insertInvoice}" value="Invoice" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.addGrant1}" value="Extra Grant" />
+                <h:commandButton class="btn" action="#{dbViewViewBackingBean.addGrant2}" value="One more Grant" />
                 <h:commandButton class="btn" action="#{viewBean.addGrantAdjustment}" value="Adjust invoice" />
             </div>
         </h:form>
