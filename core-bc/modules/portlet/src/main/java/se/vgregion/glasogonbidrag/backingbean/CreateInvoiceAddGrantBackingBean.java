@@ -299,6 +299,7 @@ public class CreateInvoiceAddGrantBackingBean {
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             flow.setShowGrantTypeAgeSection(true);
             flow.setShowPrescriptionDateOutput(true);
+            flow.setShowAmountInput(true);
         }
 
 
@@ -310,6 +311,22 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     // Actions
+
+    public String doSaveGrantAndAddNew() {
+        saveGrant();
+
+        
+
+        return "";
+    }
+
+    public String doSaveGrantAndShowOverview() {
+        saveGrant();
+
+        return "";
+    }
+
+
 
     public String saveGrant() {
 

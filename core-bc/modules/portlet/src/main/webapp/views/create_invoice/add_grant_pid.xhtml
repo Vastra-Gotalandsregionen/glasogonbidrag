@@ -154,7 +154,11 @@
                     </div>
                 </div>
                 <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Spara"
+
+                    <h:commandLink styleClass="link-btn primary" value="Spara och registrera nytt"
+                                   action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
+
+                    <h:commandLink styleClass="link-btn" value="Spara och gå till översikt"
                                    action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
                 </div>
             </div>
