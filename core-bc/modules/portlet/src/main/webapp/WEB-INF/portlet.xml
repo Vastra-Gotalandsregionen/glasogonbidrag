@@ -51,4 +51,27 @@
         </portlet-info>
     </portlet>
 
+
+    <portlet>
+        <portlet-name>glasogonbidrag-spring-flow</portlet-name>
+        <display-name>glasogonbidrag-spring-flow</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/spring_flow/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-spring-flow</title>
+            <short-title>glasogonbidrag-spring-flow</short-title>
+            <keywords>glasogonbidrag-spring-flow</keywords>
+        </portlet-info>
+    </portlet>
+
 </portlet-app>

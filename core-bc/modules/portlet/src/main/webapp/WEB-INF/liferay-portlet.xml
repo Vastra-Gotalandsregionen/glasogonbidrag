@@ -19,4 +19,11 @@
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
     </portlet>
 
+    <portlet>
+        <portlet-name>glasogonbidrag-spring-flow</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
 </liferay-portlet-app>
