@@ -1,6 +1,5 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
@@ -323,7 +321,8 @@ public class CreateInvoiceAddGrantBackingBean {
                 LOGGER.warn("Beneficiary didn't have a identificaiton. " +
                         "Serious error in this flow.");
 
-                FacesMessage message = new FacesMessage("Generic fatal error...");
+                FacesMessage message =
+                        new FacesMessage("Generic fatal error...");
                 FacesContext.getCurrentInstance().addMessage(null, message);
 
                 return null;
@@ -382,6 +381,11 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Facelet styling methods
 
+    /**
+     * Create list of grant types as a list of select items.
+     *
+     * @return a select item list with grant types.
+     */
     public List<SelectItem> getGrantTypes() {
         List<SelectItem> items = new ArrayList<>();
 
@@ -406,6 +410,11 @@ public class CreateInvoiceAddGrantBackingBean {
         return items;
     }
 
+    /**
+     * Pretty printing of the grant type.
+     *
+     * @return a string representation of grant type.
+     */
     public String getGrantTypeOutput() {
         if ("0".equals(grantType)) {
             return "0-15";
@@ -419,6 +428,7 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     // Initializer
+
     @PostConstruct
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
@@ -446,4 +456,5 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriptionDate = null;
         amountWithVat = null;
     }
+
 }

@@ -128,7 +128,8 @@ public class CreateInvoiceViewBackingBean {
                         getAmountWithVat()});
 
         String verificationNumber = getVerificationNumber();
-        if (verificationNumber == null || verificationNumber.trim().isEmpty()) {
+        if (verificationNumber == null ||
+                verificationNumber.trim().isEmpty()) {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
 
@@ -170,8 +171,10 @@ public class CreateInvoiceViewBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal centWithVatDecimal = amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal = centWithVatDecimal.multiply(new BigDecimal("0.8"));
+        BigDecimal centWithVatDecimal =
+                amountWithVatDecimal.multiply(new BigDecimal("100"));
+        BigDecimal centDecimal =
+                centWithVatDecimal.multiply(new BigDecimal("0.8"));
         BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
 
         int amount = centDecimal.intValue();
@@ -190,12 +193,11 @@ public class CreateInvoiceViewBackingBean {
 
         LOGGER.info("Persisted invoice, got id: {}", invoice.getId());
 
-        //addGrantBackingBean.init(invoice);
-
-        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoice.getId());
-
-
-        return returnView;
+        return String.format(
+                "add_grant?invoiceId=%d" +
+                        "&faces-redirect=true" +
+                        "&includeViewParams=true",
+                invoice.getId());
     }
 
     public String cancel() {
@@ -204,10 +206,13 @@ public class CreateInvoiceViewBackingBean {
         return "view?faces-redirect=true";
     }
 
+    // Initializer
+
     @PostConstruct
     protected void init() {
         LOGGER.info("CreateInvoiceViewBackingBean - init()");
 
         suppliers = supplierRepository.findAll();
     }
+
 }
