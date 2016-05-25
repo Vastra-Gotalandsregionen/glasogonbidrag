@@ -29,7 +29,6 @@
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
-
                     </h:commandLink>
                 </div>
             </div>
@@ -47,11 +46,12 @@
                         </div>
                     </div>
 
-                    <h:commandLink styleClass="grant-section-back" value="Tillbaka">
+                    <h:commandLink styleClass="grant-section-back">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="showPersonalNumberInput" />
+                        <span class="hide-accessible">Tillbaka</span>
                     </h:commandLink>
 
                 </div>
@@ -90,7 +90,14 @@
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </span>
-                    <a class="grant-section-back" href="">Tillbaka</a>
+
+                    <h:commandLink styleClass="grant-section-back">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="showDeliveryDateInput" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
