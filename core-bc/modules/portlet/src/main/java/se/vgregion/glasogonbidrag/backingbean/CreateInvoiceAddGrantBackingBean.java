@@ -21,6 +21,7 @@ import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
@@ -307,10 +308,11 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public String saveGrant() {
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        ThemeDisplay themeDisplay = (ThemeDisplay)externalContext.getRequestMap().get(WebKeys.THEME_DISPLAY);
+        // Fetch theme display
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+
         long userId = themeDisplay.getUserId();
-        long scopeGroupid = themeDisplay.getScopeGroupId();
+        long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
         // Insert beneficiary first.
@@ -350,26 +352,30 @@ public class CreateInvoiceAddGrantBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal centWithVatDecimal = amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal = centWithVatDecimal.multiply(new BigDecimal("0.8"));
+        BigDecimal centWithVatDecimal =
+                amountWithVatDecimal.multiply(new BigDecimal("100"));
+        BigDecimal centDecimal =
+                centWithVatDecimal.multiply(new BigDecimal("0.8"));
         BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
 
         int amount = centDecimal.intValue();
         int vat = vatDecimal.intValue();
 
-        Calendar cal = Calendar.getInstance();
-        Date createDate = cal.getTime();
-
         grant.setAmount(amount);
         grant.setVat(vat);
-        grant.setUserId(userId);
-        grant.setGroupId(scopeGroupid);
-        grant.setCompanyId(companyId);
-        grant.setCreateDate(createDate);
-        grant.setModifiedDate(createDate);
-        invoice.addGrant(grant);
 
-        invoiceService.update(invoice);
+        try {
+            invoiceService.updateAddGrant(userId, groupId, companyId,
+                    invoice, grant);
+        } catch (GrantAlreadyExistException e) {
+            LOGGER.warn("Cannot add the same grant twice.");
+
+            FacesMessage message =
+                    new FacesMessage("Cannot add the same grant twice.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return null;
+        }
 
         return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
     }
