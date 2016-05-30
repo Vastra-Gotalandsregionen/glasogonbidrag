@@ -241,8 +241,8 @@ public class DBViewViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
-        int amount = inv.getAmount();
-        int vat = inv.getVat();
+        long amount = inv.getAmount();
+        long vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
@@ -270,8 +270,8 @@ public class DBViewViewBackingBean {
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
 
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
-        int amount = inv.getAmount();
-        int vat = inv.getVat();
+        long amount = inv.getAmount();
+        long vat = inv.getVat();
 
         Calendar cal = Calendar.getInstance();
 
