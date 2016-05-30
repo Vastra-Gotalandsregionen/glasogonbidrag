@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.CurrencyConstants;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,12 +18,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * @author Martin Lind - Monator Technologies AB
  */
 @Entity
 @Table(name = "vgr_glasogonbidrag_invoice")
@@ -106,9 +110,9 @@ public class Invoice {
     @Column(name = "invoice_number")
     private String invoiceNumber;
 
-    private int vat;
+    private long vat;
 
-    private int amount;
+    private long amount;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
@@ -199,19 +203,19 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public int getVat() {
+    public long getVat() {
         return vat;
     }
 
-    public void setVat(int vat) {
+    public void setVat(long vat) {
         this.vat = vat;
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -247,6 +251,111 @@ public class Invoice {
         this.adjustment = adjustment;
     }
 
+    // Public helper methods.
+
+    public BigDecimal getAmountAsKrona() {
+        BigDecimal amountDecimal = new BigDecimal(amount);
+
+        return amountDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public void setAmountAsKrona(BigDecimal valueAsKrona) {
+        this.amount = valueAsKrona.multiply(
+                CurrencyConstants.PARTS_PER_KRONA).longValue();
+    }
+
+    public BigDecimal getVatAsKrona() {
+        BigDecimal vatDecimal = new BigDecimal(vat);
+
+        return vatDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public void setVatAsKrona(BigDecimal valueAsKrona) {
+        this.vat = valueAsKrona.multiply(
+                CurrencyConstants.PARTS_PER_KRONA).longValue();
+    }
+
+    public BigDecimal getAmountIncludingVatAsKrona() {
+        BigDecimal amountDecimal = new BigDecimal(amount);
+        BigDecimal vatDecimal = new BigDecimal(vat);
+
+        return amountDecimal.add(vatDecimal)
+                .divide(CurrencyConstants.PARTS_PER_KRONA,
+                        2,
+                        RoundingMode.HALF_EVEN);
+    }
+
+    public void setAmountIncludingVatAsKrona(BigDecimal valueAsKrona) {
+        BigDecimal value = valueAsKrona.multiply(
+                CurrencyConstants.PARTS_PER_KRONA);
+
+        BigDecimal amountDecimal = value.multiply(new BigDecimal("0.8"));
+        BigDecimal vatDecimal = value.subtract(amountDecimal);
+
+        this.amount = amountDecimal.setScale(0, RoundingMode.HALF_DOWN).longValue();
+        this.vat = vatDecimal.setScale(0, RoundingMode.HALF_UP).longValue();
+    }
+
+    public BigDecimal calculateGrantsAmountSumAsKrona() {
+        if (grants == null) {
+            return new BigDecimal(0);
+        }
+
+        long sum = sumGrantsAmount();
+        BigDecimal sumDecimal = new BigDecimal(sum);
+
+        return sumDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal calculateGrantsVatSumAsKrona() {
+        if (grants == null) {
+            return new BigDecimal(0);
+        }
+
+        long sum = sumGrantsVat();
+        BigDecimal sumDecimal = new BigDecimal(sum);
+
+        return sumDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal calculateGrantsAmountIncludingVatSumAsKrona() {
+        if (grants == null) {
+            return new BigDecimal(0);
+        }
+
+        long sum = sumGrantsAmountIncludingVat();
+        BigDecimal sumDecimal = new BigDecimal(sum);
+
+        return sumDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal calculateDifferenceExcludingVatAsKrona() {
+        long result = this.amount;
+
+        result = result - sumGrantsAmount();
+
+        BigDecimal resultDecimal = new BigDecimal(result);
+
+        return resultDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal calculateDifferenceIncludingVatAsKrona() {
+        long result = this.amount + vat;
+
+        result = result - sumGrantsAmountIncludingVat();
+
+        BigDecimal resultDecimal = new BigDecimal(result);
+
+        return resultDecimal.divide(
+                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -279,5 +388,37 @@ public class Invoice {
                 ", supplier=" + supplier +
                 ", adjustment=" + adjustment +
                 '}';
+    }
+
+    // Helper methods
+
+    private long sumGrantsAmount() {
+        long sum = 0;
+
+        for (Grant grant : grants) {
+            sum = sum + grant.getAmount();
+        }
+
+        return sum;
+    }
+
+    private long sumGrantsVat() {
+        long sum = 0;
+
+        for (Grant grant : grants) {
+            sum = sum + grant.getVat();
+        }
+
+        return sum;
+    }
+
+    private long sumGrantsAmountIncludingVat() {
+        long sum = 0;
+
+        for (Grant grant : grants) {
+            sum = sum + grant.getAmount() + grant.getVat();
+        }
+
+        return sum;
     }
 }

@@ -9,32 +9,51 @@ Template version: 1.5
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>se.vgregion.glasogonbidrag</groupId>
-    <artifactId>glasogonbidrag-system</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>se.vgregion.glasogonbidrag</groupId>
+        <artifactId>glasogonbidrag-system</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>glasogonbidrag-core-bc</artifactId>
-  <packaging>pom</packaging>
-  <name>${project.artifactId}</name>
+    <artifactId>glasogonbidrag-core-bc</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
 
-  <dependencies>
-    <dependency>
-      <artifactId>mockito-all</artifactId>
-      <groupId>org.mockito</groupId>
-      <version>1.8.5</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <artifactId>mockito-all</artifactId>
+            <groupId>org.mockito</groupId>
+            <version>1.8.5</version>
+            <scope>test</scope>
+        </dependency>
 
-  <modules>
-    <module>composites/types</module>
-    <module>composites/svc</module>
-    <module>modules/portlet</module>
-    <module>modules/intsvc</module>
-  </modules>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>composites/types</module>
+        <module>composites/svc</module>
+        <module>modules/portlet</module>
+        <module>modules/intsvc</module>
+    </modules>
 
 </project>
