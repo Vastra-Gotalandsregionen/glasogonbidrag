@@ -334,8 +334,8 @@ public class InvoiceCalculationTest {
         BigDecimal actualVat = invoice.calculateGrantsVatSumAsKrona();
         Assert.assertEquals("Sum of grants' vat 2500, 20000 and 7500 " +
                         "should equal 300.00",
-                expectedAmount,
-                actualAmount);
+                expectedVat,
+                actualVat);
 
         BigDecimal expectedAmountIncludingVat =
                 new BigDecimal(1500).setScale(2, RoundingMode.HALF_EVEN);
@@ -399,8 +399,8 @@ public class InvoiceCalculationTest {
         Assert.assertEquals(
                 "Difference including vat with no grants " +
                         "should be 1125.00.",
-                expectedDifferenceExcludingVat0,
-                actualDifferenceExcludingVat0);
+                expectedDifferenceIncludingVat0,
+                actualDifferenceIncludingVat0);
 
         Grant grant1 = new Grant();
         grant1.setAmount(10000);
@@ -424,8 +424,8 @@ public class InvoiceCalculationTest {
         Assert.assertEquals(
                 "Difference including vat with no grants " +
                         "should be 1000.00.",
-                expectedDifferenceExcludingVat1,
-                actualDifferenceExcludingVat1);
+                expectedDifferenceIncludingVat1,
+                actualDifferenceIncludingVat1);
 
         Grant grant2 = new Grant();
         grant2.setAmount(80000);
@@ -449,8 +449,8 @@ public class InvoiceCalculationTest {
         Assert.assertEquals(
                 "Difference including vat with no grants " +
                         "should be 0.00.",
-                expectedDifferenceExcludingVat2,
-                actualDifferenceExcludingVat2);
+                expectedDifferenceIncludingVat2,
+                actualDifferenceIncludingVat2);
 
         Grant grant3 = new Grant();
         grant3.setAmount(30000);
@@ -476,8 +476,8 @@ public class InvoiceCalculationTest {
         Assert.assertEquals(
                 "Difference including vat with no grants " +
                         "should be negative 375.00.",
-                expectedDifferenceExcludingVat3,
-                actualDifferenceExcludingVat3);
+                expectedDifferenceIncludingVat3,
+                actualDifferenceIncludingVat3);
 
     }
 }
