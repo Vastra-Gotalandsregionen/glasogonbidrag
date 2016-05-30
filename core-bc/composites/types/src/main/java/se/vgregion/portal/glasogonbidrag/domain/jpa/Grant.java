@@ -78,6 +78,9 @@ public class Grant {
     @JoinColumn(name = "receiver")
     private Beneficiary beneficiary;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Invoice invoice;
+
     public Grant() {
     }
 
@@ -167,6 +170,14 @@ public class Grant {
 
     public void setBeneficiary(Beneficiary beneficiary) {
         this.beneficiary = beneficiary;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
     @Override
