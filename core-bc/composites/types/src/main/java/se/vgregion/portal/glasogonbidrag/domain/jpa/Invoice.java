@@ -5,6 +5,8 @@ import se.vgregion.portal.glasogonbidrag.domain.CurrencyConstants;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -126,6 +128,9 @@ public class Invoice {
             cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private GrantAdjustment adjustment;
+
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus status;
 
     public Invoice() {
         grants = new ArrayList<>();
@@ -249,6 +254,14 @@ public class Invoice {
 
     public void setAdjustment(GrantAdjustment adjustment) {
         this.adjustment = adjustment;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
     }
 
     // Public helper methods.
