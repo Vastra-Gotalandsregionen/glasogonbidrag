@@ -23,15 +23,20 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th scope="col">Invoice</th>
                     <th scope="col">Delivery Date</th>
                     <th scope="col">Prescription Date</th>
                     <th scope="col">Amount</th>
                     <th scope="col">VAT</th>
+                    <th scope="col">Status</th>
                 </tr>
                 </thead>
                 <tbody>
                 <ui:repeat id="grants" value="#{beneficiary.grants}" var="grant">
                     <tr>
+                        <td>
+                            <h:outputText value="#{grant.invoice.verificationNumber}"/>
+                        </td>
                         <td>
                             <h:outputText value="#{grant.deliveryDate}" />
                         </td>
@@ -43,6 +48,9 @@
                         </td>
                         <td>
                             <h:outputText value="#{grant.vat/100} kr" />
+                        </td>
+                        <td>
+                            <h:outputText value="#{grant.invoice.status}"/>
                         </td>
                     </tr>
                 </ui:repeat>
