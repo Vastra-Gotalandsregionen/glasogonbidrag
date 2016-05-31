@@ -41,18 +41,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <ui:repeat value="#{invoice.grants}" var="curGrant">
+                                <ui:repeat value="#{invoice.grants}" var="grant">
                                     <tr>
                                         <td>
-                                            <h:outputText value="#{curGrant.beneficiary.identification}" />
+                                            <h:outputText value="#{grant.beneficiary.identification}" />
                                         </td>
                                         <td class="number">
-                                            <h:outputText value="#{curGrant.amount/100}">
+                                            <h:outputText value="#{grant.amountAsKrona}">
                                                 <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
                                             </h:outputText>
                                         </td>
                                         <td class="number">
-                                            <h:outputText value="#{(curGrant.amount + curGrant.vat)/100}">
+                                            <h:outputText value="#{grant.amountIncludingVatAsKrona}">
                                                 <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
                                             </h:outputText>
                                         </td>
