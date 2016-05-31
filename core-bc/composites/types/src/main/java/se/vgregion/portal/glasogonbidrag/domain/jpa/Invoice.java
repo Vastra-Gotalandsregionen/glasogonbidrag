@@ -1,6 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import se.vgregion.portal.glasogonbidrag.domain.CurrencyConstants;
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,8 +20,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,6 +131,10 @@ public class Invoice {
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
+
+    @Transient
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
 
     public Invoice() {
         grants = new ArrayList<>();
@@ -267,48 +271,31 @@ public class Invoice {
     // Public helper methods.
 
     public BigDecimal getAmountAsKrona() {
-        BigDecimal amountDecimal = new BigDecimal(amount);
-
-        return amountDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(amount);
     }
 
     public void setAmountAsKrona(BigDecimal valueAsKrona) {
-        this.amount = valueAsKrona.multiply(
-                CurrencyConstants.PARTS_PER_KRONA).longValue();
+        this.amount = currency.calculateKronaAsParts(valueAsKrona);
     }
 
     public BigDecimal getVatAsKrona() {
-        BigDecimal vatDecimal = new BigDecimal(vat);
-
-        return vatDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(vat);
     }
 
     public void setVatAsKrona(BigDecimal valueAsKrona) {
-        this.vat = valueAsKrona.multiply(
-                CurrencyConstants.PARTS_PER_KRONA).longValue();
+        this.vat = currency.calculateKronaAsParts(valueAsKrona);
     }
 
     public BigDecimal getAmountIncludingVatAsKrona() {
-        BigDecimal amountDecimal = new BigDecimal(amount);
-        BigDecimal vatDecimal = new BigDecimal(vat);
-
-        return amountDecimal.add(vatDecimal)
-                .divide(CurrencyConstants.PARTS_PER_KRONA,
-                        2,
-                        RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(amount + vat);
     }
 
     public void setAmountIncludingVatAsKrona(BigDecimal valueAsKrona) {
-        BigDecimal value = valueAsKrona.multiply(
-                CurrencyConstants.PARTS_PER_KRONA);
+        KronaCalculationUtil.ValueAndVat result =
+                currency.calculateValueAndVatAsParts(valueAsKrona);
 
-        BigDecimal amountDecimal = value.multiply(new BigDecimal("0.8"));
-        BigDecimal vatDecimal = value.subtract(amountDecimal);
-
-        this.amount = amountDecimal.setScale(0, RoundingMode.HALF_DOWN).longValue();
-        this.vat = vatDecimal.setScale(0, RoundingMode.HALF_UP).longValue();
+        this.amount = result.getValue();
+        this.vat = result.getVat();
     }
 
     public BigDecimal calculateGrantsAmountSumAsKrona() {
@@ -317,10 +304,8 @@ public class Invoice {
         }
 
         long sum = sumGrantsAmount();
-        BigDecimal sumDecimal = new BigDecimal(sum);
 
-        return sumDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(sum);
     }
 
     public BigDecimal calculateGrantsVatSumAsKrona() {
@@ -329,10 +314,8 @@ public class Invoice {
         }
 
         long sum = sumGrantsVat();
-        BigDecimal sumDecimal = new BigDecimal(sum);
 
-        return sumDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(sum);
     }
 
     public BigDecimal calculateGrantsAmountIncludingVatSumAsKrona() {
@@ -341,10 +324,8 @@ public class Invoice {
         }
 
         long sum = sumGrantsAmountIncludingVat();
-        BigDecimal sumDecimal = new BigDecimal(sum);
 
-        return sumDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(sum);
     }
 
     public BigDecimal calculateDifferenceExcludingVatAsKrona() {
@@ -352,10 +333,7 @@ public class Invoice {
 
         result = result - sumGrantsAmount();
 
-        BigDecimal resultDecimal = new BigDecimal(result);
-
-        return resultDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(result);
     }
 
     public BigDecimal calculateDifferenceIncludingVatAsKrona() {
@@ -363,10 +341,7 @@ public class Invoice {
 
         result = result - sumGrantsAmountIncludingVat();
 
-        BigDecimal resultDecimal = new BigDecimal(result);
-
-        return resultDecimal.divide(
-                CurrencyConstants.PARTS_PER_KRONA, 2, RoundingMode.HALF_EVEN);
+        return currency.calculatePartsAsKrona(result);
     }
 
     @Override

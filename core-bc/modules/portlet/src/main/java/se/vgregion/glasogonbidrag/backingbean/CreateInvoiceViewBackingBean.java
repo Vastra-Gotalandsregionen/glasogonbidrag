@@ -120,11 +120,10 @@ public class CreateInvoiceViewBackingBean {
         long companyId = themeDisplay.getCompanyId();
 
         LOGGER.info("Verification: {}, Supplier: {}, Invoice: {}, Amount: {}",
-                new Object[] {
-                        getVerificationNumber(),
-                        getSupplier(),
-                        getInvoiceNumber(),
-                        getAmountWithVat()});
+                getVerificationNumber(),
+                getSupplier(),
+                getInvoiceNumber(),
+                getAmountWithVat());
 
         String verificationNumber = getVerificationNumber();
         if (verificationNumber == null ||
@@ -170,22 +169,12 @@ public class CreateInvoiceViewBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal centWithVatDecimal =
-                amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal =
-                centWithVatDecimal.multiply(new BigDecimal("0.8"));
-        BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
-
-        int amount = centDecimal.intValue();
-        int vat = vatDecimal.intValue();
-
         Supplier s1 = supplierRepository.find(supplierName);
 
         Invoice invoice = new Invoice();
         invoice.setVerificationNumber(verificationNumber);
         invoice.setInvoiceNumber(invoiceNumber);
-        invoice.setAmount(amount);
-        invoice.setVat(vat);
+        invoice.setAmountIncludingVatAsKrona(amountWithVatDecimal);
         invoice.setSupplier(s1);
 
         invoiceService.create(userId, groupId, companyId, invoice);

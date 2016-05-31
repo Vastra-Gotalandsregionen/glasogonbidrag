@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -70,9 +74,9 @@ public class Grant {
     @Temporal(TemporalType.DATE)
     private Date prescriptionDate;
 
-    private int vat;
+    private long vat;
 
-    private int amount;
+    private long amount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver")
@@ -80,6 +84,10 @@ public class Grant {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Invoice invoice;
+
+    @Transient
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
 
     public Grant() {
     }
@@ -148,19 +156,19 @@ public class Grant {
         this.prescriptionDate = prescriptionDate;
     }
 
-    public int getVat() {
+    public long getVat() {
         return vat;
     }
 
-    public void setVat(int vat) {
+    public void setVat(long vat) {
         this.vat = vat;
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -180,6 +188,37 @@ public class Grant {
         this.invoice = invoice;
     }
 
+
+    // Public helper methods.
+
+    public BigDecimal getAmountAsKrona() {
+        return currency.calculatePartsAsKrona(amount);
+    }
+
+    public void setAmountAsKrona(BigDecimal valueAsKrona) {
+        this.amount = currency.calculateKronaAsParts(valueAsKrona);
+    }
+
+    public BigDecimal getVatAsKrona() {
+        return currency.calculatePartsAsKrona(vat);
+    }
+
+    public void setVatAsKrona(BigDecimal valueAsKrona) {
+        this.vat = currency.calculateKronaAsParts(valueAsKrona);
+    }
+
+    public BigDecimal getAmountIncludingVatAsKrona() {
+        return currency.calculatePartsAsKrona(amount + vat);
+    }
+
+    public void setAmountIncludingVatAsKrona(BigDecimal valueAsKrona) {
+        KronaCalculationUtil.ValueAndVat result =
+                currency.calculateValueAndVatAsParts(valueAsKrona);
+
+        this.amount = result.getValue();
+        this.vat = result.getVat();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -189,23 +228,24 @@ public class Grant {
 
         if (vat != grant.vat) return false;
         if (amount != grant.amount) return false;
-        if (!id.equals(grant.id)) return false;
         if (deliveryDate != null ? !deliveryDate.equals(grant.deliveryDate) : grant.deliveryDate != null)
             return false;
         if (prescriptionDate != null ? !prescriptionDate.equals(grant.prescriptionDate) : grant.prescriptionDate != null)
             return false;
-        return beneficiary != null ? beneficiary.equals(grant.beneficiary) : grant.beneficiary == null;
+        if (beneficiary != null ? !beneficiary.equals(grant.beneficiary) : grant.beneficiary != null)
+            return false;
+        return invoice != null ? invoice.equals(grant.invoice) : grant.invoice == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (deliveryDate != null ? deliveryDate.hashCode() : 0);
+        int result = deliveryDate != null ? deliveryDate.hashCode() : 0;
         result = 31 * result + (prescriptionDate != null ? prescriptionDate.hashCode() : 0);
-        result = 31 * result + vat;
-        result = 31 * result + amount;
+        result = 31 * result + (int) (vat ^ (vat >>> 32));
+        result = 31 * result + (int) (amount ^ (amount >>> 32));
         result = 31 * result + (beneficiary != null ? beneficiary.hashCode() : 0);
+        result = 31 * result + (invoice != null ? invoice.hashCode() : 0);
         return result;
     }
 

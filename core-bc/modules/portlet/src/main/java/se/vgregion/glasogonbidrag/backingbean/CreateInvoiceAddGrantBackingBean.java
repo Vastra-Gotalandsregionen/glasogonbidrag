@@ -356,9 +356,6 @@ public class CreateInvoiceAddGrantBackingBean {
             }
         }
 
-        //TODO: Fix Copy paste code.
-        // Copied from CreateInvoiceViewBackingBean - register():141
-        String amountWithVat = getAmountWithVat();
         if (amountWithVat == null || amountWithVat.trim().isEmpty()) {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
@@ -368,27 +365,15 @@ public class CreateInvoiceAddGrantBackingBean {
             return "view?faces-redirect=true";
         }
 
-        BigDecimal amountWithVatDecimal;
         try {
-            amountWithVatDecimal = new BigDecimal(amountWithVat);
+            BigDecimal amountWithVatDecimal = new BigDecimal(amountWithVat);
+            grant.setAmountIncludingVatAsKrona(amountWithVatDecimal);
         } catch (NumberFormatException e) {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
 
             return "view?faces-redirect=true";
         }
-
-        BigDecimal centWithVatDecimal =
-                amountWithVatDecimal.multiply(new BigDecimal("100"));
-        BigDecimal centDecimal =
-                centWithVatDecimal.multiply(new BigDecimal("0.8"));
-        BigDecimal vatDecimal = centWithVatDecimal.subtract(centDecimal);
-
-        int amount = centDecimal.intValue();
-        int vat = vatDecimal.intValue();
-
-        grant.setAmount(amount);
-        grant.setVat(vat);
 
         try {
             invoiceService.updateAddGrant(userId, groupId, companyId,
