@@ -6,9 +6,12 @@
 <display>
 
     <category name="VGR - Glasogonbidrag">
+        <portlet id="glasogonbidrag-canceled-invoices"/>
         <portlet id="glasogonbidrag-create-invoice"/>
         <portlet id="glasogonbidrag-db-view"/>
-        <portlet id="glasogonbidrag-spring-flow"/>
+        <portlet id="glasogonbidrag-latest-invoices"/>
+        <portlet id="glasogonbidrag-list-beneficiaries"/>
+        <portlet id="glasogonbidrag-list-invoices"/>
     </category>
 
 </display>

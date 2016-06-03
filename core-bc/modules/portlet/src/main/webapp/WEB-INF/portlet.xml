@@ -7,6 +7,29 @@
                 http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
     <portlet>
+        <portlet-name>glasogonbidrag-canceled-invoices</portlet-name>
+        <display-name>glasogonbidrag-canceled-invoices</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/canceled_invoices/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-canceled-invoices</title>
+            <short-title>glasogonbidrag-canceled-invoices</short-title>
+            <keywords>glasogonbidrag-canceled-invoices</keywords>
+        </portlet-info>
+    </portlet>
+
+
+    <portlet>
         <portlet-name>glasogonbidrag-create-invoice</portlet-name>
         <display-name>glasogonbidrag-create-invoice</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
@@ -53,13 +76,13 @@
 
 
     <portlet>
-        <portlet-name>glasogonbidrag-spring-flow</portlet-name>
-        <display-name>glasogonbidrag-spring-flow</display-name>
+        <portlet-name>glasogonbidrag-latest-invoices</portlet-name>
+        <display-name>glasogonbidrag-latest-invoices</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
-            <value>/views/spring_flow/view.xhtml</value>
+            <value>/views/latest_invoices/view.xhtml</value>
         </init-param>
 
         <supports>
@@ -68,9 +91,55 @@
         </supports>
 
         <portlet-info>
-            <title>glasogonbidrag-spring-flow</title>
-            <short-title>glasogonbidrag-spring-flow</short-title>
-            <keywords>glasogonbidrag-spring-flow</keywords>
+            <title>glasogonbidrag-latest-invoices</title>
+            <short-title>glasogonbidrag-latest-invoices</short-title>
+            <keywords>glasogonbidrag-latest-invoices</keywords>
+        </portlet-info>
+    </portlet>
+
+
+    <portlet>
+        <portlet-name>glasogonbidrag-list-beneficiaries</portlet-name>
+        <display-name>glasogonbidrag-list-beneficiaries</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/list_beneficiaries/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-list-beneficiaries</title>
+            <short-title>glasogonbidrag-list-beneficiaries</short-title>
+            <keywords>glasogonbidrag-list-beneficiaries</keywords>
+        </portlet-info>
+    </portlet>
+
+
+    <portlet>
+        <portlet-name>glasogonbidrag-list-invoices</portlet-name>
+        <display-name>glasogonbidrag-list-invoices</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/list_invoices/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-list-invoices</title>
+            <short-title>glasogonbidrag-list-invoices</short-title>
+            <keywords>glasogonbidrag-list-invoices</keywords>
         </portlet-info>
     </portlet>
 

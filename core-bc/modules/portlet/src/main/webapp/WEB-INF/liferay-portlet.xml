@@ -6,6 +6,13 @@
 <liferay-portlet-app>
 
     <portlet>
+        <portlet-name>glasogonbidrag-canceled-invoices</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
         <portlet-name>glasogonbidrag-create-invoice</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
@@ -20,7 +27,21 @@
     </portlet>
 
     <portlet>
-        <portlet-name>glasogonbidrag-spring-flow</portlet-name>
+        <portlet-name>glasogonbidrag-latest-invoices</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-list-beneficiaries</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-list-invoices</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
