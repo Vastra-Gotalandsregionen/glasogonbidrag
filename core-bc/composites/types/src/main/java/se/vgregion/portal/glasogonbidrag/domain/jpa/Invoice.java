@@ -73,6 +73,11 @@ import java.util.List;
                 name = "glasogonbidrag.invoice.findAllBySupplier",
                 query = "SELECT i FROM Invoice i " +
                         "WHERE i.supplier = :supplier " +
+                        "ORDER BY i.invoiceDate ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllByStatus",
+                query = "SELECT i FROM Invoice i " +
+                        "WHERE i.status = :status " +
                         "ORDER BY i.invoiceDate ASC")
 })
 public class Invoice {

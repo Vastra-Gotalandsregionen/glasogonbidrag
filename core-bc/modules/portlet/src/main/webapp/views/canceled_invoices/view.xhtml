@@ -11,7 +11,44 @@
 
     <h:body>
 
-        <h1>List canceled Invoices portlet</h1>
+        <div class="row-fluid">
+            <div class="span12">
+
+                <h:form>
+
+                    <div class="box box-sidebar">
+                        <div class="box-hd">
+                            <h3 class="box-title">
+                                <h:outputText value="Makulerad fakturor"/>
+                            </h3>
+                        </div>
+
+                        <div class="box-bd">
+                            <h:dataTable styleClass="" value="#{canceledInvoicesViewBackingBean.invoices}" var="invoice">
+                                <h:column>
+                                    <f:facet name="header">Ver.nr</f:facet>
+                                    <h:outputText value="#{invoice.verificationNumber}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Datum</f:facet>
+                                    <h:outputText value="#{invoice.invoiceDate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Belopp</f:facet>
+                                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                    </h:outputText>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+
+                </h:form>
+
+            </div>
+        </div>
 
     </h:body>
 </f:view>
