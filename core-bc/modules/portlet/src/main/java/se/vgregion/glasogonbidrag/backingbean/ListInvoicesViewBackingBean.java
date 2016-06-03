@@ -39,16 +39,7 @@ public class ListInvoicesViewBackingBean {
 
     private List<Invoice> invoices;
     private Locale locale;
-    private PrettyTime prettyTime;
-    private Layout registerInvoiceLayout;
-
-    public Layout getRegisterInvoiceLayout() {
-        return registerInvoiceLayout;
-    }
-
-    public void setRegisterInvoiceLayout(Layout registerInvoiceLayout) {
-        this.registerInvoiceLayout = registerInvoiceLayout;
-    }
+    private PrettyTime prettyTime; //TODO: Do we need getter and setter?
 
     public List<Invoice> getInvoices() {
         return invoices;
@@ -66,6 +57,14 @@ public class ListInvoicesViewBackingBean {
         this.prettyTime = prettyTime;
     }
 
+    // Public view formatting code
+
+    public String formatPrettyTime(Date date) {
+        return prettyTime.format(date);
+    }
+
+    // Initilizer.
+
     @PostConstruct
     protected void init() {
 
@@ -78,43 +77,5 @@ public class ListInvoicesViewBackingBean {
         prettyTime = new PrettyTime(locale);
 
         invoices = invoiceRepository.findAllOrderByModificationDate(userId);
-
-        try {
-            registerInvoiceLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), true, "/registrera-faktura");
-        } catch (PortalException e) {
-            e.printStackTrace();
-        } catch (SystemException e) {
-            e.printStackTrace();
-        }
     }
-
-    public String formatPrettyTime(Date date) {
-
-        String prettyDateString = prettyTime.format(date);
-
-        return prettyDateString;
-    }
-
-    public String createInvoiceUrl(Invoice invoice) {
-        String invoiceUrl = "";
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        PortletRequest portletRequest = (PortletRequest) facesContext.getExternalContext().getRequest();
-
-        String registerInvoicePortletId = "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
-
-        if(registerInvoiceLayout != null) {
-            long registerInvoicePlid = registerInvoiceLayout.getPlid();
-
-            PortletURL portletURL = PortletURLFactoryUtil.create(portletRequest, registerInvoicePortletId, registerInvoicePlid, PortletRequest.RENDER_PHASE);
-            portletURL.setParameter("_facesViewIdRender", "/views/create_invoice/view_invoice.xhtml");
-            portletURL.setParameter("invoiceId", String.valueOf(invoice.getId()));
-
-            invoiceUrl = portletURL.toString();
-        }
-
-        return invoiceUrl;
-    }
-
-
 }
