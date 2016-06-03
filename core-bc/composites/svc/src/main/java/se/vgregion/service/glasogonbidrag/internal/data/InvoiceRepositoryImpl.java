@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
@@ -59,7 +60,7 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     @Override
     public List<Invoice> findAllByInvoiceNumber(String number) {
         TypedQuery<Invoice> q = em.createNamedQuery(
-                "glasogonbidrag.invoice.findByInvoiceNumber",
+                "glasogonbidrag.invoice.findAllByInvoiceNumber",
                 Invoice.class);
         q.setParameter("number", number);
 
@@ -75,4 +76,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
         return q.getResultList();
     }
 
+    @Override
+    public List<Invoice> findAllWithStatus(InvoiceStatus status) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findAllByStatus", Invoice.class);
+        q.setParameter("status", status);
+
+        return q.getResultList();
+    }
 }

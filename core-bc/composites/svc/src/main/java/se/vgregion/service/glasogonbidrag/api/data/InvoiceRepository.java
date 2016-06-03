@@ -1,6 +1,7 @@
 package se.vgregion.service.glasogonbidrag.api.data;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface InvoiceRepository {
     List<Invoice> findAllBySupplier(Supplier supplier);
 
     List<Invoice> findAllByInvoiceNumber(String number);
+
+    List<Invoice> findAllWithStatus(InvoiceStatus status);
 }
