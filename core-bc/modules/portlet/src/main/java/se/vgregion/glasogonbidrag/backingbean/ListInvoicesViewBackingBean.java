@@ -27,6 +27,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ * @author Erik Andersson - Monator Technologies AB
+ */
 @Component(value = "listInvoicesViewBackingBean")
 @Scope(value = "request")
 public class ListInvoicesViewBackingBean {
@@ -63,7 +67,7 @@ public class ListInvoicesViewBackingBean {
         return prettyTime.format(date);
     }
 
-    // Initilizer.
+    // Initializer.
 
     @PostConstruct
     protected void init() {
