@@ -18,6 +18,10 @@ public interface InvoiceRepository {
 
     List<Invoice> findAll();
 
+    List<Invoice> findAllOrderByModificationDate();
+
+    List<Invoice> findAllOrderByModificationDate(long userId);
+
     List<Invoice> findAllBySupplier(Supplier supplier);
 
     List<Invoice> findAllByInvoiceNumber(String number);

@@ -61,6 +61,18 @@ import java.util.List;
                         "FROM Invoice i " +
                         "ORDER BY i.invoiceDate ASC"),
         @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllOrderByModificationDate",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "ORDER BY i.modifiedDate ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice." +
+                        "findAllByUserOrderByModificationDate",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "WHERE i.userId = :user " +
+                        "ORDER BY i.modifiedDate ASC"),
+        @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllByInvoiceNumber",
                 query = "SELECT i " +
                         "FROM Invoice i " +

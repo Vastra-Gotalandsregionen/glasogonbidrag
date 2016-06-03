@@ -58,6 +58,30 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
+    public List<Invoice> findAllOrderByModificationDate() {
+        return findAllOrderByModificationDate(-1);
+    }
+
+    @Override
+    public List<Invoice> findAllOrderByModificationDate(long userId) {
+        TypedQuery<Invoice> q;
+
+        if (userId == -1) {
+            q = em.createNamedQuery(
+                    "glasogonbidrag.invoice.findAllOrderByModificationDate",
+                    Invoice.class);
+        } else {
+            q = em.createNamedQuery(
+                    "glasogonbidrag.invoice." +
+                            "findAllByUserOrderByModificationDate",
+                    Invoice.class);
+            q.setParameter("user", userId);
+        }
+
+        return q.getResultList();
+    }
+
+    @Override
     public List<Invoice> findAllByInvoiceNumber(String number) {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAllByInvoiceNumber",
