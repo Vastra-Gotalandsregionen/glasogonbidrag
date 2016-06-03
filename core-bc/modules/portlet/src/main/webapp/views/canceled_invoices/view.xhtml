@@ -5,7 +5,9 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:portlet="http://java.sun.com/portlet_2_0"
+        xmlns:liferay-portlet="http://liferay.com/tld/portlet">
 
     <h:head />
 
@@ -27,7 +29,9 @@
                             <h:dataTable styleClass="" value="#{canceledInvoicesViewBackingBean.invoices}" var="invoice">
                                 <h:column>
                                     <f:facet name="header">Ver.nr</f:facet>
-                                    <h:outputText value="#{invoice.verificationNumber}" />
+                                    <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                                        <h:outputText value="#{invoice.verificationNumber}" />
+                                    </h:outputLink>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Datum</f:facet>
