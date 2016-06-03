@@ -45,7 +45,7 @@ public class KronaCalculationUtil {
         private long value;
         private long vat;
 
-        public ValueAndVat(long value, long vat) {
+        ValueAndVat(long value, long vat) {
             this.value = value;
             this.vat = vat;
         }
