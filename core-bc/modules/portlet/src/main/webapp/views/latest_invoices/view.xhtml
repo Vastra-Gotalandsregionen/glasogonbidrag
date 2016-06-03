@@ -12,7 +12,7 @@
 
     <h:body>
 
-        <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
+        <c:set var="invoices" value="#{latestInvoicesViewBackingBean.invoices}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -36,7 +36,7 @@
                                             </a>
 
                                             <span>
-                                                - #{listInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
+                                                - #{latestInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
                                             </span>
                                         </li>
                                     </ui:repeat>

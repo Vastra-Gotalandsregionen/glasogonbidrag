@@ -31,7 +31,7 @@ import java.util.Locale;
  * @author Martin Lind - Monator Technologies AB
  * @author Erik Andersson - Monator Technologies AB
  */
-@Component(value = "listInvoicesViewBackingBean")
+@Component(value = "latestInvoicesViewBackingBean")
 @Scope(value = "request")
 public class LatestInvoicesViewBackingBean {
 
