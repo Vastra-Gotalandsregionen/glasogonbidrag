@@ -11,6 +11,8 @@
 
     <h:body>
 
+        <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
+
         <div class="row-fluid">
             <div class="span12">
 
@@ -19,34 +21,34 @@
                     <div class="box box-sidebar">
                         <div class="box-hd">
                             <h3 class="box-title">
-                                <h:outputText value="Senaste ändrade"/>
+                                <h:outputText value="Senast ändrade fakturor"/>
                             </h3>
                         </div>
 
                         <div class="box-bd">
-                            <h:dataTable styleClass="" value="#{listInvoicesViewBackingBean.invoices}" var="invoice">
-                                <h:column>
-                                    <f:facet name="header">Ver.nr</f:facet>
-                                    <h:outputText value="#{invoice.verificationNumber}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Datum</f:facet>
-                                    <h:outputText value="#{invoice.invoiceDate}">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                                    </h:outputText>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Belopp</f:facet>
-                                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                        <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                         locale="#{listInvoicesViewBackingBean.locale}" />
-                                    </h:outputText>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Status</f:facet>
-                                    <h:outputText value="#{invoice.status}" />
-                                </h:column>
-                            </h:dataTable>
+
+                            <ui:fragment rendered="#{not empty invoices}">
+                                <ul class="simple-list">
+                                    <ui:repeat value="#{invoices}" var="invoice">
+                                        <li>
+                                            <a href="#{listInvoicesViewBackingBean.createInvoiceUrl(invoice)}">
+                                                <h:outputText value="#{invoice.verificationNumber}" />
+                                            </a>
+
+                                            <span>
+                                                - #{listInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
+                                            </span>
+                                        </li>
+                                    </ui:repeat>
+                                </ul>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{empty invoices}">
+                                <div class="alert alert-info">
+                                    Inga fakturor finns registrerade
+                                </div>
+                            </ui:fragment>
+
                         </div>
                     </div>
 

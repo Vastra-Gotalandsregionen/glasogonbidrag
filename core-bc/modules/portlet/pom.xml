@@ -108,6 +108,18 @@ Template version: 1.5
             <version>4.2.5-ga6</version>
         </dependency>
 
+        <!-- Pretty Time -->
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>3.2.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime-integration-jsf</artifactId>
+            <version>3.2.4.Final</version>
+        </dependency>
+
         <!-- EHCache dependency (Do we need this?) -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
