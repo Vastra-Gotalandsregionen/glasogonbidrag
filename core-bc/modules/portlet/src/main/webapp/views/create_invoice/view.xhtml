@@ -19,7 +19,7 @@
 
             <div class="span6">
 
-                <h:form id="form" pt:data-focus="true">
+                <h:form id="addInvoiceForm" pt:data-focus="true">
 
                     <div class="box">
 
@@ -27,7 +27,8 @@
                             <div class="field-element inline">
                                 <h:outputLabel for="verificationNumber" value="Verifikationsnr:" />
                                 <h:inputText id="verificationNumber" value="#{createInvoiceViewBackingBean.verificationNumber}"
-                                             pt:placeholder="Skriv in verifikationsnr..." pt:autofocus="true" />
+                                             pt:placeholder="Skriv in verifikationsnr..." pt:autofocus="true">
+                                </h:inputText>
                             </div>
 
                             <div class="field-element inline">

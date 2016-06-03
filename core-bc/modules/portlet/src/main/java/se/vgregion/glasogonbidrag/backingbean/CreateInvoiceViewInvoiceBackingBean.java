@@ -11,6 +11,8 @@ import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 
+import static org.terracotta.modules.ehcache.ToolkitInstanceFactoryImpl.LOGGER;
+
 /**
  * @author Martin Lind - Monator Technologies AB
  */
