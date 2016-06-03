@@ -379,20 +379,25 @@ public class Invoice {
 
     @Override
     public String toString() {
-        return "Invoice{" +
-                "id=" + id +
-                ", companyId=" + companyId +
-                ", groupId=" + groupId +
-                ", userId=" + userId +
-                ", invoiceDate=" + invoiceDate +
-                ", verificationNumber='" + verificationNumber + '\'' +
-                ", invoiceNumber='" + invoiceNumber + '\'' +
-                ", vat=" + vat +
-                ", amount=" + amount +
-                ", grants=" + grants +
-                ", supplier=" + supplier +
-                ", adjustment=" + adjustment +
-                '}';
+        try {
+            return "Invoice{" +
+                    "id=" + id +
+                    ", companyId=" + companyId +
+                    ", groupId=" + groupId +
+                    ", userId=" + userId +
+                    ", invoiceDate=" + invoiceDate +
+                    ", verificationNumber='" + verificationNumber + '\'' +
+                    ", invoiceNumber='" + invoiceNumber + '\'' +
+                    ", vat=" + vat +
+                    ", amount=" + amount +
+                    ", grants=" + grants +
+                    ", supplier=" + supplier +
+                    ", adjustment=" + adjustment +
+                    '}';
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     // Helper methods

@@ -15,17 +15,18 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
-            <ui:fragment rendered="#{true}">
-                <div class="box box-sidebar">
+            <div class="box box-sidebar">
 
-                    <div class="box-hd">
-                        <h3 class="box-title">
-                            <h:outputText value="Inmatade bidrag" />
-                        </h3>
-                    </div>
+                <div class="box-hd">
+                    <h3 class="box-title">
+                        <h:outputText value="Inmatade bidrag" />
+                    </h3>
+                </div>
 
 
-                    <div class="box-bd">
+                <div class="box-bd">
+                    
+                    <ui:fragment rendered="#{not empty invoice.grants}">
                         <table class="simple-table">
                             <thead>
                                 <tr>
@@ -60,11 +61,16 @@
                                 </ui:repeat>
                             </tbody>
                         </table>
-                    </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{empty invoice.grants}">
+                        <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
+                    </ui:fragment>
 
                 </div>
 
-            </ui:fragment>
+            </div>
+
         </h:panelGroup>
 
     </h:body>
