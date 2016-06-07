@@ -32,12 +32,8 @@
                     </h:commandLink>
 
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
-                        <!--
-                        -->
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
-
                     </h:link>
-
 
                 </div>
             </div>
@@ -86,6 +82,9 @@
                     <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
                             render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
                 </h:commandLink>
+                <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                </h:link>
             </div>
         </ui:fragment>
         <ui:fragment rendered="${flow.showDeliveryDateOutput}">
@@ -128,6 +127,9 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
                     </h:commandLink>
+                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
                 </div>
             </div>
         </ui:fragment>
@@ -160,6 +162,9 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
                     </h:commandLink>
+                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
                 </div>
             </div>
         </ui:fragment>
