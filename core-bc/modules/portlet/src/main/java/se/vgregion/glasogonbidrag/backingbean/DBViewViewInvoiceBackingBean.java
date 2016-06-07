@@ -13,10 +13,10 @@ import javax.annotation.PostConstruct;
 
 @Component(value = "viewInvoiceBean")
 @Scope(value = "request")
-public class ViewInvoiceBackingBean {
+public class DBViewViewInvoiceBackingBean {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ViewInvoiceBackingBean.class);
+            LoggerFactory.getLogger(DBViewViewInvoiceBackingBean.class);
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -32,7 +32,7 @@ public class ViewInvoiceBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("ViewInvoiceBackingBean - init()");
+        LOGGER.info("DBViewViewInvoiceBackingBean - init()");
 
         Long id = util.fetchId("invoiceId");
 

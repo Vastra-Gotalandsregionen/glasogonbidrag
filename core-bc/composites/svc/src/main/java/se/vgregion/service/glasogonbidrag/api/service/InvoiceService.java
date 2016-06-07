@@ -27,4 +27,6 @@ public interface InvoiceService {
         throws GrantAdjustmentAlreadySetException;
 
     void delete(Long id);
+
+    void deleteGrant(Invoice invoice, Long grantId);
 }

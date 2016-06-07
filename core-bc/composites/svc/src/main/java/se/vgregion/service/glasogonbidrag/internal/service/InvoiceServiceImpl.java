@@ -256,4 +256,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         em.remove(invoice);
     }
 
+    @Override
+    @Transactional
+    public void deleteGrant(Invoice invoice, Long grantId) {
+        Grant grant = em.find(Grant.class, grantId);
+
+        invoice.removeGrant(grant);
+
+        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
+
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+
+        invoice.setModifiedDate(date);
+
+        em.merge(invoice);
+    }
 }
