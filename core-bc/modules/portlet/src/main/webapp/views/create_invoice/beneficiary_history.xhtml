@@ -11,20 +11,29 @@
 
     <h:body>
 
+        <div class="box box-sidebar">
 
-        <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
+            <div class="box-hd">
+                <h3 class="box-title">
+                    <h:outputText value="Historik Bidragstagare" />
+                </h3>
+            </div>
 
+            <div class="box-bd">
 
-                <div class="box box-sidebar">
-
-                    <div class="box-hd">
-                        <h3 class="box-title">
-                            <h:outputText value="Historik Bidragstagare" />
-                        </h3>
+                <ui:fragment rendered="#{empty createInvoiceAddGrantBackingBean.beneficiary}">
+                    <div class="alert alert-info">
+                        Ingen bidragstagare vald ännu.
                     </div>
+                </ui:fragment>
 
-                    <div class="box-bd"></div>
+                <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
+                    <div class="alert alert-info">
+                        Bidragstagaren har inga registrerade bidrag sedan tidigare.
+                    </div>
+                </ui:fragment>
 
+                <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
 
                     <h:dataTable rendered="true" var="grant" value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" styleClass="simple-table" columnClasses="none, number, none, none">
 
@@ -74,10 +83,11 @@
 
 
                     </h:dataTable>
-                </div>
 
+                </ui:fragment>
 
-        </ui:fragment>
+            </div>
+        </div>
 
     </h:body>
 
