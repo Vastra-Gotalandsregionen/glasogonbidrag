@@ -220,7 +220,6 @@ public class DBViewViewBackingBean {
         invoice.setGrants(grants);
         invoice.setAmount(30000);
         invoice.setVat(7500);
-        invoice.setInvoiceDate(cal.getTime());
         invoice.setInvoiceNumber("10002");
         invoice.setVerificationNumber("E510396");
 

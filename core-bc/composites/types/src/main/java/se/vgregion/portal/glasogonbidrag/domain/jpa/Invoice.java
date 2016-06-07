@@ -59,7 +59,7 @@ import java.util.List;
                 name = "glasogonbidrag.invoice.findAll",
                 query = "SELECT i " +
                         "FROM Invoice i " +
-                        "ORDER BY i.invoiceDate ASC"),
+                        "ORDER BY i.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllOrderByModificationDate",
                 query = "SELECT i " +
@@ -118,10 +118,6 @@ public class Invoice {
     private Date modifiedDate;
 
     // Invoice Specific
-
-    @Column(name = "invoice_date")
-    @Temporal(TemporalType.DATE)
-    private Date invoiceDate;
 
     @Column(name = "verification_number", nullable = false)
     private String verificationNumber;
@@ -203,14 +199,6 @@ public class Invoice {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    public Date getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(Date invoiceDate) {
-        this.invoiceDate = invoiceDate;
     }
 
     public String getVerificationNumber() {
@@ -385,7 +373,6 @@ public class Invoice {
                     ", companyId=" + companyId +
                     ", groupId=" + groupId +
                     ", userId=" + userId +
-                    ", invoiceDate=" + invoiceDate +
                     ", verificationNumber='" + verificationNumber + '\'' +
                     ", invoiceNumber='" + invoiceNumber + '\'' +
                     ", vat=" + vat +
