@@ -29,6 +29,8 @@ public class AddGrantGrantTypeState extends CreateInvoiceAddGrantPidFlow {
     public CreateInvoiceAddGrantPidFlow nextState(AddGrantAction action) {
         if (action == AddGrantAction.AGE_0_TO_15 || action == AddGrantAction.AGE_0_TO_19) {
             return new AddGrantPrescriptionDateState();
+        } else if(action == AddGrantAction.OTHER) {
+            return new AddGrantTypeOtherState();
         } else {
             return null;
         }
