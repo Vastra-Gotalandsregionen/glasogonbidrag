@@ -8,6 +8,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -35,7 +36,11 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
                 "glasogonbidrag.beneficiary.findWithParts", Beneficiary.class);
         q.setParameter("id", id);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -45,7 +50,11 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
                 Beneficiary.class);
         q.setParameter("id", identification);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

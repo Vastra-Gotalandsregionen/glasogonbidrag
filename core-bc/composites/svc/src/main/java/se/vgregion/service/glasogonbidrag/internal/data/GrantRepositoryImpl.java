@@ -7,6 +7,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -42,11 +43,9 @@ public class GrantRepositoryImpl implements GrantRepository {
         q.setParameter("user", userId);
         q.setParameter("date", date, TemporalType.DATE);
 
-        Long result = q.getSingleResult();
-
-        if (result != null) {
-            return result;
-        } else {
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
             return 0;
         }
     }

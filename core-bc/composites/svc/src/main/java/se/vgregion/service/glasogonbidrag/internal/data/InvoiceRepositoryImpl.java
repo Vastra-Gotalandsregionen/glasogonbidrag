@@ -9,6 +9,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -36,7 +37,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
                 "glasogonbidrag.invoice.findWithParts", Invoice.class);
         q.setParameter("id", id);
 
-        return q.getSingleResult();
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -46,7 +52,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
                 Invoice.class);
         q.setParameter("number", number);
 
-        return q.getSingleResult();
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
