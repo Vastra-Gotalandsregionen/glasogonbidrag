@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -15,28 +15,27 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-@Component(value = "listInvoicesViewBackingBean")
+@Component(value = "listBeneficiariesViewBackingBean")
 @Scope(value = "request")
-public class ListInvoicesViewBackingBean {
-
+public class ListBeneficiariesViewBackingBean {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ListInvoicesViewBackingBean.class);
+            LoggerFactory.getLogger(ListBeneficiariesViewBackingBean.class);
 
     @Autowired
     private FacesUtil facesUtil;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private BeneficiaryRepository beneficiaryRepository;
 
-    private List<Invoice> invoices;
+    private List<Beneficiary> beneficiaries;
 
-    public List<Invoice> getInvoices() {
-        return invoices;
+    public List<Beneficiary> getBeneficiaries() {
+        return beneficiaries;
     }
 
     @PostConstruct
     protected void init() {
-        invoices = invoiceRepository.findAll();
+        beneficiaries = beneficiaryRepository.findAll();
     }
 }

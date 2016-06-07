@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletRequest;
 import java.util.Map;
 
 @Component
@@ -24,6 +25,13 @@ public class FacesUtil {
         Map<String, Object> requestMap = externalContext.getRequestMap();
 
         return (ThemeDisplay)requestMap.get(WebKeys.THEME_DISPLAY);
+    }
+
+    public PortletRequest getRequest() {
+        ExternalContext externalContext =
+                FacesContext.getCurrentInstance().getExternalContext();
+
+        return (PortletRequest)externalContext.getRequest();
     }
 
     public Long fetchId(String paramterName) {

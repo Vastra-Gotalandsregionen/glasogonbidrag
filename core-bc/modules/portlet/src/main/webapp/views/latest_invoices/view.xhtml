@@ -5,13 +5,14 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
-
+        xmlns:portal="http://liferay.com/faces/portal"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:portlet="http://java.sun.com/portlet_2_0">
     <h:head />
 
     <h:body>
 
-        <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
+        <c:set var="invoices" value="#{latestInvoicesViewBackingBean.invoices}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -26,17 +27,16 @@
                         </div>
 
                         <div class="box-bd">
-
                             <ui:fragment rendered="#{not empty invoices}">
                                 <ul class="simple-list">
                                     <ui:repeat value="#{invoices}" var="invoice">
                                         <li>
-                                            <a href="#{listInvoicesViewBackingBean.createInvoiceUrl(invoice)}">
+                                            <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                                                 <h:outputText value="#{invoice.verificationNumber}" />
                                             </a>
 
                                             <span>
-                                                - #{listInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
+                                                - #{latestInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
                                             </span>
                                         </li>
                                     </ui:repeat>

@@ -21,6 +21,7 @@
     <import resource="classpath*:/serviceContext.xml" />
 
     <context:component-scan base-package="se.vgregion.glasogonbidrag.backingbean"/>
+    <context:component-scan base-package="se.vgregion.glasogonbidrag.navigation"/>
     <context:component-scan base-package="se.vgregion.glasogonbidrag.util"/>
 
     <context:annotation-config/>

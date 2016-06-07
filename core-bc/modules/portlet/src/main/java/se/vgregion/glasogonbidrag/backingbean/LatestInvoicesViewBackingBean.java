@@ -1,13 +1,14 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactory;
 import com.liferay.portlet.PortletURLFactoryUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.ocpsoft.prettytime.PrettyTime;
+import org.ocpsoft.prettytime.jsf.PrettyTimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,16 +19,21 @@ import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-@Component(value = "canceledInvoicesViewBackingBean")
+/**
+ * @author Martin Lind - Monator Technologies AB
+ * @author Erik Andersson - Monator Technologies AB
+ */
+@Component(value = "latestInvoicesViewBackingBean")
 @Scope(value = "request")
-public class CanceledInvoicesViewBackingBean {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CanceledInvoicesViewBackingBean.class);
+public class LatestInvoicesViewBackingBean {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -37,6 +43,7 @@ public class CanceledInvoicesViewBackingBean {
 
     private List<Invoice> invoices;
     private Locale locale;
+    private PrettyTime prettyTime; //TODO: Do we need getter and setter?
 
     public List<Invoice> getInvoices() {
         return invoices;
@@ -46,16 +53,33 @@ public class CanceledInvoicesViewBackingBean {
         return locale;
     }
 
+    public PrettyTime getPrettyTime() {
+        return prettyTime;
+    }
+
+    public void setPrettyTime(PrettyTime prettyTime) {
+        this.prettyTime = prettyTime;
+    }
+
+    // Public view formatting code
+
+    public String formatPrettyTime(Date date) {
+        return prettyTime.format(date);
+    }
+
+    // Initializer.
+
     @PostConstruct
     protected void init() {
 
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-//        HttpServletRequest request = themeDisplay.getRequest();
-        long groupId = themeDisplay.getScopeGroupId();
         locale = themeDisplay.getLocale();
+        long userId = themeDisplay.getUserId();
         // Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
-        invoices = invoiceRepository.findAllWithStatus(InvoiceStatus.CANCELED);
+        prettyTime = new PrettyTime(locale);
+
+        invoices = invoiceRepository.findAllOrderByModificationDate(userId);
     }
 }

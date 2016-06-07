@@ -5,11 +5,15 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:portlet="http://java.sun.com/portlet_2_0"
+        xmlns:liferay-portlet="http://liferay.com/tld/portlet">
 
     <h:head />
 
     <h:body>
+
+        <c:set var="invoices" value="#{canceledInvoicesViewBackingBean.invoices}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -24,10 +28,12 @@
                         </div>
 
                         <div class="box-bd">
-                            <h:dataTable styleClass="" value="#{canceledInvoicesViewBackingBean.invoices}" var="invoice">
+                            <h:dataTable styleClass="" value="#{invoices}" var="invoice">
                                 <h:column>
                                     <f:facet name="header">Ver.nr</f:facet>
-                                    <h:outputText value="#{invoice.verificationNumber}" />
+                                    <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                                        <h:outputText value="#{invoice.verificationNumber}" />
+                                    </h:outputLink>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Datum</f:facet>
@@ -38,7 +44,8 @@
                                 <h:column>
                                     <f:facet name="header">Belopp</f:facet>
                                     <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2"
+                                                         locale="#{canceledInvoicesViewBackingBean.locale}" />
                                     </h:outputText>
                                 </h:column>
                             </h:dataTable>
