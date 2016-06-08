@@ -31,12 +31,6 @@
                                     <h:outputText value="#{invoice.verificationNumber}" />
                                 </h:column>
                                 <h:column>
-                                    <f:facet name="header">Datum</f:facet>
-                                    <h:outputText value="#{invoice.invoiceDate}">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                                    </h:outputText>
-                                </h:column>
-                                <h:column>
                                     <f:facet name="header">Belopp</f:facet>
                                     <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                                         <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{canceledInvoicesViewBackingBean.locale}" />

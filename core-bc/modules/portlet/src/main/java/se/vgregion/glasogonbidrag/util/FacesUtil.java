@@ -58,7 +58,7 @@ public class FacesUtil {
 
         String value = parameterMap.get(parameterName);
 
-        LOGGER.info("ViewBeneficiaryBackingBean - fetchProperty(): {}", value);
+        LOGGER.info("FacesUtil - fetchProperty(): {}", value);
 
         return value;
     }
