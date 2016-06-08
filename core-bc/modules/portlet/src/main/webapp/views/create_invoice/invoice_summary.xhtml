@@ -16,7 +16,7 @@
 
         <h:panelGroup id="invoiceSummary" layout="block">
             <ui:fragment rendered="#{true}">
-                <div class="box box-sidebar">
+                <div class="box box-sidebar js-box-collapsible">
 
                     <div class="box-hd">
                         <h3 class="box-title">
@@ -58,7 +58,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h:outputText value="Registrerade bidrag" />
+                                        <h:outputText value="Bidrag" />
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">

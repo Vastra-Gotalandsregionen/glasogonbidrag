@@ -15,11 +15,11 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
-            <div class="box box-sidebar">
+            <div class="box box-sidebar box-collapsed js-box-collapsible">
 
                 <div class="box-hd">
                     <h3 class="box-title">
-                        <h:outputText value="Inmatade bidrag" />
+                        <h:outputText value="Registrerade bidrag" />
                     </h3>
                 </div>
 
@@ -31,7 +31,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <h:outputText value="Personnummer" />
+                                        <h:outputText value="Bidragstagare" />
                                     </th>
                                     <th>
                                         <h:outputText value="Exkl. moms" />
