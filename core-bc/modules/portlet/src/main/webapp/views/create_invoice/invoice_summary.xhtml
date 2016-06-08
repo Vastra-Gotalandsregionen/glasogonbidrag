@@ -71,7 +71,7 @@
                                         </h:outputText>
                                     </td>
                                 </tr>
-                                <tr class="summary-row #{invoice.calculateDifferenceExcludingVatAsKrona() eq 0 ? 'match' : 'no-match'}">
+                                <tr class="summary-row #{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0 ? 'match' : 'no-match'}">
                                     <td>
                                         <span class="summary-icon">
                                             <h:outputText value="" />
