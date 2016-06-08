@@ -23,26 +23,38 @@
                     <div class="box box-sidebar">
                         <div class="box-hd">
                             <h3 class="box-title">
-                                <h:outputText value="Makulerad fakturor"/>
+                                <h:outputText value="Makulerade fakturor"/>
                             </h3>
                         </div>
 
                         <div class="box-bd">
-                            <h:dataTable styleClass="" value="#{invoices}" var="invoice">
-                                <h:column>
-                                    <f:facet name="header">Ver.nr</f:facet>
-                                    <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
-                                        <h:outputText value="#{invoice.verificationNumber}" />
-                                    </h:outputLink>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Belopp</f:facet>
-                                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                        <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                         locale="#{canceledInvoicesViewBackingBean.locale}" />
-                                    </h:outputText>
-                                </h:column>
-                            </h:dataTable>
+                            <ui:fragment rendered="#{not empty invoices}">
+                                <h:dataTable styleClass="simple-table" value="#{invoices}" var="invoice">
+                                    <h:column>
+                                        <f:facet name="header">Ver.nr</f:facet>
+                                        <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                                            <h:outputText value="#{invoice.verificationNumber}" />
+                                        </h:outputLink>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Leverantör</f:facet>
+                                        <h:outputText value="#{invoice.supplier.name}" />
+                                    </h:column>
+
+                                    <h:column>
+                                        <f:facet name="header">Belopp</f:facet>
+                                        <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2"
+                                                             locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                        </h:outputText>
+                                    </h:column>
+                                </h:dataTable>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty invoices}">
+                                <div class="alert alert-info">
+                                    Det finns inga makulerade fakturor.
+                                </div>
+                            </ui:fragment>
                         </div>
                     </div>
 
