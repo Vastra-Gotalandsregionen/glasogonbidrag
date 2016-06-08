@@ -3,7 +3,10 @@ package se.vgregion.glasogonbidrag.flow.state;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 
-public class AddGrantPrescriptionDateState extends CreateInvoiceAddGrantPidFlow {
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
+public class AddGrantOtherDateState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
     public boolean getShowPersonalNumberOutput() {
@@ -21,18 +24,17 @@ public class AddGrantPrescriptionDateState extends CreateInvoiceAddGrantPidFlow 
     }
 
     @Override
-    public boolean getShowGrantTypeAgeSection() {
+    public boolean getShowGrantTypeOtherSection() {
         return true;
     }
 
     @Override
-    public boolean getShowPrescriptionDateInput() {
+    public boolean getShowPrescriptionTypeOutput() {
         return true;
     }
 
     @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
-        //return new AddGrantAmountAfterAgeState();
-        return AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
+        return AddGrantFlowState.ENTER_AMOUNT_AFTER_OTHER.getState();
     }
 }

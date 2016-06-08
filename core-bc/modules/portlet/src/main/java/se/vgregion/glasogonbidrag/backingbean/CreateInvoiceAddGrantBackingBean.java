@@ -12,6 +12,7 @@ import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.viewobject.GrantTypeOtherVO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
@@ -90,6 +91,11 @@ public class CreateInvoiceAddGrantBackingBean {
     private String prescriptionDate;
     private String grantType;
     private String grantTypeLabel;
+
+    private GrantTypeOtherVO grantTypeOtherVO;
+
+    private String prescriptionComment;
+
     private String amountWithVat;
 
 
@@ -201,6 +207,22 @@ public class CreateInvoiceAddGrantBackingBean {
         this.prescriptionDate = prescriptionDate;
     }
 
+    public GrantTypeOtherVO getGrantTypeOtherVO() {
+        return grantTypeOtherVO;
+    }
+
+    public void setGrantTypeOtherVO(GrantTypeOtherVO grantTypeOtherVO) {
+        this.grantTypeOtherVO = grantTypeOtherVO;
+    }
+
+    public String getPrescriptionComment() {
+        return prescriptionComment;
+    }
+
+    public void setPrescriptionComment(String prescriptionComment) {
+        this.prescriptionComment = prescriptionComment;
+    }
+
     // Listeners
 
     public void personalNumberListener() {
@@ -300,6 +322,20 @@ public class CreateInvoiceAddGrantBackingBean {
         // Set flow
         flow = flow.nextState();
 
+    }
+
+    public void changePrescriptionTypeListener() {
+    }
+
+    public void otherPrescriptionTypeListener() {
+        LOGGER.info("");
+        //TODO: Set values in beneficiary
+        flow = flow.nextState();
+    }
+
+    public void otherPrescriptionDateListener() {
+        //TODO: Set values in beneficiary
+        flow = flow.nextState();
     }
 
     public void stepBackListener() {
@@ -471,6 +507,7 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriptionDate = null;
         grantType = null;
         amountWithVat = null;
+        grantTypeOtherVO = new GrantTypeOtherVO();
     }
 
 }

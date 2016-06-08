@@ -46,7 +46,19 @@ public abstract class CreateInvoiceAddGrantPidFlow {
         return false;
     }
 
+    public boolean getShowGrantTypeAgeSection() {
+        return false;
+    }
+
     public boolean getShowGrantTypeOtherSection() {
+        return false;
+    }
+
+    public boolean getShowPrescriptionTypeInput() {
+        return false;
+    }
+
+    public boolean getShowPrescriptionTypeOutput() {
         return false;
     }
 
@@ -55,10 +67,6 @@ public abstract class CreateInvoiceAddGrantPidFlow {
     }
 
     public boolean getShowPrescriptionDateOutput() {
-        return false;
-    }
-
-    public boolean getShowGrantTypeAgeSection() {
         return false;
     }
 
@@ -80,6 +88,8 @@ public abstract class CreateInvoiceAddGrantPidFlow {
         sb.append(",getShowGrantTypeInput=").append(getShowGrantTypeInput());
         sb.append(",getShowGrantTypeOutput=").append(getShowGrantTypeOutput());
         sb.append(",getShowGrantTypeOtherSection=").append(getShowGrantTypeOtherSection());
+        sb.append(",getShowPrescriptionTypeInput=").append(getShowPrescriptionTypeInput());
+        sb.append(",getShowPrescriptionTypeOutput=").append(getShowPrescriptionTypeOutput());
         sb.append(",getShowPrescriptionDateInput=").append(getShowPrescriptionDateInput());
         sb.append(",getShowPrescriptionDateOutput=").append(getShowPrescriptionDateOutput());
         sb.append(",getShowAmountInput=").append(getShowAmountInput());

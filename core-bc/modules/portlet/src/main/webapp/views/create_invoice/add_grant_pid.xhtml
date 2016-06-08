@@ -13,6 +13,7 @@
 
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="flow" value="#{createInvoiceAddGrantBackingBean.flow}" scope="request" />
+        <c:set var="otherVO" value="#{createInvoiceAddGrantBackingBean.grantTypeOtherVO}" scope="request" />
 
         <!-- Insert beneficiary's identification number -->
         <ui:fragment rendered="#{flow.showPersonalNumberInput}">
@@ -200,13 +201,8 @@
 
 
         <!-- Grant type others -->
-        <ui:fragment rendered="#{flow.showGrantTypeOtherSection}">
-            <!-- TODO: WHERE HERE -->
+        <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeInput}">
 
-            <!-- TODO: real data not hard coded -->
-            <c:set var="hasAfaki" value="false" scope="request" />
-            <c:set var="hasKeratonus" value="true" scope="request" />
-            <c:set var="hasSpecial" value="false" scope="request" />
 
             <div class="grant-section">
                 <div class="field-row">
@@ -214,23 +210,28 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="afaki" value="#{hasAfaki}" />
+                                <h:selectBooleanCheckbox id="afaki" value="#{otherVO.aphakia}">
+                                    <f:ajax execute=":addGrantForm"
+                                            listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                            render=":addGrantForm:grantAddPanel"
+                                            onevent="function(data) {ajaxComplete(data)}" />
+                                </h:selectBooleanCheckbox>
                                 <h:outputLabel for="afaki" value="Afaki:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{hasAfaki}">
+                            <ui:fragment rendered="#{otherVO.aphakia}">
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightBilateral" value="false" />
+                                        <h:selectBooleanCheckbox id="afakiEyeSightBilateral" value="#{otherVO.aphakiaBilateral}" />
                                         <h:outputLabel for="afakiEyeSightBilateral" value="Bilat." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightRight" value="false" />
+                                        <h:selectBooleanCheckbox id="afakiEyeSightRight" value="#{otherVO.aphakiaRight}" />
                                         <h:outputLabel for="afakiEyeSightRight" value="Hö" />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightLeft" value="false" />
+                                        <h:selectBooleanCheckbox id="afakiEyeSightLeft" value="#{otherVO.aphakiaLeft}" />
                                         <h:outputLabel for="afakiEyeSightLeft" value="Vä" />
                                     </div>
                                 </div>
@@ -241,24 +242,29 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="keratokonus" value="#{hasKeratonus}" pt:autofocus="true" />
+                                <h:selectBooleanCheckbox id="keratokonus" value="#{otherVO.keratoconus}" pt:autofocus="true">
+                                <f:ajax execute=":addGrantForm"
+                                        listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                        render=":addGrantForm:grantAddPanel"
+                                        onevent="function(data) {ajaxComplete(data)}" />
+                                </h:selectBooleanCheckbox>
                                 <h:outputLabel for="keratokonus" value="Keratokonus:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{hasKeratonus}">
+                            <ui:fragment rendered="#{otherVO.keratoconus}">
 
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightBilateral" value="false" />
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightBilateral" value="#{otherVO.keratoconusBilateral}" />
                                         <h:outputLabel for="keratokonusEyeSightBilateral" value="Bilat." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightRight" value="false" />
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightRight" value="#{otherVO.keratoconusRight}" />
                                         <h:outputLabel for="keratokonusEyeSightRight" value="Hö" />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightLeft" value="false" />
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightLeft" value="#{otherVO.keratoconusLeft}" />
                                         <h:outputLabel for="keratokonusEyeSightLeft" value="Vä" />
                                     </div>
                                 </div>
@@ -267,18 +273,22 @@
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
                                         <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
-                                        <h:inputText id="keratokonusVisualAcuityRight" pt:placeholder="" styleClass="input-very-short" />
+                                        <h:inputText id="keratokonusVisualAcuityRight"
+                                                     value="#{otherVO.keratoconusRightAdjustment}"
+                                                     pt:placeholder="" styleClass="input-very-short" />
                                     </div>
 
                                     <div class="prescription-section-field">
                                         <h:outputLabel for="keratokonusVisualAcuityLeft" value="Vä" />
-                                        <h:inputText id="keratokonusVisualAcuityLeft" pt:placeholder="" styleClass="input-very-short"  />
+                                        <h:inputText id="keratokonusVisualAcuityLeft"
+                                                     value="#{otherVO.keratoconusLeftAdjustment}"
+                                                     pt:placeholder="" styleClass="input-very-short"  />
                                     </div>
 
                                     <div class="prescription-section-field">
-													<span>
-														Med glaskorr.
-													</span>
+                                        <span>
+                                            Med glaskorr.
+                                        </span>
                                     </div>
 
                                 </div>
@@ -286,7 +296,7 @@
 
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="false" />
+                                        <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{otherVO.keratoconusNoGlass}" />
                                         <h:outputLabel for="keratokonusNoGlasses" value="Ej glas" />
                                     </div>
                                 </div>
@@ -298,29 +308,34 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="special" value="#{hasSpecial}" />
+                                <h:selectBooleanCheckbox id="special" value="#{otherVO.special}">
+                                    <f:ajax execute=":addGrantForm"
+                                            listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                            render=":addGrantForm:grantAddPanel"
+                                            onevent="function(data) {ajaxComplete(data)}" />
+                                </h:selectBooleanCheckbox>
                                 <h:outputLabel for="special" value="Spec / synsvag:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{hasSpecial}">
+                            <ui:fragment rendered="#{otherVO.special}">
                                 <div>
                                     <div class="prescription-section-fieldset">
                                         <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialWeakEyeSight" value="false" />
+                                            <h:selectBooleanCheckbox id="specialWeakEyeSight" value="#{otherVO.specialWeakSight}" />
                                             <h:outputLabel for="specialWeakEyeSight" value="Synsvag" />
                                         </div>
 
                                         <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightBilateral" value="false" />
+                                            <h:selectBooleanCheckbox id="specialEyeSightBilateral" value="#{otherVO.specialBilateral}" />
                                             <h:outputLabel for="specialEyeSightBilateral" value="Bilat." />
                                         </div>
                                         <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightRight" value="false" />
+                                            <h:selectBooleanCheckbox id="specialEyeSightRight" value="#{otherVO.specialRight}" />
                                             <h:outputLabel for="specialEyeSightRight" value="Hö" />
                                         </div>
                                         <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightLeft" value="false" />
+                                            <h:selectBooleanCheckbox id="specialEyeSightLeft" value="#{otherVO.specialLeft}" />
                                             <h:outputLabel for="specialEyeSightLeft" value="Vä" />
                                         </div>
                                     </div>
@@ -330,6 +345,26 @@
                     </div>
 
                 </div>
+                <div class="button-row">
+                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
+                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                    </h:commandLink>
+                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
+                </div>
+            </div>
+
+        </ui:fragment>
+
+        <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeOutput}">
+            You inserted some values!
+        </ui:fragment>
+
+        <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionDateInput}">
+
+            <div class="grant-section">
                 <div class="field-row field-row-3">
                     <div class="field-element inline">
                         <h:outputLabel for="prescriber" value="Ordinatör:" />
@@ -345,13 +380,25 @@
                     </div>
                     <div class="field-element inline">
                         <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
-                        <h:inputTextarea id="prescriptionNote" value=""  />
+                        <h:inputTextarea id="prescriptionNote" value="#{createInvoiceAddGrantBackingBean.prescriptionComment}"  />
                     </div>
 
-
+                </div>
+                <div class="button-row">
+                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
+                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                    </h:commandLink>
+                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
                 </div>
             </div>
 
+        </ui:fragment>
+
+        <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionDateOutput}">
+            More values where inserted
         </ui:fragment>
 
         <!-- Input amount -->
