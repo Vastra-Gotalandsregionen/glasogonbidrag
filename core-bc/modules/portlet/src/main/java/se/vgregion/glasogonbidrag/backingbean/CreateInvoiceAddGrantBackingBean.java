@@ -289,9 +289,10 @@ public class CreateInvoiceAddGrantBackingBean {
             return;
         }
 
-        grant.setPrescriptionDate(date);
+        beneficiary.getPrescription().setDate(date);
 
-        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) || GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
+        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
+                GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             // TODO: make address check against prescriptionDate
             LOGGER.info("prescriptionDateListener(): addressCheck=");
         }
@@ -333,15 +334,17 @@ public class CreateInvoiceAddGrantBackingBean {
     public String doSaveGrantAndAddNew() {
         saveGrant();
 
-        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoice.getId());
-
-        return returnView;
+        return String.format(
+                "add_grant" +
+                        "?invoiceId=%d" +
+                        "&faces-redirect=true" +
+                        "&includeViewParams=true",
+                invoice.getId());
     }
 
     public String doSaveGrantAndShowOverview() {
         return saveGrant();
     }
-
 
     public String saveGrant() {
 
