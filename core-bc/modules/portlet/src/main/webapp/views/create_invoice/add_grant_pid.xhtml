@@ -287,7 +287,7 @@
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
                                         <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="false" />
-                                        <h:outputLabel for="keratokonusNoGlasses" value="Glas kan ej användas" />
+                                        <h:outputLabel for="keratokonusNoGlasses" value="Ej glas" />
                                     </div>
                                 </div>
 
@@ -328,6 +328,26 @@
                             </ui:fragment>
                         </div>
                     </div>
+
+                </div>
+                <div class="field-row field-row-3">
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriber" value="Ordinatör:" />
+                        <h:inputText id="prescriber" styleClass=""
+                                     value=""
+                                     pt:placeholder="Skriv in ordindatör..." />
+                    </div>
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
+                        <h:inputText id="prescriptionDate2" styleClass="js-input-mask js-input-mask-date"
+                                     value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                     pt:placeholder="ÅÅÅÅ-MM-DD" />
+                    </div>
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
+                        <h:inputTextarea id="prescriptionNote" value=""  />
+                    </div>
+
 
                 </div>
             </div>

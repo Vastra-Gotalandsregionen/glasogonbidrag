@@ -434,23 +434,6 @@ public class CreateInvoiceAddGrantBackingBean {
         return items;
     }
 
-    /**
-     * Pretty printing of the grant type.
-     *
-     * @return a string representation of grant type.
-     */
-    public String getGrantTypeOutput() {
-        if ("0".equals(grantType)) {
-            return "0-15";
-        } else if ("1".equals(grantType)) {
-            return "0-19";
-        } else if ("2".equals(grantType)) {
-            return "Övriga";
-        } else {
-            return "";
-        }
-    }
-
     // Initializer
 
     @PostConstruct
