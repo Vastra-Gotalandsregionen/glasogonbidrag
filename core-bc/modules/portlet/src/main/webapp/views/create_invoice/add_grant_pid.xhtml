@@ -10,12 +10,23 @@
     <h:head />
 
     <h:body>
-
+        <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="flow" value="#{createInvoiceAddGrantBackingBean.flow}" scope="request" />
 
+        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
+            <div class="alert alert-info">
+                Samtliga bidrag på fakturan verkar vara registrerade.
+            </div>
+            <div class="button-row">
+                <h:link styleClass="link-btn primary" value="Gå till översikt" outcome="view_invoice" >
+                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                </h:link>
+            </div>
+        </ui:fragment>
+
         <!-- Insert beneficiary's identification number -->
-        <ui:fragment rendered="#{flow.showPersonalNumberInput}">
+        <ui:fragment rendered="#{flow.showPersonalNumberInput and (invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() ne 0)}">
             <div class="grant-section">
                 <div class="field-row">
                     <div class="field-element inline">
