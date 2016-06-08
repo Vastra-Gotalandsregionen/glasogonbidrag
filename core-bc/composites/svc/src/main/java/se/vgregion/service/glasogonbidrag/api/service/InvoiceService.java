@@ -15,18 +15,15 @@ public interface InvoiceService {
 
     void update(Invoice invoice);
 
-    void updateWithGrants(long userId, long groupId, long companyId,
-                          Invoice invoice);
-
     void updateAddGrant(long userId, long groupId, long companyId,
                         Invoice invoice, Grant grant)
             throws GrantAlreadyExistException;
+
+    void updateDeleteGrant(Invoice invoice, Long grantId);
 
     void updateAddGrantAdjustment(long userId, long groupId, long companyId,
                                   Invoice invoice, GrantAdjustment adjustment)
         throws GrantAdjustmentAlreadySetException;
 
     void delete(Long id);
-
-    void deleteGrant(Invoice invoice, Long grantId);
 }

@@ -47,8 +47,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (adjustment != null) {
             adjustment.setCreateDate(date);
             adjustment.setModifiedDate(date);
-
-            em.persist(adjustment);
         }
 
         // Set user, group and company id of new invoice.
@@ -60,6 +58,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setCreateDate(date);
         invoice.setModifiedDate(date);
 
+        em.persist(invoice);
+
         // Set user, group and company id of all grants.
         //  Also set creation date and modification date of all grants.
         for (Grant grant : invoice.getGrants()) {
@@ -69,16 +69,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 
             grant.setCreateDate(date);
             grant.setModifiedDate(date);
-        }
 
-        em.persist(invoice);
+            grant.setInvoice(invoice);
+
+            em.persist(grant);
+        }
     }
 
     /**
      * Updated the invoice object. Don't use this to persist when adding
-     * new grants, to persist all new grants use
-     * {@link InvoiceServiceImpl#updateWithGrants}
-     * or to add just one grant to the invoice object use
+     * new grants. to add one grant to the invoice object use
      * {@link InvoiceServiceImpl#updateAddGrant}
      *
      * @param invoice the invoice to update.
@@ -123,58 +123,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public void updateWithGrants(long userId, long groupId, long companyId,
-                                 Invoice invoice) {
-        LOGGER.info("Updating invoice {} with all grants", invoice);
-
-        TypedQuery<Invoice> q = em.createNamedQuery(
-                "glasogonbidrag.invoice.findWithGrants", Invoice.class);
-        q.setParameter("id", invoice.getId());
-
-        Invoice dbInvoice;
-        try {
-            dbInvoice = q.getSingleResult();
-        } catch (NoResultException e) {
-            LOGGER.warn("No result from query.");
-            return;
-        }
-
-        // Update modification date of this invoice
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-
-        invoice.setModifiedDate(date);
-
-        // Set user, group and company id of all new grants.
-        //  Also set creation date and modified date of new grants.
-        if (dbInvoice.getGrants().size() != invoice.getGrants().size()) {
-            LOGGER.info("Number of grants in database differs.");
-
-            List<Grant> dbGrants = dbInvoice.getGrants();
-
-            List<Grant> newGrants = new ArrayList<>();
-            for (Grant grant : invoice.getGrants()) {
-                if (!dbGrants.contains(grant)) {
-                    newGrants.add(grant);
-                }
-            }
-
-            for (Grant grant : newGrants) {
-                LOGGER.info("New grant: {}", grant);
-                grant.setUserId(userId);
-                grant.setGroupId(groupId);
-                grant.setCompanyId(companyId);
-
-                grant.setCreateDate(date);
-                grant.setModifiedDate(date);
-            }
-        }
-
-        em.merge(invoice);
-    }
-
-    @Override
-    @Transactional
     public void updateAddGrant(long userId, long groupId, long companyId,
                                Invoice invoice, Grant grant)
             throws GrantAlreadyExistException {
@@ -201,10 +149,33 @@ public class InvoiceServiceImpl implements InvoiceService {
         grant.setCreateDate(date);
         grant.setModifiedDate(date);
 
+        // Setup relation from the grant to the invoice.
+        grant.setInvoice(invoice);
         // Add grant to the invoice object and update it.
         invoice.addGrant(grant);
 
+        em.persist(grant);
+
         this.update(invoice);
+    }
+
+    @Override
+    @Transactional
+    public void updateDeleteGrant(Invoice invoice, Long grantId) {
+        Grant grant = em.find(Grant.class, grantId);
+
+        invoice.removeGrant(grant);
+        grant.setInvoice(null);
+
+        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+
+        invoice.setModifiedDate(date);
+
+        em.merge(invoice);
+        em.remove(grant);
     }
 
     @Override
@@ -254,23 +225,5 @@ public class InvoiceServiceImpl implements InvoiceService {
         LOGGER.info("Deleting invoice: {}", invoice);
 
         em.remove(invoice);
-    }
-
-    @Override
-    @Transactional
-    public void deleteGrant(Invoice invoice, Long grantId) {
-        Grant grant = em.find(Grant.class, grantId);
-
-        invoice.removeGrant(grant);
-
-        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
-
-
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-
-        invoice.setModifiedDate(date);
-
-        em.merge(invoice);
     }
 }
