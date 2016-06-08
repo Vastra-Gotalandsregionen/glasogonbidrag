@@ -140,7 +140,7 @@
                         Bidragstyp:
                     </span>
                     <span class="grant-section-data">
-                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantType}" />
+                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}" />
                     </span>
                     <h:commandLink styleClass="grant-section-back">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
@@ -187,6 +187,13 @@
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </span>
+                    <h:commandLink styleClass="grant-section-back">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="ENTER_PRESCRIPTION_DATE" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
