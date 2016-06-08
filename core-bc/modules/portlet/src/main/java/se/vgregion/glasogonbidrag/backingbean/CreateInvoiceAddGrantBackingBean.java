@@ -89,6 +89,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private String deliveryDate;
     private String prescriptionDate;
     private String grantType;
+    private String grantTypeLabel;
     private String amountWithVat;
 
 
@@ -176,6 +177,14 @@ public class CreateInvoiceAddGrantBackingBean {
         this.grantType = grantType;
     }
 
+    public String getGrantTypeLabel() {
+        return grantTypeLabel;
+    }
+
+    public void setGrantTypeLabel(String grantTypeLabel) {
+        this.grantTypeLabel = grantTypeLabel;
+    }
+
     public String getAmountWithVat() {
         return amountWithVat;
     }
@@ -256,10 +265,13 @@ public class CreateInvoiceAddGrantBackingBean {
         // Set flow
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_15);
+            grantTypeLabel = "0-15";
         } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_19);
+            grantTypeLabel = "0-19";
         } else {
             flow = flow.nextState(AddGrantAction.OTHER);
+            grantTypeLabel = "Övriga";
         }
     }
 
@@ -420,23 +432,6 @@ public class CreateInvoiceAddGrantBackingBean {
         items.add(new SelectItem("2", "Övriga"));
 
         return items;
-    }
-
-    /**
-     * Pretty printing of the grant type.
-     *
-     * @return a string representation of grant type.
-     */
-    public String getGrantTypeOutput() {
-        if ("0".equals(grantType)) {
-            return "0-15";
-        } else if ("1".equals(grantType)) {
-            return "0-19";
-        } else if ("2".equals(grantType)) {
-            return "Övriga";
-        } else {
-            return "";
-        }
     }
 
     // Initializer

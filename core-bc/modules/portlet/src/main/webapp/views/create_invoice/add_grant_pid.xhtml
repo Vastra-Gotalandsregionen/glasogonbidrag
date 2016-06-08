@@ -140,8 +140,15 @@
                         Bidragstyp:
                     </span>
                     <span class="grant-section-data">
-                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantType}" />
+                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}" />
                     </span>
+                    <h:commandLink styleClass="grant-section-back">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="SELECT_GRANT_TYPE" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
@@ -180,6 +187,13 @@
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </span>
+                    <h:commandLink styleClass="grant-section-back">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="ENTER_PRESCRIPTION_DATE" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
                 </div>
             </div>
         </ui:fragment>
@@ -188,6 +202,156 @@
         <!-- Grant type others -->
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection}">
             <!-- TODO: WHERE HERE -->
+
+            <!-- TODO: real data not hard coded -->
+            <c:set var="hasAfaki" value="false" scope="request" />
+            <c:set var="hasKeratonus" value="true" scope="request" />
+            <c:set var="hasSpecial" value="false" scope="request" />
+
+            <div class="grant-section">
+                <div class="field-row">
+
+                    <div class="prescription-section">
+                        <div class="prescription-section-main">
+                            <div class="field-element field-element-toggle">
+                                <h:selectBooleanCheckbox id="afaki" value="#{hasAfaki}" />
+                                <h:outputLabel for="afaki" value="Afaki:" />
+                            </div>
+                        </div>
+                        <div class="prescription-section-fields">
+                            <ui:fragment rendered="#{hasAfaki}">
+                                <div class="prescription-section-fieldset">
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="afakiEyeSightBilateral" value="false" />
+                                        <h:outputLabel for="afakiEyeSightBilateral" value="Bilat." />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="afakiEyeSightRight" value="false" />
+                                        <h:outputLabel for="afakiEyeSightRight" value="Hö" />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="afakiEyeSightLeft" value="false" />
+                                        <h:outputLabel for="afakiEyeSightLeft" value="Vä" />
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+
+                    <div class="prescription-section">
+                        <div class="prescription-section-main">
+                            <div class="field-element field-element-toggle">
+                                <h:selectBooleanCheckbox id="keratokonus" value="#{hasKeratonus}" pt:autofocus="true" />
+                                <h:outputLabel for="keratokonus" value="Keratokonus:" />
+                            </div>
+                        </div>
+                        <div class="prescription-section-fields">
+                            <ui:fragment rendered="#{hasKeratonus}">
+
+                                <div class="prescription-section-fieldset">
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightBilateral" value="false" />
+                                        <h:outputLabel for="keratokonusEyeSightBilateral" value="Bilat." />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightRight" value="false" />
+                                        <h:outputLabel for="keratokonusEyeSightRight" value="Hö" />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="keratokonusEyeSightLeft" value="false" />
+                                        <h:outputLabel for="keratokonusEyeSightLeft" value="Vä" />
+                                    </div>
+                                </div>
+
+
+                                <div class="prescription-section-fieldset">
+                                    <div class="prescription-section-field">
+                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
+                                        <h:inputText id="keratokonusVisualAcuityRight" pt:placeholder="" styleClass="input-very-short" />
+                                    </div>
+
+                                    <div class="prescription-section-field">
+                                        <h:outputLabel for="keratokonusVisualAcuityLeft" value="Vä" />
+                                        <h:inputText id="keratokonusVisualAcuityLeft" pt:placeholder="" styleClass="input-very-short"  />
+                                    </div>
+
+                                    <div class="prescription-section-field">
+													<span>
+														Med glaskorr.
+													</span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="prescription-section-fieldset">
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="false" />
+                                        <h:outputLabel for="keratokonusNoGlasses" value="Ej glas" />
+                                    </div>
+                                </div>
+
+                            </ui:fragment>
+                        </div>
+                    </div>
+
+                    <div class="prescription-section">
+                        <div class="prescription-section-main">
+                            <div class="field-element field-element-toggle">
+                                <h:selectBooleanCheckbox id="special" value="#{hasSpecial}" />
+                                <h:outputLabel for="special" value="Spec / synsvag:" />
+                            </div>
+                        </div>
+                        <div class="prescription-section-fields">
+                            <ui:fragment rendered="#{hasSpecial}">
+                                <div>
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="specialWeakEyeSight" value="false" />
+                                            <h:outputLabel for="specialWeakEyeSight" value="Synsvag" />
+                                        </div>
+
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="specialEyeSightBilateral" value="false" />
+                                            <h:outputLabel for="specialEyeSightBilateral" value="Bilat." />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="specialEyeSightRight" value="false" />
+                                            <h:outputLabel for="specialEyeSightRight" value="Hö" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="specialEyeSightLeft" value="false" />
+                                            <h:outputLabel for="specialEyeSightLeft" value="Vä" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="field-row field-row-3">
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriber" value="Ordinatör:" />
+                        <h:inputText id="prescriber" styleClass=""
+                                     value=""
+                                     pt:placeholder="Skriv in ordindatör..." />
+                    </div>
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
+                        <h:inputText id="prescriptionDate2" styleClass="js-input-mask js-input-mask-date"
+                                     value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                     pt:placeholder="ÅÅÅÅ-MM-DD" />
+                    </div>
+                    <div class="field-element inline">
+                        <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
+                        <h:inputTextarea id="prescriptionNote" value=""  />
+                    </div>
+
+
+                </div>
+            </div>
+
         </ui:fragment>
 
         <!-- Input amount -->

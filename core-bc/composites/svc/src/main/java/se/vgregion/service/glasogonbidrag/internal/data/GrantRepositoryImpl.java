@@ -43,9 +43,16 @@ public class GrantRepositoryImpl implements GrantRepository {
         q.setParameter("user", userId);
         q.setParameter("date", date, TemporalType.DATE);
 
+        Long result = null;
         try {
-            return q.getSingleResult();
+            result = q.getSingleResult();
         } catch (NoResultException e) {
+            // Ignore exception
+        }
+
+        if (result != null) {
+            return result;
+        } else {
             return 0;
         }
     }
