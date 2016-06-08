@@ -80,17 +80,17 @@ import java.util.List;
                         "LEFT JOIN FETCH i.supplier " +
                         "LEFT JOIN FETCH i.adjustment " +
                         "WHERE i.invoiceNumber = :number " +
-                        "ORDER BY i.invoiceDate ASC"),
+                        "ORDER BY i.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllBySupplier",
                 query = "SELECT i FROM Invoice i " +
                         "WHERE i.supplier = :supplier " +
-                        "ORDER BY i.invoiceDate ASC"),
+                        "ORDER BY i.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllByStatus",
                 query = "SELECT i FROM Invoice i " +
                         "WHERE i.status = :status " +
-                        "ORDER BY i.invoiceDate ASC")
+                        "ORDER BY i.id ASC")
 })
 public class Invoice {
 
@@ -129,17 +129,20 @@ public class Invoice {
 
     private long amount;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "invoice")
     private List<Grant> grants;
 
     @ManyToOne
+    @JoinColumn(name = "supplier_name")
     private Supplier supplier;
 
     @OneToOne(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @JoinColumn(name = "adjustment")
     private GrantAdjustment adjustment;
 
     @Enumerated(EnumType.STRING)

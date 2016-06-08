@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = "vgr_glasogonbidrag_personal_identification")
 public class PersonalIdentification extends Identification {
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "pid_number", unique = true, nullable = false)
     private String number;
 
     // Default constructor

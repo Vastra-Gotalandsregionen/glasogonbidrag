@@ -1,5 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -70,15 +71,20 @@ public class Beneficiary {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver", referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     private List<Grant> grants;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "identification_id")
     private Identification identification;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "prescription_id")
+    private Prescription prescription;
 
     public Beneficiary() {
         grants = new ArrayList<>();
+        prescription = new Prescription();
     }
 
     public Long getId() {
@@ -135,6 +141,14 @@ public class Beneficiary {
 
     public void setIdentification(Identification identification) {
         this.identification = identification;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 
     @Override

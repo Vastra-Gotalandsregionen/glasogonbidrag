@@ -70,19 +70,16 @@ public class Grant {
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
 
-    @Column(name = "prescription_date")
-    @Temporal(TemporalType.DATE)
-    private Date prescriptionDate;
-
     private long vat;
 
     private long amount;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "receiver")
+    @JoinColumn(name = "beneficiary_id")
     private Beneficiary beneficiary;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
     @Transient
@@ -146,14 +143,6 @@ public class Grant {
 
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
-    }
-
-    public Date getPrescriptionDate() {
-        return prescriptionDate;
-    }
-
-    public void setPrescriptionDate(Date prescriptionDate) {
-        this.prescriptionDate = prescriptionDate;
     }
 
     public long getVat() {
@@ -230,8 +219,6 @@ public class Grant {
         if (amount != grant.amount) return false;
         if (deliveryDate != null ? !deliveryDate.equals(grant.deliveryDate) : grant.deliveryDate != null)
             return false;
-        if (prescriptionDate != null ? !prescriptionDate.equals(grant.prescriptionDate) : grant.prescriptionDate != null)
-            return false;
         if (beneficiary != null ? !beneficiary.equals(grant.beneficiary) : grant.beneficiary != null)
             return false;
         return invoice != null ? invoice.equals(grant.invoice) : grant.invoice == null;
@@ -241,7 +228,6 @@ public class Grant {
     @Override
     public int hashCode() {
         int result = deliveryDate != null ? deliveryDate.hashCode() : 0;
-        result = 31 * result + (prescriptionDate != null ? prescriptionDate.hashCode() : 0);
         result = 31 * result + (int) (vat ^ (vat >>> 32));
         result = 31 * result + (int) (amount ^ (amount >>> 32));
         result = 31 * result + (beneficiary != null ? beneficiary.hashCode() : 0);
@@ -254,7 +240,6 @@ public class Grant {
         return "Grant{" +
                 "id=" + id +
                 ", deliveryDate=" + deliveryDate +
-                ", prescriptionDate=" + prescriptionDate +
                 ", vat=" + vat +
                 ", amount=" + amount +
                 '}';

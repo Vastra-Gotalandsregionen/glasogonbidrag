@@ -42,8 +42,7 @@ public class GrantAdjustment {
 
     private int amount;
 
-    @OneToOne
-    @JoinColumn(name = "invoice")
+    @OneToOne(mappedBy = "adjustment")
     private Invoice invoice;
 
     public GrantAdjustment() {
