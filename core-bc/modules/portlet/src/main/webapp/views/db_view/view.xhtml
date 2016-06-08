@@ -28,7 +28,7 @@
             <ul>
                 <ui:repeat id="suppliers" value="#{dbViewViewBackingBean.suppliers}" var="supplier">
                     <li>
-                        <h:link value="#{supplier.name}" outcome="viewSupplier">
+                        <h:link value="#{supplier.name}" outcome="view_supplier">
                             <f:param name="supplierName" value="#{supplier.name}" />
                         </h:link>
                     </li>
@@ -46,7 +46,8 @@
             <ul>
                 <ui:repeat id="beneficiaries" value="#{dbViewViewBackingBean.beneficiaries}" var="beneficiary">
                     <li>
-                        <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})" outcome="viewBeneficiary">
+                        <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})"
+                                outcome="view_beneficiary">
                             <f:param name="beneficiaryId" value="#{beneficiary.id}" />
                         </h:link>
                     </li>

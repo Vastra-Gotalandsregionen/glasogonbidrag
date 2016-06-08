@@ -12,6 +12,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
@@ -168,9 +169,12 @@ public class DBViewViewBackingBean {
             beneficiaryService.create(beneficiary);
         } catch (NoIdentificationException e) {
             message = new FacesMessage("No identification added to user.");
+            LOGGER.warn("No identiciation set for the user");
         } catch (PersistenceException e) {
             message = new FacesMessage("Exception persisting beneficiary. " +
                     "Got exception: " + e.getMessage());
+            LOGGER.warn("Exception persisting beneficiary: {}.",
+                    e.getMessage());
         }
 
         if (message != null) {
@@ -195,6 +199,7 @@ public class DBViewViewBackingBean {
         Identification id2 = identificationRepository.findByLMANumber("50-008920/4");
         Beneficiary b2 = beneficiaryRepository.findWithPartsByIdent(id2);
 
+
         Calendar cal = Calendar.getInstance();
 
         Grant g1 = new Grant();
@@ -202,14 +207,16 @@ public class DBViewViewBackingBean {
         g1.setVat(2500);
         g1.setBeneficiary(b1);
         g1.setDeliveryDate(cal.getTime());
-        g1.setPrescriptionDate(cal.getTime());
+
+        b1.getPrescription().setDate(cal.getTime());
 
         Grant g2 = new Grant();
         g2.setAmount(20000);
         g2.setVat(5000);
         g2.setBeneficiary(b2);
         g2.setDeliveryDate(cal.getTime());
-        g2.setPrescriptionDate(cal.getTime());
+
+        b2.getPrescription().setDate(cal.getTime());
 
         List<Grant> grants = new ArrayList<>();
         grants.add(g1);
@@ -222,6 +229,23 @@ public class DBViewViewBackingBean {
         invoice.setVat(7500);
         invoice.setInvoiceNumber("10002");
         invoice.setVerificationNumber("E510396");
+        invoice.setStatus(InvoiceStatus.UNPAID);
+
+        try {
+            beneficiaryService.update(b1);
+        } catch (NoIdentificationException e) {
+            FacesMessage message = new FacesMessage(
+                    "Identification not set on beneficiary");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+        try {
+            beneficiaryService.update(b2);
+        } catch (NoIdentificationException e) {
+            FacesMessage message = new FacesMessage(
+                    "Identification not set on beneficiary");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
 
         invoiceService.create(userId, groupId, companyId, invoice);
 
@@ -250,9 +274,26 @@ public class DBViewViewBackingBean {
         grant.setVat(7500);
         grant.setBeneficiary(b1);
         grant.setDeliveryDate(cal.getTime());
-        grant.setPrescriptionDate(cal.getTime());
 
-        invoiceService.updateWithGrants(userId, groupId, companyId, inv);
+        b1.getPrescription().setDate(cal.getTime());
+
+        try {
+            beneficiaryService.update(b1);
+        } catch (NoIdentificationException e) {
+            FacesMessage message = new FacesMessage(
+                    "Identification not set on beneficiary");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+        try {
+            invoiceService.updateAddGrant(userId, groupId, companyId, inv, grant);
+        } catch (GrantAlreadyExistException e) {
+            FacesMessage message = new FacesMessage(
+                    "May not add the same grant twice.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            LOGGER.info("Grant already exists on this invoice!");
+        }
 
         return "view?faces-redirect=true";
     }
@@ -279,7 +320,16 @@ public class DBViewViewBackingBean {
         grant.setVat(15000);
         grant.setBeneficiary(b1);
         grant.setDeliveryDate(cal.getTime());
-        grant.setPrescriptionDate(cal.getTime());
+
+        b1.getPrescription().setDate(cal.getTime());
+
+        try {
+            beneficiaryService.update(b1);
+        } catch (NoIdentificationException e) {
+            FacesMessage message = new FacesMessage(
+                    "Identification not set on beneficiary");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
 
         try {
             invoiceService.updateAddGrant(userId, groupId, companyId, inv, grant);

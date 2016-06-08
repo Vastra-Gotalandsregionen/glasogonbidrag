@@ -13,10 +13,10 @@ import javax.annotation.PostConstruct;
 
 @Controller("viewBeneficiaryBean")
 @Scope(value = "request")
-public class ViewBeneficiaryBackingBean {
+public class DBViewViewBeneficiaryBackingBean {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ViewBeneficiaryBackingBean.class);
+            LoggerFactory.getLogger(DBViewViewBeneficiaryBackingBean.class);
 
     @Autowired
     private BeneficiaryRepository beneficiaryRepository;
@@ -32,7 +32,7 @@ public class ViewBeneficiaryBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("ViewBeneficiaryBackingBean - init()");
+        LOGGER.info("DBViewViewBeneficiaryBackingBean - init()");
 
         Long id = util.fetchId("beneficiaryId");
 

@@ -16,10 +16,10 @@ import java.util.List;
 
 @Controller("viewSupplierBean")
 @Scope(value = "request")
-public class ViewSupplierBackingBean {
+public class DBViewViewSupplierBackingBean {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ViewSupplierBackingBean.class);
+            LoggerFactory.getLogger(DBViewViewSupplierBackingBean.class);
 
     @Autowired
     private SupplierRepository repository;
@@ -43,7 +43,7 @@ public class ViewSupplierBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("ViewSupplierBackingBean - init()");
+        LOGGER.info("DBViewViewSupplierBackingBean - init()");
 
         String name = util.fetchProperty("supplierName");
 

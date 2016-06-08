@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
@@ -41,7 +40,7 @@ public class DBViewViewInvoiceBackingBean {
     public String deleteGrant() {
         long grantId = util.fetchId("grantId");
 
-        invoiceService.deleteGrant(invoice, grantId);
+        invoiceService.updateDeleteGrant(invoice, grantId);
 
         return "view_invoice?invoiceId=" + invoice.getId() +
                     "&faces-redirect=true";
@@ -95,5 +94,10 @@ public class DBViewViewInvoiceBackingBean {
         Long id = util.fetchId("invoiceId");
 
         invoice = invoiceRepository.findWithParts(id);
+
+        LOGGER.info("Invoice: {}", invoice);
+        if (invoice.getGrants().size() > 0) {
+            LOGGER.info("Grant[1]: {}", invoice.getGrants().get(0));
+        }
     }
 }
