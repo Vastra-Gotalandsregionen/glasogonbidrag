@@ -1,8 +1,9 @@
 package se.vgregion.glasogonbidrag.flow.state;
 
+import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 
-public class AddGrantAmountAfterOtherState extends CreateInvoiceAddGrantPidFlow {
+public class AddGrantOtherTypeState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
     public boolean getShowPersonalNumberOutput() {
@@ -20,28 +21,23 @@ public class AddGrantAmountAfterOtherState extends CreateInvoiceAddGrantPidFlow 
     }
 
     @Override
+    public boolean getShowGrantTypeAgeSection() {
+        return true;
+    }
+
+    @Override
     public boolean getShowGrantTypeOtherSection() {
         return true;
     }
 
     @Override
-    public boolean getShowPrescriptionTypeOutput() {
-        return true;
-    }
-
-    @Override
-    public boolean getShowPrescriptionDateOutput() {
-        return true;
-    }
-
-    @Override
-    public boolean getShowAmountInput() {
+    public boolean getShowPrescriptionTypeInput() {
         return true;
     }
 
     @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
-        // Final state, next state will be null state.
-        return null;
+        //return new AddGrantAmountAfterOtherState();
+        return AddGrantFlowState.ENTER_GRANT_STATE_OTHER_DATE.getState();
     }
 }

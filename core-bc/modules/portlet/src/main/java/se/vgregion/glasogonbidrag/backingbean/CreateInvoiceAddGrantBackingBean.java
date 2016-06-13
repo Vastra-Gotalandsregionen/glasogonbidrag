@@ -10,8 +10,17 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterAgeState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterOtherState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantDeliveryDateState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantGrantTypeState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherDateState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherTypeState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantPersonalNumberState;
+import se.vgregion.glasogonbidrag.flow.state.AddGrantPrescriptionDateState;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.viewobject.GrantTypeOtherVO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
@@ -90,6 +99,12 @@ public class CreateInvoiceAddGrantBackingBean {
     private String prescriptionDate;
     private String grantType;
     private String grantTypeLabel;
+
+    private GrantTypeOtherVO grantTypeOtherVO;
+
+    private String prescriber;
+    private String prescriptionComment;
+
     private String amountWithVat;
 
 
@@ -115,7 +130,7 @@ public class CreateInvoiceAddGrantBackingBean {
         this.locale = locale;
     }
 
-// Getter and Setters for Main objects
+    // Getter and Setters for Main objects
 
     public Invoice getInvoice() {
         return invoice;
@@ -199,6 +214,30 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void setPrescriptionDate(String prescriptionDate) {
         this.prescriptionDate = prescriptionDate;
+    }
+
+    public GrantTypeOtherVO getGrantTypeOtherVO() {
+        return grantTypeOtherVO;
+    }
+
+    public void setGrantTypeOtherVO(GrantTypeOtherVO grantTypeOtherVO) {
+        this.grantTypeOtherVO = grantTypeOtherVO;
+    }
+
+    public String getPrescriber() {
+        return prescriber;
+    }
+
+    public void setPrescriber(String prescriber) {
+        this.prescriber = prescriber;
+    }
+
+    public String getPrescriptionComment() {
+        return prescriptionComment;
+    }
+
+    public void setPrescriptionComment(String prescriptionComment) {
+        this.prescriptionComment = prescriptionComment;
     }
 
     // Listeners
@@ -299,7 +338,20 @@ public class CreateInvoiceAddGrantBackingBean {
 
         // Set flow
         flow = flow.nextState();
+    }
 
+    public void changePrescriptionTypeListener() {
+        // Don't do anything.
+    }
+
+    public void otherPrescriptionTypeListener() {
+        //TODO: Set values in beneficiary
+        flow = flow.nextState();
+    }
+
+    public void otherPrescriptionDateListener() {
+        //TODO: Set values in beneficiary
+        flow = flow.nextState();
     }
 
     public void stepBackListener() {
@@ -311,19 +363,74 @@ public class CreateInvoiceAddGrantBackingBean {
 
         AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
-        // Todo: better implementation
-        if(state == AddGrantFlowState.ENTER_PERSONAL_NUMBER) {
-            //number = null;
-            beneficiary = null;
-            deliveryDate = null;
-            grantType = null;
-            prescriptionDate = null;
-        } else if(state == AddGrantFlowState.ENTER_DELIVERY_DATE) {
-            //number = null;
-            //beneficiary = null;
-            //deliveryDate = null;
-            grantType = null;
-            prescriptionDate = null;
+
+        switch (state) {
+            case ENTER_PERSONAL_NUMBER:
+                beneficiary = null; // This should be fetched again
+
+                deliveryDate = null;
+                prescriptionDate = null;
+                grantType = null;
+                grantTypeLabel = null;
+
+                grantTypeOtherVO = new GrantTypeOtherVO();
+
+                prescriber = null;
+                prescriptionComment = null;
+
+                amountWithVat = null;
+                break;
+            case ENTER_DELIVERY_DATE:
+                prescriptionDate = null;
+                grantType = null;
+                grantTypeLabel = null;
+
+                grantTypeOtherVO = new GrantTypeOtherVO();
+
+                prescriber = null;
+                prescriptionComment = null;
+
+                amountWithVat = null;
+                break;
+            case SELECT_GRANT_TYPE:
+                prescriptionDate = null;
+                grantType = null;
+                grantTypeLabel = null;
+
+                grantTypeOtherVO = new GrantTypeOtherVO();
+
+                prescriber = null;
+                prescriptionComment = null;
+
+                amountWithVat = null;
+                break;
+            case ENTER_PRESCRIPTION_DATE:
+                grantType = null;
+                grantTypeLabel = null;
+
+                grantTypeOtherVO = new GrantTypeOtherVO();
+
+                prescriber = null;
+                prescriptionComment = null;
+
+                amountWithVat = null;
+                break;
+            case ENTER_GRANT_STATE_OTHER_TYPE:
+//                grantTypeOtherVO = new GrantTypeOtherVO();
+                prescriptionDate = null;
+
+                prescriber = null;
+                prescriptionComment = null;
+
+                amountWithVat = null;
+                break;
+            case ENTER_GRANT_STATE_OTHER_DATE:
+                amountWithVat = null;
+                break;
+            case ENTER_AMOUNT_AFTER_AGE:
+                break;
+            case ENTER_AMOUNT_AFTER_OTHER:
+                break;
         }
 
         flow = state.getState();
@@ -470,6 +577,13 @@ public class CreateInvoiceAddGrantBackingBean {
         deliveryDate = null;
         prescriptionDate = null;
         grantType = null;
+        grantTypeLabel = null;
+
+        grantTypeOtherVO = new GrantTypeOtherVO();
+
+        prescriber = null;
+        prescriptionComment = null;
+
         amountWithVat = null;
     }
 
