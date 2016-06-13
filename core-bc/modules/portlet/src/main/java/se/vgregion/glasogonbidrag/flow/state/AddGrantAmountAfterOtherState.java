@@ -20,15 +20,19 @@ public class AddGrantAmountAfterOtherState extends CreateInvoiceAddGrantPidFlow 
     }
 
     @Override
-    public boolean getShowGrantTypeAgeSection() {
+    public boolean getShowGrantTypeOtherSection() {
         return true;
     }
 
-//    @Override
-//    public boolean getShowGrantTypeOtherSection() {
-//        return true;
-//    }
+    @Override
+    public boolean getShowPrescriptionTypeOutput() {
+        return true;
+    }
 
+    @Override
+    public boolean getShowPrescriptionDateOutput() {
+        return true;
+    }
 
     @Override
     public boolean getShowAmountInput() {
@@ -37,6 +41,7 @@ public class AddGrantAmountAfterOtherState extends CreateInvoiceAddGrantPidFlow 
 
     @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
+        // Final state, next state will be null state.
         return null;
     }
 }

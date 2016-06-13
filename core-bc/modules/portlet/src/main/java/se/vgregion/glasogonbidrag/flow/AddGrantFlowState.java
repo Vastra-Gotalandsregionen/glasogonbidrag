@@ -14,7 +14,7 @@ public enum AddGrantFlowState {
 
     private CreateInvoiceAddGrantPidFlow state;
 
-    private AddGrantFlowState(CreateInvoiceAddGrantPidFlow state) {
+    AddGrantFlowState(CreateInvoiceAddGrantPidFlow state) {
         this.state = state;
     }
 

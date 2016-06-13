@@ -4,8 +4,7 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:head />
 
@@ -29,7 +28,7 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
 
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
@@ -52,9 +51,9 @@
                         </div>
                     </div>
 
-                    <h:commandLink styleClass="grant-section-back">
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_PERSONAL_NUMBER" />
                         <span class="hide-accessible">Tillbaka</span>
@@ -81,7 +80,7 @@
             <div class="button-row">
                 <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                     <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
-                            render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}" />
+                            render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                 </h:commandLink>
                 <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
                     <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -100,9 +99,9 @@
                         </h:outputText>
                     </span>
 
-                    <h:commandLink styleClass="grant-section-back">
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_DELIVERY_DATE" />
                         <span class="hide-accessible">Tillbaka</span>
@@ -126,7 +125,7 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -143,9 +142,9 @@
                     <span class="grant-section-data">
                         <h:outputText value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}" />
                     </span>
-                    <h:commandLink styleClass="grant-section-back">
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="SELECT_GRANT_TYPE" />
                         <span class="hide-accessible">Tillbaka</span>
@@ -168,7 +167,7 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -188,9 +187,9 @@
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </span>
-                    <h:commandLink styleClass="grant-section-back">
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function(data) {ajaxComplete(data)}">
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_PRESCRIPTION_DATE" />
                         <span class="hide-accessible">Tillbaka</span>
@@ -214,7 +213,7 @@
                                     <f:ajax execute=":addGrantForm"
                                             listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                             render=":addGrantForm:grantAddPanel"
-                                            onevent="function(data) {ajaxComplete(data)}" />
+                                            onevent="function eventHandler(data) {ajaxComplete(data)}" />
                                 </h:selectBooleanCheckbox>
                                 <h:outputLabel for="afaki" value="Afaki:" />
                             </div>
@@ -246,7 +245,7 @@
                                 <f:ajax execute=":addGrantForm"
                                         listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                         render=":addGrantForm:grantAddPanel"
-                                        onevent="function(data) {ajaxComplete(data)}" />
+                                        onevent="function eventHandler(data) {ajaxComplete(data)}" />
                                 </h:selectBooleanCheckbox>
                                 <h:outputLabel for="keratokonus" value="Keratokonus:" />
                             </div>
@@ -312,7 +311,7 @@
                                     <f:ajax execute=":addGrantForm"
                                             listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                             render=":addGrantForm:grantAddPanel"
-                                            onevent="function(data) {ajaxComplete(data)}" />
+                                            onevent="function eventHandler(data) {ajaxComplete(data)}" />
                                 </h:selectBooleanCheckbox>
                                 <h:outputLabel for="special" value="Spec / synsvag:" />
                             </div>
@@ -348,7 +347,7 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -359,7 +358,19 @@
         </ui:fragment>
 
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeOutput}">
-            You inserted some values!
+            <div class="grant-section">
+                <div class="grant-section-output">
+                    You inserted some values!
+
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_TYPE" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
+                </div>
+            </div>
         </ui:fragment>
 
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionDateInput}">
@@ -369,7 +380,7 @@
                     <div class="field-element inline">
                         <h:outputLabel for="prescriber" value="Ordinatör:" />
                         <h:inputText id="prescriber" styleClass=""
-                                     value=""
+                                     value="#{createInvoiceAddGrantBackingBean.prescriber}"
                                      pt:placeholder="Skriv in ordindatör..." />
                     </div>
                     <div class="field-element inline">
@@ -387,7 +398,7 @@
                 <div class="button-row">
                     <h:commandLink styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -398,7 +409,19 @@
         </ui:fragment>
 
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionDateOutput}">
-            More values where inserted
+            <div class="grant-section">
+                <div class="grant-section-output">
+                    More values where inserted
+
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_DATE" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
+                </div>
+            </div>
         </ui:fragment>
 
         <!-- Input amount -->

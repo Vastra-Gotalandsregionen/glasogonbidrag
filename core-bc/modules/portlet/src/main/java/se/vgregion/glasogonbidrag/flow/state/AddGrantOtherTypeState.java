@@ -38,6 +38,6 @@ public class AddGrantOtherTypeState extends CreateInvoiceAddGrantPidFlow {
     @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
         //return new AddGrantAmountAfterOtherState();
-        return AddGrantFlowState.ENTER_AMOUNT_AFTER_OTHER.getState();
+        return AddGrantFlowState.ENTER_GRANT_STATE_OTHER_DATE.getState();
     }
 }

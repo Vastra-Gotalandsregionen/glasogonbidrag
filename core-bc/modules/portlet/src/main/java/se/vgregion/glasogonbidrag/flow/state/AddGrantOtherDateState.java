@@ -34,6 +34,11 @@ public class AddGrantOtherDateState extends CreateInvoiceAddGrantPidFlow {
     }
 
     @Override
+    public boolean getShowPrescriptionDateInput() {
+        return true;
+    }
+
+    @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
         return AddGrantFlowState.ENTER_AMOUNT_AFTER_OTHER.getState();
     }
