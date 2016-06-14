@@ -2,6 +2,9 @@
 /core-bc/composites/types/src/main/resources/rebel.xml
 /core-bc/modules/portlet/src/main/resources/rebel.xml
 
+*.xls
+*.xlsx
+
 .DS_Store
 
 .settings/*
