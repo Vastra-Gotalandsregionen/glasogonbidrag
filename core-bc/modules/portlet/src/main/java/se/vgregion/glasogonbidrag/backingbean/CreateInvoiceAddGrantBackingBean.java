@@ -378,7 +378,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriber = null;
                 prescriptionComment = null;
 
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case ENTER_DELIVERY_DATE:
                 prescriptionDate = null;
@@ -390,7 +390,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriber = null;
                 prescriptionComment = null;
 
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case SELECT_GRANT_TYPE:
                 prescriptionDate = null;
@@ -402,7 +402,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriber = null;
                 prescriptionComment = null;
 
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case ENTER_PRESCRIPTION_DATE:
                 grantType = null;
@@ -413,7 +413,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriber = null;
                 prescriptionComment = null;
 
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_TYPE:
 //                grantTypeOtherVO = new GrantTypeOtherVO();
@@ -422,10 +422,10 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriber = null;
                 prescriptionComment = null;
 
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_DATE:
-                amountWithVat = null;
+                //amountWithVat = null;
                 break;
             case ENTER_AMOUNT_AFTER_AGE:
                 break;
@@ -584,7 +584,8 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriber = null;
         prescriptionComment = null;
 
-        amountWithVat = null;
+        // Temp
+        amountWithVat = "800";
     }
 
 }
