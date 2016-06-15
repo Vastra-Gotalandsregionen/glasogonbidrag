@@ -1,21 +1,30 @@
 package se.vgregion.glasogonbidrag;
 
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import java.util.HashMap;
-import java.util.Map;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import se.vgregion.glasogonbidrag.data.Importer;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
 public class Program {
     public static void main(String[] args) throws Exception {
-        ExcelImporter importer = new ExcelImporter();
+        ExcelImporter importer = null;
+
+        Importer settings = new Importer();
+        CmdLineParser parser = new CmdLineParser(settings);
+        try {
+            parser.parseArgument(args);
+            importer = settings.run();
+        } catch (CmdLineException e) {
+            System.err.println("Exception: " + e.getMessage());
+            parser.printUsage(System.err);
+        }
+
+        if (importer == null) {
+            return;
+        }
+
         importer.benficiaryRun();
     }
 }
