@@ -1,9 +1,28 @@
 package se.vgregion.glasogonbidrag.internal;
 
+import org.omg.CORBA.IDLType;
+import se.vgregion.glasogonbidrag.model.IdType;
+
 /**
  * Created by martlin on 2016/06/15.
  */
 public class IdentificationUtil {
+    public static IdType detect(String id) {
+        IdType type = IdType.NONE;
+
+        if (detectPersonalNumber(id)) {
+            if (validatePersonalNumber(id)) {
+                type = IdType.VALID;
+            } else {
+                type = IdType.INVALID;
+            }
+        } else if (detectReservedNumber(id)) {
+            type = IdType.RESERVE;
+        }
+
+        return type;
+    }
+
     public static boolean detectPersonalNumber(String number) {
         int length = number.length() - 1;
 
