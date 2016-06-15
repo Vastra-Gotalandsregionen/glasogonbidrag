@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:jsf="http://xmlns.jcp.org/jsf"
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -13,6 +14,10 @@
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="flow" value="#{createInvoiceAddGrantBackingBean.flow}" scope="request" />
         <c:set var="otherVO" value="#{createInvoiceAddGrantBackingBean.grantTypeOtherVO}" scope="request" />
+
+        <div class="msg-wrap">
+            <h:messages />
+        </div>
 
         <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
             <div class="alert alert-info">
@@ -31,11 +36,26 @@
                 <div class="field-row">
                     <div class="field-element inline">
                         <h:outputLabel for="personalNumber" value="Personnummer:" />
-                        <h:inputText id="personalNumber" styleClass="js-input-mask js-input-mask-personnumber"
+                        <h:inputText id="personalNumber"
+                                     binding="#{personalNumber}"
+                                     styleClass="js-input-mask js-input-mask-personnumber #{personalNumber.isValid() ? '' : 'error'}"
                                      value="#{createInvoiceAddGrantBackingBean.number}"
+                                     required="true"
+                                     requiredMessage="Du måste fylla i ett personnummer"
                                      pt:placeholder="Skriv in personnummer..." pt:autofocus="true"
                                      pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:personalNumberSubmit"
-                        />
+                        >
+                            <!--
+                            <f:validator validatorId="personalNumberValidator" />
+                            -->
+                        </h:inputText>
+
+                        <!--
+                        <div>
+                            <p>Message for personalNumber:</p>
+                            <h:message class="error" for="personalNumber" id="personalNumberError" />
+                        </div>
+                        -->
                     </div>
                 </div>
                 <div class="button-row">
@@ -91,15 +111,16 @@
                         />
                     </div>
                 </div>
-            </div>
-            <div class="button-row">
-                <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="Fortsätt">
-                    <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
-                            render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
-                </h:commandLink>
-                <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
-                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
-                </h:link>
+                <div class="button-row">
+                    <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="Fortsätt">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                    </h:commandLink>
+                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
+                </div>
+
             </div>
         </ui:fragment>
         <ui:fragment rendered="${flow.showDeliveryDateOutput}">
@@ -128,17 +149,38 @@
         <!-- Choose the grant type -->
         <ui:fragment rendered="#{flow.showGrantTypeInput}">
             <div class="grant-section">
+
                 <div class="field-row">
                     <div class="field-element inline">
-                        <h:outputLabel for="grantType" value="Bidragstyp:" />
-                        <h:selectOneMenu id="grantType" value="#{createInvoiceAddGrantBackingBean.grantType}"
-                                         pt:autofocus="true">
-                            <f:selectItems value="#{createInvoiceAddGrantBackingBean.grantTypes}" />
-                        </h:selectOneMenu>
+                        <!--
+                        http://balusc.omnifaces.org/2015/10/custom-layout-with-hselectoneradio-in.html
+                        -->
+                        <h:outputLabel value="Bidragstyp:" />
+                        <ul class="gb-radio-list">
+                            <ui:repeat id="grantTypes" value="#{createInvoiceAddGrantBackingBean.grantTypes}" var="grantType" varStatus="grantTypeStatus">
+                                <li>
+                                    <input type="radio" class="gb-radio-input"
+                                           jsf:id="grantType" pt:name="#{hiddenGrantType.clientId}"
+                                           value="#{grantType.value}"
+                                           pt:checked="#{grantType.value eq createInvoiceAddGrantBackingBean.grantType ? 'checked' : null}"
+                                           pt:autofocus="#{grantTypeStatus.index eq 0 ? 'true' : null}"
+                                           pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeSubmit"
+                                    />
+                                    <h:outputLabel for="grantType" value="#{grantType.label}" />
+                                </li>
+                            </ui:repeat>
+                        </ul>
+
+                        <h:inputHidden id="selectedHiddenGrantType" binding="#{hiddenGrantType}" value="#{createInvoiceAddGrantBackingBean.grantType}"
+                                       rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
+
+
                     </div>
                 </div>
+
+
                 <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="grantTypeSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
@@ -176,11 +218,14 @@
                         <h:outputLabel for="prescriptionDate" value="Receptdatum:" />
                         <h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"
                                      value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true" />
+                                     pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true"
+                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:prescriptionDateSubmit"
+                        />
+
                     </div>
                 </div>
                 <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
@@ -445,17 +490,17 @@
                 <div class="field-row">
                     <div class="field-element inline">
                         <h:outputLabel for="amountWithVat" value="Summa:" />
-                        <h:inputText id="amountWithVat" styleClass=""
+                        <h:inputText id="amountWithVat" styleClass="js-select-on-render"
                                      value="#{createInvoiceAddGrantBackingBean.amountWithVat}"
                                      pt:placeholder="Skriv in bidragssumma..." pt:autofocus="true"
-                                     onfocus="this.select"
+                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:amountWithVatSubmit"
 
                         />
                     </div>
                 </div>
                 <div class="button-row">
 
-                    <h:commandLink styleClass="link-btn primary" value="Spara och registrera nytt"
+                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara och registrera nytt"
                                    action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
                     <h:commandLink styleClass="link-btn" value="Spara och gå till översikt"

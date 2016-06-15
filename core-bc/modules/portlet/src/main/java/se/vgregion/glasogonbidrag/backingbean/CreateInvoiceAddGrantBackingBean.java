@@ -10,16 +10,10 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterAgeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterOtherState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantDeliveryDateState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantGrantTypeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherDateState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherTypeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantPersonalNumberState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantPrescriptionDateState;
+import se.vgregion.glasogonbidrag.util.GrantUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.GrantTypeOtherVO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
@@ -74,6 +68,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private FacesUtil facesUtil;
+
+    @Autowired
+    private GrantUtil grantUtil;
 
     // Helpers
 
@@ -245,32 +242,51 @@ public class CreateInvoiceAddGrantBackingBean {
     public void personalNumberListener() {
         LOGGER.info("personalNumberListener(): number={}", number);
 
-        Identification identification =
-                identificationRepository.findByPersonalNumber(number);
-        if (identification == null) {
-            identification = new PersonalIdentification(number);
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        // Strip away centry digits
+        if(number.length() == 13) {
+            number = number.substring(2, number.length());
+        }
+
+        boolean isNumberValid = grantUtil.validatePersonalNumber(number);
+        // Temp
+        isNumberValid = true;
+
+        if(isNumberValid) {
+            Identification identification =
+                    identificationRepository.findByPersonalNumber(number);
+            if (identification == null) {
+                identification = new PersonalIdentification(number);
+            } else {
+                beneficiary =
+                        beneficiaryRepository.findWithPartsByIdent(identification);
+            }
+
+            if (beneficiary == null) {
+                // TODO: Integrate with external service.
+                beneficiary = new Beneficiary();
+                beneficiary.setFirstName("Sven");
+                beneficiary.setLastName("Göransson");
+                beneficiary.setIdentification(identification);
+
+                newBeneficiary = true;
+            }
+
+            LOGGER.info("createInvoiceAddGrantBackingBean - " +
+                    "personNumberListener(): {}", beneficiary);
+
+            grant.setBeneficiary(beneficiary);
+
+            // Set flow
+            flow = flow.nextState();
         } else {
-            beneficiary =
-                    beneficiaryRepository.findWithPartsByIdent(identification);
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Detta är inget giltigt personnummer...", "");
+
+            context.addMessage(portletNamespace + ":addGrantForm:personalNumber", message);
         }
 
-        if (beneficiary == null) {
-            // TODO: Integrate with external service.
-            beneficiary = new Beneficiary();
-            beneficiary.setFirstName("Sven");
-            beneficiary.setLastName("Göransson");
-            beneficiary.setIdentification(identification);
-
-            newBeneficiary = true;
-        }
-
-        LOGGER.info("createInvoiceAddGrantBackingBean - " +
-                "personNumberListener(): {}", beneficiary);
-
-        grant.setBeneficiary(beneficiary);
-
-        // Set flow
-        flow = flow.nextState();
     }
 
     public void deliveryDateListener() {
@@ -530,7 +546,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
         Date changeDate = cal.getTime();
 
-        items.add(new SelectItem("-1", ""));
+        // Commented out EA 2016-06-15
+        //items.add(new SelectItem("-1", ""));
 
         if (grant != null && grant.getDeliveryDate() != null &&
                 grant.getDeliveryDate().before(changeDate)) {
