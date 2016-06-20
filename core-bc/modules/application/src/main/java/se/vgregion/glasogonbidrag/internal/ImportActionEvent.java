@@ -2,8 +2,7 @@ package se.vgregion.glasogonbidrag.internal;
 
 public enum ImportActionEvent {
     ID,
-    NAME,
+    TEXT,
     EMPTY,
-    ANY,
     EOF
 }

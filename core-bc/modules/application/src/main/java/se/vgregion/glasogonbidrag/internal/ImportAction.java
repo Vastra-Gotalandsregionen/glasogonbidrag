@@ -3,12 +3,14 @@ package se.vgregion.glasogonbidrag.internal;
 public class ImportAction {
     private int line;
     private ImportActionEvent action;
-    private String content;
+    private String[] row;
 
-    public ImportAction(int line, ImportActionEvent action, String content) {
+    public ImportAction(int line,
+                        ImportActionEvent action,
+                        String[] row) {
         this.line = line;
         this.action = action;
-        this.content = content;
+        this.row = row;
     }
 
     public int getLine() {
@@ -19,11 +21,16 @@ public class ImportAction {
         return action;
     }
 
-    public String getContent() {
-        return content;
+    public String[] getRow() {
+        return row;
     }
 
     public boolean is(ImportActionEvent action) {
         return action == this.action;
+    }
+
+    @Override
+    public String toString() {
+        return this.action.toString() + "(" + line + ")";
     }
 }

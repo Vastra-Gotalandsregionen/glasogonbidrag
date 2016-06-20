@@ -1,99 +1,116 @@
 package se.vgregion.glasogonbidrag.internal;
 
-import se.vgregion.glasogonbidrag.model.ImportId;
+import se.vgregion.glasogonbidrag.model.ImportDocument;
+import se.vgregion.glasogonbidrag.model.ImportGrant;
+import se.vgregion.glasogonbidrag.util.DocumentUtil;
 
 import static se.vgregion.glasogonbidrag.internal.ImportActionEvent.*;
 
 public class ImportStateFactory {
-    public ImportState newImportState() {
-        return new StartOfFileState();
+    public static ImportState newImportState() {
+        return new ImportStateFactory.StartOfFileState(new ParseOutputData());
     }
 
-    public class StartOfFileState extends AbstractImportState {
+    /**
+     *
+     */
+    public static class StartOfFileState extends AbstractImportState {
+
+        public StartOfFileState(ParseOutputData data) {
+            super(data);
+        }
+
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
-                return new FirstIdState(action.getContent());
+                return new IdState(getData(), action.getRow()[0]);
             }
 
             if (action.is(EOF)) {
-                return new EOFState(null);
+                return new EOFState(getData());
             }
 
             return this;
         }
     }
 
-    public class FirstIdState extends AbstractImportState {
-        ImportId current;
+    /**
+     *
+     */
+    public static class IdState extends AbstractImportState {
 
-        public FirstIdState(String content) {
-            current = new ImportId();
-            current.setId(content);
+        private String id;
+
+        public IdState(ParseOutputData data, String id) {
+            super(data);
+            this.id = id;
         }
 
         @Override
         public ImportState activate(ImportAction action) {
-            if (action.is(NAME)) {
-                return new NameAndValueState(current, action.getContent());
+            if (action.is(TEXT)) {
+                ImportDocument doc = DocumentUtil.document(id, action.getRow());
+                ImportGrant grant = DocumentUtil.grant(action.getRow());
+
+                getData().addDocument(doc);
+                getData().addGrant(grant);
+
+                return new NameAndGrantState(getData());
             }
 
             if (action.is(EMPTY)) {
                 return this;
             }
 
-            throw new IllegalImportStateException(action.getLine(), "");
+            if (action.is(ID)) {
+                throw new IllegalImportStateException(action.getLine(),
+                        "expected name found id.");
+            } else if (action.is(EOF)) {
+                throw new IllegalImportStateException(action.getLine(),
+                        "expected name reached end of file.");
+            }
+
+            throw new IllegalImportStateException(action.getLine(),
+                    "unknown error");
         }
+
     }
 
-    public class NameAndValueState extends AbstractImportState {
-        private ImportId current;
+    /**
+     *
+     */
+    public static class NameAndGrantState extends AbstractImportState {
 
-        public NameAndValueState(ImportId current, String name) {
-            this.current = current;
-            this.current.setName(name);
+        public NameAndGrantState(ParseOutputData data) {
+            super(data);
         }
 
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
-                return new IdState(this.current, action.getContent());
+                return new IdState(getData(), action.getRow()[0]);
             }
 
             if (action.is(EOF)) {
-                return new EOFState(this.current);
+                return new EOFState(getData());
             }
 
-            return null;
+            if (!DocumentUtil.emptyRow(action.getRow())) {
+                ImportGrant grant = DocumentUtil.grant(action.getRow());
+                getData().addGrant(grant);
+            }
+
+            return this;
         }
     }
 
-    public class IdState extends AbstractImportState {
-        private ImportId current;
-        private ImportId finished;
+    /**
+     *
+     */
+    public static class EOFState extends AbstractImportState {
 
-        public IdState(ImportId finished, String id) {
-            current = new ImportId();
-            current.setId(id);
-
-            this.finished = finished;
-        }
-
-        @Override
-        public ImportState activate(ImportAction action) {
-            return null;
-        }
-
-        public ImportId getFinished() {
-            return finished;
-        }
-    }
-
-    public class EOFState extends AbstractImportState {
-        private ImportId finished;
-
-        public EOFState(ImportId finished) {
-            this.finished = finished;
+        public EOFState(ParseOutputData data) {
+            super(data);
         }
 
         @Override
@@ -106,10 +123,6 @@ public class ImportStateFactory {
         @Override
         public boolean isFinal() {
             return true;
-        }
-
-        public ImportId getFinished() {
-            return finished;
         }
     }
 }
