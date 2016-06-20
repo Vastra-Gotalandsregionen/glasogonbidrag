@@ -3,6 +3,9 @@ package se.vgregion.glasogonbidrag.util;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public final class DocumentUtil {
     private DocumentUtil() {
 
@@ -12,7 +15,7 @@ public final class DocumentUtil {
         return document(id, row[0]);
     }
 
-    public static ImportDocument document(String id, String name) {
+    private static ImportDocument document(String id, String name) {
         return new ImportDocument(id, name);
     }
 
@@ -20,7 +23,7 @@ public final class DocumentUtil {
         return grant(row[1], row[2], row[3], row[4], row[5]);
     }
 
-    public static ImportGrant grant(String prescriptionDate,
+    private static ImportGrant grant(String prescriptionDate,
                                     String deliveryDate,
                                     String amount,
                                     String invoiceNumber,

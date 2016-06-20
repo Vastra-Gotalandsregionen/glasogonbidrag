@@ -3,6 +3,9 @@ package se.vgregion.glasogonbidrag.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public class ImportDocument {
     private String id;
     private String name;

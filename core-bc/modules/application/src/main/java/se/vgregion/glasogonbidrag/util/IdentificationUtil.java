@@ -2,6 +2,9 @@ package se.vgregion.glasogonbidrag.util;
 
 import se.vgregion.glasogonbidrag.model.IdentificationType;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public final class IdentificationUtil {
     private IdentificationUtil() {
 

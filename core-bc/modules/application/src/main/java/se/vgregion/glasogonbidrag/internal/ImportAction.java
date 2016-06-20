@@ -1,5 +1,8 @@
 package se.vgregion.glasogonbidrag.internal;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public class ImportAction {
     private int line;
     private ImportActionEvent action;
@@ -13,7 +16,7 @@ public class ImportAction {
         this.row = row;
     }
 
-    public int getLine() {
+    int getLine() {
         return line;
     }
 
@@ -21,11 +24,11 @@ public class ImportAction {
         return action;
     }
 
-    public String[] getRow() {
+    String[] getRow() {
         return row;
     }
 
-    public boolean is(ImportActionEvent action) {
+    boolean is(ImportActionEvent action) {
         return action == this.action;
     }
 

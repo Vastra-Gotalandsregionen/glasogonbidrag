@@ -5,6 +5,9 @@ import se.vgregion.glasogonbidrag.model.ImportGrant;
 
 import java.util.Stack;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public class ParseOutputData {
     private ImportDocument current;
     private Stack<ImportDocument> documents;
@@ -13,12 +16,12 @@ public class ParseOutputData {
         this.documents = new Stack<>();
     }
 
-    public void addDocument(ImportDocument document) {
+    void addDocument(ImportDocument document) {
         this.current = document;
         documents.push(document);
     }
 
-    public void addGrant(ImportGrant grant) {
+    void addGrant(ImportGrant grant) {
         current.addGrant(grant);
     }
 

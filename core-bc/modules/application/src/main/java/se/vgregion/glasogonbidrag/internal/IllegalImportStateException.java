@@ -1,13 +1,15 @@
 package se.vgregion.glasogonbidrag.internal;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public class IllegalImportStateException extends RuntimeException {
     private int line;
     public IllegalImportStateException(int line) {
         this.line = line;
     }
 
-    public IllegalImportStateException(int line,
-                                       String message) {
+    IllegalImportStateException(int line, String message) {
         super(message);
         this.line = line;
     }

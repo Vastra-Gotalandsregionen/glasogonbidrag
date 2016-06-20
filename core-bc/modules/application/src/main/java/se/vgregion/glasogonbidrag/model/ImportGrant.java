@@ -1,5 +1,8 @@
 package se.vgregion.glasogonbidrag.model;
 
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
 public class ImportGrant {
     private String prescriptionDate;
     private String deliveryDate;

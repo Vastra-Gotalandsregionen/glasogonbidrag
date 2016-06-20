@@ -30,6 +30,7 @@ import static se.vgregion.glasogonbidrag.internal.ImportActionEvent.*;
  *
  * implemented as a pushdown automaton.
  *
+ * @author Martin Lind - Monator Technologies AB
  */
 public class ImportStateFactory {
     public static ImportState newImportState() {

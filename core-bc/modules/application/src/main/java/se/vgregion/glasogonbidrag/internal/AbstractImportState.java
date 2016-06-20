@@ -1,9 +1,12 @@
 package se.vgregion.glasogonbidrag.internal;
 
-public abstract class AbstractImportState implements ImportState {
+/**
+ * @author Martin Lind - Monator Technologies AB
+ */
+abstract class AbstractImportState implements ImportState {
     private ParseOutputData data;
 
-    public AbstractImportState(ParseOutputData data) {
+    AbstractImportState(ParseOutputData data) {
         this.data = data;
     }
 
