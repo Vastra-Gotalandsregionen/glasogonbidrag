@@ -6,6 +6,31 @@ import se.vgregion.glasogonbidrag.util.DocumentUtil;
 
 import static se.vgregion.glasogonbidrag.internal.ImportActionEvent.*;
 
+/**
+ * A finite state machine for parsing excel file of the quasi-structured
+ * data format in repeating pattern
+ *
+ * <pre>
+ * {@code
+ * +------+
+ * | id   |
+ * +------+--------------+----------+--------+---------+--------------+
+ * |      | prescription | delivery |        | invoice | verification |
+ * | name |    date      |   date   | amount |   nr    |      nr      |
+ * +------+--------------+----------+--------+---------+--------------+
+ *                                     .
+ *                                     .
+ *                                     .
+ *        +--------------+----------+--------+---------+--------------+
+ *        | prescription | delivery |        | invoice | verification |
+ *        |    date      |   date   | amount |   nr    |      nr      |
+ *        +--------------+----------+--------+---------+--------------+
+ * }
+ * </pre>
+ *
+ * implemented as a pushdown automaton.
+ *
+ */
 public class ImportStateFactory {
     public static ImportState newImportState() {
         return new ImportStateFactory.StartOfFileState(new ParseOutputData());
@@ -14,9 +39,9 @@ public class ImportStateFactory {
     /**
      *
      */
-    public static class StartOfFileState extends AbstractImportState {
+    private static class StartOfFileState extends AbstractImportState {
 
-        public StartOfFileState(ParseOutputData data) {
+        StartOfFileState(ParseOutputData data) {
             super(data);
         }
 
@@ -37,11 +62,11 @@ public class ImportStateFactory {
     /**
      *
      */
-    public static class IdState extends AbstractImportState {
+    private static class IdState extends AbstractImportState {
 
         private String id;
 
-        public IdState(ParseOutputData data, String id) {
+        IdState(ParseOutputData data, String id) {
             super(data);
             this.id = id;
         }
@@ -79,9 +104,9 @@ public class ImportStateFactory {
     /**
      *
      */
-    public static class NameAndGrantState extends AbstractImportState {
+    private static class NameAndGrantState extends AbstractImportState {
 
-        public NameAndGrantState(ParseOutputData data) {
+        NameAndGrantState(ParseOutputData data) {
             super(data);
         }
 
@@ -107,9 +132,9 @@ public class ImportStateFactory {
     /**
      *
      */
-    public static class EOFState extends AbstractImportState {
+    private static class EOFState extends AbstractImportState {
 
-        public EOFState(ParseOutputData data) {
+        EOFState(ParseOutputData data) {
             super(data);
         }
 

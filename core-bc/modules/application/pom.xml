@@ -30,6 +30,7 @@ Template version: 1.5
             <version>${project.version}</version>
         </dependency>
 
+        <!-- Database access and parsing dependencies -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -41,18 +42,19 @@ Template version: 1.5
             <version>9.4.1208.jre7</version>
         </dependency>
 
+        <!-- Excel reading dependencies -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.14</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.14</version>
         </dependency>
 
+        <!-- Command line parsing -->
         <dependency>
             <groupId>args4j</groupId>
             <artifactId>args4j</artifactId>
@@ -78,12 +80,13 @@ Template version: 1.5
     </dependencies>
 
     <build>
-        <finalName>excel-importer</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <finalName>excel-importer</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
