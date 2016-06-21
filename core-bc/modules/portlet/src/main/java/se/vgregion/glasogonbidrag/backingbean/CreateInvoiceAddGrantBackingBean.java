@@ -1,6 +1,7 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
+import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
@@ -32,7 +34,10 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,6 +55,9 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final String GRANT_TYPE_AGE_0_TO_15 = "0";
     private static final String GRANT_TYPE_AGE_0_TO_19 = "1";
     private static final String GRANT_TYPE_OTHER = "2";
+
+    @Autowired
+    private GrantRepository grantRepository;
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -71,6 +79,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private GrantUtil grantUtil;
+
+    @Autowired
+    private PersonalNumberValidator personalNumberValidator;
+
 
     // Helpers
 
@@ -244,14 +256,15 @@ public class CreateInvoiceAddGrantBackingBean {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
-        // Strip away centry digits
+        // Strip away century digits
         if(number.length() == 13) {
             number = number.substring(2, number.length());
         }
 
-        boolean isNumberValid = grantUtil.validatePersonalNumber(number);
+        boolean isNumberValid = personalNumberValidator.validatePersonalNumber(number);
+        System.out.println("isNumberValid: " + isNumberValid);
         // Temp
-        isNumberValid = true;
+        //isNumberValid = true;
 
         if(isNumberValid) {
             Identification identification =
@@ -454,6 +467,21 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Actions
 
+    public String doDeleteGrant() {
+        LOGGER.info("doDeleteGrant");
+
+        Long grantId = grant.getId();
+
+        invoiceService.updateDeleteGrant(invoice, grantId);
+
+        return String.format(
+                "add_grant" +
+                        "?invoiceId=%d" +
+                        "&faces-redirect=true" +
+                        "&includeViewParams=true",
+                invoice.getId());
+    }
+
     public String doSaveGrantAndAddNew() {
         saveGrant();
 
@@ -561,6 +589,28 @@ public class CreateInvoiceAddGrantBackingBean {
         return items;
     }
 
+    public String editGrant() {
+        //String returnView = String.format("add_grant?invoiceId=%d&grantId=%d&faces-redirect=true&includeViewParams=true", invoiceId, grantId);
+        //String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoiceId);
+
+        Long invoiceId = facesUtil.fetchId("invoiceId");
+        Long grantId = facesUtil.fetchId("grantId");
+
+        LOGGER.info("editGrant - invoiceId is: " + invoiceId);
+
+        String returnView = String.format(
+                "add_grant" +
+                "?invoiceId=%d" +
+                "&grantId=%d" +
+                "&faces-redirect=true" +
+                "&includeViewParams=true",
+                invoiceId, grantId);
+
+
+        return returnView;
+    }
+
+
     // Initializer
 
     @PostConstruct
@@ -572,22 +622,19 @@ public class CreateInvoiceAddGrantBackingBean {
         // Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
+        portletNamespace = FacesContext.getCurrentInstance()
+                .getExternalContext().encodeNamespace("");
+
+
         flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
         LOGGER.info("Current state: {}.", flow);
 
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceRepository.findWithParts(invoiceId);
 
-        tabUtil = new TabUtil(Arrays.asList("Personnummer", "LMA-Nummer"), 0);
-
-        portletNamespace = FacesContext.getCurrentInstance()
-                .getExternalContext().encodeNamespace("");
-
         newBeneficiary = false;
 
         //invoice = newInvoice;
-
-        grant = new Grant();
         beneficiary = null;
 
         number = null;
@@ -601,8 +648,58 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriber = null;
         prescriptionComment = null;
 
-        // Temp
+        // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
+
+        tabUtil = new TabUtil(Arrays.asList("Personnummer", "LMA-Nummer"), 0);
+
+
+        Long grantId = facesUtil.fetchId("grantId");
+        if(grantId != null) {
+            System.out.println("--- Found GrantId -----");
+
+            grant = grantRepository.find(grantId);
+            beneficiary = grant.getBeneficiary();
+            // Todo: add find with parts to grantrepository -> Then row below will not be needed.
+            beneficiary = beneficiaryRepository.findWithParts(beneficiary.getId());
+            number = beneficiary.getIdentification().getString();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+            deliveryDate = df.format(grant.getDeliveryDate());
+
+            // Todo: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in backing bean
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, 2015);
+            cal.set(Calendar.MONTH, Calendar.APRIL);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+
+            Date changeDate = cal.getTime();
+
+            if(grant.getDeliveryDate().before((changeDate))) {
+                grantType = GRANT_TYPE_AGE_0_TO_15;
+                grantTypeLabel = "0-15";
+            } else {
+                grantType = GRANT_TYPE_AGE_0_TO_19;
+                grantTypeLabel = "0-19";
+            }
+
+            amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
+
+            //flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
+            flow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
+            LOGGER.info("Current state: {}.", flow);
+
+
+        } else {
+            grant = new Grant();
+        }
+
+
+
+
+
+
     }
 
 }

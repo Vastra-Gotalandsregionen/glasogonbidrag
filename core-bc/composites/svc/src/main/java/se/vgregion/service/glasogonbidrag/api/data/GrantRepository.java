@@ -9,6 +9,8 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface GrantRepository {
+    Grant find(Long id);
+
     List<Grant> findByUser(long userId);
 
     long currentProgressByUserAndDate(long userId, Date date);

@@ -15,7 +15,7 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
-            <div class="box box-sidebar box-collapsed js-box-collapsible">
+            <div class="box box-sidebar box-collapsed_ js-box-collapsible">
 
                 <div class="box-hd">
                     <h3 class="box-title">
@@ -33,11 +33,14 @@
                                     <th>
                                         <h:outputText value="Bidragstagare" />
                                     </th>
-                                    <th>
+                                    <th class="number">
                                         <h:outputText value="Exkl. moms" />
                                     </th>
-                                    <th>
+                                    <th class="number">
                                         <h:outputText value="Inkl. moms" />
+                                    </th>
+                                    <th>
+                                        <span class="box-edit-switch box-edit-switch-off"></span>
                                     </th>
                                 </tr>
                             </thead>
@@ -57,6 +60,15 @@
                                                 <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
                                             </h:outputText>
                                         </td>
+                                        <td>
+
+                                            <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
+                                                <f:param name="invoiceId" value="${invoice.id}" />
+                                                <f:param name="grantId" value="${grant.id}" />
+                                                <span>Redigera</span>
+                                            </h:commandLink>
+
+                                       </td>
                                     </tr>
                                 </ui:repeat>
                             </tbody>

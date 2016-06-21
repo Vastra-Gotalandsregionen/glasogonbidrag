@@ -46,8 +46,10 @@
                                      pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:personalNumberSubmit"
                         >
                             <!--
+
                             <f:validator validatorId="personalNumberValidator" />
                             -->
+
                         </h:inputText>
 
                         <!--
@@ -174,7 +176,6 @@
                         <h:inputHidden id="selectedHiddenGrantType" binding="#{hiddenGrantType}" value="#{createInvoiceAddGrantBackingBean.grantType}"
                                        rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
 
-
                     </div>
                 </div>
 
@@ -269,7 +270,15 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="afaki" value="#{otherVO.aphakia}">
+
+                                <c:set var="noOtherSelected" value="#{not otherVO.aphakia and not otherVO.keratoconus and not otherVO.special}" scope="request" />
+
+                                <h:selectBooleanCheckbox
+                                        id="afaki"
+                                        styleClass="js-prescription-checkbox"
+                                        value="#{otherVO.aphakia}"
+                                        pt:autofocus="#{otherVO.aphakia or noOtherSelected}"
+                                >
                                     <f:ajax execute=":addGrantForm"
                                             listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                             render=":addGrantForm:grantAddPanel"
@@ -301,7 +310,12 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="keratokonus" value="#{otherVO.keratoconus}" pt:autofocus="true">
+                                <h:selectBooleanCheckbox
+                                        id="keratokonus"
+                                        styleClass="js-prescription-checkbox"
+                                        value="#{otherVO.keratoconus}"
+                                        pt:autofocus="#{otherVO.keratoconus}"
+                                >
                                 <f:ajax execute=":addGrantForm"
                                         listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                         render=":addGrantForm:grantAddPanel"
@@ -367,7 +381,12 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox id="special" value="#{otherVO.special}">
+                                <h:selectBooleanCheckbox
+                                        id="special"
+                                        styleClass="js-prescription-checkbox"
+                                        value="#{otherVO.special}"
+                                        pt:autofocus="#{otherVO.special}"
+                                >
                                     <f:ajax execute=":addGrantForm"
                                             listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                             render=":addGrantForm:grantAddPanel"
@@ -402,6 +421,10 @@
                             </ui:fragment>
                         </div>
                     </div>
+
+                    <h:inputHidden id="selectedHiddenPrescriptionType" binding="#{hiddenPrescriptionType}" value=""
+                               rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
+
 
                 </div>
                 <div class="button-row">
@@ -500,11 +523,17 @@
                 </div>
                 <div class="button-row">
 
-                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara och registrera nytt"
+                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara"
                                    action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
                     <h:commandLink styleClass="link-btn" value="Spara och gå till översikt"
                                    action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
+
+
+                    <h:commandLink styleClass="link-btn" value="Ta bort"
+                                   rendered="#{not empty grant.id}"
+                                   action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
+
                 </div>
             </div>
         </ui:fragment>

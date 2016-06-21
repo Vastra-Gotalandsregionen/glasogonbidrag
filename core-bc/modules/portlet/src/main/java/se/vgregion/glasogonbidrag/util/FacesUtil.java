@@ -34,16 +34,15 @@ public class FacesUtil {
         return (PortletRequest)externalContext.getRequest();
     }
 
-    public Long fetchId(String paramterName) {
-        ExternalContext externalContext =
-                FacesContext.getCurrentInstance().getExternalContext();
+    public Long fetchId(String parameterName) {
 
-        Map<String, String> parameterMap =
-                externalContext.getRequestParameterMap();
+        String value = fetchProperty(parameterName);
 
-        Long id = Long.parseLong(parameterMap.get(paramterName));
+        Long id = null;
 
-        LOGGER.info("FacesUtil - fetchId(): {}", id);
+        if(value != null) {
+            id = Long.parseLong(value);
+        }
 
         return id;
     }

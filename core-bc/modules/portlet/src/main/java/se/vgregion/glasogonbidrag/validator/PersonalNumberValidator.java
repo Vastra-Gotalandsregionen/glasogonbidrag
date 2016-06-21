@@ -1,6 +1,9 @@
 package se.vgregion.glasogonbidrag.validator;
 
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -9,6 +12,8 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 @FacesValidator("personalNumberValidator")
+@Component
+@Scope(value = "prototype")
 public class PersonalNumberValidator implements Validator {
 
     public PersonalNumberValidator(){
@@ -33,7 +38,7 @@ public class PersonalNumberValidator implements Validator {
 
     }
 
-    private boolean validatePersonalNumber(String number) {
+    public boolean validatePersonalNumber(String number) {
         boolean isValid = false;
 
         String tenCharNumber = number;

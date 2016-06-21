@@ -27,6 +27,11 @@ public class GrantRepositoryImpl implements GrantRepository {
     private EntityManager em;
 
     @Override
+    public Grant find(Long id) {
+        return em.find(Grant.class, id);
+    }
+
+    @Override
     public List<Grant> findByUser(long userId) {
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findByUser", Grant.class);
