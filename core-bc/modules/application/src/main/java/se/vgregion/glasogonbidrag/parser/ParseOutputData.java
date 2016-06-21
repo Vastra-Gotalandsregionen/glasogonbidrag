@@ -1,4 +1,4 @@
-package se.vgregion.glasogonbidrag.internal;
+package se.vgregion.glasogonbidrag.parser;
 
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportGrant;

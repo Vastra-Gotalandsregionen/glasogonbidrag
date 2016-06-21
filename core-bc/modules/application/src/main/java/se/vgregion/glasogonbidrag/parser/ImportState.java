@@ -1,4 +1,4 @@
-package se.vgregion.glasogonbidrag.internal;
+package se.vgregion.glasogonbidrag.parser;
 
 /**
  * @author Martin Lind - Monator Technologies AB

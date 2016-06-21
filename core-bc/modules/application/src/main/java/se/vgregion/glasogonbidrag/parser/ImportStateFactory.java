@@ -1,10 +1,10 @@
-package se.vgregion.glasogonbidrag.internal;
+package se.vgregion.glasogonbidrag.parser;
 
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 import se.vgregion.glasogonbidrag.util.DocumentUtil;
 
-import static se.vgregion.glasogonbidrag.internal.ImportActionEvent.*;
+import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 
 /**
  * A finite state machine for parsing excel file of the quasi-structured

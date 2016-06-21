@@ -6,12 +6,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import se.vgregion.glasogonbidrag.internal.IllegalImportStateException;
-import se.vgregion.glasogonbidrag.internal.ParseOutputData;
+import se.vgregion.glasogonbidrag.parser.IllegalImportStateException;
+import se.vgregion.glasogonbidrag.parser.ParseOutputData;
 import se.vgregion.glasogonbidrag.model.IdentificationType;
-import se.vgregion.glasogonbidrag.internal.ImportAction;
-import se.vgregion.glasogonbidrag.internal.ImportState;
-import se.vgregion.glasogonbidrag.internal.ImportStateFactory;
+import se.vgregion.glasogonbidrag.parser.ImportAction;
+import se.vgregion.glasogonbidrag.parser.ImportState;
+import se.vgregion.glasogonbidrag.parser.ImportStateFactory;
 import se.vgregion.glasogonbidrag.model.ImportError;
 import se.vgregion.glasogonbidrag.util.IdentificationUtil;
 
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static se.vgregion.glasogonbidrag.internal.ImportActionEvent.*;
+import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 
 class ExcelDataParser {
 
