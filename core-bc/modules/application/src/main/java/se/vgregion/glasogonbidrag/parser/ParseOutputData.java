@@ -1,12 +1,10 @@
 package se.vgregion.glasogonbidrag.parser;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportError;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 import se.vgregion.glasogonbidrag.model.ValidationError;
 
-import java.util.List;
 import java.util.Stack;
 
 /**

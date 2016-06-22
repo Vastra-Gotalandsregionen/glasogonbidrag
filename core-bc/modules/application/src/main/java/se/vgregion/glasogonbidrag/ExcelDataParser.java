@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import se.vgregion.glasogonbidrag.model.ImportErrorType;
 import se.vgregion.glasogonbidrag.parser.IllegalImportStateException;
 import se.vgregion.glasogonbidrag.parser.ParseOutputData;
 import se.vgregion.glasogonbidrag.model.IdentificationType;
@@ -18,45 +19,64 @@ import se.vgregion.glasogonbidrag.util.IdentificationUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 
 class ExcelDataParser {
 
     private String password;
-    private List<ImportError> errors;
-    private File currentWorkingFile;
-    private boolean debugOutput;
+    private File file;
 
-    ExcelDataParser() {
-        this(null, false);
+    private Map<String, ParseOutputData> data;
+    private List<ImportError> fatalErrors;
+
+    ExcelDataParser(File file) {
+        this(file, null);
     }
 
-    ExcelDataParser(String password, boolean debugOutput) {
+    ExcelDataParser(File file, String password) {
+        this.file = file;
         this.password = password;
-        this.debugOutput = debugOutput;
 
-        this.errors = new ArrayList<>();
+        this.data = new HashMap<>();
+        this.fatalErrors = new ArrayList<>();
     }
 
-    void run(File file) {
-        currentWorkingFile = file;
+    // Getters for data
 
+
+    public File getFile() {
+        return file;
+    }
+
+    public Map<String, ParseOutputData> getData() {
+        return data;
+    }
+
+    void run() {
         Workbook wb;
 
         try {
+            // Open workbook. If exceptions happens the import will stop
+            // for this file.
             wb = workbook();
         } catch (IOException e) {
             System.out.println(String.format(
                     "Exception opening the file %s, got exception %s.",
-                    file.toString(), e.getMessage()));
+                    file.toString(),
+                    e.getMessage()));
+
             return;
         } catch (InvalidFormatException e) {
             System.out.println(String.format(
                     "The excel file %s seem to be of the wrong format, " +
                             "got exception %s.",
-                    file.toString(), e.getMessage()));
+                    file.toString(),
+                    e.getMessage()));
+
             return;
         }
 
@@ -65,98 +85,74 @@ class ExcelDataParser {
         for (int i = 0; i < max; i++) {
             Sheet sheet = wb.getSheetAt(i);
 
-            if (debugOutput) {
-                System.out.println(String.format(
-                        "Starting processing sheet: %s.",
-                        sheet.getSheetName()));
-            }
-
             try {
                 handle(sheet);
             } catch (IllegalImportStateException e) {
-                if (debugOutput) {
-                    System.out.println(String.format(
-                            "Parsing error in the %s on the line %d:",
-                            sheet.getSheetName(), e.getLine()));
-                    System.out.println(String.format("Error: %s", e.getMessage()));
-                }
-
-                errors.add(new ImportError(
-                        currentWorkingFile.toString(),
+                fatalErrors.add(new ImportError(
+                        file.toString(),
                         sheet.getSheetName(),
                         e.getLine(),
+                        ImportErrorType.FATAL_ERROR,
                         e.getMessage()));
             }
         }
 
-        if (errors.size() > 0) {
+        if (fatalErrors.size() > 0) {
             handleErrors();
-        }
-    }
-
-    private void handleErrors() {
-        System.out.println("\n\nThere where errors importing documents:");
-        for (ImportError error : errors) {
-            System.err.println(String.format(
-                    "Parsing error in %s on sheet \"%s\" on the line %d: %s",
-                    error.getFile(),
-                    error.getSheet(),
-                    error.getLine(),
-                    error.getMessage()));
         }
     }
 
     private void handle(Sheet sheet) throws IllegalImportStateException {
         ImportState state = ImportStateFactory.newImportState();
 
+        String name = sheet.getSheetName();
+
         int index = 0;
         int max = sheet.getPhysicalNumberOfRows();
         while (index < max) {
             ImportAction action = action(
-                    index, row(sheet, index));
+                    name, index, row(sheet, index), extra(sheet, index));
 
             state = state.activate(action);
 
             index += 1;
         }
 
-        ImportAction action = new ImportAction(max, EOF, null);
+        ImportAction action = new ImportAction(
+                file.getName(), name, max, EOF, null);
         state = state.activate(action);
 
         if (state.isFinal()) {
-            ParseOutputData data = state.getData();
-
-            System.out.println(String.format(
-                    "Sheet \"%s\" in file %s imported correctly! " +
-                            "Found %d documents with a total of %d grants.",
-                    sheet.getSheetName(),
-                    currentWorkingFile,
-                    data.getDocuments().size(),
-                    data.sumGrants()));
+            ParseOutputData parsed = state.getData();
+            data.put(sheet.getSheetName(), parsed);
         } else {
-            if (debugOutput) {
-                System.out.println("Warn!");
-            }
-
-            errors.add(new ImportError(
-                    currentWorkingFile.toString(),
+            fatalErrors.add(new ImportError(
+                    file.toString(),
                     sheet.getSheetName(),
                     max,
+                    ImportErrorType.FATAL_ERROR,
                     "Reached end of file but not in a final state. " +
                             "this is an error"));
         }
     }
 
-    private ImportAction action(int line, String[] row) {
+    private ImportAction action(String name,
+                                int line,
+                                String[] row,
+                                String extra) {
         String content = row[0];
         if (!content.isEmpty()) {
-            if (IdentificationUtil.detect(content) != IdentificationType.NONE) {
-                return new ImportAction(line, ID, row);
+            if (IdentificationUtil
+                    .detect(content) != IdentificationType.NONE) {
+                return new ImportAction(
+                        file.getName(), name, line, ID, row, extra);
             } else {
-                return new ImportAction(line, TEXT, row);
+                return new ImportAction(
+                        file.getName(), name, line, TEXT, row, extra);
             }
         } else {
-            return new ImportAction(line, EMPTY, row);
+            return new ImportAction(
+                    file.getName(), name, line, EMPTY, row, extra);
         }
     }
 
@@ -165,9 +161,9 @@ class ExcelDataParser {
         Workbook wb;
 
         if (usePassword()) {
-            wb = WorkbookFactory.create(currentWorkingFile, password);
+            wb = WorkbookFactory.create(file, password);
         } else {
-            wb = WorkbookFactory.create(currentWorkingFile);
+            wb = WorkbookFactory.create(file);
         }
 
         return wb;
@@ -179,9 +175,25 @@ class ExcelDataParser {
 
         Row r = sheet.getRow(row);
         if (r != null) {
-            int max = r.getPhysicalNumberOfCells();
+            int max = r.getLastCellNum();
             for (int i = 0; i < max && i < 6; i++) {
                 result[i] = cell(r, i);
+            }
+        }
+
+        return result;
+    }
+
+    private String extra(Sheet sheet, int row) {
+        String result = null;
+
+        Row r = sheet.getRow(row);
+
+        if (r != null) {
+            int last = r.getLastCellNum();
+            if (last >= 6) {
+                // Extra data is located on cell number 6 (zero indexed)
+                result = cell(r, 6);
             }
         }
 
@@ -217,5 +229,17 @@ class ExcelDataParser {
 
     private boolean usePassword() {
         return password != null;
+    }
+
+    private void handleErrors() {
+        System.out.println("\n\nFatal errors importing documents:");
+        for (ImportError error : fatalErrors) {
+            System.err.println(String.format(
+                    "Parsing error in %s on sheet \"%s\" on the line %d: %s",
+                    error.getFile() + 1,
+                    error.getSheet(),
+                    error.getLine(),
+                    error.getMessage()));
+        }
     }
 }

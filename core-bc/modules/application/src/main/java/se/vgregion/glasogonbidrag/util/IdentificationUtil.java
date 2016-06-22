@@ -101,7 +101,7 @@ public final class IdentificationUtil {
     public static String removeYear(String number) {
         int length = number.length() - 1;
 
-        if (length == 12 || length == 10) {
+        if (length == 12) {
             return number.substring(2);
         } else {
             return number;

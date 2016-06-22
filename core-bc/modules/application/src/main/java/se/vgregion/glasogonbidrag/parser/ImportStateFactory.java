@@ -1,11 +1,6 @@
 package se.vgregion.glasogonbidrag.parser;
 
-import se.vgregion.glasogonbidrag.model.ImportDataLibrary;
-import se.vgregion.glasogonbidrag.model.ImportDocument;
-import se.vgregion.glasogonbidrag.model.ImportError;
-import se.vgregion.glasogonbidrag.model.ImportGrant;
 import se.vgregion.glasogonbidrag.util.DocumentUtil;
-import se.vgregion.glasogonbidrag.util.ImportValidationUtil;
 
 import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 import static se.vgregion.glasogonbidrag.model.ImportErrorType.*;
@@ -50,7 +45,6 @@ public class ImportStateFactory {
      *
      */
     private static class StartOfFileState extends AbstractImportState {
-
         StartOfFileState(ParseOutputData data) {
             super(data);
         }
@@ -117,7 +111,6 @@ public class ImportStateFactory {
      *
      */
     private static class NameAndGrantState extends AbstractImportState {
-
         NameAndGrantState(ParseOutputData data) {
             super(data);
         }
@@ -136,7 +129,7 @@ public class ImportStateFactory {
             if (!DocumentUtil.emptyRow(action.getRow())) {
                 newImportHandler(getData()).grant(action);
             }
-            
+
             return this;
         }
     }
@@ -145,7 +138,6 @@ public class ImportStateFactory {
      *
      */
     private static class EOFState extends AbstractImportState {
-
         EOFState(ParseOutputData data) {
             super(data);
         }
