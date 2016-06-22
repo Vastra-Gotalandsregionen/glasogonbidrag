@@ -136,30 +136,6 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="ENTER_DELIVERY_DATE" />
-        <!--
-        <ui:fragment rendered="${flow.showDeliveryDateOutput}">
-            <div class="grant-section">
-                <div class="grant-section-output">
-                    <span class="grant-section-label">
-                        Kvitteringsdatum:
-                    </span>
-                    <span class="grant-section-data">
-                        <h:outputText value="#{grant.deliveryDate}">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-                        </h:outputText>
-                    </span>
-
-                    <h:commandLink styleClass="grant-section-back" immediate="true">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
-                        <f:param name="showSection" value="ENTER_DELIVERY_DATE" />
-                        <span class="hide-accessible">Tillbaka</span>
-                    </h:commandLink>
-                </div>
-            </div>
-        </ui:fragment>
-        -->
 
         <!-- Choose the grant type -->
         <ui:fragment rendered="#{flow.showGrantTypeInput}">
@@ -213,27 +189,6 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="SELECT_GRANT_TYPE" />
-        <!--
-        <ui:fragment rendered="#{flow.showGrantTypeOutput}">
-            <div class="grant-section">
-                <div class="grant-section-output">
-                    <span class="grant-section-label">
-                        Bidragstyp:
-                    </span>
-                    <span class="grant-section-data">
-                        <h:outputText value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}" />
-                    </span>
-                    <h:commandLink styleClass="grant-section-back" immediate="true">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
-                        <f:param name="showSection" value="SELECT_GRANT_TYPE" />
-                        <span class="hide-accessible">Tillbaka</span>
-                    </h:commandLink>
-                </div>
-            </div>
-        </ui:fragment>
-        -->
 
         <!-- Grant Type 0-15 or 0-19 -->
         <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateInput}">
@@ -269,31 +224,6 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="ENTER_PRESCRIPTION_DATE" />
-
-        <!--
-        <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}">
-            <div class="grant-section">
-                <div class="grant-section-output">
-                    <span class="grant-section-label">
-                        Receptdatum:
-                    </span>
-                    <span class="grant-section-data">
-                        <h:outputText value="#{grant.beneficiary.prescription.date}">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-                        </h:outputText>
-                    </span>
-                    <h:commandLink styleClass="grant-section-back" immediate="true">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
-                        <f:param name="showSection" value="ENTER_PRESCRIPTION_DATE" />
-                        <span class="hide-accessible">Tillbaka</span>
-                    </h:commandLink>
-                </div>
-            </div>
-        </ui:fragment>
-        -->
-
 
         <!-- Grant type others -->
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeInput}">
@@ -585,33 +515,6 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="#{flow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}" />
-        <!--
-
-        <ui:fragment rendered="#{flow.showAmountOutput}">
-
-            <div class="grant-section">
-                <div class="grant-section-output">
-                    <span class="grant-section-label">
-                        Summa:
-                    </span>
-                    <span class="grant-section-data">
-                        <h:outputText value="#{grant.amountIncludingVatAsKrona}" />
-                    </span>
-                    <h:commandLink styleClass="grant-section-back" immediate="true">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
-
-                        <f:param name="showSection" value="#{flow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}" />
-
-                        <span class="hide-accessible">Tillbaka</span>
-                    </h:commandLink>
-                </div>
-            </div>
-
-        </ui:fragment>
-        -->
-
 
     </h:body>
 </f:view>
