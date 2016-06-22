@@ -74,7 +74,7 @@ public class ImportDataLibrary {
 
     private void catalog(ParseOutputData data) {
         Stack<ImportDocument> docs = data.getDocuments();
-        Stack<ImportError> errs = data.getErrors();
+        Stack<ImportError> errs = data.getImportErrors();
 
         if (!errs.isEmpty()) {
             catalogErrors(errs);

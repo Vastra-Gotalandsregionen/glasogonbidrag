@@ -3,12 +3,12 @@ package se.vgregion.glasogonbidrag.parser;
 import se.vgregion.glasogonbidrag.model.ImportDataLibrary;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportError;
-import se.vgregion.glasogonbidrag.model.ImportErrorType;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 import se.vgregion.glasogonbidrag.util.DocumentUtil;
 import se.vgregion.glasogonbidrag.util.ImportValidationUtil;
 
 import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
+import static se.vgregion.glasogonbidrag.model.ImportErrorType.*;
 
 /**
  * A finite state machine for parsing excel file of the quasi-structured
@@ -37,8 +37,13 @@ import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
  * @author Martin Lind - Monator Technologies AB
  */
 public class ImportStateFactory {
+    private static ImportHandler newImportHandler(ParseOutputData data) {
+        return new ImportHandler(data);
+    }
+
     public static ImportState newImportState() {
-        return new ImportStateFactory.StartOfFileState(new ParseOutputData());
+        return new ImportStateFactory.StartOfFileState(
+                new ParseOutputData());
     }
 
     /**
@@ -53,6 +58,7 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
+                newImportHandler(getData()).validate(action);
                 return new IdState(getData(), action.getRow()[0]);
             }
 
@@ -79,30 +85,8 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(TEXT)) {
-                ImportDocument doc = DocumentUtil.document(
-                        id, action.getRow());
-                ImportGrant grant = DocumentUtil.grant(action.getRow());
-
-                getData().addDocument(doc);
-                if(!ImportValidationUtil.verificationNumber(action)) {
-                    String verificationNumber =
-                            ImportDataLibrary.dummyVerificationNumber();
-
-                    if (ImportValidationUtil.comment(action) &&
-                            ImportValidationUtil
-                                    .verificationInComment(action)) {
-                        verificationNumber = DocumentUtil
-                                .extractVerification(action.getExtraData());
-                    }
-
-                    grant = new ImportGrant(
-                            grant.getPrescriptionDate(),
-                            grant.getDeliveryDate(),
-                            grant.getAmount(),
-                            grant.getInvoiceNumber(),
-                            verificationNumber);
-                }
-                getData().addGrant(grant);
+                newImportHandler(getData()).document(id, action);
+                newImportHandler(getData()).grant(action);
 
                 return new NameAndGrantState(getData());
             }
@@ -112,24 +96,14 @@ public class ImportStateFactory {
             }
 
             if (action.is(ID)) {
-                ImportError error = new ImportError(
-                        action.getFile(),
-                        action.getSheet(),
-                        action.getLine(),
-                        ImportErrorType.UNEXPECTED_ID,
+                newImportHandler(getData()).error(
+                        action, UNEXPECTED_ID,
                         "expected name found id.");
-                getData().addError(error);
-
                 return new IdState(getData(), action.getRow()[0]);
             } else if (action.is(EOF)) {
-                ImportError error = new ImportError(
-                        action.getFile(),
-                        action.getSheet(),
-                        action.getLine(),
-                        ImportErrorType.UNEXPECTED_EOF,
+                newImportHandler(getData()).error(
+                        action, UNEXPECTED_EOF,
                         "expected name reached end of file.");
-                getData().addError(error);
-
                 return new EOFState(getData());
             }
 
@@ -151,6 +125,7 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
+                newImportHandler(getData()).validate(action);
                 return new IdState(getData(), action.getRow()[0]);
             }
 
@@ -159,13 +134,9 @@ public class ImportStateFactory {
             }
 
             if (!DocumentUtil.emptyRow(action.getRow())) {
-                ImportGrant grant = DocumentUtil.grant(action.getRow());
-                getData().addGrant(grant);
-
-
+                newImportHandler(getData()).grant(action);
             }
-
-
+            
             return this;
         }
     }

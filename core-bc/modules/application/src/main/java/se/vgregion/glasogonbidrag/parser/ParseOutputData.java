@@ -1,8 +1,10 @@
 package se.vgregion.glasogonbidrag.parser;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportError;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
+import se.vgregion.glasogonbidrag.model.ValidationError;
 
 import java.util.List;
 import java.util.Stack;
@@ -12,20 +14,27 @@ import java.util.Stack;
  */
 public class ParseOutputData {
     private ImportDocument current;
+
     private Stack<ImportDocument> documents;
-    private Stack<ImportError> errors;
+    private Stack<ImportError> importErrors;
+    private Stack<ValidationError> validationErrors;
 
     ParseOutputData() {
         this.documents = new Stack<>();
-        this.errors = new Stack<>();
+        this.importErrors = new Stack<>();
+        this.validationErrors = new Stack<>();
     }
 
     public Stack<ImportDocument> getDocuments() {
         return documents;
     }
 
-    public Stack<ImportError> getErrors() {
-        return errors;
+    public Stack<ImportError> getImportErrors() {
+        return importErrors;
+    }
+
+    public Stack<ValidationError> getValidationErrors() {
+        return validationErrors;
     }
 
     void addDocument(ImportDocument document) {
@@ -33,19 +42,15 @@ public class ParseOutputData {
         documents.push(document);
     }
 
-    void addError(ImportError error) {
-        errors.push(error);
-    }
-
     void addGrant(ImportGrant grant) {
         current.addGrant(grant);
     }
 
-    public int sumGrants() {
-        int sum = 0;
-        for (ImportDocument document : documents) {
-            sum += document.getGrants().size();
-        }
-        return sum;
+    void addImportError(ImportError error) {
+        importErrors.push(error);
+    }
+
+    void addValidationError(ValidationError error) {
+        validationErrors.add(error);
     }
 }

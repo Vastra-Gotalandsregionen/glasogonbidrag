@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Utility class for helping of building Import Document and Import Grant.
  * Also helpers for related functionality.
- * 
+ *
  * @author Martin Lind - Monator Technologies AB
  */
 public final class DocumentUtil {
@@ -72,6 +72,23 @@ public final class DocumentUtil {
         return new ImportGrant(
                 prescriptionDate, deliveryDate,
                 amount, invoiceNumber, verificationNumber);
+    }
+
+    /**
+     *
+     * @param grant
+     * @param verificationNumber
+     * @return
+     */
+    public static ImportGrant replace(ImportGrant grant,
+                                      String verificationNumber) {
+
+        return new ImportGrant(
+                grant.getPrescriptionDate(),
+                grant.getDeliveryDate(),
+                grant.getAmount(),
+                grant.getInvoiceNumber(),
+                verificationNumber);
     }
 
     /**
