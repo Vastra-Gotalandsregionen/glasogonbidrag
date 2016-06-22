@@ -1,8 +1,10 @@
 package se.vgregion.glasogonbidrag.parser;
 
 import se.vgregion.glasogonbidrag.model.ImportDocument;
+import se.vgregion.glasogonbidrag.model.ImportError;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -11,9 +13,19 @@ import java.util.Stack;
 public class ParseOutputData {
     private ImportDocument current;
     private Stack<ImportDocument> documents;
+    private Stack<ImportError> errors;
 
     ParseOutputData() {
         this.documents = new Stack<>();
+        this.errors = new Stack<>();
+    }
+
+    public Stack<ImportDocument> getDocuments() {
+        return documents;
+    }
+
+    public Stack<ImportError> getErrors() {
+        return errors;
     }
 
     void addDocument(ImportDocument document) {
@@ -21,12 +33,12 @@ public class ParseOutputData {
         documents.push(document);
     }
 
-    void addGrant(ImportGrant grant) {
-        current.addGrant(grant);
+    void addError(ImportError error) {
+        errors.push(error);
     }
 
-    public Stack<ImportDocument> getDocuments() {
-        return documents;
+    void addGrant(ImportGrant grant) {
+        current.addGrant(grant);
     }
 
     public int sumGrants() {

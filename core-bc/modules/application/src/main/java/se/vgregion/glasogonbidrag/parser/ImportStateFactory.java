@@ -1,8 +1,12 @@
 package se.vgregion.glasogonbidrag.parser;
 
+import se.vgregion.glasogonbidrag.model.ImportDataLibrary;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
+import se.vgregion.glasogonbidrag.model.ImportError;
+import se.vgregion.glasogonbidrag.model.ImportErrorType;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 import se.vgregion.glasogonbidrag.util.DocumentUtil;
+import se.vgregion.glasogonbidrag.util.ImportValidationUtil;
 
 import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 
@@ -75,10 +79,29 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(TEXT)) {
-                ImportDocument doc = DocumentUtil.document(id, action.getRow());
+                ImportDocument doc = DocumentUtil.document(
+                        id, action.getRow());
                 ImportGrant grant = DocumentUtil.grant(action.getRow());
 
                 getData().addDocument(doc);
+                if(!ImportValidationUtil.verificationNumber(action)) {
+                    String verificationNumber =
+                            ImportDataLibrary.dummyVerificationNumber();
+
+                    if (ImportValidationUtil.comment(action) &&
+                            ImportValidationUtil
+                                    .verificationInComment(action)) {
+                        verificationNumber = DocumentUtil
+                                .extractVerification(action.getExtraData());
+                    }
+
+                    grant = new ImportGrant(
+                            grant.getPrescriptionDate(),
+                            grant.getDeliveryDate(),
+                            grant.getAmount(),
+                            grant.getInvoiceNumber(),
+                            verificationNumber);
+                }
                 getData().addGrant(grant);
 
                 return new NameAndGrantState(getData());
@@ -89,11 +112,25 @@ public class ImportStateFactory {
             }
 
             if (action.is(ID)) {
-                throw new IllegalImportStateException(action.getLine(),
+                ImportError error = new ImportError(
+                        action.getFile(),
+                        action.getSheet(),
+                        action.getLine(),
+                        ImportErrorType.UNEXPECTED_ID,
                         "expected name found id.");
+                getData().addError(error);
+
+                return new IdState(getData(), action.getRow()[0]);
             } else if (action.is(EOF)) {
-                throw new IllegalImportStateException(action.getLine(),
+                ImportError error = new ImportError(
+                        action.getFile(),
+                        action.getSheet(),
+                        action.getLine(),
+                        ImportErrorType.UNEXPECTED_EOF,
                         "expected name reached end of file.");
+                getData().addError(error);
+
+                return new EOFState(getData());
             }
 
             throw new IllegalImportStateException(action.getLine(),
@@ -124,7 +161,10 @@ public class ImportStateFactory {
             if (!DocumentUtil.emptyRow(action.getRow())) {
                 ImportGrant grant = DocumentUtil.grant(action.getRow());
                 getData().addGrant(grant);
+
+
             }
+
 
             return this;
         }
