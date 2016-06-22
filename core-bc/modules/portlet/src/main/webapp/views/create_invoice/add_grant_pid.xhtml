@@ -101,19 +101,6 @@
                                       triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:deliveryDateSubmit"
                 />
 
-                <!--
-                <div class="field-row">
-                    <div class="field-element inline">
-                        <h:outputLabel for="deliveryDate" value="Kvitteringsdatum:" />
-                        <h:inputText id="deliveryDate" styleClass="js-input-mask js-input-mask-date"
-                                     value="#{createInvoiceAddGrantBackingBean.deliveryDate}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD"
-                                     pt:autofocus="true"
-                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:deliveryDateSubmit"
-                        />
-                    </div>
-                </div>
-                -->
                 <div class="button-row">
                     <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
@@ -204,19 +191,6 @@
                                       triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:prescriptionDateSubmit"
                 />
 
-                <!--
-                <div class="field-row">
-                    <div class="field-element inline">
-                        <h:outputLabel for="prescriptionDate" value="Receptdatum:" />
-                        <h:inputText id="prescriptionDate" styleClass="js-input-mask js-input-mask-date"
-                                     value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true"
-                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:prescriptionDateSubmit"
-                        />
-
-                    </div>
-                </div>
-                -->
                 <div class="button-row">
                     <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
@@ -499,20 +473,6 @@
                                       requiredMessage="Du måste fylla i en summa"
                                       triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:amountWithVatSubmit"
                 />
-
-                <!--
-                <div class="field-row">
-                    <div class="field-element inline">
-                        <h:outputLabel for="amountWithVat" value="Summa:" />
-                        <h:inputText id="amountWithVat" styleClass="js-select-on-render"
-                                     value="#{createInvoiceAddGrantBackingBean.amountWithVat}"
-                                     pt:placeholder="Skriv in bidragssumma..." pt:autofocus="true"
-                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:amountWithVatSubmit"
-
-                        />
-                    </div>
-                </div>
-                -->
 
                 <div class="button-row">
 
