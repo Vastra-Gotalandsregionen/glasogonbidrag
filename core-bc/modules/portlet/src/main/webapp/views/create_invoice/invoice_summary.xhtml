@@ -27,28 +27,22 @@
 
                     <div class="box-bd">
                         <table class="simple-table">
+                            <!--
                             <thead>
                                 <tr>
                                     <th>
-                                        <h:outputText value="" />
-                                    </th>
-                                    <th class="number">
-                                        <h:outputText value="Exkl. moms" />
+                                        <h:outputText value="Post" />
                                     </th>
                                     <th class="number">
                                         <h:outputText value="Inkl. moms" />
                                     </th>
                                 </tr>
                             </thead>
+                            -->
                             <tbody>
                                 <tr>
                                     <td>
                                         <h:outputText value="Faktura" />
-                                    </td>
-                                    <td class="number">
-                                        <h:outputText value="#{invoice.amountAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                        </h:outputText>
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
@@ -58,12 +52,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h:outputText value="Bidrag" />
-                                    </td>
-                                    <td class="number">
-                                        <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                        </h:outputText>
+                                        <h:outputText value="Registrerade bidrag" />
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{invoice.calculateGrantsAmountIncludingVatSumAsKrona()}">
@@ -76,11 +65,6 @@
                                         <span class="summary-icon">
                                             <h:outputText value="" />
                                         </span>
-                                    </td>
-                                    <td class="number">
-                                        <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                        </h:outputText>
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{invoice.calculateDifferenceIncludingVatAsKrona()}">

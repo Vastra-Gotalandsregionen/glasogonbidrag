@@ -7,7 +7,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
 
@@ -21,6 +23,10 @@ import static org.terracotta.modules.ehcache.ToolkitInstanceFactoryImpl.LOGGER;
 public class CreateInvoiceViewInvoiceBackingBean {
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
 
     @Autowired
     private CreateInvoiceAddGrantBackingBean addGrantBackingBean;
@@ -40,18 +46,21 @@ public class CreateInvoiceViewInvoiceBackingBean {
 
     // Actions
 
-    public String addNewGrant() {
-        Long invoiceId = facesUtil.fetchId("invoiceId");
-
-        System.out.println("Invoice id: " + invoiceId);
-        //invoice = invoiceRepository.findWithParts(invoiceId);
-
-        //addGrantBackingBean.init(invoice);
-
-        String returnView = String.format("add_grant?invoiceId=%d&faces-redirect=true&includeViewParams=true", invoiceId);
-
-        return returnView;
+    public void markPaid() {
+        invoice.setStatus(InvoiceStatus.PAID);
+        invoiceService.update(invoice);
     }
+
+    public void markUnpaid() {
+        invoice.setStatus(InvoiceStatus.UNPAID);
+        invoiceService.update(invoice);
+    }
+
+    public void markCanceled() {
+        invoice.setStatus(InvoiceStatus.CANCELED);
+        invoiceService.update(invoice);
+    }
+
 
     @PostConstruct
     protected void init() {

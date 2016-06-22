@@ -42,9 +42,9 @@
                             <f:facet name="header">
                                 <h:outputText value="Ver.nr." />
                             </f:facet>
-                            <a href="#invoice">
-                                <h:outputText value="A12345" />
-                            </a>
+                            <h:link value="#{grant.invoice.invoiceNumber}" outcome="view_invoice" target="_BLANK">
+                                <f:param name="invoiceId" value="#{grant.invoice.id}" />
+                            </h:link>
                         </h:column>
 
                         <!-- Todo: perhaps math should be done before view. -->

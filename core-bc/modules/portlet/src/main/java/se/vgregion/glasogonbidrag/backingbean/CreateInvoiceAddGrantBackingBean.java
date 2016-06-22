@@ -26,6 +26,7 @@ import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
@@ -57,22 +58,25 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final String GRANT_TYPE_OTHER = "2";
 
     @Autowired
-    private GrantRepository grantRepository;
+    private BeneficiaryRepository beneficiaryRepository;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private GrantRepository grantRepository;
 
     @Autowired
     private IdentificationRepository identificationRepository;
 
     @Autowired
-    private BeneficiaryRepository beneficiaryRepository;
-
-    @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private BeneficiaryService beneficiaryService;
+
+    @Autowired
+    private GrantService grantService;
+
+    @Autowired
+    private InvoiceService invoiceService;
 
     @Autowired
     private FacesUtil facesUtil;
@@ -392,6 +396,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
+        // TODO: When step back to ENTER_PRESCRIPTION_DATE values for prescription date is lost. When step back to SELECT_GRANT_TYPE value for grant type is lost. However, when step back to ENTER_DELIVERY_DATE, value for deliveryDate is still there.
 
         switch (state) {
             case ENTER_PERSONAL_NUMBER:
@@ -434,9 +439,6 @@ public class CreateInvoiceAddGrantBackingBean {
                 //amountWithVat = null;
                 break;
             case ENTER_PRESCRIPTION_DATE:
-                grantType = null;
-                grantTypeLabel = null;
-
                 grantTypeOtherVO = new GrantTypeOtherVO();
 
                 prescriber = null;
@@ -459,6 +461,10 @@ public class CreateInvoiceAddGrantBackingBean {
             case ENTER_AMOUNT_AFTER_AGE:
                 break;
             case ENTER_AMOUNT_AFTER_OTHER:
+                break;
+            case ENTER_ALL_DATA_AFTER_OTHER:
+                break;
+            case ENTER_ALL_DATA_AFTER_AGE:
                 break;
         }
 
@@ -506,6 +512,14 @@ public class CreateInvoiceAddGrantBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
+        long tempInvoiceId = -1;
+        Invoice tempInvoice = grant.getInvoice();
+        if(tempInvoice != null) {
+            tempInvoiceId = tempInvoice.getId();
+        }
+
+        LOGGER.info("Invoice id: " + tempInvoiceId);
+
         // Insert beneficiary first.
         if (newBeneficiary) {
             try {
@@ -541,20 +555,45 @@ public class CreateInvoiceAddGrantBackingBean {
             return "view?faces-redirect=true";
         }
 
+        FacesMessage message = null;
+
+        if (grant.getId() == null) {
+            message = persistGrant(userId, groupId, companyId, invoice, grant);
+        } else {
+            message = updateGrant(userId, groupId, companyId, grant);
+        }
+
+        if(message != null) {
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+
+        return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
+    }
+
+    public FacesMessage persistGrant(long userId, long groupId, long companyId, Invoice invoice, Grant grant) {
+        FacesMessage message = null;
+
         try {
             invoiceService.updateAddGrant(userId, groupId, companyId,
                     invoice, grant);
         } catch (GrantAlreadyExistException e) {
             LOGGER.warn("Cannot add the same grant twice.");
 
-            FacesMessage message =
+            message =
                     new FacesMessage("Cannot add the same grant twice.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-            return null;
         }
 
-        return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
+        return message;
+    }
+
+    public FacesMessage updateGrant(long userId, long groupId, long companyId, Grant grant) {
+        FacesMessage message = null;
+
+        // TODO: only updated if data has changed
+        grantService.update(grant);
+
+        return message;
     }
 
     // Facelet styling methods
@@ -687,7 +726,15 @@ public class CreateInvoiceAddGrantBackingBean {
             amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
 
             //flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
-            flow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
+
+            if(GRANT_TYPE_OTHER.equals(grantType)) {
+                flow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
+            }
+            else if(GRANT_TYPE_AGE_0_TO_19.equals(grantType) || GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
+                flow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
+            }
+
+            //flow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
             LOGGER.info("Current state: {}.", flow);
 
 

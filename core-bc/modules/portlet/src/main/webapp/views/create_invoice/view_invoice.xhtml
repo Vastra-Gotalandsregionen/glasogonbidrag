@@ -5,7 +5,9 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
@@ -53,7 +55,11 @@
                                 <ui:repeat value="#{invoice.grants}" var="grant">
                                     <tr>
                                         <td>
-                                            <h:outputText value="#{grant.beneficiary.identification}" />
+                                            <h:link outcome="add_grant">
+                                                <f:param name="invoiceId" value="${invoice.id}" />
+                                                <f:param name="grantId" value="${grant.id}" />
+                                                <h:outputText value="#{grant.beneficiary.identification}" />
+                                            </h:link>
                                         </td>
                                         <td>
                                             <h:outputText value="#{grant.beneficiary.prescription.date}">
@@ -85,13 +91,13 @@
                             <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
                         </ui:fragment>
 
-                        <h:form>
-                            <div class="button-row">
-                                <h:commandLink styleClass="link-btn primary" action="#{createInvoiceViewInvoiceBackingBean.addNewGrant}" value="Lägg till nytt bidrag">
-                                    <f:param name="invoiceId" value="${invoice.id}" />
-                                </h:commandLink>
-                            </div>
-                        </h:form>
+                        <div class="button-row">
+                            <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag">
+                                <f:param name="invoiceId" value="${invoice.id}" />
+                                <h:outputText value="#{grant.beneficiary.identification}" />
+                            </h:link>
+                        </div>
+
 
                     </div>
                 </div>
@@ -147,8 +153,24 @@
             <div class="span12">
                 <h:form>
                     <div class="button-row">
-                        <h:commandLink styleClass="link-btn primary" value="Klarmarkera (dummy)" />
-                        <h:commandLink styleClass="link-btn" value="Makulera (dummy)" />
+                        <h:commandLink value="Klarmarkera"
+                                       styleClass="link-btn primary"
+                                       action="#{createInvoiceViewInvoiceBackingBean.markPaid}">
+                            <f:param name="invoiceId" value="${invoice.id}" />
+                        </h:commandLink>
+                        <h:commandLink value="Makulera"
+                                       styleClass="link-btn"
+                                       action="#{createInvoiceViewInvoiceBackingBean.markCanceled}">
+                            <f:param name="invoiceId" value="${invoice.id}" />
+                        </h:commandLink>
+
+                        <h:commandLink value="Pågående"
+                                       styleClass="link-btn"
+                                       action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}">
+                            <f:param name="invoiceId" value="${invoice.id}" />
+                        </h:commandLink>
+
+
                     </div>
                 </h:form>
             </div>

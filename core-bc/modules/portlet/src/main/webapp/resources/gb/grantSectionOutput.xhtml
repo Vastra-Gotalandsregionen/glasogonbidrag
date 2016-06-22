@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+
+
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:bridge="http://liferay.com/faces/bridge"
+      xmlns:portlet="http://java.sun.com/portlet_2_0"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+<cc:interface>
+    <cc:attribute name="label"/>
+    <cc:attribute name="value"/>
+    <cc:attribute name="valueType"/>
+    <cc:attribute name="backExecute"/>
+    <cc:attribute name="backListener" method-signature="void listener()" />
+    <cc:attribute name="backRender"/>
+    <cc:attribute name="backShowSection" />
+</cc:interface>
+
+<cc:implementation>
+    <c:set var="label" value="#{cc.attrs.label}" />
+    <c:set var="value" value="#{cc.attrs.value}" />
+    <c:set var="valueType" value="#{cc.attrs.valueType}" />
+    <c:set var="backExecute" value="#{cc.attrs.backExecute}" />
+    <c:set var="backListener" value="#{cc.attrs.backListener}"  />
+    <c:set var="backRender" value="#{cc.attrs.backRender}" />
+    <c:set var="backShowSection" value="#{cc.attrs.backShowSection}" />
+
+    <div class="grant-section">
+        <div class="grant-section-output">
+            <span class="grant-section-label">
+                <h:outputText value="#{label}" />
+            </span>
+            <span class="grant-section-data">
+
+                <ui:fragment rendered="#{valueType eq 'raw'}">
+                    <h:outputText value="#{value}" />
+                </ui:fragment>
+
+                <ui:fragment rendered="#{valueType eq 'date'}">
+                    <h:outputText value="#{value}">
+                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                    </h:outputText>
+                </ui:fragment>
+
+            </span>
+
+            <h:commandLink styleClass="grant-section-back" immediate="true">
+                <f:ajax execute="#{backExecute}" listener="#{backListener}"
+                        render="#{backRender}" onevent="function eventHandler(data) {ajaxComplete(data)}">
+                </f:ajax>
+                <f:param name="showSection" value="#{backShowSection}" />
+                <span class="hide-accessible">Tillbaka</span>
+            </h:commandLink>
+        </div>
+    </div>
+
+</cc:implementation>
+
+</html>

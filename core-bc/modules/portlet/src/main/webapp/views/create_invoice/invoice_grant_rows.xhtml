@@ -28,13 +28,11 @@
                     
                     <ui:fragment rendered="#{not empty invoice.grants}">
                         <table class="simple-table">
+                            <!--
                             <thead>
                                 <tr>
                                     <th>
                                         <h:outputText value="Bidragstagare" />
-                                    </th>
-                                    <th class="number">
-                                        <h:outputText value="Exkl. moms" />
                                     </th>
                                     <th class="number">
                                         <h:outputText value="Inkl. moms" />
@@ -44,6 +42,7 @@
                                     </th>
                                 </tr>
                             </thead>
+                            -->
                             <tbody>
                                 <ui:repeat value="#{invoice.grants}" var="grant">
                                     <tr>
@@ -51,23 +50,16 @@
                                             <h:outputText value="#{grant.beneficiary.identification}" />
                                         </td>
                                         <td class="number">
-                                            <h:outputText value="#{grant.amountAsKrona}">
-                                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                            </h:outputText>
-                                        </td>
-                                        <td class="number">
                                             <h:outputText value="#{grant.amountIncludingVatAsKrona}">
                                                 <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
                                             </h:outputText>
                                         </td>
                                         <td>
-
                                             <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
                                                 <f:param name="invoiceId" value="${invoice.id}" />
                                                 <f:param name="grantId" value="${grant.id}" />
                                                 <span>Redigera</span>
                                             </h:commandLink>
-
                                        </td>
                                     </tr>
                                 </ui:repeat>

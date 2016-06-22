@@ -5,7 +5,9 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
@@ -66,7 +68,7 @@
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
 
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
 
@@ -118,13 +120,23 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
 
             </div>
         </ui:fragment>
+
+        <gb:grantSectionOutput rendered="${flow.showDeliveryDateOutput}"
+                               label="Kvitteringsdatum"
+                               value="#{grant.deliveryDate}"
+                               valueType="date"
+                               backExecute=":addGrantForm"
+                               backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                               backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                               backShowSection="ENTER_DELIVERY_DATE" />
+        <!--
         <ui:fragment rendered="${flow.showDeliveryDateOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
@@ -147,6 +159,7 @@
                 </div>
             </div>
         </ui:fragment>
+        -->
 
         <!-- Choose the grant type -->
         <ui:fragment rendered="#{flow.showGrantTypeInput}">
@@ -185,12 +198,22 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
             </div>
         </ui:fragment>
+
+        <gb:grantSectionOutput rendered="${flow.showGrantTypeOutput}"
+                               label="Bidragstyp"
+                               value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}"
+                               valueType="raw"
+                               backExecute=":addGrantForm"
+                               backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                               backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                               backShowSection="SELECT_GRANT_TYPE" />
+        <!--
         <ui:fragment rendered="#{flow.showGrantTypeOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
@@ -210,6 +233,7 @@
                 </div>
             </div>
         </ui:fragment>
+        -->
 
         <!-- Grant Type 0-15 or 0-19 -->
         <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateInput}">
@@ -230,13 +254,23 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
             </div>
         </ui:fragment>
 
+        <gb:grantSectionOutput rendered="${flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}"
+                               label="Receptdatum"
+                               value="#{grant.beneficiary.prescription.date}"
+                               valueType="date"
+                               backExecute=":addGrantForm"
+                               backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                               backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                               backShowSection="ENTER_PRESCRIPTION_DATE" />
+
+        <!--
         <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
@@ -258,6 +292,7 @@
                 </div>
             </div>
         </ui:fragment>
+        -->
 
 
         <!-- Grant type others -->
@@ -432,7 +467,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -483,7 +518,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn" value="Avbryt och gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -526,17 +561,57 @@
                     <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara"
                                    action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
-                    <h:commandLink styleClass="link-btn" value="Spara och gå till översikt"
+                    <h:commandLink styleClass="link-btn" value="Spara / gå tillbaka"
                                    action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
-
 
                     <h:commandLink styleClass="link-btn" value="Ta bort"
                                    rendered="#{not empty grant.id}"
                                    action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
 
+                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
+
+
                 </div>
             </div>
         </ui:fragment>
+
+        <gb:grantSectionOutput rendered="${flow.showAmountOutput}"
+                               label="Summa"
+                               value="#{grant.amountIncludingVatAsKrona}"
+                               valueType="raw"
+                               backExecute=":addGrantForm"
+                               backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                               backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                               backShowSection="#{flow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}" />
+        <!--
+
+        <ui:fragment rendered="#{flow.showAmountOutput}">
+
+            <div class="grant-section">
+                <div class="grant-section-output">
+                    <span class="grant-section-label">
+                        Summa:
+                    </span>
+                    <span class="grant-section-data">
+                        <h:outputText value="#{grant.amountIncludingVatAsKrona}" />
+                    </span>
+                    <h:commandLink styleClass="grant-section-back" immediate="true">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
+                        </f:ajax>
+
+                        <f:param name="showSection" value="#{flow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}" />
+
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
+                </div>
+            </div>
+
+        </ui:fragment>
+        -->
+
 
     </h:body>
 </f:view>

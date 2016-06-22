@@ -10,7 +10,9 @@ public enum AddGrantFlowState {
     ENTER_GRANT_STATE_OTHER_TYPE(new AddGrantOtherTypeState()),
     ENTER_GRANT_STATE_OTHER_DATE(new AddGrantOtherDateState()),
     ENTER_AMOUNT_AFTER_AGE(new AddGrantAmountAfterAgeState()),
-    ENTER_AMOUNT_AFTER_OTHER(new AddGrantAmountAfterOtherState());
+    ENTER_AMOUNT_AFTER_OTHER(new AddGrantAmountAfterOtherState()),
+    ENTER_ALL_DATA_AFTER_OTHER(new AddGrantAllDataAfterOtherState()),
+    ENTER_ALL_DATA_AFTER_AGE(new AddGrantAllDataAfterAgeState());
 
     private CreateInvoiceAddGrantPidFlow state;
 
