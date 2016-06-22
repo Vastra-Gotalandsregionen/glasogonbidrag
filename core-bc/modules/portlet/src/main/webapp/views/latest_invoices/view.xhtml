@@ -7,7 +7,9 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:portal="http://liferay.com/faces/portal"
         xmlns:bridge="http://liferay.com/faces/bridge"
-        xmlns:portlet="http://java.sun.com/portlet_2_0">
+        xmlns:portlet="http://java.sun.com/portlet_2_0"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
     <h:head />
 
     <h:body>
@@ -19,38 +21,29 @@
 
                 <h:form>
 
-                    <div class="box box-sidebar">
-                        <div class="box-hd">
-                            <h3 class="box-title">
-                                <h:outputText value="Senast ändrade fakturor"/>
-                            </h3>
-                        </div>
-
-                        <div class="box-bd">
-                            <ui:fragment rendered="#{not empty invoices}">
-                                <ul class="simple-list">
-                                    <ui:repeat value="#{invoices}" var="invoice">
-                                        <li>
-                                            <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
-                                                <h:outputText value="#{invoice.verificationNumber}" />
-                                            </a>
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Senast ändrade fakturor">
+                        <ui:fragment rendered="#{not empty invoices}">
+                            <ul class="simple-list">
+                                <ui:repeat value="#{invoices}" var="invoice">
+                                    <li>
+                                        <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                                            <h:outputText value="#{invoice.verificationNumber}" />
+                                        </a>
 
                                             <span>
                                                 - #{latestInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
                                             </span>
-                                        </li>
-                                    </ui:repeat>
-                                </ul>
-                            </ui:fragment>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </ui:fragment>
 
-                            <ui:fragment rendered="#{empty invoices}">
-                                <div class="alert alert-info">
-                                    Inga fakturor finns registrerade
-                                </div>
-                            </ui:fragment>
-
-                        </div>
-                    </div>
+                        <ui:fragment rendered="#{empty invoices}">
+                            <div class="alert alert-info">
+                                Inga fakturor finns registrerade
+                            </div>
+                        </ui:fragment>
+                    </gb:box>
 
                 </h:form>
 

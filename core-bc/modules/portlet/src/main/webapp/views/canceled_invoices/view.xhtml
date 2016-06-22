@@ -7,7 +7,9 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge"
         xmlns:portlet="http://java.sun.com/portlet_2_0"
-        xmlns:liferay-portlet="http://liferay.com/tld/portlet">
+        xmlns:liferay-portlet="http://liferay.com/tld/portlet"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
@@ -20,43 +22,35 @@
 
                 <h:form>
 
-                    <div class="box box-sidebar">
-                        <div class="box-hd">
-                            <h3 class="box-title">
-                                <h:outputText value="Makulerade fakturor"/>
-                            </h3>
-                        </div>
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Makulerade fakturor">
+                        <ui:fragment rendered="#{not empty invoices}">
+                            <h:dataTable styleClass="simple-table" value="#{invoices}" var="invoice">
+                                <h:column>
+                                    <f:facet name="header">Ver.nr</f:facet>
+                                    <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                                        <h:outputText value="#{invoice.verificationNumber}" />
+                                    </h:outputLink>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Leverantör</f:facet>
+                                    <h:outputText value="#{invoice.supplier.name}" />
+                                </h:column>
 
-                        <div class="box-bd">
-                            <ui:fragment rendered="#{not empty invoices}">
-                                <h:dataTable styleClass="simple-table" value="#{invoices}" var="invoice">
-                                    <h:column>
-                                        <f:facet name="header">Ver.nr</f:facet>
-                                        <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
-                                            <h:outputText value="#{invoice.verificationNumber}" />
-                                        </h:outputLink>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">Leverantör</f:facet>
-                                        <h:outputText value="#{invoice.supplier.name}" />
-                                    </h:column>
-
-                                    <h:column>
-                                        <f:facet name="header">Belopp</f:facet>
-                                        <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                             locale="#{canceledInvoicesViewBackingBean.locale}" />
-                                        </h:outputText>
-                                    </h:column>
-                                </h:dataTable>
-                            </ui:fragment>
-                            <ui:fragment rendered="#{empty invoices}">
-                                <div class="alert alert-info">
-                                    Det finns inga makulerade fakturor.
-                                </div>
-                            </ui:fragment>
-                        </div>
-                    </div>
+                                <h:column>
+                                    <f:facet name="header">Belopp</f:facet>
+                                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2"
+                                                         locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                    </h:outputText>
+                                </h:column>
+                            </h:dataTable>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty invoices}">
+                            <div class="alert alert-info">
+                                Det finns inga makulerade fakturor.
+                            </div>
+                        </ui:fragment>
+                    </gb:box>
 
                 </h:form>
 

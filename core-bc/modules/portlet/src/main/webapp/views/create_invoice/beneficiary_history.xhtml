@@ -5,89 +5,79 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
     <h:body>
 
-        <div class="box box-sidebar">
+        <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Historik Bidragstagare">
+            <ui:fragment rendered="#{empty createInvoiceAddGrantBackingBean.beneficiary}">
+                <div class="alert alert-info">
+                    Ingen bidragstagare vald ännu.
+                </div>
+            </ui:fragment>
 
-            <div class="box-hd">
-                <h3 class="box-title">
-                    <h:outputText value="Historik Bidragstagare" />
-                </h3>
-            </div>
+            <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
+                <div class="alert alert-info">
+                    Bidragstagaren har inga registrerade bidrag sedan tidigare.
+                </div>
+            </ui:fragment>
 
-            <div class="box-bd">
+            <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
 
-                <ui:fragment rendered="#{empty createInvoiceAddGrantBackingBean.beneficiary}">
-                    <div class="alert alert-info">
-                        Ingen bidragstagare vald ännu.
-                    </div>
-                </ui:fragment>
+                <h:dataTable rendered="true" var="grant" value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" styleClass="simple-table" columnClasses="none, number, none, none">
 
-                <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
-                    <div class="alert alert-info">
-                        Bidragstagaren har inga registrerade bidrag sedan tidigare.
-                    </div>
-                </ui:fragment>
+                    <!-- Todo: ver.nr should be fetched from invoice -->
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ver.nr." />
+                        </f:facet>
+                        <h:link value="#{grant.invoice.invoiceNumber}" outcome="view_invoice" target="_BLANK">
+                            <f:param name="invoiceId" value="#{grant.invoice.id}" />
+                        </h:link>
+                    </h:column>
 
-                <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
+                    <!-- Todo: perhaps math should be done before view. -->
+                    <h:column headerClass="number">
+                        <f:facet name="header">
+                            <h:outputText value="Belopp" />
+                        </f:facet>
+                        <h:outputText value="#{(grant.amount+grant.vat)/100}">
+                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                        </h:outputText>
+                    </h:column>
 
-                    <h:dataTable rendered="true" var="grant" value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" styleClass="simple-table" columnClasses="none, number, none, none">
-
-                        <!-- Todo: ver.nr should be fetched from invoice -->
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Ver.nr." />
-                            </f:facet>
-                            <h:link value="#{grant.invoice.invoiceNumber}" outcome="view_invoice" target="_BLANK">
-                                <f:param name="invoiceId" value="#{grant.invoice.id}" />
-                            </h:link>
-                        </h:column>
-
-                        <!-- Todo: perhaps math should be done before view. -->
-                        <h:column headerClass="number">
-                            <f:facet name="header">
-                                <h:outputText value="Belopp" />
-                            </f:facet>
-                            <h:outputText value="#{(grant.amount+grant.vat)/100}">
-                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Datum" />
+                        </f:facet>
+                        <div>
+                            <h:outputText value="#{grant.deliveryDate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
                             </h:outputText>
-                        </h:column>
+                        </div>
+                        <div>
+                            <h:outputText value="#{grant.beneficiary.prescription.date}">
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                            </h:outputText>
+                        </div>
+                    </h:column>
 
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Datum" />
-                            </f:facet>
-                            <div>
-                                <h:outputText value="#{grant.deliveryDate}">
-                                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                                </h:outputText>
-                            </div>
-                            <div>
-                                <h:outputText value="#{grant.beneficiary.prescription.date}">
-                                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                                </h:outputText>
-                            </div>
-                        </h:column>
+                    <!-- Todo: status should be fetched from invoice. -->
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Status" />
+                        </f:facet>
+                        <h:outputText value="Bet" />
+                    </h:column>
 
-                        <!-- Todo: status should be fetched from invoice. -->
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Status" />
-                            </f:facet>
-                            <h:outputText value="Bet" />
-                        </h:column>
+                </h:dataTable>
+            </ui:fragment>
 
-
-                    </h:dataTable>
-
-                </ui:fragment>
-
-            </div>
-        </div>
+        </gb:box>
 
     </h:body>
 

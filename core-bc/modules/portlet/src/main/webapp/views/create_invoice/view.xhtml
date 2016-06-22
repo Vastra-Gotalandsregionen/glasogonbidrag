@@ -5,7 +5,9 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
@@ -21,8 +23,7 @@
 
                 <h:form id="addInvoiceForm" pt:data-focus="true">
 
-                    <div class="box">
-
+                    <gb:box collapsible="false" collapsed="false" styleClass="" title="">
                         <div class="field-row field-row-2">
                             <div class="field-element inline">
                                 <h:outputLabel for="verificationNumber" value="Verifikationsnr:" />
@@ -62,8 +63,8 @@
                             <h:commandButton id="cancelButton" value="Avbryt" styleClass="cancel"
                                              action="#{createInvoiceViewBackingBean.cancel}" />
                         </div>
+                    </gb:box>
 
-                    </div>
                 </h:form>
 
             </div>

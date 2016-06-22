@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+
+
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:bridge="http://liferay.com/faces/bridge"
+      xmlns:portlet="http://java.sun.com/portlet_2_0"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+<cc:interface>
+    <cc:attribute name="collapsible" default="false" required="false" type="java.lang.Boolean" />
+    <cc:attribute name="collapsed" default="false" required="false" type="java.lang.Boolean" />
+    <cc:attribute name="styleClass" />
+    <cc:attribute name="title" />
+</cc:interface>
+
+<cc:implementation>
+
+    <c:set var="collapsible" value="#{cc.attrs.collapsible}" />
+    <c:set var="collapsed" value="#{cc.attrs.collapsed}" />
+    <c:set var="styleClass" value="#{cc.attrs.styleClass}" />
+    <c:set var="title" value="#{cc.attrs.title}" />
+
+    <div class="box #{styleClass} #{collapsible ? 'js-box-collapsible' : ''}  #{collapsed ? 'box-collapsed' : ''} ">
+
+        <ui:fragment rendered="#{not empty title}">
+            <div class="box-hd">
+                <h3 class="box-title">
+                    <h:outputText value="#{title}" />
+                </h3>
+            </div>
+        </ui:fragment>
+
+        <div class="box-bd">
+            <cc:insertChildren />
+        </div>
+
+    </div>
+
+</cc:implementation>
+
+</html>

@@ -5,7 +5,9 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
 
     <h:head />
@@ -15,68 +17,56 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
 
         <h:panelGroup id="invoiceMeta" layout="block">
-            <ui:fragment rendered="#{true}">
-                <div class="box box-sidebar box-collapsed js-box-collapsible">
 
-                    <div class="box-hd">
-                        <h3 class="box-title">
-                            <h:outputText value="Fakturainformation" />
-                        </h3>
-                    </div>
+            <gb:box collapsible="true" collapsed="true" styleClass="box-sidebar" title="Fakturainformation">
+                <table class="simple-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <h:outputText value="Post" />
+                        </th>
+                        <th>
+                            <h:outputText value="Värde" />
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <h:outputText value="Verifikationsnummer" />
+                        </td>
+                        <td>
+                            <h:outputText value="#{invoice.verificationNumber}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputText value="Leverantör" />
+                        </td>
+                        <td>
+                            <h:outputText value="#{invoice.supplier.name}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputText value="Lev. fakturanr." />
+                        </td>
+                        <td>
+                            <h:outputText value="#{invoice.invoiceNumber}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputText value="Status" />
+                        </td>
+                        <td>
+                            <h:outputText value="#{invoice.status}" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </gb:box>
 
-
-                    <div class="box-bd">
-                        <table class="simple-table">
-                            <thead>
-                            <tr>
-                                <th>
-                                    <h:outputText value="Post" />
-                                </th>
-                                <th>
-                                    <h:outputText value="Värde" />
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h:outputText value="Verifikationsnummer" />
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{invoice.verificationNumber}" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h:outputText value="Leverantör" />
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{invoice.supplier.name}" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h:outputText value="Lev. fakturanr." />
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{invoice.invoiceNumber}" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h:outputText value="Status" />
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{invoice.status}" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-            </ui:fragment>
         </h:panelGroup>
 
     </h:body>

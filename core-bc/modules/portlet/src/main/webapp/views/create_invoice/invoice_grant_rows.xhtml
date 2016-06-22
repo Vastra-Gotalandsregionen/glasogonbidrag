@@ -5,7 +5,9 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
 
     <h:head />
@@ -15,65 +17,53 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
-            <div class="box box-sidebar box-collapsed_ js-box-collapsible">
 
-                <div class="box-hd">
-                    <h3 class="box-title">
-                        <h:outputText value="Registrerade bidrag" />
-                    </h3>
-                </div>
+            <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Registrerade bidrag">
+                <ui:fragment rendered="#{not empty invoice.grants}">
+                    <table class="simple-table">
+                        <!--
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h:outputText value="Bidragstagare" />
+                                </th>
+                                <th class="number">
+                                    <h:outputText value="Inkl. moms" />
+                                </th>
+                                <th>
+                                    <span class="box-edit-switch box-edit-switch-off"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        -->
+                        <tbody>
+                        <ui:repeat value="#{invoice.grants}" var="grant">
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{grant.beneficiary.identification}" />
+                                </td>
+                                <td class="number">
+                                    <h:outputText value="#{grant.amountIncludingVatAsKrona}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
+                                        <f:param name="invoiceId" value="${invoice.id}" />
+                                        <f:param name="grantId" value="${grant.id}" />
+                                        <span>Redigera</span>
+                                    </h:commandLink>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </ui:fragment>
 
-
-                <div class="box-bd">
-                    
-                    <ui:fragment rendered="#{not empty invoice.grants}">
-                        <table class="simple-table">
-                            <!--
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <h:outputText value="Bidragstagare" />
-                                    </th>
-                                    <th class="number">
-                                        <h:outputText value="Inkl. moms" />
-                                    </th>
-                                    <th>
-                                        <span class="box-edit-switch box-edit-switch-off"></span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            -->
-                            <tbody>
-                                <ui:repeat value="#{invoice.grants}" var="grant">
-                                    <tr>
-                                        <td>
-                                            <h:outputText value="#{grant.beneficiary.identification}" />
-                                        </td>
-                                        <td class="number">
-                                            <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                            </h:outputText>
-                                        </td>
-                                        <td>
-                                            <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
-                                                <f:param name="invoiceId" value="${invoice.id}" />
-                                                <f:param name="grantId" value="${grant.id}" />
-                                                <span>Redigera</span>
-                                            </h:commandLink>
-                                       </td>
-                                    </tr>
-                                </ui:repeat>
-                            </tbody>
-                        </table>
-                    </ui:fragment>
-
-                    <ui:fragment rendered="#{empty invoice.grants}">
-                        <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
-                    </ui:fragment>
-
-                </div>
-
-            </div>
+                <ui:fragment rendered="#{empty invoice.grants}">
+                    <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
+                </ui:fragment>
+            </gb:box>
 
         </h:panelGroup>
 
