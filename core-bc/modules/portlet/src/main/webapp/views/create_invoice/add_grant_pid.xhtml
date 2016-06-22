@@ -35,20 +35,18 @@
         <!-- Insert beneficiary's identification number -->
         <ui:fragment rendered="#{flow.showPersonalNumberInput and (invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() ne 0)}">
             <div class="grant-section">
-                <div class="field-row">
-                    <div class="field-element inline">
-                        <h:outputLabel for="personalNumber" value="Personnummer:" />
-                        <h:inputText id="personalNumber"
-                                     binding="#{personalNumber}"
-                                     styleClass="js-input-mask js-input-mask-personnumber #{personalNumber.isValid() ? '' : 'error'}"
-                                     value="#{createInvoiceAddGrantBackingBean.number}"
-                                     required="true"
-                                     requiredMessage="Du måste fylla i ett personnummer"
-                                     pt:placeholder="Skriv in personnummer..." pt:autofocus="true"
-                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:personalNumberSubmit"
-                        />
-                    </div>
-                </div>
+
+                <gb:grantSectionInput id="personalNumber"
+                                      label="Personnummer"
+                                      value="#{createInvoiceAddGrantBackingBean.number}"
+                                      valueType="personNumber"
+                                      autofocus="true"
+                                      placeholder="ÅÅMMDD-XXXX"
+                                      required="true"
+                                      requiredMessage="Du måste fylla i ett personnummer"
+                                      triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:personalNumberSubmit"
+                />
+
                 <div class="button-row">
                     <h:commandLink id="personalNumberSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
@@ -92,16 +90,30 @@
         <ui:fragment rendered="#{flow.showDeliveryDateInput}">
             <div class="grant-section">
 
+                <gb:grantSectionInput id="deliveryDate"
+                                      label="Kvitteringsdatum"
+                                      value="#{createInvoiceAddGrantBackingBean.deliveryDate}"
+                                      valueType="date"
+                                      autofocus="true"
+                                      placeholder="ÅÅÅÅ-MM-DD"
+                                      required="true"
+                                      requiredMessage="Du måste fylla i ett datum"
+                                      triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:deliveryDateSubmit"
+                />
+
+                <!--
                 <div class="field-row">
                     <div class="field-element inline">
                         <h:outputLabel for="deliveryDate" value="Kvitteringsdatum:" />
                         <h:inputText id="deliveryDate" styleClass="js-input-mask js-input-mask-date"
                                      value="#{createInvoiceAddGrantBackingBean.deliveryDate}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD" pt:autofocus="true"
+                                     pt:placeholder="ÅÅÅÅ-MM-DD"
+                                     pt:autofocus="true"
                                      pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:deliveryDateSubmit"
                         />
                     </div>
                 </div>
+                -->
                 <div class="button-row">
                     <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
@@ -180,6 +192,19 @@
         <!-- Grant Type 0-15 or 0-19 -->
         <ui:fragment rendered="#{flow.showGrantTypeAgeSection and flow.showPrescriptionDateInput}">
             <div class="grant-section">
+
+                <gb:grantSectionInput id="prescriptionDate"
+                                      label="Receptdatum"
+                                      value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                      valueType="date"
+                                      autofocus="true"
+                                      placeholder="ÅÅÅÅ-MM-DD"
+                                      required="true"
+                                      requiredMessage="Du måste fylla i ett datum"
+                                      triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:prescriptionDateSubmit"
+                />
+
+                <!--
                 <div class="field-row">
                     <div class="field-element inline">
                         <h:outputLabel for="prescriptionDate" value="Receptdatum:" />
@@ -191,6 +216,7 @@
 
                     </div>
                 </div>
+                -->
                 <div class="button-row">
                     <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
@@ -462,6 +488,19 @@
         <!-- Input amount -->
         <ui:fragment rendered="#{flow.showAmountInput}">
             <div class="grant-section">
+
+                <gb:grantSectionInput id="amountWithVat"
+                                      label="Summa"
+                                      value="#{createInvoiceAddGrantBackingBean.amountWithVat}"
+                                      valueType="amount"
+                                      autofocus="true"
+                                      placeholder="Skriv in bidragssumma..."
+                                      required="true"
+                                      requiredMessage="Du måste fylla i en summa"
+                                      triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:amountWithVatSubmit"
+                />
+
+                <!--
                 <div class="field-row">
                     <div class="field-element inline">
                         <h:outputLabel for="amountWithVat" value="Summa:" />
@@ -473,6 +512,8 @@
                         />
                     </div>
                 </div>
+                -->
+
                 <div class="button-row">
 
                     <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara"

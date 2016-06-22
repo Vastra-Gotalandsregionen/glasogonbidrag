@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+
+
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:bridge="http://liferay.com/faces/bridge"
+      xmlns:portlet="http://java.sun.com/portlet_2_0"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+<cc:interface>
+    <cc:attribute name="id" />
+    <cc:attribute name="inputStyleClass" />
+    <cc:attribute name="label" />
+    <cc:attribute name="value" />
+    <cc:attribute name="valueType" />
+    <cc:attribute name="required"  default="false" required="false" type="java.lang.Boolean" />
+    <cc:attribute name="requiredMessage" />
+    <cc:attribute name="placeholder" />
+    <cc:attribute name="autofocus" default="false" required="false" type="java.lang.Boolean" />
+    <cc:attribute name="triggerOnEnter" />
+</cc:interface>
+
+<cc:implementation>
+    <c:set var="id" value="#{cc.attrs.id}" />
+    <c:set var="inputStyleClass" value="#{cc.attrs.inputStyleClass}" />
+    <c:set var="label" value="#{cc.attrs.label}" />
+    <c:set var="value" value="#{cc.attrs.value}" />
+    <c:set var="valueType" value="#{cc.attrs.valueType}" />
+    <c:set var="required" value="#{cc.attrs.required}" />
+    <c:set var="requiredMessage" value="#{cc.attrs.requiredMessage}" />
+    <c:set var="placeholder" value="#{cc.attrs.placeholder}" />
+    <c:set var="autofocus" value="#{cc.attrs.autofocus}" />
+    <c:set var="triggerOnEnter" value="#{cc.attrs.triggerOnEnter}"  />
+
+    <div class="field-row">
+        <div class="field-element inline">
+            <h:outputLabel for="#{id}" value="#{label}" />
+            <h:inputText id="#{id}"
+                         styleClass="#{valueType eq 'personNumber' ? 'js-input-mask js-input-mask-personnumber' : ''} #{valueType eq 'date' ? 'js-input-mask js-input-mask-date' : ''} #{inputStyleClass}"
+                         value="#{value}"
+                         required="#{required}"
+                         requiredMessage="#{requiredMessage}"
+                         pt:placeholder="#{placeholder}"
+                         pt:autofocus="#{autofocus}"
+                         pt:data-triggeronenter="#{triggerOnEnter}"
+            />
+        </div>
+    </div>
+
+</cc:implementation>
+
+</html>
