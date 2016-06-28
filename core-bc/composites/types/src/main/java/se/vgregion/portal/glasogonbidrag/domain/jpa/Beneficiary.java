@@ -78,13 +78,13 @@ public class Beneficiary {
     @JoinColumn(name = "identification_id")
     private Identification identification;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prescription_id")
-    private Prescription prescription;
+//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "prescription_id")
+//    private Prescription prescription;
 
     public Beneficiary() {
         grants = new ArrayList<>();
-        prescription = new Prescription();
+//        prescription = new Prescription();
     }
 
     public Long getId() {
@@ -143,13 +143,13 @@ public class Beneficiary {
         this.identification = identification;
     }
 
-    public Prescription getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
+//    public Prescription getPrescription() {
+//        return prescription;
+//    }
+//
+//    public void setPrescription(Prescription prescription) {
+//        this.prescription = prescription;
+//    }
 
     @Override
     public boolean equals(Object o) {

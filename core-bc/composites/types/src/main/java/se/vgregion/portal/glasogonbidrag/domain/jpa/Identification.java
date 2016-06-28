@@ -21,6 +21,10 @@ import javax.persistence.Table;
                 query = "SELECT i FROM PersonalIdentification i " +
                         "WHERE i.number = :number"),
         @NamedQuery(
+                name = "glasogonbidrag.identification.findByReserveNumber",
+                query = "SELECT i FROM ReserveIdentification i " +
+                        "WHERE i.number = :number"),
+        @NamedQuery(
                 name = "glasogonbidrag.identification.findByLMANumber",
                 query = "SELECT i FROM LMAIdentification i " +
                         "WHERE i.number = :number")
