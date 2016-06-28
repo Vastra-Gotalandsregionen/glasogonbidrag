@@ -52,7 +52,7 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
-                newImportHandler(getData()).validate(action);
+                newImportHandler(getData()).validateId(action);
                 return new IdState(getData(), action.getRow()[0]);
             }
 
@@ -80,7 +80,10 @@ public class ImportStateFactory {
         public ImportState activate(ImportAction action) {
             if (action.is(TEXT)) {
                 newImportHandler(getData()).document(id, action);
-                newImportHandler(getData()).grant(action);
+
+                if (newImportHandler(getData()).validateGrant(action)) {
+                    newImportHandler(getData()).grant(action);
+                }
 
                 return new NameAndGrantState(getData());
             }
@@ -118,7 +121,7 @@ public class ImportStateFactory {
         @Override
         public ImportState activate(ImportAction action) {
             if (action.is(ID)) {
-                newImportHandler(getData()).validate(action);
+                newImportHandler(getData()).validateId(action);
                 return new IdState(getData(), action.getRow()[0]);
             }
 
@@ -127,7 +130,11 @@ public class ImportStateFactory {
             }
 
             if (!DocumentUtil.emptyRow(action.getRow())) {
-                newImportHandler(getData()).grant(action);
+                boolean shouldSave =
+                        newImportHandler(getData()).validateGrant(action);
+                if (shouldSave) {
+                    newImportHandler(getData()).grant(action);
+                }
             }
 
             return this;

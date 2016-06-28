@@ -1,6 +1,10 @@
 package se.vgregion.glasogonbidrag.writers;
 
+import se.vgregion.glasogonbidrag.library.StorableRepository;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
 
 import javax.persistence.EntityManager;
@@ -29,7 +33,7 @@ public class DatabaseWriter {
         this.password = password;
     }
 
-    public void run() {
+    public void run(StorableRepository repository) {
         Map<String, Object> override = new HashMap<>();
 
         // the fully qualified class name of the driver class
@@ -44,7 +48,7 @@ public class DatabaseWriter {
         override.put("javax.persistence.jdbc.password", password);
 
         // Don't re-create or modify the schema.
-        override.put("hibernate.hbm2ddl.auto", "none");
+        override.put("hibernate.hbm2ddl.auto", "update");
 
 
         EntityManagerFactory factory =
@@ -53,17 +57,28 @@ public class DatabaseWriter {
 
         EntityManager em = factory.createEntityManager();
 
-
-
-        Identification id = new PersonalIdentification();
-        ((PersonalIdentification)id).setNumber("880418-4714");
-
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
             tx.begin();
 
-            em.persist(id);
+            em.persist(repository.getMigration());
+
+            for (Identification i : repository.getIdentifications()) {
+                em.persist(i);
+            }
+
+            for (Beneficiary b : repository.getBeneficiaries()) {
+                em.persist(b);
+            }
+
+            for (Grant g : repository.getGrants()) {
+                em.persist(g);
+            }
+
+            for (Invoice i : repository.getInvoices()) {
+                em.persist(i);
+            }
 
             tx.commit();
         } catch (RuntimeException e) {

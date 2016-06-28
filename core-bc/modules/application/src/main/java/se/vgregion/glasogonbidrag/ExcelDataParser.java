@@ -25,6 +25,11 @@ import java.util.Map;
 
 import static se.vgregion.glasogonbidrag.parser.ImportActionEvent.*;
 
+/**
+ * Parser of data in the excel files.
+ *
+ * @author Martin Lind - Monator Technologies AB
+ */
 class ExcelDataParser {
 
     private String password;
@@ -47,7 +52,6 @@ class ExcelDataParser {
 
     // Getters for data
 
-
     public File getFile() {
         return file;
     }
@@ -56,7 +60,7 @@ class ExcelDataParser {
         return data;
     }
 
-    void run() {
+    void parse() {
         Workbook wb;
 
         try {

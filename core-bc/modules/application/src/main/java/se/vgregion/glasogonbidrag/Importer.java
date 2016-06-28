@@ -2,11 +2,14 @@ package se.vgregion.glasogonbidrag;
 
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.StringArrayOptionHandler;
-import se.vgregion.glasogonbidrag.model.ImportDataLibrary;
+import se.vgregion.glasogonbidrag.library.StorableRepositoryImpl;
 import se.vgregion.glasogonbidrag.model.ImportError;
 import se.vgregion.glasogonbidrag.parser.ParseOutputData;
+import se.vgregion.glasogonbidrag.writers.DatabaseWriter;
+import se.vgregion.glasogonbidrag.writers.FileWriter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,22 +23,41 @@ public class Importer {
     @Option(name = "-password", usage = "The file is password protected.")
     private String password;
     @Option(name = "-file", handler = StringArrayOptionHandler.class,
-            usage = "The file(s) that should be imported.")
+            usage = "The file(s) that should be imported.",
+            required = true)
     private List<String> files;
+    @Option(name = "-silent",
+            usage = "Set this if you want to suppress all output to " +
+                    "stderr and stdout.")
+    private boolean silent;
 
     void run() {
-        ImportDataLibrary library = new ImportDataLibrary();
+        StorableRepositoryImpl repo = new StorableRepositoryImpl();
+
+        if (!silent) {
+            System.out.println("Starting");
+        }
 
         for (File file : getFiles()) {
             ExcelDataParser parser =
                     new ExcelDataParser(file, password);
-            parser.run();
+            parser.parse();
 
             Map<String, ParseOutputData> data = parser.getData();
-            library.catalog(data);
+            repo.catalog(data);
         }
 
-        handleErrors(library.getErrors());
+        DatabaseWriter db = new DatabaseWriter();
+        db.run(repo);
+
+        FileWriter writer = new FileWriter("import.log");
+        try {
+            writer.logErrors(repo);
+        } catch (IOException e) {
+            if (!silent) {
+                System.err.println("Couldn't write log. " + e.getMessage());
+            }
+        }
     }
 
     public String getPassword() {
@@ -64,31 +86,11 @@ public class Importer {
         this.files = files;
     }
 
-    private void handleErrors(List<ImportError> errors) {
-        if (errors.isEmpty()) {
-            return;
-        }
+    public boolean isSilent() {
+        return silent;
+    }
 
-        Collections.sort(errors, new Comparator<ImportError>() {
-            @Override
-            public int compare(ImportError o1, ImportError o2) {
-                int file = o1.getFile().compareTo(o2.getFile());
-                int sheet = o1.getSheet().compareTo(o2.getSheet());
-                int line = Integer.compare(o1.getLine(), o2.getLine());
-
-                return file * 100 + sheet * 10 + line;
-            }
-        });
-
-        System.out.println(String.format("\nFound %d errors in one or more files when " +
-                "importing documents:", errors.size()));
-        for (ImportError error : errors) {
-            System.err.println(String.format(
-                    "Parsing error in %s on sheet \"%s\" on the line %d: %s",
-                    error.getFile() + 1,
-                    error.getSheet(),
-                    error.getLine(),
-                    error.getMessage()));
-        }
+    public void setSilent(boolean silent) {
+        this.silent = silent;
     }
 }

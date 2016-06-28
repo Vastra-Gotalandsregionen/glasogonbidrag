@@ -3,6 +3,7 @@ package se.vgregion.glasogonbidrag.util;
 import se.vgregion.glasogonbidrag.model.ImportDocument;
 import se.vgregion.glasogonbidrag.model.ImportGrant;
 
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,9 +70,14 @@ public final class DocumentUtil {
                                      String amount,
                                      String invoiceNumber,
                                      String verificationNumber) {
+        String extractPrescriptionDate = extractDate(prescriptionDate);
+        String extractDeliveryDate = extractDate(deliveryDate);
+        String extractAmount = extractAmount(amount);
+        String verification = removeScientificNotation(verificationNumber);
+
         return new ImportGrant(
-                prescriptionDate, deliveryDate,
-                amount, invoiceNumber, verificationNumber);
+                extractPrescriptionDate, extractDeliveryDate,
+                extractAmount, invoiceNumber, verification);
     }
 
     /**
@@ -104,6 +110,56 @@ public final class DocumentUtil {
     }
 
     /**
+     * Extract the date from date fields, this field can by accident end with
+     * . followed by extra characters
+     *
+     * @param date the date to extract
+     * @return a number extracted from the string.
+     */
+    private static String extractDate(String date) {
+        Pattern pattern = Pattern.compile("(?<date>[0-9]+).?[0-9]*");
+        Matcher matcher = pattern.matcher(date.trim());
+
+        if (matcher.matches()) {
+            return matcher.group("date");
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Extract the amount from the amount field, this field can end with "kr"
+     * or ":-" or any other currency symbol. The only value that should
+     * be cared for is the numbers.
+     *
+     * @param amount the amount to extract
+     * @return a number extracted from the string.
+     */
+    private static String extractAmount(String amount) {
+        Pattern pattern = Pattern.compile(
+                "(?<amount>[0-9]+\\.?[0-9]*)[a-zA-Z :-]*");
+        Matcher matcher = pattern.matcher(amount.trim());
+
+        if (matcher.matches()) {
+            return matcher.group("amount");
+        } else {
+            return "";
+        }
+    }
+
+    private static String removeScientificNotation(String number) {
+        String result = number;
+        if (number.contains(".")
+                && (number.contains("E") || number.contains("e"))) {
+            try {
+                result = new BigDecimal(number).toPlainString();
+            } catch (NumberFormatException ignored) { }
+        }
+
+        return result;
+    }
+
+    /**
      * The comment (column 7) in an row may contain a text with the
      * verification of the replacement invoice, this method will extract
      * this verification number.
@@ -119,9 +175,9 @@ public final class DocumentUtil {
 
         if (matcher.matches()) {
             return matcher.group("ver");
+        } else {
+            return "";
         }
-
-        return "";
     }
 
     /**
