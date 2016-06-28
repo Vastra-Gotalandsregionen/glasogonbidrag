@@ -10,14 +10,6 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterAgeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantAmountAfterOtherState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantDeliveryDateState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantGrantTypeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherDateState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantOtherTypeState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantPersonalNumberState;
-import se.vgregion.glasogonbidrag.flow.state.AddGrantPrescriptionDateState;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.viewobject.GrantTypeOtherVO;
@@ -25,7 +17,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
@@ -328,7 +320,8 @@ public class CreateInvoiceAddGrantBackingBean {
             return;
         }
 
-        beneficiary.getPrescription().setDate(date);
+//        beneficiary.getPrescription().setDate(date);
+        grant.setPrescriptionDate(date);
 
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {

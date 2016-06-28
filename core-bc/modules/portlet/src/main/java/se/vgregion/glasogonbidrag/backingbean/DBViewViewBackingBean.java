@@ -13,8 +13,8 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.LMAIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
@@ -207,16 +207,18 @@ public class DBViewViewBackingBean {
         g1.setVat(2500);
         g1.setBeneficiary(b1);
         g1.setDeliveryDate(cal.getTime());
+        g1.setPrescriptionDate(cal.getTime()); //TODO: Make this work
 
-        b1.getPrescription().setDate(cal.getTime());
+//        b1.getPrescription().setDate(cal.getTime());
 
         Grant g2 = new Grant();
         g2.setAmount(20000);
         g2.setVat(5000);
         g2.setBeneficiary(b2);
         g2.setDeliveryDate(cal.getTime());
+        g2.setPrescriptionDate(cal.getTime()); //TODO: Make this work
 
-        b2.getPrescription().setDate(cal.getTime());
+//        b2.getPrescription().setDate(cal.getTime());
 
         List<Grant> grants = new ArrayList<>();
         grants.add(g1);
@@ -274,8 +276,9 @@ public class DBViewViewBackingBean {
         grant.setVat(7500);
         grant.setBeneficiary(b1);
         grant.setDeliveryDate(cal.getTime());
+        grant.setPrescriptionDate(cal.getTime()); //TODO: Make this work
 
-        b1.getPrescription().setDate(cal.getTime());
+//        b1.getPrescription().setDate(cal.getTime());
 
         try {
             beneficiaryService.update(b1);
@@ -320,8 +323,9 @@ public class DBViewViewBackingBean {
         grant.setVat(15000);
         grant.setBeneficiary(b1);
         grant.setDeliveryDate(cal.getTime());
+        grant.setPrescriptionDate(cal.getTime()); //TODO: Make this work
 
-        b1.getPrescription().setDate(cal.getTime());
+//        b1.getPrescription().setDate(cal.getTime());
 
         try {
             beneficiaryService.update(b1);
