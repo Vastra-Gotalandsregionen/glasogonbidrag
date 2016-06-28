@@ -145,6 +145,10 @@ public class Invoice {
     @JoinColumn(name = "adjustment")
     private GrantAdjustment adjustment;
 
+    @ManyToOne
+    @JoinColumn(name = "migration")
+    private Migration migration;
+
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
@@ -266,6 +270,14 @@ public class Invoice {
 
     public void setAdjustment(GrantAdjustment adjustment) {
         this.adjustment = adjustment;
+    }
+
+    public Migration getMigration() {
+        return migration;
+    }
+
+    public void setMigration(Migration migration) {
+        this.migration = migration;
     }
 
     public InvoiceStatus getStatus() {

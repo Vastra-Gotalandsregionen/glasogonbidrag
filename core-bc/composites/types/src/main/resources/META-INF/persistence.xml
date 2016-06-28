@@ -4,14 +4,16 @@
              version="2.0">
 
     <persistence-unit name="glasogonbidrag">
+
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Grant</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Identification</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.LMAIdentification</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.LMAIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.ReserveIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseAphakia</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseKeratoconus</class>
@@ -21,7 +23,7 @@
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
-    </properties>
+        </properties>
     </persistence-unit>
 
 </persistence>

@@ -54,6 +54,7 @@ Template version: 1.5
         <module>composites/svc</module>
         <module>modules/portlet</module>
         <module>modules/intsvc</module>
+        <module>modules/application</module>
     </modules>
 
 </project>

@@ -70,6 +70,10 @@ public class Grant {
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
 
+    @Column(name = "prescription_date")
+    @Temporal(TemporalType.DATE)
+    private Date prescriptionDate;
+
     private long vat;
 
     private long amount;
@@ -143,6 +147,14 @@ public class Grant {
 
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
+    }
+
+    public Date getPrescriptionDate() {
+        return prescriptionDate;
+    }
+
+    public void setPrescriptionDate(Date prescriptionDate) {
+        this.prescriptionDate = prescriptionDate;
     }
 
     public long getVat() {

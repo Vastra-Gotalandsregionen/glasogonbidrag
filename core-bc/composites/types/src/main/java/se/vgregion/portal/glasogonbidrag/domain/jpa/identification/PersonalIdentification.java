@@ -1,4 +1,6 @@
-package se.vgregion.portal.glasogonbidrag.domain.jpa;
+package se.vgregion.portal.glasogonbidrag.domain.jpa.identification;
+
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -6,12 +8,21 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@DiscriminatorValue("l")
-@Table(name = "vgr_glasogonbidrag_lma_identification")
-public class LMAIdentification extends Identification {
+@DiscriminatorValue("p")
+@Table(name = "vgr_glasogonbidrag_personal_identification")
+public class PersonalIdentification extends Identification {
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "pid_number", unique = true, nullable = false)
     private String number;
+
+    // Default constructor
+    public PersonalIdentification() {
+
+    }
+
+    public PersonalIdentification(String number) {
+        this.number = number;
+    }
 
     public String getNumber() {
         return number;
@@ -32,7 +43,7 @@ public class LMAIdentification extends Identification {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        LMAIdentification that = (LMAIdentification) o;
+        PersonalIdentification that = (PersonalIdentification) o;
 
         return number != null ? number.equals(that.number) : that.number == null;
 

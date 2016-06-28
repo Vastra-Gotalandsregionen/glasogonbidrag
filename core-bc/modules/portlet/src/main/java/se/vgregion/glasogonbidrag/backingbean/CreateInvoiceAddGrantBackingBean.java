@@ -20,7 +20,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.PersonalIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
@@ -361,7 +361,8 @@ public class CreateInvoiceAddGrantBackingBean {
             return;
         }
 
-        beneficiary.getPrescription().setDate(date);
+//        beneficiary.getPrescription().setDate(date);
+        grant.setPrescriptionDate(date);
 
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
