@@ -9,18 +9,18 @@ import javax.persistence.Table;
 
 @Entity
 @DiscriminatorValue("p")
-@Table(name = "vgr_glasogonbidrag_personal_identification")
-public class PersonalIdentification extends Identification {
+@Table(name = "vgr_glasogonbidrag_identification_personal")
+public class Personal extends Identification {
 
     @Column(name = "pid_number", unique = true, nullable = false)
     private String number;
 
     // Default constructor
-    public PersonalIdentification() {
+    public Personal() {
 
     }
 
-    public PersonalIdentification(String number) {
+    public Personal(String number) {
         this.number = number;
     }
 
@@ -38,12 +38,17 @@ public class PersonalIdentification extends Identification {
     }
 
     @Override
+    public Identification.Type getType() {
+        return Type.PERSONAL;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        PersonalIdentification that = (PersonalIdentification) o;
+        Personal that = (Personal) o;
 
         return number != null ? number.equals(that.number) : that.number == null;
 

@@ -5,10 +5,9 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.LMAIdentification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Migration;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.ReserveIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -44,9 +43,9 @@ public final class TypesUtil {
 
         Identification id;
         if (type == IdentificationType.VALID) {
-            id = new PersonalIdentification(number);
+            id = new Personal(number);
         } else {
-            id = new ReserveIdentification(number);
+            id = new Reserve(number);
         }
 
         return id;

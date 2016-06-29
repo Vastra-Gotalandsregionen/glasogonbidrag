@@ -9,8 +9,8 @@ import javax.persistence.Table;
 
 @Entity
 @DiscriminatorValue("l")
-@Table(name = "vgr_glasogonbidrag_lma_identification")
-public class LMAIdentification extends Identification {
+@Table(name = "vgr_glasogonbidrag_identification_lma")
+public class Lma extends Identification {
 
     @Column(unique = true, nullable = false)
     private String number;
@@ -29,12 +29,17 @@ public class LMAIdentification extends Identification {
     }
 
     @Override
+    public Identification.Type getType() {
+        return Type.LMA;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        LMAIdentification that = (LMAIdentification) o;
+        Lma that = (Lma) o;
 
         return number != null ? number.equals(that.number) : that.number == null;
 

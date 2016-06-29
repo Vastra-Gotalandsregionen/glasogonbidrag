@@ -21,15 +21,15 @@ import javax.persistence.Table;
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.identification.findByPersonalNumber",
-                query = "SELECT i FROM PersonalIdentification i " +
+                query = "SELECT i FROM Personal i " +
                         "WHERE i.number = :number"),
         @NamedQuery(
                 name = "glasogonbidrag.identification.findByReserveNumber",
-                query = "SELECT i FROM ReserveIdentification i " +
+                query = "SELECT i FROM Reserve i " +
                         "WHERE i.number = :number"),
         @NamedQuery(
                 name = "glasogonbidrag.identification.findByLMANumber",
-                query = "SELECT i FROM LMAIdentification i " +
+                query = "SELECT i FROM Lma i " +
                         "WHERE i.number = :number")
 })
 public abstract class Identification {
@@ -47,6 +47,8 @@ public abstract class Identification {
     }
 
     public abstract String getString();
+
+    public abstract Type getType();
 
     @Override
     public boolean equals(Object o) {
@@ -70,4 +72,10 @@ public abstract class Identification {
         return getString();
     }
 
+    public enum Type {
+        PERSONAL,
+        RESERVE,
+        LMA,
+        OTHER
+    }
 }

@@ -12,8 +12,8 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("r")
-@Table(name = "vgr_glasogonbidrag_reserve_identification")
-public class ReserveIdentification extends Identification {
+@Table(name = "vgr_glasogonbidrag_identification_reserve")
+public class Reserve extends Identification {
 
     @Column(name = "reserve_number", unique = true, nullable = false)
     private String number;
@@ -21,11 +21,11 @@ public class ReserveIdentification extends Identification {
     /**
      * Default constructor
      */
-    public ReserveIdentification() {
+    public Reserve() {
 
     }
 
-    public ReserveIdentification(String number) {
+    public Reserve(String number) {
         this.number = number;
     }
 
@@ -40,6 +40,11 @@ public class ReserveIdentification extends Identification {
     @Override
     public String getString() {
         return getNumber();
+    }
+
+    @Override
+    public Identification.Type getType() {
+        return Type.RESERVE;
     }
 
 }

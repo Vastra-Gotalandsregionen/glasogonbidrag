@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,6 +82,9 @@ public class Grant {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "beneficiary_id")
     private Beneficiary beneficiary;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Prescription prescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "invoice_id")

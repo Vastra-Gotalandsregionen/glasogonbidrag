@@ -5,19 +5,21 @@
 
     <persistence-unit name="glasogonbidrag">
 
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Migration</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Grant</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Identification</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.LMAIdentification</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.ReserveIdentification</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseAphakia</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseKeratoconus</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseWeakEyesight</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special</class>
 
         <properties>
             <property name="hibernate.format_sql" value="true" />

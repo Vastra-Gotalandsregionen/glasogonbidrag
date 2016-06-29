@@ -22,7 +22,7 @@ import java.util.Date;
 public class Supplier {
 
     @Id
-    @Column(name = "suplier_name")
+    @Column(name = "supplier_name")
     private String name;
 
     // Liferay Related

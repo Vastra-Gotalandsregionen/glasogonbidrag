@@ -6,11 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -31,9 +34,16 @@ public class Prescription {
     @Temporal(TemporalType.DATE)
     private Date date;
     private String prescriber;
+
     @Lob
     @Column(name = "prescriber_comment")
     private String comment;
+
+    @ManyToOne
+    private Beneficiary beneficiary;
+
+    @OneToMany
+    private List<Grant> grants;
 
     public Prescription() {
     }
