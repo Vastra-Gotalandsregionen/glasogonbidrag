@@ -7,5 +7,6 @@ public enum IdentificationType {
     PERSONAL,
     RESERVE,
     LMA,
-    OTHER
+    OTHER,
+    NONE
 }
