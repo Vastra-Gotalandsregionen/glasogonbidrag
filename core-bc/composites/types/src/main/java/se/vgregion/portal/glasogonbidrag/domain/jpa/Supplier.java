@@ -28,13 +28,13 @@ public class Supplier {
     // Liferay Related
 
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
 
     @Column(name = "group_id")
-    private long groupId;
+    private Long groupId;
 
     @Column(name = "company_id")
-    private long companyId;
+    private Long companyId;
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
