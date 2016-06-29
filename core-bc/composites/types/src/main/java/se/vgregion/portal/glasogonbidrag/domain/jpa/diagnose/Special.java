@@ -37,7 +37,7 @@ public class Special extends Diagnose {
     }
 
     @Override
-    public Diagnose.Type getDiagnoseType() {
-        return Type.SPECIAL;
+    public DiagnoseType getDiagnoseType() {
+        return DiagnoseType.SPECIAL;
     }
 }

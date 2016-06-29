@@ -27,7 +27,7 @@ public class Aphakia extends Diagnose {
     }
 
     @Override
-    public Diagnose.Type getDiagnoseType() {
-        return Type.APHAKIA;
+    public DiagnoseType getDiagnoseType() {
+        return DiagnoseType.APHAKIA;
     }
 }

@@ -48,7 +48,7 @@ public abstract class Identification {
 
     public abstract String getString();
 
-    public abstract Type getType();
+    public abstract IdentificationType getType();
 
     @Override
     public boolean equals(Object o) {
@@ -70,12 +70,5 @@ public abstract class Identification {
     @Override
     public String toString() {
         return getString();
-    }
-
-    public enum Type {
-        PERSONAL,
-        RESERVE,
-        LMA,
-        OTHER
     }
 }

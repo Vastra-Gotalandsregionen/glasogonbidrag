@@ -30,17 +30,10 @@ public abstract class Diagnose {
         this.id = id;
     }
 
-    public abstract Type getDiagnoseType();
+    public abstract DiagnoseType getDiagnoseType();
 
     @Override
     public String toString() {
         return getDiagnoseType().toString();
-    }
-
-    public enum Type {
-        APHAKIA,
-        KERATOCONUS,
-        SPECIAL,
-        NONE
     }
 }

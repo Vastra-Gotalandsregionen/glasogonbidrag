@@ -1,6 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa.identification;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.IdentificationType;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -29,8 +30,8 @@ public class Lma extends Identification {
     }
 
     @Override
-    public Identification.Type getType() {
-        return Type.LMA;
+    public IdentificationType getType() {
+        return IdentificationType.LMA;
     }
 
     @Override
