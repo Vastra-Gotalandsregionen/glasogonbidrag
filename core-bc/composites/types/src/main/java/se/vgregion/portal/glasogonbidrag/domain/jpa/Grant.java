@@ -84,6 +84,7 @@ public class Grant {
     private Beneficiary beneficiary;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -183,6 +184,14 @@ public class Grant {
 
     public void setBeneficiary(Beneficiary beneficiary) {
         this.beneficiary = beneficiary;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 
     public Invoice getInvoice() {

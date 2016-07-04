@@ -78,7 +78,7 @@ public class Beneficiary {
     @JoinColumn(name = "identification_id")
     private Identification identification;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     private List<Prescription> prescriptionHistory;
 
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
