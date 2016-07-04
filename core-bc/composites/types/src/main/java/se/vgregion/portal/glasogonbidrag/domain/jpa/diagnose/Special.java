@@ -1,8 +1,8 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.DiagnoseType;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.VisualLaterality;
+import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

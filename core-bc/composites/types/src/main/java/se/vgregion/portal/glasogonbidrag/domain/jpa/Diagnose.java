@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,7 +1,7 @@
-package se.vgregion.portal.glasogonbidrag.domain.jpa;
+package se.vgregion.portal.glasogonbidrag.domain;
 
 /**
- * Created by martlin on 2016/06/29.
+ * @author Martin Lind - Monator Technologies AB
  */
 public enum IdentificationType {
     PERSONAL,

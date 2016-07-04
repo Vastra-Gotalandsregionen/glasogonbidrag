@@ -1,7 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa.identification;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;

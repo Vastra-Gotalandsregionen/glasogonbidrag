@@ -1,5 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
 import javax.persistence.CascadeType;
