@@ -29,7 +29,7 @@
     <c:set var="styleClass" value="#{cc.attrs.styleClass}" />
     <c:set var="title" value="#{cc.attrs.title}" />
 
-    <div class="box #{styleClass} #{collapsible ? 'js-box-collapsible' : ''}  #{collapsed ? 'box-collapsed' : ''} ">
+    <div class="box #{styleClass} #{collapsible ? 'js-box-collapsible' : ''}  #{collapsed ? 'box-collapsed' : 'box-expanded'} ">
 
         <ui:fragment rendered="#{not empty title}">
             <div class="box-hd">

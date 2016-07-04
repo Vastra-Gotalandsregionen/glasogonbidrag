@@ -14,6 +14,46 @@
     <h:body>
 
         <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Historik Bidragstagare">
+
+
+            <!--
+            <div class="chip js-chip-collapsible chip-collapsed">
+                <div class="chip-hd">
+                    <div class="chip-hd-item">
+                        Lorem
+                    </div>
+                    <div class="chip-hd-item">
+                        Ipsum
+                    </div>
+                    <div class="chip-hd-item">
+                        Dolarem
+                    </div>
+                </div>
+                <div class="chip-bd">
+                    <ul class="labeled-list">
+                        <li>
+                            <span class="item-label">
+                                Lorem
+                            </span>
+                            <span class="item-value">
+                                Ipsum
+                            </span>
+                        </li>
+                        <li>
+                            <span class="item-label">
+                                Dolarem
+                            </span>
+                            <span class="item-value">
+                                Consectetur adipiscing elit
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <br />
+            -->
+
             <ui:fragment rendered="#{empty createInvoiceAddGrantBackingBean.beneficiary}">
                 <div class="alert alert-info">
                     Ingen bidragstagare vald ännu.
@@ -28,53 +68,86 @@
 
             <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
 
-                <h:dataTable rendered="true" var="grant" value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" styleClass="simple-table" columnClasses="none, number, none, none">
 
-                    <!-- Todo: ver.nr should be fetched from invoice -->
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Ver.nr." />
-                        </f:facet>
-                        <h:link value="#{grant.invoice.invoiceNumber}" outcome="view_invoice" target="_BLANK">
-                            <f:param name="invoiceId" value="#{grant.invoice.id}" />
-                        </h:link>
-                    </h:column>
-
-                    <!-- Todo: perhaps math should be done before view. -->
-                    <h:column headerClass="number">
-                        <f:facet name="header">
-                            <h:outputText value="Belopp" />
-                        </f:facet>
-                        <h:outputText value="#{(grant.amount+grant.vat)/100}">
-                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                        </h:outputText>
-                    </h:column>
-
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Datum" />
-                        </f:facet>
-                        <div>
-                            <h:outputText value="#{grant.deliveryDate}">
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                            </h:outputText>
+                <div class="chip-wrap">
+                    <ui:repeat value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" var="grant">
+                        <div class="chip js-chip-collapsible chip-collapsed">
+                            <div class="chip-hd">
+                                <div class="chip-hd-item chip-hd-item-date">
+                                    <h:outputText value="#{grant.prescriptionDate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    </h:outputText>
+                                </div>
+                                <div class="chip-hd-item chip-hd-item-currency">
+                                    <h:outputText value="#{grant.amountIncludingVatAsKrona}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                                    </h:outputText>
+                                </div>
+                                <div class="chip-hd-item">
+                                    <!-- TODO: Better implementation of this in view -->
+                                    <ui:fragment rendered="#{empty grant.invoice.status}">
+                                        Pågående
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{grant.invoice.status eq 'PAID'}">
+                                        Betalad
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{grant.invoice.status eq 'UNPAID'}">
+                                        Ej betalad
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{grant.invoice.status eq 'CANCELED'}">
+                                        Makulerad
+                                    </ui:fragment>
+                                </div>
+                            </div>
+                            <div class="chip-bd">
+                                <ul class="labeled-list">
+                                    <li>
+                                        <span class="item-label">
+                                            <h:outputText value="Recept:" />
+                                        </span>
+                                        <span class="item-value">
+                                            <h:outputText value="#{grant.prescriptionDate}">
+                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            </h:outputText>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="item-label">
+                                            <h:outputText value="Kvittens:" />
+                                        </span>
+                                        <span class="item-value">
+                                            <h:outputText value="#{grant.deliveryDate}">
+                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            </h:outputText>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="item-label">
+                                            <h:outputText value="Leverantör:" />
+                                        </span>
+                                        <span class="item-value">
+                                            <h:outputText value="#{grant.invoice.supplier.name}" />
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="item-label">
+                                            <h:outputText value="Faktura:" />
+                                        </span>
+                                        <span class="item-value">
+                                            <h:link outcome="view_invoice" target="_BLANK">
+                                                <h:outputText value="#{grant.prescriptionDate}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                </h:outputText>
+                                                <f:param name="invoiceId" value="#{grant.invoice.id}" />
+                                            </h:link>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div>
-                            <h:outputText value="#{grant.prescriptionDate}">
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                            </h:outputText>
-                        </div>
-                    </h:column>
+                    </ui:repeat>
+                </div>
 
-                    <!-- Todo: status should be fetched from invoice. -->
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Status" />
-                        </f:facet>
-                        <h:outputText value="Bet" />
-                    </h:column>
-
-                </h:dataTable>
             </ui:fragment>
 
         </gb:box>

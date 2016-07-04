@@ -19,6 +19,7 @@
     <cc:attribute name="label"/>
     <cc:attribute name="value"/>
     <cc:attribute name="valueType"/>
+    <cc:attribute name="locale" default="sv_SE" />
     <cc:attribute name="backExecute"/>
     <cc:attribute name="backListener" method-signature="void listener()" />
     <cc:attribute name="backRender"/>
@@ -29,6 +30,7 @@
     <c:set var="label" value="#{cc.attrs.label}" />
     <c:set var="value" value="#{cc.attrs.value}" />
     <c:set var="valueType" value="#{cc.attrs.valueType}" />
+    <c:set var="locale" value="#{cc.attrs.locale}" />
     <c:set var="backExecute" value="#{cc.attrs.backExecute}" />
     <c:set var="backListener" value="#{cc.attrs.backListener}"  />
     <c:set var="backRender" value="#{cc.attrs.backRender}" />
@@ -37,12 +39,18 @@
     <div class="grant-section">
         <div class="grant-section-output">
             <span class="grant-section-label">
-                <h:outputText value="#{label}" />
+                <h:outputText value="#{label}" />:
             </span>
             <span class="grant-section-data">
 
                 <ui:fragment rendered="#{valueType eq 'raw'}">
                     <h:outputText value="#{value}" />
+                </ui:fragment>
+
+                <ui:fragment rendered="#{valueType eq 'currency'}">
+                    <h:outputText value="#{value}">
+                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
+                    </h:outputText>
                 </ui:fragment>
 
                 <ui:fragment rendered="#{valueType eq 'date'}">

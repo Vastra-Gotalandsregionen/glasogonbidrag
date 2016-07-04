@@ -19,52 +19,95 @@
         <h:panelGroup id="invoiceMeta" layout="block">
 
             <gb:box collapsible="true" collapsed="true" styleClass="box-sidebar" title="Fakturainformation">
-                <table class="simple-table">
-                    <thead>
-                    <tr>
-                        <th>
-                            <h:outputText value="Post" />
-                        </th>
-                        <th>
-                            <h:outputText value="Värde" />
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <h:outputText value="Verifikationsnummer" />
-                        </td>
-                        <td>
+
+                <ul class="labeled-list">
+                    <li>
+                        <span class="item-label">
+                            <h:outputText value="Ver.nr:" />
+                        </span>
+                        <span class="item-value">
                             <h:outputText value="#{invoice.verificationNumber}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:outputText value="Leverantör" />
-                        </td>
-                        <td>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="item-label">
+                            <h:outputText value="Leverantör:" />
+                        </span>
+                        <span class="item-value">
                             <h:outputText value="#{invoice.supplier.name}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:outputText value="Lev. fakturanr." />
-                        </td>
-                        <td>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="item-label">
+                            <h:outputText value="Lev. fakturanr:" />
+                        </span>
+                        <span class="item-value">
                             <h:outputText value="#{invoice.invoiceNumber}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:outputText value="Status" />
-                        </td>
-                        <td>
-                            <h:outputText value="#{invoice.status}" />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="item-label">
+                            <h:outputText value="Status:" />
+                        </span>
+                        <span class="item-value">
+                            <!-- TODO: Better implementation of this in view -->
+                            <ui:fragment rendered="#{empty grant.invoice.status}">
+                                Pågående
+                            </ui:fragment>
+                            <ui:fragment rendered="#{grant.invoice.status eq 'PAID'}">
+                                Betalad
+                            </ui:fragment>
+                            <ui:fragment rendered="#{grant.invoice.status eq 'UNPAID'}">
+                                Ej betalad
+                            </ui:fragment>
+                            <ui:fragment rendered="#{grant.invoice.status eq 'CANCELED'}">
+                                Makulerad
+                            </ui:fragment>
+                        </span>
+                    </li>
+
+                </ul>
+
+                <ui:remove>
+                    <table class="simple-table">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <h:outputText value="Verifikationsnummer" />
+                            </td>
+                            <td>
+                                <h:outputText value="#{invoice.verificationNumber}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Leverantör" />
+                            </td>
+                            <td>
+                                <h:outputText value="#{invoice.supplier.name}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Lev. fakturanr." />
+                            </td>
+                            <td>
+                                <h:outputText value="#{invoice.invoiceNumber}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Status" />
+                            </td>
+                            <td>
+                                <h:outputText value="#{invoice.status}" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ui:remove>
+
+
             </gb:box>
 
         </h:panelGroup>

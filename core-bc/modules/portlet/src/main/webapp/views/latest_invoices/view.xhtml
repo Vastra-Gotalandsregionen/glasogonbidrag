@@ -23,19 +23,22 @@
 
                     <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Senast ändrade fakturor">
                         <ui:fragment rendered="#{not empty invoices}">
-                            <ul class="simple-list">
-                                <ui:repeat value="#{invoices}" var="invoice">
-                                    <li>
-                                        <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
-                                            <h:outputText value="#{invoice.verificationNumber}" />
-                                        </a>
 
-                                            <span>
-                                                - #{latestInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
+                            <div class="chip-wrap">
+                                <ui:repeat value="#{invoices}" var="invoice">
+                                    <a href="#{viewInvoiceNavigation.navigate(invoice.id)}" class="chip chip-link">
+                                        <span class="chip-hd">
+                                            <span class="chip-hd-item">
+                                                <h:outputText value="#{invoice.verificationNumber}" />
                                             </span>
-                                    </li>
+                                            <span class="chip-hd-item">
+                                                #{latestInvoicesViewBackingBean.formatPrettyTime(invoice.modifiedDate)}
+                                            </span>
+                                        </span>
+                                    </a>
                                 </ui:repeat>
-                            </ul>
+                            </div>
+
                         </ui:fragment>
 
                         <ui:fragment rendered="#{empty invoices}">
