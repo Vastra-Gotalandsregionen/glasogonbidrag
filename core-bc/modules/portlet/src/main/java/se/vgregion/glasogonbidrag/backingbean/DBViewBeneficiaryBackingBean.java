@@ -1,5 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
@@ -54,6 +56,8 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
 
     private IdentificationType type;
     private Identification identification;
+
+    private Prescription prescription;
 
     // Getter and setters
 
@@ -170,6 +174,22 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
         return "list_beneficiaries?faces-redirect=true";
     }
 
+    // Actions for Prescription
+
+    public String doSavePrescription() {
+        ThemeDisplay display = util.getThemeDisplay();
+        long userId = display.getUserId();
+        long groupId = display.getScopeGroupId();
+        long companyId = display.getCompanyId();
+
+        service.updateAddPrescription(
+                userId, groupId, companyId,
+                beneficiary, prescription);
+
+        return "view_beneficiary?faces-redirect=true" +
+                "&beneficiaryId=" + beneficiary.getId();
+    }
+
     // Listeners
 
     public void identificationTypeListener() {
@@ -218,6 +238,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
             if (id != null) {
                 beneficiary = repository.find(id);
                 editBeneficiary = true;
+                prescription = new Prescription();
             }
         } catch (Exception e) {
             LOGGER.warn("Got exception.");

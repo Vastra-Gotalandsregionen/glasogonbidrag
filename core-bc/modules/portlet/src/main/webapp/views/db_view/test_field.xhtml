@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:jsf="http://xmlns.jcp.org/jsf"
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+        <c:set var="prescription" value="#{dbViewTestFieldBackingBean.prescriptionVO}" scope="request" />
+
+        <h:form>
+            <ul>
+                <ui:repeat id="grantTypeOther" value="#{dbViewTestFieldBackingBean.diagnoseTypeItems}" var="item">
+                    <li>
+                        <input type="radio"
+                               value="#{item.value}"
+                               jsf:id="item"
+                               a:name="#{hiddenItem.clientId}"
+                               a:checked="#{prescription.type == item.value ? 'checked' : null}">
+                            <f:ajax listener="#{dbViewTestFieldBackingBean.diagnoseTypeListener}"
+                                    execute="@form" render="@form" />
+                        </input>
+                        <h:outputLabel for="item" value="#{item.label}" />
+                    </li>
+                </ui:repeat>
+            </ul>
+
+            <ui:fragment rendered="#{prescription.type == 'APHAKIA'}">
+                <h2>Afaki</h2>
+            </ui:fragment>
+            <ui:fragment rendered="#{prescription.type == 'KERATOCONUS'}">
+                <h2>Keratokonus</h2>
+            </ui:fragment>
+            <ui:fragment rendered="#{prescription.type == 'SPECIAL'}">
+                <h2>Special</h2>
+            </ui:fragment>
+
+            <h:inputHidden id="selectedItem"
+                           binding="#{hiddenItem}"
+                           value="#{prescription.type}"
+                           rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                <f:converter converterId="se.vgregion.DiagnoseType" />
+            </h:inputHidden>
+
+            <h:commandButton value="Action" action="#{dbViewTestFieldBackingBean.doAction}" />
+        </h:form>
+    </h:body>
+</f:view>
