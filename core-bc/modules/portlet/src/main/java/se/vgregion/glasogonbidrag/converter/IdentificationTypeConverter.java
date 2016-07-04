@@ -1,6 +1,6 @@
 package se.vgregion.glasogonbidrag.converter;
 
-import se.vgregion.portal.glasogonbidrag.domain.jpa.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

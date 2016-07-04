@@ -45,25 +45,6 @@
             </div>
         </ui:fragment>
 
-        <h2>Beneficiaries</h2>
-        <ui:fragment rendered="#{not empty dbViewViewBackingBean.beneficiaries}">
-            <ul>
-                <ui:repeat id="beneficiaries" value="#{dbViewViewBackingBean.beneficiaries}" var="beneficiary">
-                    <li>
-                        <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})"
-                                outcome="view_beneficiary">
-                            <f:param name="beneficiaryId" value="#{beneficiary.id}" />
-                        </h:link>
-                    </li>
-                </ui:repeat>
-            </ul>
-        </ui:fragment>
-        <ui:fragment rendered="#{empty dbViewViewBackingBean.beneficiaries}">
-            <div class="alert alert-warning">
-                No beneficiareies in the database.
-            </div>
-        </ui:fragment>
-
         <h2>Invoices</h2>
         <ui:fragment rendered="#{not empty dbViewViewBackingBean.invoices}">
             <ul>

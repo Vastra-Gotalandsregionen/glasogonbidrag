@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
@@ -17,9 +17,11 @@ import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -142,7 +144,11 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
         try {
             service.create(beneficiary);
         } catch (NoIdentificationException e) {
-            LOGGER.warn("No id.");
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null,
+                    new FacesMessage(
+                            "You need to set an identification number."));
+
             return null;
         }
 

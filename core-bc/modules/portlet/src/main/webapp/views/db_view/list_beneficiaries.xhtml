@@ -34,7 +34,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Action</f:facet>
-                    <h:commandButton action="add_beneficiary" immediate="true" value="Edit">
+                    <h:commandButton action="view_beneficiary" immediate="true" value="View">
                         <f:param name="beneficiaryId" value="#{beneficiary.id}" />
                     </h:commandButton>
                     <h:commandButton action="#{dbViewBeneficiaryBackingBean.doDelete}" value="Delete"
@@ -44,9 +44,10 @@
                 </h:column>
             </h:dataTable>
             <h:panelGroup rendered="#{empty dbViewBeneficiaryBackingBean.beneficiaries}">
-                No beneficiaries listed
+                <div class="alert alert-warning">
+                    No beneficiaries in the database.
+                </div>
             </h:panelGroup>
-
             <h:commandLink action="#{dbViewBeneficiaryBackingBean.doCreate}" immediate="true" value="Add" />
         </h:form>
     </h:body>
