@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 

@@ -1,7 +1,7 @@
 package se.vgregion.service.glasogonbidrag.api.data;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package se.vgregion.service.glasogonbidrag.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
 
 /**
@@ -10,6 +11,10 @@ public interface BeneficiaryService {
     void create(Beneficiary beneficiary) throws NoIdentificationException;
 
     void update(Beneficiary beneficiary) throws NoIdentificationException;
+
+    void updateAddPrescription(long userId, long groupId, long companyId,
+                               Beneficiary beneficiary,
+                               Prescription prescription);
 
     void delete(Long id);
 }

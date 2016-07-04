@@ -87,6 +87,7 @@ public class Beneficiary {
 
     public Beneficiary() {
         grants = new ArrayList<>();
+        prescriptionHistory = new ArrayList<>();
 //        prescription = new Prescription();
     }
 
@@ -146,7 +147,15 @@ public class Beneficiary {
         this.identification = identification;
     }
 
-//    public Prescription getPrescription() {
+    public List<Prescription> getPrescriptionHistory() {
+        return prescriptionHistory;
+    }
+
+    public void setPrescriptionHistory(List<Prescription> prescriptionHistory) {
+        this.prescriptionHistory = prescriptionHistory;
+    }
+
+    //    public Prescription getPrescription() {
 //        return prescription;
 //    }
 //

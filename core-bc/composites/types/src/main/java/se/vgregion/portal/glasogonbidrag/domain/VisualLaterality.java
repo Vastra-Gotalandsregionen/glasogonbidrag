@@ -6,5 +6,6 @@ package se.vgregion.portal.glasogonbidrag.domain;
 public enum VisualLaterality {
     BILATERAL,
     RIGHT,
-    LEFT
+    LEFT,
+    NONE
 }

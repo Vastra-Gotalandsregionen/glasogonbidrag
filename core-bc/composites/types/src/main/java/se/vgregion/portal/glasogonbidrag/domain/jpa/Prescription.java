@@ -28,6 +28,25 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    // Liferay specific
+
+    @Column(name = "user_id")
+    private long userId;
+
+    @Column(name = "group_id")
+    private long groupId;
+
+    @Column(name = "company_id")
+    private long companyId;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Column(name = "modified_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedDate;
+
     @OneToOne
     private Diagnose diagnose;
 
@@ -58,6 +77,54 @@ public class Prescription {
         this.id = id;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public Diagnose getDiagnose() {
+        return diagnose;
+    }
+
+    public void setDiagnose(Diagnose diagnose) {
+        this.diagnose = diagnose;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -80,5 +147,21 @@ public class Prescription {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Beneficiary getBeneficiary() {
+        return beneficiary;
+    }
+
+    public void setBeneficiary(Beneficiary beneficiary) {
+        this.beneficiary = beneficiary;
+    }
+
+    public List<Grant> getGrants() {
+        return grants;
+    }
+
+    public void setGrants(List<Grant> grants) {
+        this.grants = grants;
     }
 }
