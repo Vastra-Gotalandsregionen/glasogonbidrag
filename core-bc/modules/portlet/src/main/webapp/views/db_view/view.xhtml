@@ -17,6 +17,10 @@
             </div>
         </div>
 
+        <h:link outcome="list_beneficiaries">
+            Beneficiaries
+        </h:link>
+
         <div class="row-fluid">
             <div class="span12">
                 <h1>Database content.</h1>
@@ -38,25 +42,6 @@
         <ui:fragment rendered="#{empty dbViewViewBackingBean.suppliers}">
             <div class="alert alert-warning">
                 No suppliers in the database.
-            </div>
-        </ui:fragment>
-
-        <h2>Beneficiaries</h2>
-        <ui:fragment rendered="#{not empty dbViewViewBackingBean.beneficiaries}">
-            <ul>
-                <ui:repeat id="beneficiaries" value="#{dbViewViewBackingBean.beneficiaries}" var="beneficiary">
-                    <li>
-                        <h:link value="#{beneficiary.firstName} #{beneficiary.lastName} (#{beneficiary.identification})"
-                                outcome="view_beneficiary">
-                            <f:param name="beneficiaryId" value="#{beneficiary.id}" />
-                        </h:link>
-                    </li>
-                </ui:repeat>
-            </ul>
-        </ui:fragment>
-        <ui:fragment rendered="#{empty dbViewViewBackingBean.beneficiaries}">
-            <div class="alert alert-warning">
-                No beneficiareies in the database.
             </div>
         </ui:fragment>
 
@@ -96,5 +81,9 @@
             </div>
         </h:form>
 
-	</h:body>
+        <h:link outcome="test_field">
+            Test prescription
+        </h:link>
+
+    </h:body>
 </f:view>

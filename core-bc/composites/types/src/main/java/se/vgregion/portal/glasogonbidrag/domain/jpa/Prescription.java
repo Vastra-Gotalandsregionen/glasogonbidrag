@@ -5,11 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -18,33 +23,50 @@ import java.util.Date;
 @Entity
 @Table(name = "vgr_glasogonbidrag_prescription")
 public class Prescription {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    // Liferay specific
+
+    @Column(name = "user_id")
+    private long userId;
+
+    @Column(name = "group_id")
+    private long groupId;
+
+    @Column(name = "company_id")
+    private long companyId;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Column(name = "modified_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedDate;
+
+    @OneToOne
+    private Diagnose diagnose;
 
     @Column(name = "prescription_date")
     @Temporal(TemporalType.DATE)
     private Date date;
     private String prescriber;
+
     @Lob
     @Column(name = "prescriber_comment")
     private String comment;
 
-    @Column(name = "aphakia")
-    private boolean aphakiaDiagnosed = false;
-    @Column(name = "keratoconus")
-    private boolean keratoconusDiagnosed = false;
-    @Column(name = "weak_eye_sight")
-    private boolean weakEyeSightDiagnosed = false;
+    @ManyToOne
+    @JoinColumn(name = "beneficiary_id")
+    private Beneficiary beneficiary;
 
-    private DiagnoseAphakia aphakia;
-    private DiagnoseKeratoconus keratoconus;
-    private DiagnoseWeakEyesight weakEyeSight;
+    @OneToMany(mappedBy = "prescription")
+    private List<Grant> grants;
 
     public Prescription() {
-        aphakia = new DiagnoseAphakia();
-        keratoconus = new DiagnoseKeratoconus();
-        weakEyeSight = new DiagnoseWeakEyesight();
     }
 
     public long getId() {
@@ -53,6 +75,54 @@ public class Prescription {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public Diagnose getDiagnose() {
+        return diagnose;
+    }
+
+    public void setDiagnose(Diagnose diagnose) {
+        this.diagnose = diagnose;
     }
 
     public Date getDate() {
@@ -79,51 +149,19 @@ public class Prescription {
         this.comment = comment;
     }
 
-    public boolean isAphakiaDiagnosed() {
-        return aphakiaDiagnosed;
+    public Beneficiary getBeneficiary() {
+        return beneficiary;
     }
 
-    public void setAphakiaDiagnosed(boolean aphakiaDiagnosed) {
-        this.aphakiaDiagnosed = aphakiaDiagnosed;
+    public void setBeneficiary(Beneficiary beneficiary) {
+        this.beneficiary = beneficiary;
     }
 
-    public boolean isKeratoconusDiagnosed() {
-        return keratoconusDiagnosed;
+    public List<Grant> getGrants() {
+        return grants;
     }
 
-    public void setKeratoconusDiagnosed(boolean keratoconusDiagnosed) {
-        this.keratoconusDiagnosed = keratoconusDiagnosed;
-    }
-
-    public boolean isWeakEyeSightDiagnosed() {
-        return weakEyeSightDiagnosed;
-    }
-
-    public void setWeakEyeSightDiagnosed(boolean weakEyeSightDiagnosed) {
-        this.weakEyeSightDiagnosed = weakEyeSightDiagnosed;
-    }
-
-    public DiagnoseAphakia getAphakia() {
-        return aphakia;
-    }
-
-    public void setAphakia(DiagnoseAphakia aphakia) {
-        this.aphakia = aphakia;
-    }
-
-    public DiagnoseKeratoconus getKeratoconus() {
-        return keratoconus;
-    }
-
-    public void setKeratoconus(DiagnoseKeratoconus keratoconus) {
-        this.keratoconus = keratoconus;
-    }
-
-    public DiagnoseWeakEyesight getWeakEyeSight() {
-        return weakEyeSight;
-    }
-
-    public void setWeakEyeSight(DiagnoseWeakEyesight weakEyeSight) {
-        this.weakEyeSight = weakEyeSight;
+    public void setGrants(List<Grant> grants) {
+        this.grants = grants;
     }
 }

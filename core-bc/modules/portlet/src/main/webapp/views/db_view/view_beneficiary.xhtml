@@ -10,7 +10,7 @@
     <h:head />
 
     <h:body>
-        <c:set var="beneficiary" value="#{viewBeneficiaryBean.beneficiary}" scope="request" />
+        <c:set var="beneficiary" value="#{dbViewBeneficiaryBackingBean.beneficiary}" scope="request" />
 
         <h1>#{beneficiary.firstName} #{beneficiary.lastName}</h1>
 

@@ -42,7 +42,7 @@ public class Migration {
     @Column(name = "migration_date")
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "migration")
     private List<Invoice> invoices;
 
     public Migration() {

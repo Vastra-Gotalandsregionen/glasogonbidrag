@@ -1,28 +1,15 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.PortletURLFactory;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import org.ocpsoft.prettytime.PrettyTime;
-import org.ocpsoft.prettytime.jsf.PrettyTimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
 import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

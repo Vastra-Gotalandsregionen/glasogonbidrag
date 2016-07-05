@@ -12,9 +12,9 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.InvoiceStatus;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.LMAIdentification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
@@ -101,7 +101,7 @@ public class DBViewViewBackingBean {
     public String insertBeneficiary1() {
         LOGGER.info("DBViewViewBackingBean - insertBeneficiary1()");
 
-        PersonalIdentification i1 = new PersonalIdentification();
+        Personal i1 = new Personal();
         i1.setNumber("11294377-1834");
 
         Beneficiary b1 = new Beneficiary();
@@ -117,7 +117,7 @@ public class DBViewViewBackingBean {
     public String insertBeneficiary2() {
         LOGGER.info("DBViewViewBackingBean - insertBeneficiary2()");
 
-        PersonalIdentification i2 = new PersonalIdentification();
+        Personal i2 = new Personal();
         i2.setNumber("67652979-0773");
 
         Beneficiary b2 = new Beneficiary();
@@ -133,7 +133,7 @@ public class DBViewViewBackingBean {
     public String insertBeneficiary3() {
         LOGGER.info("DBViewViewBackingBean - insertBeneficiary3()");
 
-        PersonalIdentification i3 = new PersonalIdentification();
+        Personal i3 = new Personal();
         i3.setNumber("36386944-2631");
 
         Beneficiary b3 = new Beneficiary();
@@ -149,7 +149,7 @@ public class DBViewViewBackingBean {
     public String insertBeneficiary4() {
         LOGGER.info("DBViewViewBackingBean - insertBeneficiary4()");
 
-        LMAIdentification i4 = new LMAIdentification();
+        Lma i4 = new Lma();
         i4.setNumber("50-008920/4");
 
         Beneficiary b4 = new Beneficiary();

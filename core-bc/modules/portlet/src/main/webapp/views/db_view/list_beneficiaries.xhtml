@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+        <h1>Beneficiaries</h1>
+        <h:form>
+            <h:commandButton value="Refresh" action="#{dbViewBeneficiaryBackingBean.doRefresh}" />
+
+            <h:dataTable rendered="#{not empty dbViewBeneficiaryBackingBean.beneficiaries}"
+                         value="#{dbViewBeneficiaryBackingBean.beneficiaries}"
+                         var="beneficiary">
+                <h:column>
+                    <f:facet name="header">First name</f:facet>
+                    <h:outputText value="#{beneficiary.firstName}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Last name</f:facet>
+                    <h:outputText value="#{beneficiary.lastName}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Identification</f:facet>
+                    <h:outputText value="#{beneficiary.identification}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Identification</f:facet>
+                    <h:outputText value="#{beneficiary.identification}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandButton action="view_beneficiary" immediate="true" value="View">
+                        <f:param name="beneficiaryId" value="#{beneficiary.id}" />
+                    </h:commandButton>
+                    <h:commandButton action="#{dbViewBeneficiaryBackingBean.doDelete}" value="Delete"
+                                     immediate="true">
+                        <f:param name="beneficiaryId" value="#{beneficiary.id}" />
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+            <h:panelGroup rendered="#{empty dbViewBeneficiaryBackingBean.beneficiaries}">
+                <div class="alert alert-warning">
+                    No beneficiaries in the database.
+                </div>
+            </h:panelGroup>
+            <h:commandLink action="#{dbViewBeneficiaryBackingBean.doCreate}" immediate="true" value="Add" />
+        </h:form>
+    </h:body>
+
+</f:view>

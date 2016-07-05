@@ -1,7 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.PersonalIdentification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.api.data.IdentificationRepository;
@@ -35,8 +34,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -274,7 +271,7 @@ public class CreateInvoiceAddGrantBackingBean {
             Identification identification =
                     identificationRepository.findByPersonalNumber(number);
             if (identification == null) {
-                identification = new PersonalIdentification(number);
+                identification = new Personal(number);
             } else {
                 beneficiary =
                         beneficiaryRepository.findWithPartsByIdent(identification);
@@ -691,7 +688,7 @@ public class CreateInvoiceAddGrantBackingBean {
         // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
 
-        tabUtil = new TabUtil(Arrays.asList("Personnummer", "LMA-Nummer"), 0);
+        tabUtil = new TabUtil(Arrays.asList("Personnummer", "Lma-Nummer"), 0);
 
 
         Long grantId = facesUtil.fetchId("grantId");

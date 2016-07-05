@@ -78,12 +78,16 @@ public class Beneficiary {
     @JoinColumn(name = "identification_id")
     private Identification identification;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
+    private List<Prescription> prescriptionHistory;
+
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "prescription_id")
 //    private Prescription prescription;
 
     public Beneficiary() {
         grants = new ArrayList<>();
+        prescriptionHistory = new ArrayList<>();
 //        prescription = new Prescription();
     }
 
@@ -143,7 +147,15 @@ public class Beneficiary {
         this.identification = identification;
     }
 
-//    public Prescription getPrescription() {
+    public List<Prescription> getPrescriptionHistory() {
+        return prescriptionHistory;
+    }
+
+    public void setPrescriptionHistory(List<Prescription> prescriptionHistory) {
+        this.prescriptionHistory = prescriptionHistory;
+    }
+
+    //    public Prescription getPrescription() {
 //        return prescription;
 //    }
 //
