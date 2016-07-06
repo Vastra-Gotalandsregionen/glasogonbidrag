@@ -26,13 +26,13 @@ public class ViewInvoiceNavigation {
     @Autowired
     private FacesUtil facesUtil;
 
-    private long plid;
-    private String portletId;
+    private long registerInvoicePlid;
+    private String createInvoicePortletId;
 
     public String navigate(long id) {
         PortletRequest request = facesUtil.getRequest();
 
-        PortletURL renderUrl = PortletURLFactoryUtil.create(request, portletId, plid, PortletRequest.RENDER_PHASE);
+        PortletURL renderUrl = PortletURLFactoryUtil.create(request, createInvoicePortletId, registerInvoicePlid, PortletRequest.RENDER_PHASE);
         renderUrl.setParameter("_facesViewIdRender", "/views/create_invoice/view_invoice.xhtml");
         renderUrl.setParameter("invoiceId", Long.toString(id));
 
@@ -50,14 +50,14 @@ public class ViewInvoiceNavigation {
         try {
             registerLayout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
                     groupId, true, "/registrera-faktura");
-            plid = registerLayout.getPlid();
+            registerInvoicePlid = registerLayout.getPlid();
         } catch (SystemException e) {
-            LOGGER.error("Cannot get plid of registrera-faktura from " +
+            LOGGER.error("Cannot get registerInvoicePlid of registrera-faktura from " +
                     "layout local service util. Got exception: {}",
                     e.getMessage());
         }
 
-        portletId = "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
+        createInvoicePortletId = "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
 
 
     }

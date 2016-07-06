@@ -16,21 +16,34 @@
 
         <h:form>
             <p:dataTable var="invoice" value="#{listInvoicesViewBackingBean.invoices}"
-                         rows="2"
+                         rows="5"
                          paginator="true"
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="1, 5,10,15,20, 50" >
-                <p:column headerText="Ver.nr" sortBy="#{invoice.verificationNumber}">
-                    <h:outputText value="#{invoice.verificationNumber}" />
+                <p:column headerText="Ver.nr"
+                          sortBy="#{invoice.verificationNumber}"
+                >
+                    <!--
+                    filterBy="#{invoice.verificationNumber}"
+                    filterMatchMode="contains"
+                    -->
+
+                    <a href="#{listInvoicesViewBackingBean.navigate(invoice.id)}">
+                        <h:outputText value="#{invoice.verificationNumber}" />
+                    </a>
                 </p:column>
 
                 <p:column headerText="Leverantör" sortBy="#{invoice.supplier.name}">
                     <h:outputText value="#{invoice.supplier.name}" />
                 </p:column>
 
-                <p:column headerText="Status">
-                    <h:outputText value="#{invoice.status.name}" />
+                <p:column headerText="Status" sortBy="#{invoice.status}">
+                    <h:outputText value="#{bundle[invoice.status]}" />
+                </p:column>
+
+                <p:column headerText="Handläggare" sortBy="#{invoice.userId}">
+                    <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
                 </p:column>
 
             </p:dataTable>
