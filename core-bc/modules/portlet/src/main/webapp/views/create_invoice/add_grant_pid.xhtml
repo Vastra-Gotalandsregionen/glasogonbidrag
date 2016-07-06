@@ -15,7 +15,7 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="flow" value="#{createInvoiceAddGrantBackingBean.flow}" scope="request" />
-        <c:set var="otherVO" value="#{createInvoiceAddGrantBackingBean.grantTypeOtherVO}" scope="request" />
+        <c:set var="prescriptionVO" value="#{createInvoiceAddGrantBackingBean.prescriptionVO}" scope="request" />
 
         <div class="msg-wrap">
             <h:messages />
@@ -182,7 +182,7 @@
 
                 <gb:grantSectionInput id="prescriptionDate"
                                       label="Receptdatum"
-                                      value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                      value="#{prescriptionVO.date}"
                                       valueType="date"
                                       autofocus="true"
                                       placeholder="ÅÅÅÅ-MM-DD"
@@ -219,40 +219,64 @@
             <div class="grant-section">
                 <div class="field-row">
 
+                    <h:inputHidden id="selectedHiddenDiagnoseType" binding="#{hiddenDiagnoseType}" value="#{prescriptionVO.type}"
+                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                        <f:converter converterId="se.vgregion.DiagnoseType" />
+                    </h:inputHidden>
+
+
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-
-                                <c:set var="noOtherSelected" value="#{not otherVO.aphakia and not otherVO.keratoconus and not otherVO.special}" scope="request" />
-
-                                <h:selectBooleanCheckbox
-                                        id="afaki"
-                                        styleClass="js-prescription-checkbox"
-                                        value="#{otherVO.aphakia}"
-                                        pt:autofocus="#{otherVO.aphakia or noOtherSelected}"
-                                >
-                                    <f:ajax execute=":addGrantForm"
-                                            listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                            render=":addGrantForm:grantAddPanel"
-                                            onevent="function eventHandler(data) {ajaxComplete(data)}" />
-                                </h:selectBooleanCheckbox>
-                                <h:outputLabel for="afaki" value="Afaki:" />
+                                <input type="radio" class="gb-radio-input"
+                                       jsf:id="diagnoseTypeAphakia" pt:name="#{hiddenDiagnoseType.clientId}"
+                                       value="APHAKIA"
+                                       pt:checked="#{prescriptionVO.diagnoseAphakia ? 'checked' : null}"
+                                       pt:autofocus="#{prescriptionVO.diagnoseAphakia or prescriptionVO.diagnoseNone ? 'true' : null}"
+                                       pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                    <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+                                </input>
+                                <h:outputLabel for="diagnoseTypeAphakia" value="Afaki:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{otherVO.aphakia}">
+                            <ui:fragment rendered="#{prescriptionVO.diagnoseAphakia}">
                                 <div class="prescription-section-fieldset">
+                                    <h:inputHidden id="selectedHiddenAphakiaLaterality" binding="#{hiddenAphakiaLaterality}" value="#{prescriptionVO.laterality}"
+                                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                        <f:converter converterId="se.vgregion.VisualLaterality" />
+                                    </h:inputHidden>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightBilateral" value="#{otherVO.aphakiaBilateral}" />
-                                        <h:outputLabel for="afakiEyeSightBilateral" value="Bilat." />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityAphakiaBilateral" pt:name="#{hiddenAphakiaLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityAphakiaBilateral" value="Bilat." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightRight" value="#{otherVO.aphakiaRight}" />
-                                        <h:outputLabel for="afakiEyeSightRight" value="Hö" />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityAphakiaLeft" pt:name="#{hiddenAphakiaLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityAphakiaLeft" value="Vä." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="afakiEyeSightLeft" value="#{otherVO.aphakiaLeft}" />
-                                        <h:outputLabel for="afakiEyeSightLeft" value="Vä" />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityAphakiaRight" pt:name="#{hiddenAphakiaLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityAphakiaRight" value="Hö." />
                                     </div>
                                 </div>
                             </ui:fragment>
@@ -262,70 +286,89 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox
-                                        id="keratokonus"
-                                        styleClass="js-prescription-checkbox"
-                                        value="#{otherVO.keratoconus}"
-                                        pt:autofocus="#{otherVO.keratoconus}"
-                                >
-                                <f:ajax execute=":addGrantForm"
-                                        listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                        render=":addGrantForm:grantAddPanel"
-                                        onevent="function eventHandler(data) {ajaxComplete(data)}" />
-                                </h:selectBooleanCheckbox>
-                                <h:outputLabel for="keratokonus" value="Keratokonus:" />
+                                <input type="radio" class="gb-radio-input"
+                                       jsf:id="diagnoseTypeKeratokonus" pt:name="#{hiddenDiagnoseType.clientId}"
+                                       value="KERATOCONUS"
+                                       pt:checked="#{prescriptionVO.diagnoseKeratokonus ? 'checked' : null}"
+                                       pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                    <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+                                </input>
+                                <h:outputLabel for="diagnoseTypeKeratokonus" value="Keratokonus:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{otherVO.keratoconus}">
-
+                            <ui:fragment rendered="#{prescriptionVO.diagnoseKeratokonus}">
                                 <div class="prescription-section-fieldset">
+                                    <h:inputHidden id="selectedHiddenKeratokonusLaterality" binding="#{hiddenKeratokonusLaterality}" value="#{prescriptionVO.laterality}"
+                                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                        <f:converter converterId="se.vgregion.VisualLaterality" />
+                                    </h:inputHidden>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightBilateral" value="#{otherVO.keratoconusBilateral}" />
-                                        <h:outputLabel for="keratokonusEyeSightBilateral" value="Bilat." />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityKeratokonusBilateral" pt:name="#{hiddenKeratokonusLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityKeratokonusBilateral" value="Bilat." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightRight" value="#{otherVO.keratoconusRight}" />
-                                        <h:outputLabel for="keratokonusEyeSightRight" value="Hö" />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityKeratokonusLeft" pt:name="#{hiddenKeratokonusLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityKeratokonusLeft" value="Vä." />
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusEyeSightLeft" value="#{otherVO.keratoconusLeft}" />
-                                        <h:outputLabel for="keratokonusEyeSightLeft" value="Vä" />
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityKeratokonusRight" pt:name="#{hiddenKeratokonusLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralityKeratokonusRight" value="Hö." />
                                     </div>
                                 </div>
-
-
                                 <div class="prescription-section-fieldset">
-                                    <div class="prescription-section-field">
-                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
-                                        <h:inputText id="keratokonusVisualAcuityRight"
-                                                     value="#{otherVO.keratoconusRightAdjustment}"
-                                                     pt:placeholder="" styleClass="input-very-short" />
-                                    </div>
-
                                     <div class="prescription-section-field">
                                         <h:outputLabel for="keratokonusVisualAcuityLeft" value="Vä" />
                                         <h:inputText id="keratokonusVisualAcuityLeft"
-                                                     value="#{otherVO.keratoconusLeftAdjustment}"
-                                                     pt:placeholder="" styleClass="input-very-short"  />
+                                                     value="#{prescriptionVO.visualAcuityLeft}"
+                                                     pt:placeholder=""
+                                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit"
+                                                     styleClass="input-very-short">
+                                            <f:converter converterId="javax.faces.Float" />
+                                        </h:inputText>
                                     </div>
-
+                                    <div class="prescription-section-field">
+                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
+                                        <h:inputText id="keratokonusVisualAcuityRight"
+                                                     value="#{prescriptionVO.visualAcuityRight}"
+                                                     pt:placeholder=""
+                                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit"
+                                                     styleClass="input-very-short">
+                                            <f:converter converterId="javax.faces.Float" />
+                                        </h:inputText>
+                                    </div>
                                     <div class="prescription-section-field">
                                         <span>
                                             Med glaskorr.
                                         </span>
                                     </div>
-
                                 </div>
-
-
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{otherVO.keratoconusNoGlass}" />
+                                        <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{prescriptionVO.noGlasses}" pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" />
                                         <h:outputLabel for="keratokonusNoGlasses" value="Ej glas" />
                                     </div>
                                 </div>
-
                             </ui:fragment>
                         </div>
                     </div>
@@ -333,54 +376,70 @@
                     <div class="prescription-section">
                         <div class="prescription-section-main">
                             <div class="field-element field-element-toggle">
-                                <h:selectBooleanCheckbox
-                                        id="special"
-                                        styleClass="js-prescription-checkbox"
-                                        value="#{otherVO.special}"
-                                        pt:autofocus="#{otherVO.special}"
-                                >
-                                    <f:ajax execute=":addGrantForm"
-                                            listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                            render=":addGrantForm:grantAddPanel"
-                                            onevent="function eventHandler(data) {ajaxComplete(data)}" />
-                                </h:selectBooleanCheckbox>
-                                <h:outputLabel for="special" value="Spec / synsvag:" />
+
+                                <input type="radio" class="gb-radio-input"
+                                       jsf:id="diagnoseTypeSpecial" pt:name="#{hiddenDiagnoseType.clientId}"
+                                       value="SPECIAL"
+                                       pt:checked="#{prescriptionVO.diagnoseSpecial ? 'checked' : null}"
+                                       pt:autofocus="#{prescriptionVO.diagnoseSpecial ? 'true' : null}"
+                                       pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                    <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
+                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+                                </input>
+                                <h:outputLabel for="diagnoseTypeSpecial" value="Spec / synsvag:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
-                            <ui:fragment rendered="#{otherVO.special}">
-                                <div>
-                                    <div class="prescription-section-fieldset">
-                                        <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialWeakEyeSight" value="#{otherVO.specialWeakSight}" />
-                                            <h:outputLabel for="specialWeakEyeSight" value="Synsvag" />
-                                        </div>
-
-                                        <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightBilateral" value="#{otherVO.specialBilateral}" />
-                                            <h:outputLabel for="specialEyeSightBilateral" value="Bilat." />
-                                        </div>
-                                        <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightRight" value="#{otherVO.specialRight}" />
-                                            <h:outputLabel for="specialEyeSightRight" value="Hö" />
-                                        </div>
-                                        <div class="prescription-section-field">
-                                            <h:selectBooleanCheckbox id="specialEyeSightLeft" value="#{otherVO.specialLeft}" />
-                                            <h:outputLabel for="specialEyeSightLeft" value="Vä" />
-                                        </div>
+                            <ui:fragment rendered="#{prescriptionVO.diagnoseSpecial}">
+                                <div class="prescription-section-fieldset">
+                                    <h:inputHidden id="selectedHiddenSpecialLaterality" binding="#{hiddenSpecialLaterality}" value="#{prescriptionVO.laterality}"
+                                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                        <f:converter converterId="se.vgregion.VisualLaterality" />
+                                    </h:inputHidden>
+                                    <div class="prescription-section-field">
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralitySpecialBilateral" pt:name="#{hiddenSpecialLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralitySpecialBilateral" value="Bilat." />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralitySpecialLeft" pt:name="#{hiddenSpecialLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralitySpecialLeft" value="Vä." />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralitySpecialRight" pt:name="#{hiddenSpecialLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
+                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
+                                               pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralitySpecialRight" value="Hö." />
+                                    </div>
+                                </div>
+                                <div class="prescription-section-fieldset">
+                                    <div class="prescription-section-field">
+                                        <h:selectBooleanCheckbox id="specialWeakEyeSight" value="#{prescriptionVO.weakEyeSight}" pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" />
+                                        <h:outputLabel for="specialWeakEyeSight" value="Synsvag" />
                                     </div>
                                 </div>
                             </ui:fragment>
                         </div>
                     </div>
-
-                    <h:inputHidden id="selectedHiddenPrescriptionType" binding="#{hiddenPrescriptionType}" value=""
-                               rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
-
-
                 </div>
                 <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="grantTypeOtherSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
@@ -415,18 +474,18 @@
                     <div class="field-element inline">
                         <h:outputLabel for="prescriber" value="Ordinatör:" />
                         <h:inputText id="prescriber" styleClass=""
-                                     value="#{createInvoiceAddGrantBackingBean.prescriber}"
+                                     value="#{prescriptionVO.prescriber}"
                                      pt:placeholder="Skriv in ordindatör..." pt:autofocus="true" />
                     </div>
                     <div class="field-element inline">
                         <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
                         <h:inputText id="prescriptionDate2" styleClass="js-input-mask js-input-mask-date"
-                                     value="#{createInvoiceAddGrantBackingBean.prescriptionDate}"
+                                     value="#{prescriptionVO.date}"
                                      pt:placeholder="ÅÅÅÅ-MM-DD" />
                     </div>
                     <div class="field-element inline">
                         <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
-                        <h:inputTextarea id="prescriptionNote" value="#{createInvoiceAddGrantBackingBean.prescriptionComment}"  />
+                        <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
                     </div>
 
                 </div>

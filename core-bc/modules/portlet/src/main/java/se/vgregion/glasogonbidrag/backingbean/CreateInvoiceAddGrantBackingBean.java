@@ -15,6 +15,7 @@ import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.GrantTypeOtherVO;
+import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
@@ -121,14 +122,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
     private String number;
     private String deliveryDate;
-    private String prescriptionDate;
     private String grantType;
     private String grantTypeLabel;
 
-    private GrantTypeOtherVO grantTypeOtherVO;
-
-    private String prescriber;
-    private String prescriptionComment;
+    private PrescriptionVO prescriptionVO;
 
     private String amountWithVat;
 
@@ -233,36 +230,12 @@ public class CreateInvoiceAddGrantBackingBean {
         this.amountWithVat = amountWithVat;
     }
 
-    public String getPrescriptionDate() {
-        return prescriptionDate;
+    public PrescriptionVO getPrescriptionVO() {
+        return prescriptionVO;
     }
 
-    public void setPrescriptionDate(String prescriptionDate) {
-        this.prescriptionDate = prescriptionDate;
-    }
-
-    public GrantTypeOtherVO getGrantTypeOtherVO() {
-        return grantTypeOtherVO;
-    }
-
-    public void setGrantTypeOtherVO(GrantTypeOtherVO grantTypeOtherVO) {
-        this.grantTypeOtherVO = grantTypeOtherVO;
-    }
-
-    public String getPrescriber() {
-        return prescriber;
-    }
-
-    public void setPrescriber(String prescriber) {
-        this.prescriber = prescriber;
-    }
-
-    public String getPrescriptionComment() {
-        return prescriptionComment;
-    }
-
-    public void setPrescriptionComment(String prescriptionComment) {
-        this.prescriptionComment = prescriptionComment;
+    public void setPrescriptionVO(PrescriptionVO prescriptionVO) {
+        this.prescriptionVO = prescriptionVO;
     }
 
     // Listeners
@@ -361,20 +334,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void prescriptionDateListener() {
         LOGGER.info("prescriptionDateListener(): add {} to grant {}",
-                prescriptionDate, grant);
+                prescriptionVO.getDate(), grant);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = sdf.parse(prescriptionDate);
-        } catch (ParseException e) {
-            LOGGER.warn("Exception. {}", e.getMessage());
-
-            return;
-        }
-
-//        beneficiary.getPrescription().setDate(date);
-        grant.setPrescriptionDate(date);
+        grant.setPrescriptionDate(prescriptionVO.getDate());
 
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
@@ -415,55 +377,44 @@ public class CreateInvoiceAddGrantBackingBean {
                 beneficiary = null; // This should be fetched again
 
                 deliveryDate = null;
-                prescriptionDate = null;
                 grantType = null;
                 grantTypeLabel = null;
 
-                grantTypeOtherVO = new GrantTypeOtherVO();
-
-                prescriber = null;
-                prescriptionComment = null;
+                prescriptionVO = new PrescriptionVO();
 
                 //amountWithVat = null;
                 break;
             case ENTER_DELIVERY_DATE:
-                prescriptionDate = null;
                 grantType = null;
                 grantTypeLabel = null;
 
-                grantTypeOtherVO = new GrantTypeOtherVO();
-
-                prescriber = null;
-                prescriptionComment = null;
+                prescriptionVO = new PrescriptionVO();
 
                 //amountWithVat = null;
                 break;
             case SELECT_GRANT_TYPE:
-                prescriptionDate = null;
                 grantType = null;
                 grantTypeLabel = null;
 
-                grantTypeOtherVO = new GrantTypeOtherVO();
-
-                prescriber = null;
-                prescriptionComment = null;
+                prescriptionVO = new PrescriptionVO();
 
                 //amountWithVat = null;
                 break;
             case ENTER_PRESCRIPTION_DATE:
-                grantTypeOtherVO = new GrantTypeOtherVO();
 
-                prescriber = null;
-                prescriptionComment = null;
+                Date prescriptionDate = prescriptionVO.getDate();
+
+                prescriptionVO = new PrescriptionVO();
+
+                prescriptionVO.setDate(prescriptionDate);
 
                 //amountWithVat = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_TYPE:
-//                grantTypeOtherVO = new GrantTypeOtherVO();
-                prescriptionDate = null;
 
-                prescriber = null;
-                prescriptionComment = null;
+                prescriptionVO.setDate(null);
+                prescriptionVO.setComment(null);
+                prescriptionVO.setPrescriber(null);
 
                 //amountWithVat = null;
                 break;
@@ -683,14 +634,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
         number = null;
         deliveryDate = null;
-        prescriptionDate = null;
         grantType = null;
         grantTypeLabel = null;
 
-        grantTypeOtherVO = new GrantTypeOtherVO();
-
-        prescriber = null;
-        prescriptionComment = null;
+        prescriptionVO = new PrescriptionVO();
 
         // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
@@ -711,6 +658,8 @@ public class CreateInvoiceAddGrantBackingBean {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             deliveryDate = df.format(grant.getDeliveryDate());
+
+            prescriptionVO.setDate(grant.getPrescriptionDate());
 
             //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
             if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
