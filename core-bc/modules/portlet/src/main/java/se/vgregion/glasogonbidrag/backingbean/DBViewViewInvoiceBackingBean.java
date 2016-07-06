@@ -73,16 +73,16 @@ public class DBViewViewInvoiceBackingBean {
     }
 
     public void markPaid() {
-        invoice.setStatus(InvoiceStatus.PAID);
+        invoice.setStatus(InvoiceStatus.COMPLETED);
         invoiceService.update(invoice);
     }
 
     public void markUnpaid() {
-        invoice.setStatus(InvoiceStatus.UNPAID);
+        invoice.setStatus(InvoiceStatus.IN_PROGRESS);
         invoiceService.update(invoice);
     }
 
-    public void markCancled() {
+    public void markCanceled() {
         invoice.setStatus(InvoiceStatus.CANCELED);
         invoiceService.update(invoice);
     }

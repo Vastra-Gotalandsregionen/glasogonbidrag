@@ -4,10 +4,12 @@ import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
@@ -15,11 +17,13 @@ import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -41,7 +45,10 @@ public class CreateInvoiceViewBackingBean {
     private CreateInvoiceAddGrantBackingBean addGrantBackingBean;
 
     @Autowired
-    private FacesUtil facesUtil;
+    private FacesUtil util;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * List of suppliers that will be used to populate the
@@ -52,9 +59,9 @@ public class CreateInvoiceViewBackingBean {
     // Form inputs
 
     private String verificationNumber;
-    private String supplier;
+    private long supplier;
     private String invoiceNumber;
-    private String amountWithVat;
+    private BigDecimal amountWithVat;
 
     // Getter and setters for form inputs
 
@@ -66,11 +73,11 @@ public class CreateInvoiceViewBackingBean {
         this.verificationNumber = verificationNumber;
     }
 
-    public String getSupplier() {
+    public long getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(String supplier) {
+    public void setSupplier(long supplier) {
         this.supplier = supplier;
     }
 
@@ -82,11 +89,11 @@ public class CreateInvoiceViewBackingBean {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getAmountWithVat() {
+    public BigDecimal getAmountWithVat() {
         return amountWithVat;
     }
 
-    public void setAmountWithVat(String amountWithVat) {
+    public void setAmountWithVat(BigDecimal amountWithVat) {
         this.amountWithVat = amountWithVat;
     }
 
@@ -103,8 +110,7 @@ public class CreateInvoiceViewBackingBean {
 
         for (Supplier supplier : suppliers) {
             SelectItem item = new SelectItem(
-                    supplier.getName(),
-                    supplier.getName());
+                    supplier.getId(), supplier.getName());
             items.add(item);
         }
 
@@ -114,70 +120,37 @@ public class CreateInvoiceViewBackingBean {
     public String register() {
         LOGGER.info("CreateInvoiceViewBackingBean - register()");
 
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        LOGGER.info("Verification: {}, Supplier: {}, Invoice: {}, Amount: {}",
-                getVerificationNumber(),
-                getSupplier(),
-                getInvoiceNumber(),
-                getAmountWithVat());
-
-        String verificationNumber = getVerificationNumber();
-        if (verificationNumber == null ||
-                verificationNumber.trim().isEmpty()) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-
-            LOGGER.info("Return to view. verificaiton number Not filled in");
-
-            return "view?faces-redirect=true";
-        }
-
-        String supplierName = getSupplier();
-        if (supplierName == null || supplierName.trim().isEmpty()) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-
-            LOGGER.info("Return to view. supplier Not filled in");
-
-            return "view?faces-redirect=true";
-
-        }
-
-        String invoiceNumber = getInvoiceNumber();
-
-        String amountWithVat = getAmountWithVat();
-        if (amountWithVat == null || amountWithVat.trim().isEmpty()) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-
-            LOGGER.info("Return to view. amount Not filled in");
-
-            return "view?faces-redirect=true";
-        }
-
-        BigDecimal amountWithVatDecimal;
-        try {
-            amountWithVatDecimal = new BigDecimal(amountWithVat);
-        } catch (NumberFormatException e) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-
-            return "view?faces-redirect=true";
-        }
-
-        Supplier s1 = supplierRepository.find(supplierName);
+        Supplier s = supplierRepository.find(supplier);
 
         Invoice invoice = new Invoice();
+
         invoice.setVerificationNumber(verificationNumber);
         invoice.setInvoiceNumber(invoiceNumber);
-        invoice.setAmountIncludingVatAsKrona(amountWithVatDecimal);
-        invoice.setSupplier(s1);
+        invoice.setAmountIncludingVatAsKrona(amountWithVat);
+        invoice.setSupplier(s);
+        invoice.setStatus(InvoiceStatus.IN_PROGRESS);
 
-        invoiceService.create(userId, groupId, companyId, invoice);
+        try {
+            invoiceService.create(userId, groupId, companyId, invoice);
+        } catch (PersistenceException e) {
+            Locale locale = util.getLocale();
+            String localizedMessage = messageSource
+                    .getMessage("reg-invoice-error-verification-duplicate",
+                            new Object[0], locale);
+
+            FacesMessage message =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            localizedMessage, localizedMessage);
+            FacesContext.getCurrentInstance()
+                    .addMessage("verificationNumber", message);
+
+            return null;
+        }
 
         LOGGER.info("Persisted invoice, got id: {}", invoice.getId());
 
@@ -191,6 +164,8 @@ public class CreateInvoiceViewBackingBean {
     public String cancel() {
         LOGGER.info("CreateInvoiceViewBackingBean - cancel()");
 
+        //TODO: Should redirect to start page?
+
         return "view?faces-redirect=true";
     }
 
@@ -200,7 +175,7 @@ public class CreateInvoiceViewBackingBean {
     protected void init() {
         LOGGER.info("CreateInvoiceViewBackingBean - init()");
 
-        suppliers = supplierRepository.findAll();
+        suppliers = supplierRepository.findAllActive();
     }
 
 }

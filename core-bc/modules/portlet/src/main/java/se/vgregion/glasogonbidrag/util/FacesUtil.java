@@ -5,11 +5,13 @@ import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.portlet.PortletRequest;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -60,5 +62,9 @@ public class FacesUtil {
         LOGGER.info("FacesUtil - fetchProperty(): {}", value);
 
         return value;
+    }
+
+    public Locale getLocale() {
+        return LocaleContextHolder.getLocale();
     }
 }
