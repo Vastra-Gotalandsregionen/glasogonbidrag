@@ -47,7 +47,7 @@ public class DBViewViewSupplierBackingBean {
 
         String name = util.fetchProperty("supplierName");
 
-        supplier = repository.find(name);
+        supplier = repository.findAllByName(name).get(0);
         invoices = invoiceRepository.findAllBySupplier(supplier);
     }
 }

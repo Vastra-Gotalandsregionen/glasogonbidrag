@@ -137,7 +137,7 @@ public class Invoice {
     private List<Grant> grants;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_name")
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @OneToOne(

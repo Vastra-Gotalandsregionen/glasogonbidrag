@@ -24,14 +24,39 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     private EntityManager em;
 
     @Override
-    public Supplier find(String name) {
-        return em.find(Supplier.class, name);
+    public Supplier find(long id) {
+        return em.find(Supplier.class, id);
     }
 
     @Override
     public List<Supplier> findAll() {
         TypedQuery<Supplier> q = em.createNamedQuery(
                 "glasogonbidrag.supplier.findAll", Supplier.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Supplier> findAllActive() {
+        TypedQuery<Supplier> q = em.createNamedQuery(
+                "glasogonbidrag.supplier.findAllActive", Supplier.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Supplier> findAllInactive() {
+        TypedQuery<Supplier> q = em.createNamedQuery(
+                "glasogonbidrag.supplier.findAllInactive", Supplier.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Supplier> findAllByName(String name) {
+        TypedQuery<Supplier> q = em.createNamedQuery(
+                "glasogonbidrag.supplier.findAllByName", Supplier.class);
+        q.setParameter("name", name);
 
         return q.getResultList();
     }
