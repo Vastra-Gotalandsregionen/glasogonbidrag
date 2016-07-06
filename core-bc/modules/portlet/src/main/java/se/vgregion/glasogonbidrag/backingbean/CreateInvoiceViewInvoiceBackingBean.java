@@ -70,12 +70,12 @@ public class CreateInvoiceViewInvoiceBackingBean {
     // Actions
 
     public void markPaid() {
-        invoice.setStatus(InvoiceStatus.PAID);
+        invoice.setStatus(InvoiceStatus.COMPLETED);
         invoiceService.update(invoice);
     }
 
     public void markUnpaid() {
-        invoice.setStatus(InvoiceStatus.UNPAID);
+        invoice.setStatus(InvoiceStatus.IN_PROGRESS);
         invoiceService.update(invoice);
     }
 

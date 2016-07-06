@@ -231,7 +231,7 @@ public class DBViewViewBackingBean {
         invoice.setVat(7500);
         invoice.setInvoiceNumber("10002");
         invoice.setVerificationNumber("E510396");
-        invoice.setStatus(InvoiceStatus.UNPAID);
+        invoice.setStatus(InvoiceStatus.IN_PROGRESS);
 
         try {
             beneficiaryService.update(b1);
