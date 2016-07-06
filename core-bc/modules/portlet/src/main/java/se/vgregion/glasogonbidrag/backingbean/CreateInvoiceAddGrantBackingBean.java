@@ -121,7 +121,7 @@ public class CreateInvoiceAddGrantBackingBean {
     // Session data
 
     private String number;
-    private String deliveryDate;
+    private Date deliveryDate;
     private String grantType;
     private String grantTypeLabel;
 
@@ -198,11 +198,11 @@ public class CreateInvoiceAddGrantBackingBean {
         this.number = number;
     }
 
-    public String getDeliveryDate() {
+    public Date getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(String deliveryDate) {
+    public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
@@ -295,17 +295,17 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("deliveryDateListener(): add {} to grant {}",
                 deliveryDate, grant);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = sdf.parse(deliveryDate);
-        } catch (ParseException e) {
-            LOGGER.warn("Exception. {}", e.getMessage());
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date = null;
+//        try {
+//            date = sdf.parse(deliveryDate);
+//        } catch (ParseException e) {
+//            LOGGER.warn("Exception. {}", e.getMessage());
+//
+//            return;
+//        }
 
-            return;
-        }
-
-        grant.setDeliveryDate(date);
+        grant.setDeliveryDate(deliveryDate);
 
         // Set flow
         flow = flow.nextState();
@@ -655,9 +655,11 @@ public class CreateInvoiceAddGrantBackingBean {
             beneficiary = beneficiaryRepository.findWithParts(beneficiary.getId());
             number = beneficiary.getIdentification().getString();
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            deliveryDate = df.format(grant.getDeliveryDate());
 
-            deliveryDate = df.format(grant.getDeliveryDate());
+            deliveryDate = grant.getDeliveryDate();
 
             prescriptionVO.setDate(grant.getPrescriptionDate());
 

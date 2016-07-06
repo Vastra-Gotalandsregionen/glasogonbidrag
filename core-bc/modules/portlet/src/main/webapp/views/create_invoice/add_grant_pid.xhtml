@@ -18,7 +18,7 @@
         <c:set var="prescriptionVO" value="#{createInvoiceAddGrantBackingBean.prescriptionVO}" scope="request" />
 
         <div class="msg-wrap">
-            <h:messages />
+            <h:messages showSummary="true" showDetail="false" />
         </div>
 
         <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
@@ -98,6 +98,7 @@
                                       placeholder="ÅÅÅÅ-MM-DD"
                                       required="true"
                                       requiredMessage="Du måste fylla i ett datum"
+                                      converterMessage="#{bundle['reg-grant-error-converting-delivery-date']}"
                                       triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:deliveryDateSubmit"
                 />
 
@@ -188,6 +189,7 @@
                                       placeholder="ÅÅÅÅ-MM-DD"
                                       required="true"
                                       requiredMessage="Du måste fylla i ett datum"
+                                      converterMessage="#{bundle['reg-grant-error-converting-prescription-date']}"
                                       triggerOnEnter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:prescriptionDateSubmit"
                 />
 

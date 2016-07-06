@@ -24,6 +24,7 @@
     <cc:attribute name="valueType" />
     <cc:attribute name="required"  default="false" required="false" type="java.lang.Boolean" />
     <cc:attribute name="requiredMessage" />
+    <cc:attribute name="converterMessage" />
     <cc:attribute name="placeholder" />
     <cc:attribute name="autofocus" default="false" required="false" type="java.lang.Boolean" />
     <cc:attribute name="triggerOnEnter" />
@@ -37,6 +38,7 @@
     <c:set var="valueType" value="#{cc.attrs.valueType}" />
     <c:set var="required" value="#{cc.attrs.required}" />
     <c:set var="requiredMessage" value="#{cc.attrs.requiredMessage}" />
+    <c:set var="converterMessage" value="#{cc.attrs.converterMessage}" />
     <c:set var="placeholder" value="#{cc.attrs.placeholder}" />
     <c:set var="autofocus" value="#{cc.attrs.autofocus}" />
     <c:set var="triggerOnEnter" value="#{cc.attrs.triggerOnEnter}"  />
@@ -45,14 +47,19 @@
         <div class="field-element inline">
             <h:outputLabel for="#{id}" value="#{label}" />
             <h:inputText id="#{id}"
-                         styleClass="#{valueType eq 'personNumber' ? 'js-input-mask js-input-mask-personnumber' : ''} #{valueType eq 'date' ? 'js-input-mask js-input-mask-date' : ''} #{inputStyleClass}"
+                         styleClass="#{valueType eq 'personNumber' ? 'js-input-mask js-input-mask-personnumber' : ''} #{valueType eq 'date' ? 'js-input-mask_ js-input-mask-date_' : ''} #{inputStyleClass}"
                          value="#{value}"
                          required="#{required}"
                          requiredMessage="#{requiredMessage}"
+                         converterMessage="#{converterMessage}"
                          pt:placeholder="#{placeholder}"
                          pt:autofocus="#{autofocus}"
                          pt:data-triggeronenter="#{triggerOnEnter}"
-            />
+            >
+                <c:if test="#{valueType eq 'date'}">
+                    <f:convertDateTime  type="date" pattern="yyyy-MM-dd" />
+                </c:if>
+            </h:inputText>
         </div>
     </div>
 

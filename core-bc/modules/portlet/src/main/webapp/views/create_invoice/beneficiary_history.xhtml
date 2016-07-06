@@ -84,19 +84,7 @@
                                     </h:outputText>
                                 </div>
                                 <div class="chip-hd-item">
-                                    <!-- TODO: Better implementation of this in view -->
-                                    <ui:fragment rendered="#{empty grant.invoice.status}">
-                                        Pågående
-                                    </ui:fragment>
-                                    <ui:fragment rendered="#{grant.invoice.status eq 'PAID'}">
-                                        Betalad
-                                    </ui:fragment>
-                                    <ui:fragment rendered="#{grant.invoice.status eq 'UNPAID'}">
-                                        Ej betalad
-                                    </ui:fragment>
-                                    <ui:fragment rendered="#{grant.invoice.status eq 'CANCELED'}">
-                                        Makulerad
-                                    </ui:fragment>
+                                    <h:outputText value="#{bundle[grant.invoice.status]}" />
                                 </div>
                             </div>
                             <div class="chip-bd">

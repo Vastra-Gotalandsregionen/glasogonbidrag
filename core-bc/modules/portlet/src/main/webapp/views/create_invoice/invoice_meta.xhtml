@@ -50,19 +50,7 @@
                             <h:outputText value="Status:" />
                         </span>
                         <span class="item-value">
-                            <!-- TODO: Better implementation of this in view -->
-                            <ui:fragment rendered="#{empty grant.invoice.status}">
-                                Pågående
-                            </ui:fragment>
-                            <ui:fragment rendered="#{grant.invoice.status eq 'PAID'}">
-                                Betalad
-                            </ui:fragment>
-                            <ui:fragment rendered="#{grant.invoice.status eq 'UNPAID'}">
-                                Ej betalad
-                            </ui:fragment>
-                            <ui:fragment rendered="#{grant.invoice.status eq 'CANCELED'}">
-                                Makulerad
-                            </ui:fragment>
+                            <h:outputText value="#{bundle[invoice.status]}" />
                         </span>
                     </li>
 
