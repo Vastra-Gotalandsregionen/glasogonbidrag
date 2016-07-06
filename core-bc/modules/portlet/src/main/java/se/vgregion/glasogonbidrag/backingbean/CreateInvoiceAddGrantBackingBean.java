@@ -50,6 +50,21 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CreateInvoiceViewBackingBean.class);
 
+    private static final Date NEW_RULESET_CHANGE_DATE;
+    static {
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.YEAR, 2016);
+        cal.set(Calendar.MONTH, Calendar.MARCH);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        NEW_RULESET_CHANGE_DATE = cal.getTime();
+    }
+
     private static final String GRANT_TYPE_AGE_0_TO_15 = "0";
     private static final String GRANT_TYPE_AGE_0_TO_19 = "1";
     private static final String GRANT_TYPE_OTHER = "2";
@@ -394,8 +409,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
-        // TODO: When step back to ENTER_PRESCRIPTION_DATE values for prescription date is lost. When step back to SELECT_GRANT_TYPE value for grant type is lost. However, when step back to ENTER_DELIVERY_DATE, value for deliveryDate is still there.
-
+        //TODO: When step back to ENTER_PRESCRIPTION_DATE values for prescription date is lost. When step back to SELECT_GRANT_TYPE value for grant type is lost. However, when step back to ENTER_DELIVERY_DATE, value for deliveryDate is still there.
         switch (state) {
             case ENTER_PERSONAL_NUMBER:
                 beneficiary = null; // This should be fetched again
@@ -604,18 +618,11 @@ public class CreateInvoiceAddGrantBackingBean {
     public List<SelectItem> getGrantTypes() {
         List<SelectItem> items = new ArrayList<>();
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, 2015);
-        cal.set(Calendar.MONTH, Calendar.APRIL);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-
-        Date changeDate = cal.getTime();
-
         // Commented out EA 2016-06-15
         //items.add(new SelectItem("-1", ""));
 
         if (grant != null && grant.getDeliveryDate() != null &&
-                grant.getDeliveryDate().before(changeDate)) {
+                grant.getDeliveryDate().before(NEW_RULESET_CHANGE_DATE)) {
             items.add(new SelectItem("0", "0-15"));
         } else {
             items.add(new SelectItem("1", "0-19"));
@@ -695,9 +702,9 @@ public class CreateInvoiceAddGrantBackingBean {
         if(grantId != null) {
             System.out.println("--- Found GrantId -----");
 
+            //TODO: add find with parts to grantRepository, so that call to beneficiaryRepository.findWithParts will not be necessary.
             grant = grantRepository.find(grantId);
             beneficiary = grant.getBeneficiary();
-            // Todo: add find with parts to grantrepository -> Then row below will not be needed.
             beneficiary = beneficiaryRepository.findWithParts(beneficiary.getId());
             number = beneficiary.getIdentification().getString();
 
@@ -705,15 +712,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
             deliveryDate = df.format(grant.getDeliveryDate());
 
-            // Todo: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in backing bean
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, 2015);
-            cal.set(Calendar.MONTH, Calendar.APRIL);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-
-            Date changeDate = cal.getTime();
-
-            if(grant.getDeliveryDate().before((changeDate))) {
+            //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
+            if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
                 grantType = GRANT_TYPE_AGE_0_TO_15;
                 grantTypeLabel = "0-15";
             } else {
