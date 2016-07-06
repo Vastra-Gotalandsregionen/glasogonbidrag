@@ -16,7 +16,7 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "listInvoicesViewBackingBean")
-@Scope(value = "request")
+@Scope(value = "view")
 public class ListInvoicesViewBackingBean {
 
 
