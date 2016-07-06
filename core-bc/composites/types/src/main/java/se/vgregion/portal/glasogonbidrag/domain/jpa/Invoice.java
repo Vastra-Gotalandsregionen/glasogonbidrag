@@ -120,7 +120,7 @@ public class Invoice {
 
     // Invoice Specific
 
-    @Column(name = "verification_number", nullable = false)
+    @Column(name = "verification_number", nullable = false, unique = true)
     private String verificationNumber;
 
     @Column(name = "invoice_number")
