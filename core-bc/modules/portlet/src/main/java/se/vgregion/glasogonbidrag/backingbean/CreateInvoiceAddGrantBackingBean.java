@@ -739,12 +739,6 @@ public class CreateInvoiceAddGrantBackingBean {
         } else {
             grant = new Grant();
         }
-
-
-
-
-
-
     }
 
 }

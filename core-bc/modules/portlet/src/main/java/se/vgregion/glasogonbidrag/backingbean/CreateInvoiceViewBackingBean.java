@@ -59,7 +59,7 @@ public class CreateInvoiceViewBackingBean {
     // Form inputs
 
     private String verificationNumber;
-    private String supplier;
+    private long supplier;
     private String invoiceNumber;
     private BigDecimal amountWithVat;
 
@@ -73,11 +73,11 @@ public class CreateInvoiceViewBackingBean {
         this.verificationNumber = verificationNumber;
     }
 
-    public String getSupplier() {
+    public long getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(String supplier) {
+    public void setSupplier(long supplier) {
         this.supplier = supplier;
     }
 
@@ -110,8 +110,7 @@ public class CreateInvoiceViewBackingBean {
 
         for (Supplier supplier : suppliers) {
             SelectItem item = new SelectItem(
-                    supplier.getName(),
-                    supplier.getName());
+                    supplier.getId(), supplier.getName());
             items.add(item);
         }
 
@@ -120,36 +119,6 @@ public class CreateInvoiceViewBackingBean {
 
     public String register() {
         LOGGER.info("CreateInvoiceViewBackingBean - register()");
-
-//        LOGGER.info("Verification: {}, Supplier: {}, Invoice: {}, Amount: {}",
-//                getVerificationNumber(),
-//                getSupplier(),
-//                getInvoiceNumber(),
-//                getAmountWithVat());
-
-//        String verificationNumber = getVerificationNumber();
-//        if (verificationNumber == null ||
-//                verificationNumber.trim().isEmpty()) {
-//            FacesMessage message = new FacesMessage(
-//                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-//
-//            LOGGER.info("Return to view. verificaiton number Not filled in");
-//
-//            return "view?faces-redirect=true";
-//        }
-
-//        String supplierName = getSupplier();
-//        if (supplierName == null || supplierName.trim().isEmpty()) {
-//            FacesMessage message = new FacesMessage(
-//                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
-//
-//            LOGGER.info("Return to view. supplier Not filled in");
-//
-//            return "view?faces-redirect=true";
-//
-//        }
-
-//        String invoiceNumber = getInvoiceNumber();
 
         ThemeDisplay themeDisplay = util.getThemeDisplay();
         long userId = themeDisplay.getUserId();
@@ -206,7 +175,7 @@ public class CreateInvoiceViewBackingBean {
     protected void init() {
         LOGGER.info("CreateInvoiceViewBackingBean - init()");
 
-        suppliers = supplierRepository.findAll();
+        suppliers = supplierRepository.findAllActive();
     }
 
 }

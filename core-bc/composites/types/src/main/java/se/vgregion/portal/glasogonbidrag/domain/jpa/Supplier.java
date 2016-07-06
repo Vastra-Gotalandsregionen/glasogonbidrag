@@ -17,13 +17,33 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.supplier.findAll",
-                query = "SELECT s FROM Supplier s ORDER BY s.name ASC")
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "ORDER BY s.name ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.supplier.findAllActive",
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "WHERE s.active = TRUE " +
+                        "ORDER BY s.name ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.supplier.findAllInactive",
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "WHERE s.active = FALSE " +
+                        "ORDER BY s.name ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.supplier.findAllByName",
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "WHERE s.name = :name " +
+                        "ORDER BY s.name ASC"),
 })
 public class Supplier {
 
     @Id
-    @Column(name = "supplier_name")
-    private String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     // Liferay Related
 
@@ -44,15 +64,25 @@ public class Supplier {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
 
+    // Supplier specific
+
+    @Column(name = "supplier_name")
+    private String name;
+
+    private boolean active;
+
+    @Column(name = "external_service_id")
+    private String externalServiceId;
+
     public Supplier() {
     }
 
-    public String getName() {
-        return name;
+    public long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getUserId() {
@@ -95,6 +125,22 @@ public class Supplier {
         this.modifiedDate = modifiedDate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getExternalServiceId() {
+        return externalServiceId;
+    }
+
+    public void setExternalServiceId(String externalServiceId) {
+        this.externalServiceId = externalServiceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,19 +148,27 @@ public class Supplier {
 
         Supplier supplier = (Supplier) o;
 
-        return name.equals(supplier.name);
+        if (externalServiceId != null ? !externalServiceId.equals(supplier.externalServiceId) : supplier.externalServiceId != null)
+            return false;
+        if (name != null ? !name.equals(supplier.name) : supplier.name != null)
+            return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (externalServiceId != null ? externalServiceId.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "Supplier{" +
-                "name='" + name + '\'' +
+                "externalServiceId='" + externalServiceId + '\'' +
+                ", name='" + name + '\'' +
+                ", active=" + active +
                 '}';
     }
 }

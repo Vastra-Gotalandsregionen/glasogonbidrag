@@ -191,7 +191,9 @@ public class DBViewViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Supplier supplier = supplierRepository.find("Specsavers");
+
+        List<Supplier> suppliers = supplierRepository.findAllByName("Specsavers");
+        Supplier s = suppliers.get(0);
 
         Identification id1 = identificationRepository.findByPersonalNumber("11294377-1834");
         Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
@@ -225,7 +227,7 @@ public class DBViewViewBackingBean {
         grants.add(g2);
 
         Invoice invoice = new Invoice();
-        invoice.setSupplier(supplier);
+        invoice.setSupplier(s);
         invoice.setGrants(grants);
         invoice.setAmount(30000);
         invoice.setVat(7500);
