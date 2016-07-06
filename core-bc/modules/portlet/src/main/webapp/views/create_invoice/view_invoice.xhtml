@@ -24,127 +24,188 @@
         <div class="row-fluid">
 
             <div class="span6">
-                <div class="box">
-                    <div class="box-hd">
-                        <h3 class="box-title">Registrerade bidrag</h3>
-                    </div>
-                    <div class="box-bd">
-                        <ui:fragment rendered="#{not empty invoice.grants}">
-                            <table class="simple-table">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <h:outputText value="Bidragstagare" />
-                                    </th>
-                                    <th>
-                                        <h:outputText value="Recept" />
-                                    </th>
-                                    <th>
-                                        <h:outputText value="Kvitterat" />
-                                    </th>
-
-                                    <th class="number">
-                                        <h:outputText value="Exkl. moms" />
-                                    </th>
-                                    <th class="number">
-                                        <h:outputText value="Inkl. moms" />
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <ui:repeat value="#{invoice.grants}" var="grant">
-                                    <tr>
-                                        <td>
-                                            <h:link outcome="add_grant">
-                                                <f:param name="invoiceId" value="${invoice.id}" />
-                                                <f:param name="grantId" value="${grant.id}" />
-                                                <h:outputText value="#{grant.beneficiary.identification}" />
-                                            </h:link>
-                                        </td>
-                                        <td>
-                                            <h:outputText value="#{grant.prescriptionDate}">
-                                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                                            </h:outputText>
-                                        </td>
-                                        <td>
-                                            <h:outputText value="#{grant.deliveryDate}">
-                                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                                            </h:outputText>
-                                        </td>
-                                        <td class="number">
-                                            <h:outputText value="#{grant.amountAsKrona}">
-                                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                            </h:outputText>
-                                        </td>
-                                        <td class="number">
-                                            <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
-                                            </h:outputText>
-                                        </td>
-                                    </tr>
-                                </ui:repeat>
-                                </tbody>
-                            </table>
-                        </ui:fragment>
-
-                        <ui:fragment rendered="#{empty invoice.grants}">
-                            <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
-                        </ui:fragment>
-
-                        <div class="button-row">
-                            <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag">
-                                <f:param name="invoiceId" value="${invoice.id}" />
-                                <h:outputText value="#{grant.beneficiary.identification}" />
-                            </h:link>
-                        </div>
 
 
-                    </div>
-                </div>
-            </div>
-
-            <div class="span6">
-                <div class="box">
-                    <div class="box-hd">
-                        <h3 class="box-title">Konteringsförslag</h3>
-                    </div>
-                    <div class="box-bd">
-
-                        <table class="accounting-table">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="Registrerade bidrag">
+                    <ui:fragment rendered="#{not empty invoice.grants}">
+                        <table class="simple-table">
                             <thead>
-                                <tr>
-                                    <th>Antal</th>
-                                    <th>Ansvar</th>
-                                    <th>Konto</th>
-                                    <th>Frikod</th>
-                                    <th>Summa exkl moms</th>
-                                </tr>
+                            <tr>
+                                <th>
+                                    <h:outputText value="Bidragstagare" />
+                                </th>
+                                <th>
+                                    <h:outputText value="Recept" />
+                                </th>
+                                <th>
+                                    <h:outputText value="Kvitterat" />
+                                </th>
+
+                                <th class="number">
+                                    <h:outputText value="Exkl. moms" />
+                                </th>
+                                <th class="number">
+                                    <h:outputText value="Inkl. moms" />
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <c:forEach begin="1" end="3">
-                                    <tr>
-                                        <td>
-                                            <h:inputText />
-                                        </td>
-                                        <td>
-                                            <h:inputText />
-                                        </td>
-                                        <td>
-                                            <h:inputText />
-                                        </td>
-                                        <td>
-                                            <h:inputText />
-                                        </td>
-                                        <td>
-                                            <h:inputText />
-                                        </td>
-                                    </tr>
-                                </c:forEach>
+                            <ui:repeat value="#{invoice.grants}" var="grant">
+                                <tr>
+                                    <td>
+                                        <h:link outcome="add_grant">
+                                            <f:param name="invoiceId" value="${invoice.id}" />
+                                            <f:param name="grantId" value="${grant.id}" />
+                                            <h:outputText value="#{grant.beneficiary.identification}" />
+                                        </h:link>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{grant.prescriptionDate}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{grant.deliveryDate}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </td>
+                                    <td class="number">
+                                        <h:outputText value="#{grant.amountAsKrona}">
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                        </h:outputText>
+                                    </td>
+                                    <td class="number">
+                                        <h:outputText value="#{grant.amountIncludingVatAsKrona}">
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
                             </tbody>
                         </table>
 
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{empty invoice.grants}">
+                        <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
+                    </ui:fragment>
+
+                    <div class="button-row">
+                        <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag">
+                            <f:param name="invoiceId" value="${invoice.id}" />
+                            <h:outputText value="#{grant.beneficiary.identification}" />
+                        </h:link>
                     </div>
-                </div>
+                </gb:box>
+
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="Fakturasammanfattning">
+                    <table class="simple-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <h:outputText value="Post" />
+                            </th>
+                            <th class="number">
+                                <h:outputText value="Exkl. moms" />
+                            </th>
+                            <th class="number">
+                                <h:outputText value="Inkl. moms" />
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <h:outputText value="Faktura" />
+                            </td>
+                            <td class="number">
+                                <h:outputText value="#{invoice.amountAsKrona}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+                            <td class="number">
+                                <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Registrerade bidrag" />
+                            </td>
+                            <td class="number">
+                                <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+                            <td class="number">
+                                <h:outputText value="#{invoice.calculateGrantsAmountIncludingVatSumAsKrona()}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+                        </tr>
+                        <tr class="summary-row #{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0 ? 'match' : 'no-match'}">
+                            <td>
+                                    <span class="summary-icon">
+                                        <h:outputText value="" />
+                                    </span>
+                            </td>
+                            <td class="number">
+                                <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+
+                            <td class="number">
+                                <h:outputText value="#{invoice.calculateDifferenceIncludingVatAsKrona()}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                </h:outputText>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </gb:box>
+                
+            </div>
+
+            <div class="span6">
+
+
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="Konteringsförslag">
+                    <table class="accounting-table">
+                        <thead>
+                        <tr>
+                            <th>Antal</th>
+                            <th>Ansvar</th>
+                            <th>Konto</th>
+                            <th>Frikod</th>
+                            <th>Summa exkl moms</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach begin="1" end="3">
+                            <tr>
+                                <td>
+                                    <h:inputText />
+                                </td>
+                                <td>
+                                    <h:inputText />
+                                </td>
+                                <td>
+                                    <h:inputText />
+                                </td>
+                                <td>
+                                    <h:inputText />
+                                </td>
+                                <td>
+                                    <h:inputText />
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </gb:box>
+
             </div>
 
         </div>
@@ -153,20 +214,24 @@
             <div class="span12">
                 <h:form>
                     <div class="button-row">
+
                         <h:commandLink value="Klarmarkera"
                                        styleClass="link-btn primary"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markPaid}">
+                                       action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
+                                        rendered="#{empty invoice.status or invoice.status eq 'UNPAID'}" >
                             <f:param name="invoiceId" value="${invoice.id}" />
                         </h:commandLink>
                         <h:commandLink value="Makulera"
                                        styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markCanceled}">
+                                       action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
+                                       rendered="#{empty invoice.status or invoice.status eq 'UNPAID'}" >
                             <f:param name="invoiceId" value="${invoice.id}" />
                         </h:commandLink>
 
                         <h:commandLink value="Pågående"
                                        styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}">
+                                       action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}"
+                                       rendered="#{invoice.status eq 'PAID' or invoice.status eq 'CANCELED'}" >
                             <f:param name="invoiceId" value="${invoice.id}" />
                         </h:commandLink>
 
