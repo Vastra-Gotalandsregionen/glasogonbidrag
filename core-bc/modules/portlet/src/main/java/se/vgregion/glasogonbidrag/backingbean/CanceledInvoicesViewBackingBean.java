@@ -2,6 +2,7 @@ package se.vgregion.glasogonbidrag.backingbean;
 
 
 import com.liferay.portal.theme.ThemeDisplay;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import java.util.Locale;
 @Component(value = "canceledInvoicesViewBackingBean")
 @Scope(value = "request")
 public class CanceledInvoicesViewBackingBean {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CanceledInvoicesViewBackingBean.class);
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(CanceledInvoicesViewBackingBean.class);
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -40,14 +43,21 @@ public class CanceledInvoicesViewBackingBean {
 
     @PostConstruct
     protected void init() {
-
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-//        HttpServletRequest request = themeDisplay.getRequest();
-        long groupId = themeDisplay.getScopeGroupId();
         locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
+        long userId = themeDisplay.getUserId();
+
+        //TODO: Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
-        invoices = invoiceRepository.findAllWithStatus(InvoiceStatus.CANCELED);
+        fetchInvoices(userId);
+    }
+
+    private void fetchInvoices(long userId) {
+        int first = 0;
+        int results = 10;
+        invoices = invoiceRepository
+                .findAllWithStatusOrderByModificationDate(
+                        InvoiceStatus.CANCELED, first, results);
     }
 }

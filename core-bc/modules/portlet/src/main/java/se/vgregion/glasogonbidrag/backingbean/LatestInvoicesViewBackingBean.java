@@ -1,7 +1,12 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,6 +26,9 @@ import java.util.Locale;
 @Component(value = "latestInvoicesViewBackingBean")
 @Scope(value = "request")
 public class LatestInvoicesViewBackingBean {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LatestInvoicesViewBackingBean.class);
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -58,15 +66,26 @@ public class LatestInvoicesViewBackingBean {
 
     @PostConstruct
     protected void init() {
-
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         locale = themeDisplay.getLocale();
         long userId = themeDisplay.getUserId();
-        // Temporary - make sure we always get Swedish locale
+
+        //TODO: Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
-        prettyTime = new PrettyTime(locale);
-
-        invoices = invoiceRepository.findAllOrderByModificationDate(userId);
+        fetchInvoices(userId);
+        configurePrettyTime();
     }
+
+    private void fetchInvoices(long userId) {
+        int first = 0;
+        int results = 10;
+        invoices = invoiceRepository
+                .findAllOrderByModificationDate(userId, first, results);
+    }
+
+    private void configurePrettyTime() {
+        prettyTime = new PrettyTime(locale);
+    }
+
 }

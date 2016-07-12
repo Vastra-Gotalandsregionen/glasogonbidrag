@@ -65,14 +65,14 @@ import java.util.List;
                 name = "glasogonbidrag.invoice.findAllOrderByModificationDate",
                 query = "SELECT i " +
                         "FROM Invoice i " +
-                        "ORDER BY i.modifiedDate ASC"),
+                        "ORDER BY i.modifiedDate DESC"),
         @NamedQuery(
-                name = "glasogonbidrag.invoice." +
-                        "findAllByUserOrderByModificationDate",
+                name = "glasogonbidrag.invoice" +
+                        ".findAllByUserOrderByModificationDate",
                 query = "SELECT i " +
                         "FROM Invoice i " +
                         "WHERE i.userId = :user " +
-                        "ORDER BY i.modifiedDate ASC"),
+                        "ORDER BY i.modifiedDate DESC"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllByInvoiceNumber",
                 query = "SELECT i " +
@@ -91,6 +91,18 @@ import java.util.List;
                 name = "glasogonbidrag.invoice.findAllByStatus",
                 query = "SELECT i FROM Invoice i " +
                         "WHERE i.status = :status " +
+                        "ORDER BY i.id ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice" +
+                        ".findAllByStatusOrderByModificationDate",
+                query = "SELECT i FROM Invoice i " +
+                        "WHERE i.status = :status " +
+                        "ORDER BY i.modifiedDate DESC"),
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllByStatusAndUser",
+                query = "SELECT i FROM Invoice i " +
+                        "WHERE i.status = :status " +
+                        "  AND i.userId = :user " +
                         "ORDER BY i.id ASC")
 })
 public class Invoice {

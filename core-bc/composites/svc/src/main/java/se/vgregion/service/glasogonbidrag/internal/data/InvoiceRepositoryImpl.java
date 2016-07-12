@@ -62,19 +62,33 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
     @Override
     public List<Invoice> findAll() {
+        return findAll(-1, -1);
+    }
+
+    @Override
+    public List<Invoice> findAll(int firstResult, int maxResults) {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAll", Invoice.class);
+
+        if (firstResult >= 0) {
+            q.setFirstResult(firstResult);
+
+            if (maxResults > 0) {
+                q.setMaxResults(maxResults);
+            }
+        }
 
         return q.getResultList();
     }
 
     @Override
     public List<Invoice> findAllOrderByModificationDate() {
-        return findAllOrderByModificationDate(-1);
+        return findAllOrderByModificationDate(-1, -1, -1);
     }
 
     @Override
-    public List<Invoice> findAllOrderByModificationDate(long userId) {
+    public List<Invoice> findAllOrderByModificationDate(
+            long userId, int firstResult, int maxResults) {
         TypedQuery<Invoice> q;
 
         if (userId == -1) {
@@ -87,6 +101,14 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
                             "findAllByUserOrderByModificationDate",
                     Invoice.class);
             q.setParameter("user", userId);
+        }
+
+        if (firstResult >= 0) {
+            q.setFirstResult(firstResult);
+
+            if (maxResults > 0) {
+                q.setMaxResults(maxResults);
+            }
         }
 
         return q.getResultList();
@@ -104,6 +126,13 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
     @Override
     public List<Invoice> findAllBySupplier(Supplier supplier) {
+        return findAllBySupplier(supplier, -1, -1);
+    }
+
+    @Override
+    public List<Invoice> findAllBySupplier(Supplier supplier,
+                                           int firstResult,
+                                           int maxResults) {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAllBySupplier", Invoice.class);
         q.setParameter("supplier", supplier);
@@ -118,5 +147,60 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
         q.setParameter("status", status);
 
         return q.getResultList();
+    }
+
+    @Override
+    public List<Invoice> findAllWithStatus(InvoiceStatus status, long userId) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findAllByStatus", Invoice.class);
+        q.setParameter("status", status);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Invoice> findAllWithStatus(InvoiceStatus status,
+                                           long userId,
+                                           int firstResult,
+                                           int maxResults) {
+        TypedQuery<Invoice> q;
+        if (userId != -1) {
+            q = em.createNamedQuery(
+                    "glasogonbidrag.invoice.findAllByStatusAndUser",
+                    Invoice.class);
+            q.setParameter("user", userId);
+        } else {
+            q = em.createNamedQuery(
+                    "glasogonbidrag.invoice.findAllByStatus", Invoice.class);
+        }
+        q.setParameter("status", status);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Invoice> findAllWithStatusOrderByModificationDate(
+            InvoiceStatus status) {
+        return findAllWithStatusOrderByModificationDate(status, -1, -1);
+    }
+
+    @Override
+    public List<Invoice> findAllWithStatusOrderByModificationDate(
+            InvoiceStatus status, int firstResult, int maxResults) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice" +
+                        ".findAllByStatusOrderByModificationDate",
+                Invoice.class);
+        q.setParameter("status", status);
+
+        if (firstResult >= 0) {
+            q.setFirstResult(firstResult);
+
+            if (maxResults > 0) {
+                q.setMaxResults(maxResults);
+            }
+        }
+
+        return null;
     }
 }

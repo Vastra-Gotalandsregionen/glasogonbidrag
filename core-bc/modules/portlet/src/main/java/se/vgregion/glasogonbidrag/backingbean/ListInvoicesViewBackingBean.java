@@ -29,7 +29,6 @@ import java.util.List;
 @Scope(value = "view")
 public class ListInvoicesViewBackingBean {
 
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ListInvoicesViewBackingBean.class);
 
@@ -49,15 +48,16 @@ public class ListInvoicesViewBackingBean {
     }
 
     public String getUserNameById(long userId) {
-
         String userName = "";
 
         try {
             User user = UserLocalServiceUtil.getUser(userId);
-
             userName = user.getFullName();
-        } catch (PortalException | SystemException e) {
-            e.printStackTrace();
+        } catch (PortalException|SystemException e) {
+            LOGGER.error(
+                    "Cannot get name for user with id: {}, got exception: {}",
+                    userId,
+                    e.getMessage());
         }
 
         return userName;
@@ -66,34 +66,56 @@ public class ListInvoicesViewBackingBean {
     public String navigate(long id) {
         PortletRequest request = facesUtil.getRequest();
 
-        PortletURL renderUrl = PortletURLFactoryUtil.create(request, createInvoicePortletId, registerInvoicePlid, PortletRequest.RENDER_PHASE);
-        renderUrl.setParameter("_facesViewIdRender", "/views/create_invoice/view_invoice.xhtml");
-        renderUrl.setParameter("invoiceId", Long.toString(id));
+        PortletURL url = PortletURLFactoryUtil.create(
+                request,
+                createInvoicePortletId,
+                registerInvoicePlid,
+                PortletRequest.RENDER_PHASE);
+        url.setParameter(
+                "_facesViewIdRender",
+                "/views/create_invoice/view_invoice.xhtml");
+        url.setParameter("invoiceId", Long.toString(id));
 
-        LOGGER.info("navigate: {}", renderUrl.toString());
+        LOGGER.info("navigate: {}", url.toString());
 
-        return renderUrl.toString();
+        return url.toString();
     }
 
     @PostConstruct
     protected void init() {
-        invoices = invoiceRepository.findAll();
-
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         long groupId = themeDisplay.getScopeGroupId();
 
+        fetchInvoices();
+        generateLinkIds(groupId);
+    }
+
+    private void fetchInvoices() {
+        invoices = invoiceRepository.findAll();
+    }
+
+    private void generateLinkIds(long groupId) {
+        registerInvoicePlid = getPlid(groupId);
+        createInvoicePortletId =
+                "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
+    }
+
+    private long getPlid(long groupId) {
         Layout registerLayout = null;
         try {
             registerLayout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
                     groupId, true, "/registrera-faktura");
-            registerInvoicePlid = registerLayout.getPlid();
         } catch (SystemException e) {
-            LOGGER.error("Cannot get registerInvoicePlid of registrera-faktura from " +
-                            "layout local service util. Got exception: {}",
+            LOGGER.error(
+                    "Cannot get registerInvoicePlid of registrera-faktura " +
+                    "from layout local service util. Got exception: {}",
                     e.getMessage());
         }
 
-        createInvoicePortletId = "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
-
+        if (registerLayout != null) {
+            return registerLayout.getPlid();
+        } else {
+            return 0;
+        }
     }
 }
