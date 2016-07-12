@@ -1,6 +1,5 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
