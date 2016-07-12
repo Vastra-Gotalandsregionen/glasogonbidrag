@@ -9,8 +9,6 @@ import se.vgregion.service.glasogonbidrag.api.service.IdentificationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Martin Lind - Monator Technologies AB

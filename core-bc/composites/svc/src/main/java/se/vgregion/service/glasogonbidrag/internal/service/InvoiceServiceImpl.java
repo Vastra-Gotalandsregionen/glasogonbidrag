@@ -12,12 +12,9 @@ import se.vgregion.service.glasogonbidrag.exception.GrantAdjustmentAlreadySetExc
 import se.vgregion.service.glasogonbidrag.exception.GrantAlreadyExistException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.Calendar;
 import java.util.Date;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

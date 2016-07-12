@@ -2,11 +2,9 @@ package se.vgregion.service.glasogonbidrag.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
