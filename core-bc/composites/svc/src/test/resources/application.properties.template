@@ -1,0 +1,5 @@
+population.service.keystore=A full path to the .p12 file. Possibly place the file in the same directory as this file.
+population.service.keystore.password=The password to the .p12 file.
+
+population.service.truststore=A full path to the .jks file. Possibly place the file in the same directory as this file.
+population.service.truststore.pasword=The password to the .jks file.
