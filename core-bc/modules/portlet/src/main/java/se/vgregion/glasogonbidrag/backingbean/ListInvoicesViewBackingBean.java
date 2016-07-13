@@ -32,7 +32,6 @@ import java.util.Locale;
 @Scope(value = "view")
 public class ListInvoicesViewBackingBean {
 
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ListInvoicesViewBackingBean.class);
 
@@ -65,11 +64,16 @@ public class ListInvoicesViewBackingBean {
     protected void init() {
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
 
-        invoices = invoiceRepository.findAllWithParts();
-
         locale = themeDisplay.getLocale();
         // Temporary - make sure we always get Swedish locale
         locale = Locale.forLanguageTag("sv-SE");
 
+        //invoices = invoiceRepository.findAllWithParts();
+        fetchInvoices();
     }
+
+    private void fetchInvoices() {
+        invoices = invoiceRepository.findAllWithParts();
+    }
+
 }

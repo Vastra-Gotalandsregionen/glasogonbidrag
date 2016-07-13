@@ -15,10 +15,9 @@
         <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
 
         <h:form>
-
             <h1>Sök fakturor</h1>
 
-            <p:dataTable var="invoice" value="#{listInvoicesViewBackingBean.invoices}"
+            <p:dataTable var="invoice" value="#{invoices}"
                          rows="5"
                          paginator="true"
                          paginatorPosition="bottom"
