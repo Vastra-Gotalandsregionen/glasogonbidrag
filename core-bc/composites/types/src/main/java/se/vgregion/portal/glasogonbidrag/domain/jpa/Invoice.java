@@ -165,6 +165,9 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
+    @OneToOne
+    private AccountingDistribution distribution;
+
     @Transient
     private final KronaCalculationUtil currency =
             new KronaCalculationUtil();
