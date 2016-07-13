@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="field-row field-row-2">
-                            <div class="field-element inline">
+                            <div class="field-element">
                                 <h:outputLabel for="verificationNumber" value="Verifikationsnr:" />
                                 <h:inputText id="verificationNumber" value="#{createInvoiceViewBackingBean.verificationNumber}"
                                              required="true" requiredMessage="#{bundle['reg-invoice-error-input-verification']}"
@@ -38,7 +38,7 @@
                                 </h:inputText>
                             </div>
 
-                            <div class="field-element inline">
+                            <div class="field-element">
                                 <h:outputLabel for="supplier" value="Leverantör:" />
                                 <h:selectOneMenu id="supplier" name="world" styleClass="js-select-replace"
                                                  value="#{createInvoiceViewBackingBean.supplier}"
@@ -52,13 +52,13 @@
                         </div>
 
                         <div class="field-row field-row-2">
-                            <div class="field-element inline">
+                            <div class="field-element">
                                 <h:outputLabel for="invoiceNumber" value="Fakturanr:" />
                                 <h:inputText id="invoiceNumber" value="#{createInvoiceViewBackingBean.invoiceNumber}"
                                              pt:placeholder="Fakturanr eller meddelande..."  />
                             </div>
 
-                            <div class="field-element inline">
+                            <div class="field-element">
                                 <h:outputLabel for="invoiceAmountIncludingVAT" value="Belopp inkl moms:" />
                                 <h:inputText id="invoiceAmountIncludingVAT"
                                              value="#{createInvoiceViewBackingBean.amountWithVat}"

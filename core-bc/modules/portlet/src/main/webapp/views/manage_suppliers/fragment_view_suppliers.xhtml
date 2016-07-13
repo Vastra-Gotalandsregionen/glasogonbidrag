@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="suppliers" value="#{manageSuppliersViewBackingBean.suppliers}" scope="request" />
+        <c:set var="selectedSupplier" value="#{manageSuppliersViewBackingBean.selectedSupplier}" scope="request" />
+
+        <p:dataTable id="suppliersDataTable"
+                     var="supplier"
+                     value="#{suppliers}"
+                     rows="10"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="1,5,10,15,20,50"
+                     selectionMode="single"
+                     selection="#{selectedSupplier}"
+                     rowKey="#{supplier.id}"
+        >
+            <p:ajax event="rowSelect"
+                    listener="#{manageSuppliersViewBackingBean.onRowSelect}"
+                    update=":manageSuppliersForm:detailsPanel"
+                    oncomplete="ajaxComplete()"
+            />
+            <p:ajax event="rowUnselect"
+                    listener="#{manageSuppliersViewBackingBean.onRowUnselect}"
+                    update=":manageSuppliersForm:detailsPanel"
+                    oncomplete="ajaxComplete()"
+             />
+
+            <p:column headerText="Leverantör"
+                      sortBy="#{supplier.name}"
+            >
+                <!--
+                <h:link value="#{supplier.name}" outcome="view_supplier">
+                    <f:param name="supplierId" value="#{supplier.id}" />
+                </h:link>
+                -->
+                <h:outputText value="#{supplier.name}" />
+            </p:column>
+
+            <p:column headerText="Raindance-ID" sortBy="#{supplier.externalServiceId}">
+                <h:outputText value="#{supplier.externalServiceId}" />
+            </p:column>
+
+            <p:column headerText="Antal fakturor" sortBy="#{supplier.invoices.size()}" styleClass="number">
+                <h:outputText value="#{supplier.invoices.size()}" />
+            </p:column>
+
+            <p:column headerText="Aktiv" sortBy="#{supplier.active}">
+                <h:outputText value="#{supplier.active ? 'Ja' : 'Nej'}" />
+            </p:column>
+
+
+        </p:dataTable>
+
+    </h:body>
+</f:view>

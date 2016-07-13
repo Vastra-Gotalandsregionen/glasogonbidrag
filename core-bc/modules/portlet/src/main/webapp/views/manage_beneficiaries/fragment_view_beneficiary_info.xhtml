@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
+
+        <gb:box title="#{selectedBeneficiary.fullName}" collapsible="true" collapsed="false">
+
+            <ul class="labeled-list">
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Person-nr:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedBeneficiary.identification}" />
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Förnamn:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedBeneficiary.firstName}" />
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Efternamn:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedBeneficiary.lastName}" />
+                    </span>
+                </li>
+            </ul>
+
+        </gb:box>
+
+    </h:body>
+</f:view>

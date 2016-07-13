@@ -1,20 +1,27 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "vgr_glasogonbidrag_supplier")
 @NamedQueries({
+
+        @NamedQuery(
+                name = "glasogonbidrag.supplier.findWithInvoices",
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "LEFT JOIN FETCH s.invoices " +
+                        "WHERE s.id = :id"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.supplier.findAllWithInvoices",
+                query = "SELECT s " +
+                        "FROM Supplier s " +
+                        "LEFT JOIN FETCH s.invoices " +
+                        "ORDER BY s.name ASC"),
+
         @NamedQuery(
                 name = "glasogonbidrag.supplier.findAll",
                 query = "SELECT s " +
@@ -73,6 +80,13 @@ public class Supplier {
 
     @Column(name = "external_service_id")
     private String externalServiceId;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "supplier")
+    private List<Invoice> invoices;
+
 
     public Supplier() {
     }
@@ -133,12 +147,28 @@ public class Supplier {
         this.name = name;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public String getExternalServiceId() {
         return externalServiceId;
     }
 
     public void setExternalServiceId(String externalServiceId) {
         this.externalServiceId = externalServiceId;
+    }
+
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
     }
 
     @Override

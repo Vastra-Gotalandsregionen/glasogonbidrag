@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.beneficiaries}" scope="request" />
+        <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
+
+        <p:dataTable id="beneficiariesDataTable"
+                     var="beneficiary"
+                     value="#{beneficiaries}"
+                     rows="10"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="1,5,10,15,20,50"
+                     selectionMode="single"
+                     selection="#{selectedBeneficiary}"
+                     rowKey="#{beneficiary.id}"
+        >
+
+            <p:ajax event="rowSelect"
+                    listener="#{manageBeneficiariesViewBackingBean.onRowSelect}"
+                    update=":manageBeneficiariesForm:detailsPanel"
+                    oncomplete="ajaxComplete()"
+            />
+            <p:ajax event="rowUnselect"
+                    listener="#{manageBeneficiariesViewBackingBean.onRowUnselect}"
+                    update=":manageBeneficiariesForm:detailsPanel"
+                    oncomplete="ajaxComplete()"
+            />
+
+            <p:column headerText="Person-nr" sortBy="#{beneficiary.identification.id}">
+                <h:outputText value="#{beneficiary.identification}" />
+            </p:column>
+
+            <p:column headerText="Namn" sortBy="#{beneficiary.lastName}">
+                <h:outputText value="#{beneficiary.fullName}" />
+            </p:column>
+
+            <p:column headerText="Antal bidrag" sortBy="#{beneficiary.grants.size()}">
+                <h:outputText value="#{beneficiary.grants.size()}" />
+            </p:column>
+
+        </p:dataTable>
+
+    </h:body>
+</f:view>

@@ -34,14 +34,28 @@
     </portlet>
 
     <portlet>
-        <portlet-name>glasogonbidrag-list-beneficiaries</portlet-name>
+        <portlet-name>glasogonbidrag-list-invoices</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
     </portlet>
 
     <portlet>
-        <portlet-name>glasogonbidrag-list-invoices</portlet-name>
+        <portlet-name>glasogonbidrag-manage-beneficiaries</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-manage-suppliers</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-statistics-dashboard</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>

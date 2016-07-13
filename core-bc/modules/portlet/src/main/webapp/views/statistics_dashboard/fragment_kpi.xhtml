@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="locale" value="#{statisticsDashboardViewBackingBean.locale}" scope="request" />
+
+        <gb:box collapsible="false" collapsed="false" title="">
+            <div class="kpi-wrap">
+                <div class="kpi-item  kpi-item-skin-2">
+                    <span class="kpi-item-value">
+                        <h:outputText value="#{statisticsDashboardViewBackingBean.progressToday}">
+                            <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{statisticsDashboardViewBackingBean.locale}" />
+                        </h:outputText>
+                    </span>
+                    <span class="kpi-item-label">
+                        <h:outputText value="kr registrerade totalt idag" />
+                    </span>
+                </div>
+            </div>
+        </gb:box>
+
+        <gb:box collapsible="false" collapsed="false" title="">
+            <div class="kpi-wrap">
+                <div class="kpi-item kpi-item-skin-2">
+                    <span class="kpi-item-value">
+                        <h:outputText value="#{statisticsDashboardViewBackingBean.grantCountToday}">
+                            <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{statisticsDashboardViewBackingBean.locale}" />
+                        </h:outputText>
+                    </span>
+                    <span class="kpi-item-label">
+                        <h:outputText value="st bidrag registrerade totalt idag" />
+                    </span>
+                </div>
+            </div>
+        </gb:box>
+
+    </h:body>
+</f:view>

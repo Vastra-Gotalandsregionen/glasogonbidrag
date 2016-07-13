@@ -13,5 +13,9 @@ public interface GrantRepository {
 
     List<Grant> findByUser(long userId);
 
+    List<Grant> findByDate(Date date);
+
+    long currentProgressByDate(Date date);
+
     long currentProgressByUserAndDate(long userId, Date date);
 }

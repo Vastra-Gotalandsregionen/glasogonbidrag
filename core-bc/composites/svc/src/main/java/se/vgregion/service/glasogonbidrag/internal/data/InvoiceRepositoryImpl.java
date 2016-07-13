@@ -119,4 +119,13 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
         return q.getResultList();
     }
+
+    @Override
+    public List<Invoice> findAllWithParts() {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice.findAllWithParts", Invoice.class);
+
+        return q.getResultList();
+    }
+
 }

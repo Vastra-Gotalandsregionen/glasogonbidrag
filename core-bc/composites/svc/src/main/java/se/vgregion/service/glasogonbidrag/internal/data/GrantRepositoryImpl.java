@@ -32,12 +32,42 @@ public class GrantRepositoryImpl implements GrantRepository {
     }
 
     @Override
+    public List<Grant> findByDate(Date date) {
+        TypedQuery<Grant> q = em.createNamedQuery(
+                "glasogonbidrag.grant.findByDate", Grant.class);
+        q.setParameter("date", date, TemporalType.DATE);
+
+        return q.getResultList();
+    }
+
+    @Override
     public List<Grant> findByUser(long userId) {
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findByUser", Grant.class);
         q.setParameter("user", userId);
 
         return q.getResultList();
+    }
+
+    @Override
+    public long currentProgressByDate(Date date) {
+        TypedQuery<Long> q = em.createNamedQuery(
+                "glasogonbidrag.grant.currentProgressByDate",
+                Long.class);
+        q.setParameter("date", date, TemporalType.DATE);
+
+        Long result = null;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            // Ignore exception
+        }
+
+        if (result != null) {
+            return result;
+        } else {
+            return 0;
+        }
     }
 
     @Override

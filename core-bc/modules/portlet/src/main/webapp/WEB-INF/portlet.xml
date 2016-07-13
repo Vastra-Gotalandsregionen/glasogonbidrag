@@ -99,29 +99,6 @@
 
 
     <portlet>
-        <portlet-name>glasogonbidrag-list-beneficiaries</portlet-name>
-        <display-name>glasogonbidrag-list-beneficiaries</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
-
-        <init-param>
-            <name>javax.portlet.faces.defaultViewId.view</name>
-            <value>/views/list_beneficiaries/view.xhtml</value>
-        </init-param>
-
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>VIEW</portlet-mode>
-        </supports>
-
-        <portlet-info>
-            <title>glasogonbidrag-list-beneficiaries</title>
-            <short-title>glasogonbidrag-list-beneficiaries</short-title>
-            <keywords>glasogonbidrag-list-beneficiaries</keywords>
-        </portlet-info>
-    </portlet>
-
-
-    <portlet>
         <portlet-name>glasogonbidrag-list-invoices</portlet-name>
         <display-name>glasogonbidrag-list-invoices</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
@@ -140,6 +117,72 @@
             <title>glasogonbidrag-list-invoices</title>
             <short-title>glasogonbidrag-list-invoices</short-title>
             <keywords>glasogonbidrag-list-invoices</keywords>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-manage-beneficiaries</portlet-name>
+        <display-name>glasogonbidrag-manage-beneficiaries</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/manage_beneficiaries/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-manage-beneficiaries</title>
+            <short-title>glasogonbidrag-manage-beneficiaries</short-title>
+            <keywords>glasogonbidrag-manage-beneficiaries</keywords>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-manage-suppliers</portlet-name>
+        <display-name>glasogonbidrag-manage-suppliers</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/manage_suppliers/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-manage-suppliers</title>
+            <short-title>glasogonbidrag-manage-suppliers</short-title>
+            <keywords>glasogonbidrag-manage-suppliers</keywords>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-statistics-dashboard</portlet-name>
+        <display-name>glasogonbidrag-statistics-dashboard</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/statistics_dashboard/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-statistics-dashboard</title>
+            <short-title>glasogonbidrag-statistics-dashboard</short-title>
+            <keywords>glasogonbidrag-statistics-dashboard</keywords>
         </portlet-info>
     </portlet>
 

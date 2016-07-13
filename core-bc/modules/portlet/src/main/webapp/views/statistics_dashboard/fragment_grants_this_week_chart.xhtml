@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge">
+
+    <h:head />
+
+    <h:body>
+
+        <canvas id="grantsOfDatesOfThisWeekChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById("grantsOfDatesOfThisWeekChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: #{statisticsDashboardViewBackingBean.daysOfWeekJSONString},
+                    datasets: [{
+                        label: '<h:outputText value="Antal bidrag per dag denna vecka" />',
+                        data: #{statisticsDashboardViewBackingBean.grantsCountOfWeekDaysJSONString},
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+
+    </h:body>
+</f:view>

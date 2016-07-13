@@ -10,8 +10,10 @@
         <portlet id="glasogonbidrag-create-invoice"/>
         <portlet id="glasogonbidrag-db-view"/>
         <portlet id="glasogonbidrag-latest-invoices"/>
-        <portlet id="glasogonbidrag-list-beneficiaries"/>
         <portlet id="glasogonbidrag-list-invoices"/>
+        <portlet id="glasogonbidrag-manage-beneficiaries"/>
+        <portlet id="glasogonbidrag-manage-suppliers"/>
+        <portlet id="glasogonbidrag-statistics-dashboard"/>
     </category>
 
 </display>

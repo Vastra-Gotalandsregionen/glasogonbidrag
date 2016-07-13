@@ -1,20 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +23,12 @@ import java.util.List;
                 name = "glasogonbidrag.beneficiary.findAll",
                 query = "SELECT b FROM Beneficiary b " +
                         "ORDER BY b.id ASC"),
+        @NamedQuery(
+                name = "glasogonbidrag.beneficiary.findAllWithParts",
+                query = "SELECT b FROM Beneficiary b " +
+                        "LEFT JOIN FETCH b.grants " +
+                        "ORDER BY b.id ASC"),
+
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByFirstName",
                 query = "SELECT b FROM Beneficiary b " +
@@ -129,6 +121,10 @@ public class Beneficiary {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public List<Grant> getGrants() {

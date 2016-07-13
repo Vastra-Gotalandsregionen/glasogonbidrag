@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <gb:box title="#{selectedSupplier.name}" collapsible="true" collapsed="false">
+
+            <ul class="labeled-list">
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Namn:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedSupplier.name}" />
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Raindance-ID:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedSupplier.externalServiceId}" />
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="Aktiv:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedSupplier.active ? 'Ja' : 'Nej'}" />
+                    </span>
+                </li>
+            </ul>
+
+            <div class="button-row">
+
+                <h:commandLink styleClass="link-btn primary" value="Redigera leverantör">
+                    <f:ajax listener="#{manageSuppliersViewBackingBean.changeViewEditSupplierListener(true)}"
+                            render=":manageSuppliersForm:detailsPanel"
+                    />
+                </h:commandLink>
+            </div>
+
+        </gb:box>
+
+    </h:body>
+</f:view>

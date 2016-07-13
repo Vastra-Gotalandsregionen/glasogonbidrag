@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <gb:box title="Fakturor för #{selectedSupplier.name}" collapsible="true" collapsed="false">
+
+            <ui:fragment rendered="#{not empty selectedSupplierInvoices}">
+                <c:set var="paginatorRows" value="#{10}" scope="request" />
+                <c:set var="viewPaginator" value="#{invoices.size() gt paginatorRows ? true : false}" scope="request" />
+
+                <p:dataTable var="invoice" value="#{selectedSupplierInvoices}"
+                             rows="#{paginatorRows}"
+                             paginator="#{viewPaginator}"
+                             paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="1,5,10,15,20,50" >
+                    <p:column headerText="Ver.nr." sortBy="#{invoice.verificationNumber}">
+                        <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
+                            <h:outputText value="#{invoice.verificationNumber}" />
+                        </a>
+                    </p:column>
+
+                    <p:column headerText="Status" sortBy="#{invoice.status}">
+                        <h:outputText value="#{bundle[invoice.status]}" />
+                    </p:column>
+
+                    <p:column headerText="Handläggare" sortBy="#{invoice.userId}">
+                        <h:outputText value="#{manageSuppliersViewBackingBean.getUserNameById(invoice.userId)}" />
+                    </p:column>
+
+                </p:dataTable>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{empty selectedSupplierInvoices}">
+                <div class="alert alert-info">
+                    Det finns inga fakturor registerade för #{selectedSupplier.name}
+                </div>
+            </ui:fragment>
+        </gb:box>
+
+    </h:body>
+</f:view>

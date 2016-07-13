@@ -27,4 +27,6 @@ public interface InvoiceRepository {
     List<Invoice> findAllByInvoiceNumber(String number);
 
     List<Invoice> findAllWithStatus(InvoiceStatus status);
+
+    List<Invoice> findAllWithParts();
 }

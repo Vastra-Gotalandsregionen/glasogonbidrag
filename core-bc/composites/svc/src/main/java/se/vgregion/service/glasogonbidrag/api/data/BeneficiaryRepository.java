@@ -16,4 +16,6 @@ public interface BeneficiaryRepository {
     Beneficiary findWithPartsByIdent(Identification identification);
 
     List<Beneficiary> findAll();
+
+    List<Beneficiary> findAllWithParts();
 }
