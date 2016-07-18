@@ -16,10 +16,10 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.api.data"/>
-    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.api.service"/>
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.api.data"/>
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.api.service"/>
 
-    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.internal.data"/>
-    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.internal.service"/>
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.internal.data"/>
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.internal.service"/>
 
 </beans>

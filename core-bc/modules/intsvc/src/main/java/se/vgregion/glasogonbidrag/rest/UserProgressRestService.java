@@ -1,7 +1,7 @@
 package se.vgregion.glasogonbidrag.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

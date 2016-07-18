@@ -12,9 +12,9 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
-import se.vgregion.service.glasogonbidrag.api.service.SupplierService;
+import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

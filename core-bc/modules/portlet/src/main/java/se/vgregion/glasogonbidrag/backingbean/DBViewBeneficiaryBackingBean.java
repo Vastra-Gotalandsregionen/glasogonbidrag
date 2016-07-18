@@ -14,14 +14,13 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
-import se.vgregion.service.glasogonbidrag.api.data.BeneficiaryRepository;
-import se.vgregion.service.glasogonbidrag.api.service.BeneficiaryService;
-import se.vgregion.service.glasogonbidrag.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.List;

@@ -13,15 +13,11 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.api.data.GrantRepository;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

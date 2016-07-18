@@ -2,7 +2,6 @@ package se.vgregion.glasogonbidrag.backingbean;
 
 
 import com.liferay.portal.theme.ThemeDisplay;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

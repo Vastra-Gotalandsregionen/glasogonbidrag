@@ -12,8 +12,8 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
-import se.vgregion.service.glasogonbidrag.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;

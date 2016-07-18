@@ -1,8 +1,5 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
@@ -12,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;

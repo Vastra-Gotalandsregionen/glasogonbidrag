@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
