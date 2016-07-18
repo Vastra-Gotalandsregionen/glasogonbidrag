@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountRow;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
@@ -369,6 +371,27 @@ public class DBViewViewBackingBean {
         return "view?faces-redirect=true";
     }
 
+    public String addAccountingRows() {
+        LOGGER.info("DBViewViewBackingBean - addAccountingRows()");
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
+        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+
+        AccountingDistribution distribution = new AccountingDistribution();
+        distribution.addRow(new AccountRow(2, 34, 1023, 20202));
+        distribution.addRow(new AccountRow(4, 12, 23, 9402));
+        distribution.addRow(new AccountRow(123, 39, 2346, 7361));
+
+        invoiceService.updateAddAccountingDistribution(
+                userId, groupId, companyId, inv, distribution);
+
+        return "view?faces-redirect=true";
+    }
+
     @PostConstruct
     protected void init() {
         LOGGER.info("DBViewViewBackingBean - init()");
@@ -389,4 +412,5 @@ public class DBViewViewBackingBean {
     private void fetchBeneficiaries() {
         beneficiaries = beneficiaryRepository.findAll();
     }
+
 }

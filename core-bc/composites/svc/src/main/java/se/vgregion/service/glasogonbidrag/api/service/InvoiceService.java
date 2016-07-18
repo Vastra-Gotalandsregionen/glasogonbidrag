@@ -1,5 +1,6 @@
 package se.vgregion.service.glasogonbidrag.api.service;
 
+import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
@@ -24,6 +25,10 @@ public interface InvoiceService {
     void updateAddGrantAdjustment(long userId, long groupId, long companyId,
                                   Invoice invoice, GrantAdjustment adjustment)
         throws GrantAdjustmentAlreadySetException;
+
+    void updateAddAccountingDistribution(
+            long userId, long groupId, long companyId,
+            Invoice invoice, AccountingDistribution distribution);
 
     void delete(Long id);
 }
