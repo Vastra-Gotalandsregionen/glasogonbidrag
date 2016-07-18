@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -34,10 +38,19 @@ public class AccountRow {
     @JoinColumn(name = "distribution_id")
     private AccountingDistribution distribution;
 
+    @Transient
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
+
     /**
      * Default constructor.
      */
     public AccountRow() {
+    }
+
+    public AccountRow(int count, int responsibility,
+                      int account, int amountExclVat) {
+        this(null, count, responsibility, account, amountExclVat);
     }
 
     public AccountRow(AccountingDistribution distribution,
@@ -105,5 +118,15 @@ public class AccountRow {
 
     public void setDistribution(AccountingDistribution distribution) {
         this.distribution = distribution;
+    }
+
+    // Public helper to transform amount as krona
+
+    public BigDecimal getAmountExclVatAsKrona() {
+        return currency.calculatePartsAsKrona(amountExclVat);
+    }
+
+    public void setAmountExclVatAsKrona(BigDecimal valueAsKrona) {
+        amountExclVat = currency.calculateKronaAsParts(valueAsKrona);
     }
 }

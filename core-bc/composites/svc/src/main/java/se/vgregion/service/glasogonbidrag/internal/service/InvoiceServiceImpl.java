@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountRow;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
@@ -158,6 +159,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public void updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
             Invoice invoice, AccountingDistribution distribution) {
@@ -167,7 +169,28 @@ public class InvoiceServiceImpl implements InvoiceService {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
 
-        invoice.setModifiedDate(date);
+        // Set user, group and company id of new distribution
+        distribution.setUserId(userId);
+        distribution.setGroupId(groupId);
+        distribution.setCompanyId(companyId);
+
+        // Update creation date and modification date of the new
+        // accounting distribution.
+        distribution.setCreateDate(date);
+        distribution.setModifiedDate(date);
+
+        // Setup relation from the distribution to the invoice.
+        invoice.setDistribution(distribution);
+
+        // Persist all rows for the distribution.
+        for (AccountRow row : distribution.getRows()) {
+            em.persist(row);
+        }
+
+        // Persist the distribution.
+        em.persist(distribution);
+
+        this.update(invoice);
     }
 
     @Override

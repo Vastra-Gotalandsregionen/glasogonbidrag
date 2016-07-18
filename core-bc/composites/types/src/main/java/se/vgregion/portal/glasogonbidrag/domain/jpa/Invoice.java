@@ -46,6 +46,7 @@ import java.util.List;
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
                         "LEFT JOIN FETCH i.adjustment " +
+                        "LEFT JOIN FETCH i.distribution " +
                         "WHERE i.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findByVerificationNumber",
@@ -166,6 +167,7 @@ public class Invoice {
     private InvoiceStatus status;
 
     @OneToOne
+    @JoinColumn(name = "distribution")
     private AccountingDistribution distribution;
 
     @Transient
@@ -304,6 +306,14 @@ public class Invoice {
         this.status = status;
     }
 
+    public AccountingDistribution getDistribution() {
+        return distribution;
+    }
+
+    public void setDistribution(AccountingDistribution distribution) {
+        this.distribution = distribution;
+    }
+
     // Public helper methods.
 
     public BigDecimal getAmountAsKrona() {
@@ -333,6 +343,8 @@ public class Invoice {
         this.amount = result.getValue();
         this.vat = result.getVat();
     }
+
+    // Helper to calculate amount into krona.
 
     public BigDecimal calculateGrantsAmountSumAsKrona() {
         if (grants == null) {
