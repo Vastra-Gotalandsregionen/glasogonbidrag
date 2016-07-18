@@ -54,7 +54,7 @@ public class Keratoconus extends Diagnose {
     }
 
     @Override
-    public DiagnoseType getDiagnoseType() {
+    public DiagnoseType getType() {
         return DiagnoseType.KERATOCONUS;
     }
 }

@@ -8,5 +8,6 @@ public enum IdentificationType {
     RESERVE,
     LMA,
     OTHER,
+    PROTECTED,
     NONE
 }

@@ -32,10 +32,10 @@ public abstract class Diagnose {
         this.id = id;
     }
 
-    public abstract DiagnoseType getDiagnoseType();
+    public abstract DiagnoseType getType();
 
     @Override
     public String toString() {
-        return getDiagnoseType().toString();
+        return getType().toString();
     }
 }

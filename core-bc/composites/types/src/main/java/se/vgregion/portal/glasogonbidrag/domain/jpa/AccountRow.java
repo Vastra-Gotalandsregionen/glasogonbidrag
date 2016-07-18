@@ -49,13 +49,15 @@ public class AccountRow {
     }
 
     public AccountRow(int count, int responsibility,
-                      int account, int amountExclVat) {
-        this(null, count, responsibility, account, amountExclVat);
+                      int account, int freeCode,
+                      long amountExclVat) {
+        this(null, count, responsibility, account, freeCode, amountExclVat);
     }
 
     public AccountRow(AccountingDistribution distribution,
                       int count, int responsibility,
-                      int account, int amountExclVat) {
+                      int account, int freeCode,
+                      long amountExclVat) {
         this.distribution = distribution;
 
         this.count = count;
@@ -120,6 +122,34 @@ public class AccountRow {
         this.distribution = distribution;
     }
 
+    // Public helper to add and remove amount excl. VAT on the row.
+
+    public void incrementAmount(long amount) {
+        this.amountExclVat = this.amountExclVat + amount;
+    }
+
+    public void decrementAmount(long amount) {
+        this.amountExclVat = this.amountExclVat - amount;
+    }
+
+    // Public helper to manipulate count
+
+    public void incrementCount() {
+        incrementCount(1);
+    }
+
+    public void incrementCount(int count) {
+        this.count = this.count + count;
+    }
+
+    public void decrementCount() {
+        decrementCount(1);
+    }
+
+    public void decrementCount(int count) {
+        this.count = this.count - count;
+    }
+
     // Public helper to transform amount as krona
 
     public BigDecimal getAmountExclVatAsKrona() {
@@ -128,5 +158,41 @@ public class AccountRow {
 
     public void setAmountExclVatAsKrona(BigDecimal valueAsKrona) {
         amountExclVat = currency.calculateKronaAsParts(valueAsKrona);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AccountRow that = (AccountRow) o;
+
+        if (account != that.account) return false;
+        if (amountExclVat != that.amountExclVat) return false;
+        if (freeCode != that.freeCode) return false;
+        if (responsibility != that.responsibility) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = responsibility;
+        result = 31 * result + account;
+        result = 31 * result + freeCode;
+        result = 31 * result + (int) (amountExclVat ^ (amountExclVat >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountRow{" +
+                "count=" + count +
+                ", responsibility=" + responsibility +
+                ", account=" + account +
+                ", freeCode=" + freeCode +
+                ", amountExclVat=" + amountExclVat +
+                '}';
     }
 }

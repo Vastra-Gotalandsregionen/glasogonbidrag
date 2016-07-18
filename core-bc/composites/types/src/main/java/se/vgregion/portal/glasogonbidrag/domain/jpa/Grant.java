@@ -87,9 +87,11 @@ public class Grant {
     @Temporal(TemporalType.DATE)
     private Date prescriptionDate;
 
+    private long amount;
     private long vat;
 
-    private long amount;
+    private int county;
+    private int municipality;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "beneficiary_id")
@@ -174,6 +176,14 @@ public class Grant {
         this.prescriptionDate = prescriptionDate;
     }
 
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
+
     public long getVat() {
         return vat;
     }
@@ -182,12 +192,20 @@ public class Grant {
         this.vat = vat;
     }
 
-    public long getAmount() {
-        return amount;
+    public int getCounty() {
+        return county;
     }
 
-    public void setAmount(long amount) {
-        this.amount = amount;
+    public void setCounty(int county) {
+        this.county = county;
+    }
+
+    public int getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(int municipality) {
+        this.municipality = municipality;
     }
 
     public Beneficiary getBeneficiary() {

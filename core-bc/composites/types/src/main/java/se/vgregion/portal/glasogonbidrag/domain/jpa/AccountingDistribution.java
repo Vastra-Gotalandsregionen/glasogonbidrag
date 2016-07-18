@@ -135,4 +135,15 @@ public class AccountingDistribution {
 
         rows.add(row);
     }
+
+    public void appendRow(AccountRow row) {
+        int index = rows.indexOf(row);
+
+        if (index == -1) {
+            addRow(row);
+        } else {
+            rows.get(index).incrementCount(row.getCount());
+            rows.get(index).incrementAmount(row.getAmountExclVat());
+        }
+    }
 }
