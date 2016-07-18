@@ -22,4 +22,7 @@
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.internal.data"/>
     <context:component-scan base-package="se.vgregion.service.glasogonbidrag.domain.internal.service"/>
 
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.local.api"/>
+    <context:component-scan base-package="se.vgregion.service.glasogonbidrag.local.internal"/>
+
 </beans>
