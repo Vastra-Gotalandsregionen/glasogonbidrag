@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+        <gb:box title="Lägg till leverantör" collapsible="true" collapsed="true">
+
+            <div class="msg-wrap">
+                <h:messages showSummary="true" showDetail="false" />
+            </div>
+
+            <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel for="supplierName" value="Namn:" />
+                    <h:inputText id="supplierName"
+                                 value="#{newSupplier.name}"
+                                 required="true"
+                                 requiredMessage="#{bundle['edit-supplier-error-name-required']}">
+                    </h:inputText>
+                </div>
+                <div class="field-element">
+                    <h:outputLabel for="externalServiceId" value="Raindance-ID:" />
+                    <h:inputText id="externalServiceId"
+                                 value="#{newSupplier.externalServiceId}"
+                                 required="false">
+                    </h:inputText>
+                </div>
+            </div>
+
+            <div class="field-row field-row-2">
+                <div class="field-element field-element-checkbox inline">
+                    <h:selectBooleanCheckbox id="active" value="#{newSupplier.active}" />
+                    <h:outputLabel for="active" value="Aktiv" />
+                </div>
+            </div>
+
+            <div class="button-row">
+                <h:commandLink styleClass="link-btn primary" value="Lägg till leverantör">
+                    <f:ajax listener="#{manageSuppliersViewBackingBean.addNewSupplierListener}"
+                            execute=":manageSuppliersForm"
+                            render=":manageSuppliersForm" />
+                </h:commandLink>
+            </div>
+
+        </gb:box>
+    </h:body>
+</f:view>

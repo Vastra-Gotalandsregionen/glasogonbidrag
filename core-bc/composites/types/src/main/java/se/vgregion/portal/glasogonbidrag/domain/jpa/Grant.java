@@ -34,6 +34,18 @@ import java.util.Date;
                         "ORDER BY g.createDate"),
 
         @NamedQuery(
+                name = "glasogonbidrag.grant.findByDate",
+                query = "SELECT g " +
+                        "FROM Grant g " +
+                        "WHERE DATE_TRUNC('day', g.createDate) = :date"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.grant.currentProgressByDate",
+                query = "SELECT SUM(g.amount + g.vat) " +
+                        "FROM Grant g " +
+                        "WHERE DATE_TRUNC('day', g.createDate) = :date"),
+
+        @NamedQuery(
                 name = "glasogonbidrag.grant.currentProgressByUserAndDate",
                 query = "SELECT SUM(g.amount + g.vat) " +
                         "FROM Grant g " +

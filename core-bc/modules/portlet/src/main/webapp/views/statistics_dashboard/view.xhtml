@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="locale" value="#{statisticsDashboardViewBackingBean.locale}" scope="request" />
+
+        <h1>Statistik</h1>
+
+        <div class="row-fluid">
+
+            <div class="span4">
+                <ui:include src="fragment_progress_this_week_chart.xhtml" />
+            </div>
+
+            <div class="span4">
+                <ui:include src="fragment_grants_this_week_chart.xhtml" />
+            </div>
+
+            <div class="span4">
+                <ui:include src="fragment_kpi.xhtml" />
+            </div>
+
+        </div>
+
+    </h:body>
+</f:view>

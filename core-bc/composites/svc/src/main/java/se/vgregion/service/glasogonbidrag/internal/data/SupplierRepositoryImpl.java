@@ -7,6 +7,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.api.data.SupplierRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -29,9 +30,30 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     }
 
     @Override
+    public Supplier findWithInvoices(long id) {
+        TypedQuery<Supplier> q = em.createNamedQuery(
+                "glasogonbidrag.supplier.findWithInvoices", Supplier.class);
+        q.setParameter("id", id);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<Supplier> findAll() {
         TypedQuery<Supplier> q = em.createNamedQuery(
                 "glasogonbidrag.supplier.findAll", Supplier.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Supplier> findAllWithInvoices() {
+        TypedQuery<Supplier> q = em.createNamedQuery(
+                "glasogonbidrag.supplier.findAllWithInvoices", Supplier.class);
 
         return q.getResultList();
     }

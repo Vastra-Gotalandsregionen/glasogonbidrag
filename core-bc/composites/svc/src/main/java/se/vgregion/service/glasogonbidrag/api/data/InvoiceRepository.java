@@ -20,6 +20,8 @@ public interface InvoiceRepository {
 
     List<Invoice> findAll(int firstResult, int maxResults);
 
+    List<Invoice> findAllWithParts();
+
     List<Invoice> findAllOrderByModificationDate();
 
     List<Invoice> findAllOrderByModificationDate(

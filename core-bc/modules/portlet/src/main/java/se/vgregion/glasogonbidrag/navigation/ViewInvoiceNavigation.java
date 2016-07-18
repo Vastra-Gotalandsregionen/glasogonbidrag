@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.constants.GbConstants;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.util.LiferayUtil;
 
 import javax.annotation.PostConstruct;
 import javax.portlet.PortletRequest;
@@ -26,14 +28,16 @@ public class ViewInvoiceNavigation {
     @Autowired
     private FacesUtil facesUtil;
 
+    @Autowired
+    private LiferayUtil liferayUtil;
+
     private long registerInvoicePlid;
-    private String createInvoicePortletId;
 
     public String navigate(long id) {
         PortletRequest request = facesUtil.getRequest();
 
-        PortletURL renderUrl = PortletURLFactoryUtil.create(request, createInvoicePortletId, registerInvoicePlid, PortletRequest.RENDER_PHASE);
-        renderUrl.setParameter("_facesViewIdRender", "/views/create_invoice/view_invoice.xhtml");
+        PortletURL renderUrl = PortletURLFactoryUtil.create(request, GbConstants.CREATE_INVOICE_PORTLET_ID, registerInvoicePlid, PortletRequest.RENDER_PHASE);
+        renderUrl.setParameter("_facesViewIdRender", GbConstants.VIEW_INVOICE_PAGE);
         renderUrl.setParameter("invoiceId", Long.toString(id));
 
         LOGGER.info("navigate: {}", renderUrl.toString());
@@ -46,19 +50,6 @@ public class ViewInvoiceNavigation {
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         long groupId = themeDisplay.getScopeGroupId();
 
-        Layout registerLayout = null;
-        try {
-            registerLayout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
-                    groupId, true, "/registrera-faktura");
-            registerInvoicePlid = registerLayout.getPlid();
-        } catch (SystemException e) {
-            LOGGER.error("Cannot get registerInvoicePlid of registrera-faktura from " +
-                    "layout local service util. Got exception: {}",
-                    e.getMessage());
-        }
-
-        createInvoicePortletId = "glasogonbidragcreateinvoice_WAR_glasogonbidragportlet";
-
-
+        registerInvoicePlid = liferayUtil.getPlidByFriendlyURL(groupId, true, GbConstants.REGISTER_INVOICE_FRIENDLY_URL);
     }
 }

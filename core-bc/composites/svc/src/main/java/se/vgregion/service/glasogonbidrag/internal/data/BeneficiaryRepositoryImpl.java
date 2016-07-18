@@ -64,4 +64,14 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
 
         return q.getResultList();
     }
+
+    @Override
+    public List<Beneficiary> findAllWithParts() {
+        TypedQuery<Beneficiary> q = em.createNamedQuery(
+                "glasogonbidrag.beneficiary.findAllWithParts", Beneficiary.class);
+
+        return q.getResultList();
+    }
+
+
 }

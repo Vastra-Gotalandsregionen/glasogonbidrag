@@ -44,7 +44,7 @@
     <c:set var="triggerOnEnter" value="#{cc.attrs.triggerOnEnter}"  />
 
     <div class="field-row">
-        <div class="field-element inline">
+        <div class="field-element">
             <h:outputLabel for="#{id}" value="#{label}" />
             <h:inputText id="#{id}"
                          styleClass="#{valueType eq 'personNumber' ? 'js-input-mask js-input-mask-personnumber' : ''} #{valueType eq 'date' ? 'js-input-mask_ js-input-mask-date_' : ''} #{inputStyleClass}"
@@ -57,7 +57,15 @@
                          pt:data-triggeronenter="#{triggerOnEnter}"
             >
                 <c:if test="#{valueType eq 'date'}">
+                    <f:converter converterId="se.vgregion.MultiDateConverter" />
+                    <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                    <f:attribute name="pattern2" value="yyyyMMdd" />
+                    <f:attribute name="pattern3" value="yyMMdd" />
+                    <!--
                     <f:convertDateTime  type="date" pattern="yyyy-MM-dd" />
+                    <f:convertDateTime  type="date" pattern="yyyyMMdd" />
+                    <f:convertDateTime  type="date" pattern="yyMMdd" />
+                    -->
                 </c:if>
             </h:inputText>
         </div>

@@ -129,7 +129,7 @@
             <div class="grant-section">
 
                 <div class="field-row">
-                    <div class="field-element inline">
+                    <div class="field-element">
                         <!--
                         http://balusc.omnifaces.org/2015/10/custom-layout-with-hselectoneradio-in.html
                         -->
@@ -255,7 +255,6 @@
                                                jsf:id="lateralityAphakiaBilateral" pt:name="#{hiddenAphakiaLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityAphakiaBilateral" value="Bilat." />
@@ -265,7 +264,6 @@
                                                jsf:id="lateralityAphakiaLeft" pt:name="#{hiddenAphakiaLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityAphakiaLeft" value="Vä." />
@@ -275,7 +273,6 @@
                                                jsf:id="lateralityAphakiaRight" pt:name="#{hiddenAphakiaLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityAphakiaRight" value="Hö." />
@@ -292,6 +289,7 @@
                                        jsf:id="diagnoseTypeKeratokonus" pt:name="#{hiddenDiagnoseType.clientId}"
                                        value="KERATOCONUS"
                                        pt:checked="#{prescriptionVO.diagnoseKeratokonus ? 'checked' : null}"
+                                       pt:autofocus="#{prescriptionVO.diagnoseKeratokonus ? 'true' : null}"
                                        pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                     <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
                                             onevent="function eventHandler(data) {ajaxComplete(data)}"
@@ -312,7 +310,6 @@
                                                jsf:id="lateralityKeratokonusBilateral" pt:name="#{hiddenKeratokonusLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusBilateral" value="Bilat." />
@@ -322,7 +319,6 @@
                                                jsf:id="lateralityKeratokonusLeft" pt:name="#{hiddenKeratokonusLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusLeft" value="Vä." />
@@ -332,7 +328,6 @@
                                                jsf:id="lateralityKeratokonusRight" pt:name="#{hiddenKeratokonusLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusRight" value="Hö." />
@@ -359,12 +354,15 @@
                                             <f:converter converterId="javax.faces.Float" />
                                         </h:inputText>
                                     </div>
+                                    <!--
                                     <div class="prescription-section-field">
                                         <span>
                                             Med glaskorr.
                                         </span>
                                     </div>
+                                    -->
                                 </div>
+                                <!-- -->
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
                                         <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{prescriptionVO.noGlasses}" pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" />
@@ -404,7 +402,6 @@
                                                jsf:id="lateralitySpecialBilateral" pt:name="#{hiddenSpecialLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'BILATERAL' or prescriptionVO.laterality eq 'NONE'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralitySpecialBilateral" value="Bilat." />
@@ -414,7 +411,6 @@
                                                jsf:id="lateralitySpecialLeft" pt:name="#{hiddenSpecialLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'LEFT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralitySpecialLeft" value="Vä." />
@@ -424,7 +420,6 @@
                                                jsf:id="lateralitySpecialRight" pt:name="#{hiddenSpecialLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
-                                               pt:autofocus="#{prescriptionVO.laterality eq 'RIGHT'  ? 'true' : null}"
                                                pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralitySpecialRight" value="Hö." />
@@ -473,19 +468,24 @@
 
             <div class="grant-section">
                 <div class="field-row field-row-3">
-                    <div class="field-element inline">
+                    <div class="field-element">
                         <h:outputLabel for="prescriber" value="Ordinatör:" />
                         <h:inputText id="prescriber" styleClass=""
                                      value="#{prescriptionVO.prescriber}"
                                      pt:placeholder="Skriv in ordindatör..." pt:autofocus="true" />
                     </div>
-                    <div class="field-element inline">
+                    <div class="field-element">
                         <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
-                        <h:inputText id="prescriptionDate2" styleClass="js-input-mask js-input-mask-date"
+                        <h:inputText id="prescriptionDate2" styleClass="js-input-mask_ js-input-mask-date_"
                                      value="#{prescriptionVO.date}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD" />
+                                     pt:placeholder="ÅÅÅÅ-MM-DD">
+                            <f:converter converterId="se.vgregion.MultiDateConverter" />
+                            <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                            <f:attribute name="pattern2" value="yyyyMMdd" />
+                            <f:attribute name="pattern3" value="yyMMdd" />
+                        </h:inputText>
                     </div>
-                    <div class="field-element inline">
+                    <div class="field-element">
                         <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
                         <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
                     </div>

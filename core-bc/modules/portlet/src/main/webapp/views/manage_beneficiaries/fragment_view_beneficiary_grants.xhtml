@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
+
+        <gb:box title="Bidrag för #{selectedBeneficiary.fullName}" collapsible="true" collapsed="false">
+
+            <ui:fragment rendered="#{not empty selectedBeneficiary.grants}">
+                <c:set var="paginatorRows" value="#{10}" scope="request" />
+                <c:set var="viewPaginator" value="#{selectedBeneficiary.grants.size() gt paginatorRows ? true : false}" scope="request" />
+
+                <p:dataTable var="grant"
+                             value="#{selectedBeneficiary.grants}"
+                             rows="#{paginatorRows}"
+                             paginator="#{viewPaginator}"
+                             paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="1,5,10,15,20,50" >
+
+                    <p:column headerText="Ver.nr.">
+                        <a href="#{viewInvoiceNavigation.navigate(grant.invoice.id)}">
+                            <h:outputText value="#{grant.invoice.verificationNumber}" />
+                        </a>
+                    </p:column>
+
+                    <p:column headerText="Kvittens">
+                        <h:outputText value="#{grant.deliveryDate}">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Recept">
+                        <h:outputText value="#{grant.prescription.date}">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Belopp" styleClass="currency">
+                        <h:outputText value="#{grant.amountIncludingVatAsKrona}">
+                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{manageBeneficiariesViewBackingBean.locale}" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{empty selectedBeneficiary.grants}">
+                <div class="alert alert-info">
+                    Det finns inga bidrag registerade för #{selectedBeneficiary.fullName}
+                </div>
+            </ui:fragment>
+        </gb:box>
+
+    </h:body>
+</f:view>

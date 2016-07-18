@@ -15,6 +15,8 @@
         <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
 
         <h:form>
+            <h1>Sök fakturor</h1>
+
             <p:dataTable var="invoice" value="#{invoices}"
                          rows="5"
                          paginator="true"
@@ -29,13 +31,23 @@
                     filterMatchMode="contains"
                     -->
 
-                    <a href="#{listInvoicesViewBackingBean.navigate(invoice.id)}">
+                    <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                         <h:outputText value="#{invoice.verificationNumber}" />
                     </a>
                 </p:column>
 
                 <p:column headerText="Leverantör" sortBy="#{invoice.supplier.name}">
                     <h:outputText value="#{invoice.supplier.name}" />
+                </p:column>
+
+                <p:column headerText="Belopp" sortBy="#{invoice.amountIncludingVatAsKrona}" styleClass="currency">
+                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{listInvoicesViewBackingBean.locale}" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Antal bidrag" sortBy="#{invoice.grants.size()}" styleClass="number">
+                    <h:outputText value="#{invoice.grants.size()}" />
                 </p:column>
 
                 <p:column headerText="Status" sortBy="#{invoice.status}">

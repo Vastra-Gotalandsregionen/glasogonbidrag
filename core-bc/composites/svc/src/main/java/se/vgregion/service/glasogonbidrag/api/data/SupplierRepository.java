@@ -9,8 +9,10 @@ import java.util.List;
  */
 public interface SupplierRepository {
     Supplier find(long id);
+    Supplier findWithInvoices(long id);
 
     List<Supplier> findAll();
+    List<Supplier> findAllWithInvoices();
     List<Supplier> findAllActive();
     List<Supplier> findAllInactive();
     List<Supplier> findAllByName(String name);

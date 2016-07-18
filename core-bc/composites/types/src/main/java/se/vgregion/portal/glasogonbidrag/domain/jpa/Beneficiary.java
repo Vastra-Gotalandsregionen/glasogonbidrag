@@ -37,6 +37,12 @@ import java.util.List;
                 query = "SELECT b FROM Beneficiary b " +
                         "ORDER BY b.id ASC"),
         @NamedQuery(
+                name = "glasogonbidrag.beneficiary.findAllWithParts",
+                query = "SELECT b FROM Beneficiary b " +
+                        "LEFT JOIN FETCH b.grants " +
+                        "ORDER BY b.id ASC"),
+
+        @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByFirstName",
                 query = "SELECT b FROM Beneficiary b " +
                         "ORDER BY b.firstName, b.lastName ASC"),
@@ -130,6 +136,10 @@ public class Beneficiary {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public List<Grant> getGrants() {
         return grants;
     }
@@ -197,5 +207,4 @@ public class Beneficiary {
                 ", identification=" + identification +
                 '}';
     }
-
 }

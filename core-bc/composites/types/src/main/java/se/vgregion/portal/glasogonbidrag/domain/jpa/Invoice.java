@@ -61,6 +61,16 @@ import java.util.List;
                 query = "SELECT i " +
                         "FROM Invoice i " +
                         "ORDER BY i.id ASC"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllWithParts",
+                query = "SELECT i " +
+                        "FROM Invoice i " +
+                        "LEFT JOIN FETCH i.grants " +
+                        "LEFT JOIN FETCH i.supplier " +
+                        "LEFT JOIN FETCH i.adjustment " +
+                        "ORDER BY i.id ASC"),
+
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllOrderByModificationDate",
                 query = "SELECT i " +

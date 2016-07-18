@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="suppliers" value="#{manageSuppliersViewBackingBean.suppliers}" scope="request" />
+        <c:set var="selectedSupplier" value="#{manageSuppliersViewBackingBean.selectedSupplier}" scope="request" />
+        <c:set var="selectedSupplierInvoices" value="#{manageSuppliersViewBackingBean.selectedSupplierInvoices}" scope="request" />
+        <c:set var="viewEditSupplier" value="#{manageSuppliersViewBackingBean.viewEditSupplier}" scope="request" />
+        <c:set var="newSupplier" value="#{manageSuppliersViewBackingBean.newSupplier}" scope="request" />
+
+
+        <h:form id="manageSuppliersForm">
+
+            <h1>Hantera leverantörer</h1>
+
+            <div class="row-fluid">
+
+                <div class="span7">
+                    <h:panelGroup id="listPanel" layout="block">
+                        <ui:include src="fragment_view_suppliers.xhtml" />
+                    </h:panelGroup>
+                </div>
+
+                <div class="span5">
+                    <h:panelGroup id="detailsPanel" layout="block">
+                        <ui:fragment rendered="#{not empty selectedSupplier and not viewEditSupplier}">
+                            <ui:include src="fragment_view_supplier_info.xhtml" />
+                            <ui:include src="fragment_view_supplier_invoices.xhtml" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{not empty selectedSupplier and viewEditSupplier}">
+                            <ui:include src="fragment_edit_supplier_info.xhtml" />
+                            <ui:include src="fragment_view_supplier_invoices.xhtml" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty selectedSupplier}">
+                            <ui:include src="fragment_add_supplier.xhtml" />
+                        </ui:fragment>
+                    </h:panelGroup>
+                </div>
+
+            </div>
+
+        </h:form>
+
+    </h:body>
+</f:view>
