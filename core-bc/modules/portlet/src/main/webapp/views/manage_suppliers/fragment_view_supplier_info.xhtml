@@ -35,6 +35,19 @@
                 </li>
                 <li>
                     <span class="item-label">
+                        <h:outputText value="Epost:" />
+                    </span>
+                    <span class="item-value">
+                        <ui:fragment rendered="#{not empty selectedSupplier.email}">
+                            <a href="mailto:#{selectedSupplier.email}">#{selectedSupplier.email}</a>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty selectedSupplier.email}">
+                            -
+                        </ui:fragment>
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
                         <h:outputText value="Aktiv:" />
                     </span>
                     <span class="item-value">

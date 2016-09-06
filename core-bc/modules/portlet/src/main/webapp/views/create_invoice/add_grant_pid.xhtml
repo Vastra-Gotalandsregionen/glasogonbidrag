@@ -475,24 +475,24 @@
                                      pt:placeholder="Skriv in ordindatör..." pt:autofocus="true" />
                     </div>
                     <div class="field-element">
+                        <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
+                        <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
+                    </div>
+                    <div class="field-element">
                         <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
                         <h:inputText id="prescriptionDate2" styleClass="js-input-mask_ js-input-mask-date_"
                                      value="#{prescriptionVO.date}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD">
+                                     pt:placeholder="ÅÅÅÅ-MM-DD"
+                                     pt:data-triggeronenter="#{createInvoiceAddGrantBackingBean.portletNamespace}:addGrantForm:otherDataAndNotesSubmit">
                             <f:converter converterId="se.vgregion.MultiDateConverter" />
                             <f:attribute name="pattern1" value="yyyy-MM-dd" />
                             <f:attribute name="pattern2" value="yyyyMMdd" />
                             <f:attribute name="pattern3" value="yyMMdd" />
                         </h:inputText>
                     </div>
-                    <div class="field-element">
-                        <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
-                        <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
-                    </div>
-
                 </div>
                 <div class="button-row">
-                    <h:commandLink styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="otherDataAndNotesSubmit" styleClass="link-btn primary" value="Fortsätt">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
