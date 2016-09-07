@@ -15,10 +15,9 @@ import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
@@ -477,7 +476,7 @@ public class CreateInvoiceAddGrantBackingBean {
             tempInvoiceId = tempInvoice.getId();
         }
 
-        LOGGER.info("Invoice id: " + tempInvoiceId);
+        LOGGER.info("CreateInvoiceAddGrantBackingBean - saveGrant - Invoice id: " + tempInvoiceId);
 
         // Insert beneficiary first.
         if (newBeneficiary) {
@@ -515,6 +514,10 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         FacesMessage message = null;
+
+        // Connect Grant with prescriptionVO
+        String prescriptionTypeName = prescriptionVO.getType().name();
+        LOGGER.info("prescriptionTypeName: " + prescriptionTypeName);
 
         if (grant.getId() == null) {
             message = persistGrant(userId, groupId, companyId, invoice, grant);
@@ -634,6 +637,12 @@ public class CreateInvoiceAddGrantBackingBean {
         grantTypeLabel = null;
 
         prescriptionVO = new PrescriptionVO();
+
+        // TODO: if existing (already persited) grant - load from DB (if not already loaded)
+        // TODO: If new grant and beneficiary has a type other diagnose registered before, then load this diagnose
+        prescriptionVO.setType(DiagnoseType.NONE);
+        prescriptionVO.setLaterality(VisualLaterality.NONE);
+
 
         // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";

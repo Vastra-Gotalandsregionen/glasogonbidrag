@@ -13,8 +13,8 @@
             <var>bundle</var>
         </resource-bundle>
         <locale-config>
-            <default-locale>en</default-locale>
-            <supported-locale>se</supported-locale>
+            <default-locale>en_US</default-locale>
+            <supported-locale>sv_SE</supported-locale>
         </locale-config>
     </application>
 

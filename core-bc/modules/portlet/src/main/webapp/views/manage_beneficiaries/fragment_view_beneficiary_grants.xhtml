@@ -30,25 +30,25 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="1,5,10,15,20,50" >
 
-                    <p:column headerText="Ver.nr.">
+                    <p:column headerText="#{bundle['verification-number-short']}">
                         <a href="#{viewInvoiceNavigation.navigate(grant.invoice.id)}">
                             <h:outputText value="#{grant.invoice.verificationNumber}" />
                         </a>
                     </p:column>
 
-                    <p:column headerText="Kvittens">
+                    <p:column headerText="#{bundle['acknowledgement']}">
                         <h:outputText value="#{grant.deliveryDate}">
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Recept">
+                    <p:column headerText="#{bundle['prescription']}">
                         <h:outputText value="#{grant.prescription.date}">
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Belopp" styleClass="currency">
+                    <p:column headerText="#{bundle['amount']}" styleClass="currency">
                         <h:outputText value="#{grant.amountIncludingVatAsKrona}">
                             <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{manageBeneficiariesViewBackingBean.locale}" />
                         </h:outputText>
@@ -59,7 +59,7 @@
 
             <ui:fragment rendered="#{empty selectedBeneficiary.grants}">
                 <div class="alert alert-info">
-                    Det finns inga bidrag registerade för #{selectedBeneficiary.fullName}
+                    #{bundle['there-are-no-grants-registerd-for']} #{selectedBeneficiary.fullName}
                 </div>
             </ui:fragment>
         </gb:box>

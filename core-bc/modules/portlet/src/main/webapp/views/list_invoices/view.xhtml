@@ -15,7 +15,7 @@
         <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
 
         <h:form>
-            <h1>Sök fakturor</h1>
+            <h1>#{bundle['search-invoices']}</h1>
 
             <p:dataTable var="invoice" value="#{invoices}"
                          rows="5"
@@ -23,7 +23,7 @@
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="1, 5,10,15,20, 50" >
-                <p:column headerText="Ver.nr"
+                <p:column headerText="#{bundle['verification-number-short']}"
                           sortBy="#{invoice.verificationNumber}"
                 >
                     <!--
@@ -36,25 +36,25 @@
                     </a>
                 </p:column>
 
-                <p:column headerText="Leverantör" sortBy="#{invoice.supplier.name}">
+                <p:column headerText="#{bundle['supplier']}" sortBy="#{invoice.supplier.name}">
                     <h:outputText value="#{invoice.supplier.name}" />
                 </p:column>
 
-                <p:column headerText="Belopp" sortBy="#{invoice.amountIncludingVatAsKrona}" styleClass="currency">
+                <p:column headerText="#{bundle['amount']}" sortBy="#{invoice.amountIncludingVatAsKrona}" styleClass="currency">
                     <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                         <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{listInvoicesViewBackingBean.locale}" />
                     </h:outputText>
                 </p:column>
 
-                <p:column headerText="Antal bidrag" sortBy="#{invoice.grants.size()}" styleClass="number">
+                <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{invoice.grants.size()}" styleClass="number">
                     <h:outputText value="#{invoice.grants.size()}" />
                 </p:column>
 
-                <p:column headerText="Status" sortBy="#{invoice.status}">
+                <p:column headerText="#{bundle['status']}" sortBy="#{invoice.status}">
                     <h:outputText value="#{bundle[invoice.status]}" />
                 </p:column>
 
-                <p:column headerText="Handläggare" sortBy="#{invoice.userId}">
+                <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
                     <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
                 </p:column>
 

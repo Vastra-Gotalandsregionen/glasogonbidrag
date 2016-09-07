@@ -41,15 +41,15 @@
                     oncomplete="ajaxComplete()"
             />
 
-            <p:column headerText="Person-nr" sortBy="#{beneficiary.identification.id}">
+            <p:column headerText="#{bundle['personal-number']}" sortBy="#{beneficiary.identification.id}">
                 <h:outputText value="#{beneficiary.identification}" />
             </p:column>
 
-            <p:column headerText="Namn" sortBy="#{beneficiary.lastName}">
+            <p:column headerText="#{bundle['name']}" sortBy="#{beneficiary.lastName}">
                 <h:outputText value="#{beneficiary.fullName}" />
             </p:column>
 
-            <p:column headerText="Antal bidrag" sortBy="#{beneficiary.grants.size()}">
+            <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{beneficiary.grants.size()}">
                 <h:outputText value="#{beneficiary.grants.size()}" />
             </p:column>
 

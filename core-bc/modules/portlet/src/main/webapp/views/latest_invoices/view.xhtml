@@ -21,7 +21,7 @@
 
                 <h:form>
 
-                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Mina senaste fakturor">
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['my-latest-invoices']}">
                         <ui:fragment rendered="#{not empty invoices}">
 
                             <div class="chip-wrap">
@@ -46,7 +46,7 @@
 
                         <ui:fragment rendered="#{empty invoices}">
                             <div class="alert alert-info">
-                                Inga fakturor finns registrerade
+                                #{bundle['no-invoices-registered-message']}
                             </div>
                         </ui:fragment>
                     </gb:box>

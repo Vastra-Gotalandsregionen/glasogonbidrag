@@ -21,7 +21,7 @@
             <ul class="labeled-list">
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Person-nr:" />
+                        <h:outputText value="#{bundle['personal-number']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedBeneficiary.identification}" />
@@ -29,7 +29,7 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Förnamn:" />
+                        <h:outputText value="#{bundle['first-name']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedBeneficiary.firstName}" />
@@ -37,7 +37,7 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Efternamn:" />
+                        <h:outputText value="#{bundle['surname']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedBeneficiary.lastName}" />

@@ -19,7 +19,7 @@
             <ul class="labeled-list">
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Namn:" />
+                        <h:outputText value="#{bundle['name']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedSupplier.name}" />
@@ -27,7 +27,7 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Raindance-ID:" />
+                        <h:outputText value="#{bundle['raindance-id']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedSupplier.externalServiceId}" />
@@ -35,7 +35,7 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Epost:" />
+                        <h:outputText value="#{bundle['email']}:" />
                     </span>
                     <span class="item-value">
                         <ui:fragment rendered="#{not empty selectedSupplier.email}">
@@ -48,7 +48,7 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="Aktiv:" />
+                        <h:outputText value="#{bundle['active']}:" />
                     </span>
                     <span class="item-value">
                         <h:outputText value="#{selectedSupplier.active ? 'Ja' : 'Nej'}" />
@@ -58,7 +58,7 @@
 
             <div class="button-row">
 
-                <h:commandLink styleClass="link-btn primary" value="Redigera leverantör">
+                <h:commandLink styleClass="link-btn primary" value="#{bundle['edit-supplier']}">
                     <f:ajax listener="#{manageSuppliersViewBackingBean.changeViewEditSupplierListener(true)}"
                             render=":manageSuppliersForm:detailsPanel"
                     />

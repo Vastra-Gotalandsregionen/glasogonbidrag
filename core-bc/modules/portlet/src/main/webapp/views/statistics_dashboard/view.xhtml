@@ -15,7 +15,9 @@
 
         <c:set var="locale" value="#{statisticsDashboardViewBackingBean.locale}" scope="request" />
 
-        <h1>Statistik</h1>
+        <h1>
+            <h:outputText value="#{bundle['statistics']}" />
+        </h1>
 
         <div class="row-fluid">
 

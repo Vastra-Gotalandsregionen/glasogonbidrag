@@ -22,7 +22,7 @@
 
                 <h:form>
 
-                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Makulerade fakturor">
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['cancelled-invoices']}">
                         <ui:fragment rendered="#{not empty invoices}">
 
                             <div class="chip-wrap">
@@ -49,18 +49,18 @@
                             <ui:remove>
                                 <h:dataTable styleClass="simple-table" value="#{invoices}" var="invoice">
                                     <h:column>
-                                        <f:facet name="header">Ver.nr</f:facet>
+                                        <f:facet name="header">#{bundle['verification-number-short']</f:facet>
                                         <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
                                             <h:outputText value="#{invoice.verificationNumber}" />
                                         </h:outputLink>
                                     </h:column>
                                     <h:column>
-                                        <f:facet name="header">Leverantör</f:facet>
+                                        <f:facet name="header">#{bundle['supplier']</f:facet>
                                         <h:outputText value="#{invoice.supplier.name}" />
                                     </h:column>
 
                                     <h:column>
-                                        <f:facet name="header">Belopp</f:facet>
+                                        <f:facet name="header">#{bundle['amount']</f:facet>
                                         <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                                             <f:convertNumber groupingUsed="true" minFractionDigits="2"
                                                              locale="#{canceledInvoicesViewBackingBean.locale}" />
@@ -73,7 +73,7 @@
                         </ui:fragment>
                         <ui:fragment rendered="#{empty invoices}">
                             <div class="alert alert-info">
-                                Det finns inga makulerade fakturor.
+                                #{bundle['no-cancelled-invoices-message']}
                             </div>
                         </ui:fragment>
                     </gb:box>
