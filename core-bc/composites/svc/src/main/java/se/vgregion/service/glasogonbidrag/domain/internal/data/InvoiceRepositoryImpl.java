@@ -208,6 +208,6 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
             }
         }
 
-        return null;
+        return q.getResultList();
     }
 }
