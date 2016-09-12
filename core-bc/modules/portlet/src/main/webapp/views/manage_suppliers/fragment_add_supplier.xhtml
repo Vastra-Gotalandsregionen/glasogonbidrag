@@ -13,7 +13,7 @@
     <h:head />
 
     <h:body>
-        <gb:box title="Lägg till leverantör" collapsible="true" collapsed="true">
+        <gb:box title="#{bundle['add-supplier']}" collapsible="true" collapsed="true">
 
             <div class="msg-wrap">
                 <h:messages showSummary="true" showDetail="false" />
@@ -21,7 +21,7 @@
 
             <div class="field-row field-row-2">
                 <div class="field-element">
-                    <h:outputLabel for="supplierName" value="Namn:" />
+                    <h:outputLabel for="supplierName" value="#{bundle['name']}:" />
                     <h:inputText id="supplierName"
                                  value="#{newSupplier.name}"
                                  required="true"
@@ -29,7 +29,7 @@
                     </h:inputText>
                 </div>
                 <div class="field-element">
-                    <h:outputLabel for="externalServiceId" value="Raindance-ID:" />
+                    <h:outputLabel for="externalServiceId" value="#{bundle['raindance-id']}:" />
                     <h:inputText id="externalServiceId"
                                  value="#{newSupplier.externalServiceId}"
                                  required="false">
@@ -38,14 +38,21 @@
             </div>
 
             <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel for="supplierEmail" value="#{bundle['email']}:" />
+                    <h:inputText id="supplierEmail"
+                                 value="#{selectedSupplier.email}"
+                                 required="false">
+                    </h:inputText>
+                </div>
                 <div class="field-element field-element-checkbox inline">
                     <h:selectBooleanCheckbox id="active" value="#{newSupplier.active}" />
-                    <h:outputLabel for="active" value="Aktiv" />
+                    <h:outputLabel for="active" value="#{bundle['active']}" />
                 </div>
             </div>
 
             <div class="button-row">
-                <h:commandLink styleClass="link-btn primary" value="Lägg till leverantör">
+                <h:commandLink styleClass="link-btn primary" value="#{bundle['add-supplier']}">
                     <f:ajax listener="#{manageSuppliersViewBackingBean.addNewSupplierListener}"
                             execute=":manageSuppliersForm"
                             render=":manageSuppliersForm" />

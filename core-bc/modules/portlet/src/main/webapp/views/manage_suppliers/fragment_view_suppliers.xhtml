@@ -40,7 +40,7 @@
                     oncomplete="ajaxComplete()"
              />
 
-            <p:column headerText="Leverantör"
+            <p:column headerText="#{bundle['supplier']}"
                       sortBy="#{supplier.name}"
             >
                 <!--
@@ -51,16 +51,16 @@
                 <h:outputText value="#{supplier.name}" />
             </p:column>
 
-            <p:column headerText="Raindance-ID" sortBy="#{supplier.externalServiceId}">
+            <p:column headerText="#{bundle['raindance-id']}" sortBy="#{supplier.externalServiceId}">
                 <h:outputText value="#{supplier.externalServiceId}" />
             </p:column>
 
-            <p:column headerText="Antal fakturor" sortBy="#{supplier.invoices.size()}" styleClass="number">
+            <p:column headerText="#{bundle['number-of-invoices']}" sortBy="#{supplier.invoices.size()}" styleClass="number">
                 <h:outputText value="#{supplier.invoices.size()}" />
             </p:column>
 
-            <p:column headerText="Aktiv" sortBy="#{supplier.active}">
-                <h:outputText value="#{supplier.active ? 'Ja' : 'Nej'}" />
+            <p:column headerText="#{bundle['active']}" sortBy="#{supplier.active}">
+                <h:outputText value="#{supplier.active ? bundle['yes'] : bundle['no']}" />
             </p:column>
 
 

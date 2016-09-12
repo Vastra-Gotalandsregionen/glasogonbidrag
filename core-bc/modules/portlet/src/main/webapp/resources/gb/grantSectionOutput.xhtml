@@ -55,7 +55,7 @@
 
                 <ui:fragment rendered="#{valueType eq 'date'}">
                     <h:outputText value="#{value}">
-                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{locale}" />
                     </h:outputText>
                 </ui:fragment>
 

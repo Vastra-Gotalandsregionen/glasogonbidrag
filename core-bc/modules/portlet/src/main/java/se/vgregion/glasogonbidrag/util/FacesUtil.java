@@ -78,12 +78,20 @@ public class FacesUtil {
     }
 
     public DataTable getDataTable(String componentId) {
-        DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(componentId);
+        DataTable dataTable = (DataTable) FacesContext
+                .getCurrentInstance().getViewRoot().findComponent(componentId);
         return dataTable;
     }
 
 
     public Locale getLocale() {
-        return LocaleContextHolder.getLocale();
+        Locale locale = FacesContext.getCurrentInstance()
+                .getExternalContext().getRequestLocale();
+
+        LOGGER.info(
+                "Locale from LocaleContextHolder: {} in FacesUtil",
+                locale.toString());
+
+        return locale;
     }
 }

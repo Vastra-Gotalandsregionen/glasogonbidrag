@@ -76,6 +76,9 @@ public class Supplier {
     @Column(name = "supplier_name")
     private String name;
 
+    @Column(name = "email")
+    private String email;
+
     private boolean active;
 
     @Column(name = "external_service_id")
@@ -137,6 +140,14 @@ public class Supplier {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {

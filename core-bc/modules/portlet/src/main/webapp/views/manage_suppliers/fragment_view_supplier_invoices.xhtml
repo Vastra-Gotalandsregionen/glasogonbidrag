@@ -14,7 +14,7 @@
 
     <h:body>
 
-        <gb:box title="Fakturor för #{selectedSupplier.name}" collapsible="true" collapsed="false">
+        <gb:box title="#{bundle['invoices-for']} #{selectedSupplier.name}" collapsible="true" collapsed="false">
 
             <ui:fragment rendered="#{not empty selectedSupplierInvoices}">
                 <c:set var="paginatorRows" value="#{10}" scope="request" />
@@ -26,17 +26,17 @@
                              paginatorPosition="bottom"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="1,5,10,15,20,50" >
-                    <p:column headerText="Ver.nr." sortBy="#{invoice.verificationNumber}">
+                    <p:column headerText="#{bundle['verification-number-short']}" sortBy="#{invoice.verificationNumber}">
                         <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                             <h:outputText value="#{invoice.verificationNumber}" />
                         </a>
                     </p:column>
 
-                    <p:column headerText="Status" sortBy="#{invoice.status}">
+                    <p:column headerText="#{bundle['status']}" sortBy="#{invoice.status}">
                         <h:outputText value="#{bundle[invoice.status]}" />
                     </p:column>
 
-                    <p:column headerText="Handläggare" sortBy="#{invoice.userId}">
+                    <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
                         <h:outputText value="#{manageSuppliersViewBackingBean.getUserNameById(invoice.userId)}" />
                     </p:column>
 
@@ -45,7 +45,7 @@
 
             <ui:fragment rendered="#{empty selectedSupplierInvoices}">
                 <div class="alert alert-info">
-                    Det finns inga fakturor registerade för #{selectedSupplier.name}
+                    <h:outputText value="#{bundle['there-are-no-invoices-registered-for']} #{selectedSupplier.name}" />
                 </div>
             </ui:fragment>
         </gb:box>

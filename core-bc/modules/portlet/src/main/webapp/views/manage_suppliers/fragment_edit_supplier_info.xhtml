@@ -22,7 +22,7 @@
 
             <div class="field-row field-row-2">
                 <div class="field-element">
-                    <h:outputLabel for="supplierName" value="Namn:" />
+                    <h:outputLabel for="supplierName" value="#{bundle['name']}:" />
                     <h:inputText id="supplierName"
                                  value="#{selectedSupplier.name}"
                                  required="true"
@@ -31,7 +31,7 @@
                     </h:inputText>
                 </div>
                 <div class="field-element">
-                    <h:outputLabel for="externalServiceId" value="Raindance-ID:" />
+                    <h:outputLabel for="externalServiceId" value="#{bundle['raindance-id']}:" />
                     <h:inputText id="externalServiceId"
                                  value="#{selectedSupplier.externalServiceId}"
                                  required="false">
@@ -39,21 +39,28 @@
                 </div>
             </div>
             <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel for="supplierEmail" value="#{bundle['email']}:" />
+                    <h:inputText id="supplierEmail"
+                                 value="#{selectedSupplier.email}"
+                                 required="false">
+                    </h:inputText>
+                </div>
                 <div class="field-element field-element-checkbox inline">
                     <h:selectBooleanCheckbox id="active" value="#{selectedSupplier.active}" />
-                    <h:outputLabel for="active" value="Aktiv" />
+                    <h:outputLabel for="active" value="#{bundle['active']}" />
                 </div>
             </div>
 
             <div class="button-row">
-                <h:commandLink styleClass="link-btn primary" value="Spara">
+                <h:commandLink styleClass="link-btn primary" value="#{bundle['save']}">
                     <f:ajax listener="#{manageSuppliersViewBackingBean.updateSupplierListener()}"
                             execute=":manageSuppliersForm"
                             render=":manageSuppliersForm" />
                 </h:commandLink>
 
 
-                <h:commandLink styleClass="link-btn primary" value="Avbryt">
+                <h:commandLink styleClass="link-btn primary" value="#{bundle['cancel']}">
                     <f:ajax listener="#{manageSuppliersViewBackingBean.changeViewEditSupplierListener(false)}"
                             render=":manageSuppliersForm:detailsPanel" />
                 </h:commandLink>
