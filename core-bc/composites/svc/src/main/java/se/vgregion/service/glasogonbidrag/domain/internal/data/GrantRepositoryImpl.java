@@ -32,6 +32,23 @@ public class GrantRepositoryImpl implements GrantRepository {
     }
 
     @Override
+    public Grant findWithParts(long id) {
+        TypedQuery<Grant> q = em.createNamedQuery(
+                "glasogonbidrag.grant.findWithParts", Grant.class);
+        q.setParameter("id", id);
+
+        Grant result = null;
+
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            // Ignore exception
+        }
+
+        return result;
+    }
+
+    @Override
     public List<Grant> findByDate(Date date) {
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findByDate", Grant.class);

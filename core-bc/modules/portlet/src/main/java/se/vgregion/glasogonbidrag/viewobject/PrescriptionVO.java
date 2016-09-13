@@ -2,7 +2,6 @@ package se.vgregion.glasogonbidrag.viewobject;
 
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 
 import java.util.Date;
 

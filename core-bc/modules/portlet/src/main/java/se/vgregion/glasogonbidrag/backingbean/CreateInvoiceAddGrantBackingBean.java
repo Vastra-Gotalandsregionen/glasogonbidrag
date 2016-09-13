@@ -338,8 +338,6 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("prescriptionDateListener(): add {} to grant {}",
                 prescriptionVO.getDate(), grant);
 
-        grant.setPrescriptionDate(prescriptionVO.getDate());
-
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             // TODO: make address check against prescriptionDate
@@ -523,13 +521,14 @@ public class CreateInvoiceAddGrantBackingBean {
         FacesMessage message = null;
 
         // Connect Grant with prescriptionVO
-        if(prescriptionVO.getType() != DiagnoseType.NONE) {
-            LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Diagnose.");
 
-            Prescription prescription = new Prescription();
+        Prescription prescription = new Prescription();
+        prescription.setDate(prescriptionVO.getDate());
+
+        if(prescriptionVO.getType() != DiagnoseType.NONE) {
+            LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
 
             prescription.setComment(prescriptionVO.getComment());
-            prescription.setDate(prescriptionVO.getDate());
             prescription.setPrescriber(prescriptionVO.getPrescriber());
 
             Diagnose diagnose = null;
@@ -560,9 +559,9 @@ public class CreateInvoiceAddGrantBackingBean {
             diagnoseService.create(diagnose);
 
             prescription.setDiagnose(diagnose);
-
-            beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
         }
+
+        beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
 
         if (grant.getId() == null) {
             message = persistGrant(userId, groupId, companyId, invoice, grant);
@@ -700,10 +699,12 @@ public class CreateInvoiceAddGrantBackingBean {
             System.out.println("--- Found GrantId -----");
 
             //TODO: add find with parts to grantRepository, so that call to beneficiaryRepository.findWithParts will not be necessary.
+            //grant = grantRepository.findWithParts(grantId);
             grant = grantRepository.find(grantId);
-            beneficiary = grant.getBeneficiary();
-            beneficiary = beneficiaryRepository.findWithParts(beneficiary.getId());
+            beneficiary = beneficiaryRepository.findWithParts(grant.getBeneficiary().getId());
             number = beneficiary.getIdentification().getString();
+
+
 
 //            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 //
@@ -711,7 +712,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
             deliveryDate = grant.getDeliveryDate();
 
-            prescriptionVO.setDate(grant.getPrescriptionDate());
+            // Todo get prescription from DB
+            //prescriptionVO.setDate(grant.getPrescriptionDate());
 
             //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
             if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {

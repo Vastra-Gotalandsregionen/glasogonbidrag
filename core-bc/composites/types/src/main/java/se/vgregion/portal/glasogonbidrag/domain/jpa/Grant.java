@@ -26,6 +26,16 @@ import java.util.Date;
 @Entity
 @Table(name = "vgr_glasogonbidrag_grant")
 @NamedQueries({
+
+
+        @NamedQuery(
+                name = "glasogonbidrag.grant.findWithParts",
+                query = "SELECT g FROM Grant g " +
+                        "LEFT JOIN FETCH g.beneficiary " +
+                        "LEFT JOIN FETCH g.prescription " +
+                        "WHERE g.id = :id"),
+
+        // TODO: change to findAllByUser
         @NamedQuery(
                 name = "glasogonbidrag.grant.findByUser",
                 query = "SELECT g " +
@@ -33,6 +43,7 @@ import java.util.Date;
                         "WHERE g.userId = :user " +
                         "ORDER BY g.createDate"),
 
+        // TODO: change to findAllByDate
         @NamedQuery(
                 name = "glasogonbidrag.grant.findByDate",
                 query = "SELECT g " +

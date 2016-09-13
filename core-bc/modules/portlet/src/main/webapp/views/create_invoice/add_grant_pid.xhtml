@@ -207,7 +207,7 @@
 
         <gb:grantSectionOutput rendered="${flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}"
                                label="Receptdatum"
-                               value="#{grant.prescriptionDate}"
+                               value="#{prescriptionVO.date}"
                                valueType="date"
                                backExecute=":addGrantForm"
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"

@@ -11,8 +11,12 @@ import java.util.List;
 public interface GrantRepository {
     Grant find(Long id);
 
+    Grant findWithParts(long id);
+
+    // TODO: Should be renamed to findAllByUser
     List<Grant> findByUser(long userId);
 
+    // TODO: Should be renamed to findAllByDate
     List<Grant> findByDate(Date date);
 
     long currentProgressByDate(Date date);
