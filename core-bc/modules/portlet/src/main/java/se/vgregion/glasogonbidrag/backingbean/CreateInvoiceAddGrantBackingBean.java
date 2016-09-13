@@ -18,12 +18,16 @@ import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.DiagnoseService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
@@ -79,6 +83,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private BeneficiaryService beneficiaryService;
+
+    @Autowired
+    private DiagnoseService diagnoseService;
 
     @Autowired
     private GrantService grantService;
@@ -516,8 +523,46 @@ public class CreateInvoiceAddGrantBackingBean {
         FacesMessage message = null;
 
         // Connect Grant with prescriptionVO
-        String prescriptionTypeName = prescriptionVO.getType().name();
-        LOGGER.info("prescriptionTypeName: " + prescriptionTypeName);
+        if(prescriptionVO.getType() != DiagnoseType.NONE) {
+            LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Diagnose.");
+
+            Prescription prescription = new Prescription();
+
+            prescription.setComment(prescriptionVO.getComment());
+            prescription.setDate(prescriptionVO.getDate());
+            prescription.setPrescriber(prescriptionVO.getPrescriber());
+
+            Diagnose diagnose = null;
+
+            if (prescriptionVO.getType() == DiagnoseType.APHAKIA) {
+                Aphakia aphakia = new Aphakia();
+                aphakia.setLaterality(prescriptionVO.getLaterality());
+
+                diagnose = aphakia;
+            } else if (prescriptionVO.getType() == DiagnoseType.KERATOCONUS) {
+                Keratoconus keratoconus = new Keratoconus();
+                keratoconus.setLaterality(prescriptionVO.getLaterality());
+                keratoconus.setVisualAcuityLeft(prescriptionVO.getVisualAcuityLeft());
+                keratoconus.setVisualAcuityRight(prescriptionVO.getVisualAcuityRight());
+                keratoconus.setNoGlasses(prescriptionVO.isNoGlasses());
+
+                diagnose = keratoconus;
+            } else if (prescriptionVO.getType() == DiagnoseType.SPECIAL) {
+                Special special = new Special();
+                special.setLaterality(prescriptionVO.getLaterality());
+                special.setWeakEyeSight(prescriptionVO.isWeakEyeSight());
+
+                diagnose = special;
+            } else {
+                // TODO: Throw exception
+            }
+
+            diagnoseService.create(diagnose);
+
+            prescription.setDiagnose(diagnose);
+
+            beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
+        }
 
         if (grant.getId() == null) {
             message = persistGrant(userId, groupId, companyId, invoice, grant);

@@ -48,6 +48,7 @@ public class Prescription {
     private Date modifiedDate;
 
     @OneToOne
+    @JoinColumn(name = "diagnose_id")
     private Diagnose diagnose;
 
     @Column(name = "prescription_date")
