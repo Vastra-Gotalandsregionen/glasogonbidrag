@@ -114,7 +114,6 @@ public class CreateInvoiceAddGrantBackingBean {
     private CreateInvoiceAddGrantPidFlow flow;
 
     // Main objects
-
     private Invoice invoice;
     private Grant grant;
     private Beneficiary beneficiary;
@@ -511,7 +510,8 @@ public class CreateInvoiceAddGrantBackingBean {
         if(prescriptionVO.getType() != DiagnoseType.NONE) {
             LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
 
-            prescription.setComment(prescriptionVO.getComment());
+            // TODO: remove comment for line below when problem with comment is solved
+            //prescription.setComment(prescriptionVO.getComment());
             prescription.setPrescriber(prescriptionVO.getPrescriber());
 
             Diagnose diagnose = null;
@@ -545,6 +545,7 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
+        grant.setPrescription(prescription);
 
         if (grant.getId() == null) {
             message = persistGrant(userId, groupId, companyId, invoice, grant);
@@ -638,8 +639,6 @@ public class CreateInvoiceAddGrantBackingBean {
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
 
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
         flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
         LOGGER.info("Current state: {}.", flow);
 
@@ -675,18 +674,24 @@ public class CreateInvoiceAddGrantBackingBean {
             System.out.println("--- Found GrantId -----");
 
             //TODO: add find with parts to grantRepository, so that call to beneficiaryRepository.findWithParts will not be necessary.
-            //grant = grantRepository.findWithParts(grantId);
-            grant = grantRepository.find(grantId);
+            grant = grantRepository.findWithParts(grantId);
+            //grant = grantRepository.find(grantId);
             beneficiary = beneficiaryRepository.findWithParts(grant.getBeneficiary().getId());
             number = beneficiary.getIdentification().getString();
 
-
-
-//            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//
-//            deliveryDate = df.format(grant.getDeliveryDate());
-
             deliveryDate = grant.getDeliveryDate();
+
+            Prescription prescription = grant.getPrescription();
+
+            if(prescription == null) {
+                System.out.println("--- prescription IS null -----");
+            } else {
+                System.out.println("--- prescription is NOT null -----");
+            }
+
+            //Date prescDate = prescription.getDate();
+            //prescriptionVO.setDate(prescDate);
+
 
             // Todo get prescription from DB
             //prescriptionVO.setDate(grant.getPrescriptionDate());
