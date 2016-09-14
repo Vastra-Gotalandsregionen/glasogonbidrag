@@ -15,6 +15,7 @@
     <h:body>
 
         <c:set var="invoice" value="#{invoiceBackingBean.invoice}" scope="request" />
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <h:panelGroup id="invoiceSummary" layout="block">
 
@@ -39,7 +40,7 @@
                         </td>
                         <td class="number">
                             <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{portletBackingBean.locale}" />
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                             </h:outputText>
                         </td>
                     </tr>
@@ -49,7 +50,7 @@
                         </td>
                         <td class="number">
                             <h:outputText value="#{invoice.calculateGrantsAmountIncludingVatSumAsKrona()}">
-                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{portletBackingBean.locale}" />
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                             </h:outputText>
                         </td>
                     </tr>
@@ -61,7 +62,7 @@
                         </td>
                         <td class="number">
                             <h:outputText value="#{invoice.calculateDifferenceIncludingVatAsKrona()}">
-                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{portletBackingBean.locale}" />
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                             </h:outputText>
                         </td>
                     </tr>

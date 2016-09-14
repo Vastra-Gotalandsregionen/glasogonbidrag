@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
@@ -20,7 +21,8 @@ import java.util.Locale;
  * @author Erik Andersson - Monator Technologies AB
  */
 @Component(value = "portletBackingBean")
-@Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request")
 public class PortletBackingBean {
 
     private static final Logger LOGGER =
@@ -28,6 +30,9 @@ public class PortletBackingBean {
 
     @Autowired
     private FacesUtil facesUtil;
+
+    @Autowired
+    private LiferayUtil liferayUtil;
 
     // Helpers
     private String portletNamespace;
@@ -53,15 +58,8 @@ public class PortletBackingBean {
     // Initializer
     @PostConstruct
     public void init() {
-        LOGGER.info("PortletBackingBean - init()");
-
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
-
-        portletNamespace = FacesContext.getCurrentInstance()
-                .getExternalContext().encodeNamespace("");
+        locale = liferayUtil.getLocale();
+        portletNamespace = liferayUtil.getPortletNamespace();
     }
 
 }

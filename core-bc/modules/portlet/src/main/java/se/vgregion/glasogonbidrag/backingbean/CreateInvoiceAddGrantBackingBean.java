@@ -11,6 +11,7 @@ import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 import se.vgregion.glasogonbidrag.util.GrantUtil;
+import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
@@ -104,11 +105,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
 
     // Helpers
-
+    private LiferayUtil liferayUtil;
     private TabUtil tabUtil;
-    private String portletNamespace;
     private boolean newBeneficiary;
-    private Locale locale;
 
     // Flow
 
@@ -136,22 +135,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public TabUtil getTabUtil() {
         return tabUtil;
-    }
-
-    public String getPortletNamespace() {
-        return portletNamespace;
-    }
-
-    public void setPortletNamespace(String portletNamespace) {
-        this.portletNamespace = portletNamespace;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 
     // Getter and Setters for Main objects
@@ -288,7 +271,7 @@ public class CreateInvoiceAddGrantBackingBean {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Detta är inget giltigt personnummer...", "");
 
-            context.addMessage(portletNamespace + ":addGrantForm:personalNumber", message);
+            context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
 
     }
@@ -656,13 +639,6 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
 
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
-
-        portletNamespace = FacesContext.getCurrentInstance()
-                .getExternalContext().encodeNamespace("");
-
 
         flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
         LOGGER.info("Current state: {}.", flow);

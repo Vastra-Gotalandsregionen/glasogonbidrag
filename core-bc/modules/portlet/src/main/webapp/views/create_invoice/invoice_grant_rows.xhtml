@@ -15,6 +15,7 @@
     <h:body>
 
         <c:set var="invoice" value="#{invoiceBackingBean.invoice}" scope="request" />
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
 
@@ -30,7 +31,7 @@
                                     </div>
                                     <div class="chip-hd-item chip-hd-item-currency">
                                         <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{portletBackingBean.locale}" />
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                         </h:outputText>
                                     </div>
                                     <div class="chip-hd-item chip-hd-item-iconcontrol">
@@ -57,7 +58,7 @@
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{portletBackingBean.locale}" />
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                         </h:outputText>
                                     </td>
                                     <td>

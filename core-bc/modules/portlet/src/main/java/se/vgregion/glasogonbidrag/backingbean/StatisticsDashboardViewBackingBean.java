@@ -2,7 +2,6 @@ package se.vgregion.glasogonbidrag.backingbean;
 
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Erik Andersson - Monator Technologies AB
@@ -49,8 +47,6 @@ public class StatisticsDashboardViewBackingBean {
 
     private String daysOfWeekJSONString;
 
-    private Locale locale;
-
     private int grantCountToday;
 
     private String grantsCountOfWeekDaysJSONString;
@@ -71,10 +67,6 @@ public class StatisticsDashboardViewBackingBean {
         return grantsCountOfWeekDaysJSONString;
     }
 
-    public Locale getLocale() {
-        return locale;
-    }
-
     public BigDecimal getProgressToday() {
         return progressToday;
     }
@@ -86,12 +78,6 @@ public class StatisticsDashboardViewBackingBean {
     @PostConstruct
     protected void init() {
         currency = new KronaCalculationUtil();
-
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
 
         Date today = new Date();
 
@@ -108,7 +94,7 @@ public class StatisticsDashboardViewBackingBean {
 
         JSONArray daysOfWeekJSON = JSONFactoryUtil.createJSONArray();
         for(Date date : datesOfThisWeek) {
-            SimpleDateFormat format = new SimpleDateFormat("EEE", locale);
+            SimpleDateFormat format = new SimpleDateFormat("EEE", liferayUtil.getLocale());
             String dateString = format.format(date);
             daysOfWeekJSON.put(dateString);
         }

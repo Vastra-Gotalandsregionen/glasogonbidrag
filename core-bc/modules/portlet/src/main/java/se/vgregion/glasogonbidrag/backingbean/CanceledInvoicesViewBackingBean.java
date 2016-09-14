@@ -14,7 +14,6 @@ import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Locale;
 
 @Component(value = "canceledInvoicesViewBackingBean")
 @Scope(value = "request")
@@ -30,24 +29,15 @@ public class CanceledInvoicesViewBackingBean {
     private FacesUtil facesUtil;
 
     private List<Invoice> invoices;
-    private Locale locale;
 
     public List<Invoice> getInvoices() {
         return invoices;
     }
 
-    public Locale getLocale() {
-        return locale;
-    }
-
     @PostConstruct
     protected void init() {
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
         long userId = themeDisplay.getUserId();
-
-        //TODO: Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
 
         fetchInvoices(userId);
     }

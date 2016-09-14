@@ -15,6 +15,7 @@
     <h:body>
 
         <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <gb:box title="Bidrag för #{selectedBeneficiary.fullName}" collapsible="true" collapsed="false">
 
@@ -50,7 +51,7 @@
 
                     <p:column headerText="#{bundle['amount']}" styleClass="currency">
                         <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{manageBeneficiariesViewBackingBean.locale}" />
+                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                         </h:outputText>
                     </p:column>
 

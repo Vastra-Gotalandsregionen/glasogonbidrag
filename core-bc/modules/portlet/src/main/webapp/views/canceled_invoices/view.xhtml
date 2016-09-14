@@ -16,6 +16,7 @@
     <h:body>
 
         <c:set var="invoices" value="#{canceledInvoicesViewBackingBean.invoices}" scope="request" />
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -38,7 +39,7 @@
                                             <span class="chip-hd-item">
                                                 <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                                                     <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                                     locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                                                     locale="#{locale}" />
                                                 </h:outputText>
                                             </span>
                                         </span>
@@ -63,7 +64,7 @@
                                         <f:facet name="header">#{bundle['amount']</f:facet>
                                         <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                                             <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                             locale="#{canceledInvoicesViewBackingBean.locale}" />
+                                                             locale="#{locale}" />
                                         </h:outputText>
                                     </h:column>
                                 </h:dataTable>

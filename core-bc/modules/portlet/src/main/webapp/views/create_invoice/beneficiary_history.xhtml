@@ -13,6 +13,8 @@
 
     <h:body>
 
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
+
         <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Historik Bidragstagare">
 
 
@@ -80,7 +82,7 @@
                                 </div>
                                 <div class="chip-hd-item chip-hd-item-currency">
                                     <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceAddGrantBackingBean.locale}" />
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                     </h:outputText>
                                 </div>
                                 <div class="chip-hd-item">
