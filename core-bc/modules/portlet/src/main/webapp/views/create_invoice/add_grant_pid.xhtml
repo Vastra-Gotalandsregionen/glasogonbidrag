@@ -173,7 +173,7 @@
 
         <gb:grantSectionOutput rendered="${flow.showGrantTypeOutput}"
                                label="Bidragstyp"
-                               value="#{createInvoiceAddGrantBackingBean.grantTypeLabel}"
+                               value="#{bundle[createInvoiceAddGrantBackingBean.grantTypeLabel]}"
                                valueType="raw"
                                backExecute=":addGrantForm"
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
@@ -314,24 +314,42 @@
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                            <!--
+                                            -->
+                                            <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
+                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusBilateral" value="Bilat." />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
                                                jsf:id="lateralityKeratokonusLeft" pt:name="#{hiddenKeratokonusLaterality.clientId}"
-                                               value="BILATERAL"
+                                               value="LEFT"
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                            <!--
+                                            -->
+                                            <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
+                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusLeft" value="Vä." />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
                                                jsf:id="lateralityKeratokonusRight" pt:name="#{hiddenKeratokonusLaterality.clientId}"
-                                               value="BILATERAL"
+                                               value="RIGHT"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                            <!--
+                                            -->
+                                            <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
+                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusRight" value="Hö." />
                                     </div>
@@ -341,6 +359,7 @@
                                         <h:outputLabel for="keratokonusVisualAcuityLeft" value="Vä" />
                                         <h:inputText id="keratokonusVisualAcuityLeft"
                                                      value="#{prescriptionVO.visualAcuityLeft}"
+                                                     disabled="#{prescriptionVO.laterality eq 'RIGHT'}"
                                                      pt:placeholder=""
                                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit"
                                                      styleClass="input-very-short">
@@ -351,6 +370,7 @@
                                         <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
                                         <h:inputText id="keratokonusVisualAcuityRight"
                                                      value="#{prescriptionVO.visualAcuityRight}"
+                                                     disabled="#{prescriptionVO.laterality eq 'LEFT'}"
                                                      pt:placeholder=""
                                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit"
                                                      styleClass="input-very-short">
@@ -454,7 +474,59 @@
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
-                    You inserted some values!
+                    <span class="grant-section-label">Diagnos</span>
+                    <span class="grant-section-data">
+                        <span>
+                            <h:outputText value="#{bundle[prescriptionVO.type.languageKey]}" />
+                        </span>
+
+                        <ui:fragment rendered="#{prescriptionVO.diagnoseAphakia}">
+                            <h:outputText value=" - " />
+                            <h:outputText value="#{bundle[prescriptionVO.laterality.languageKey]}" />
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{prescriptionVO.diagnoseKeratokonus}">
+                            <h:outputText value=" - " />
+                            <h:outputText value="#{bundle[prescriptionVO.laterality.languageKey]}" />
+                            <h:outputText value=" - " />
+
+                            <ui:fragment rendered="#{prescriptionVO.laterality eq 'BILATERAL'}">
+                                <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
+                                </h:outputText>
+                                <h:outputText value=" resp. " />
+                                <h:outputText value="#{prescriptionVO.visualAcuityRight}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
+                                </h:outputText>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{prescriptionVO.laterality eq 'LEFT'}">
+                                <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
+                                </h:outputText>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{prescriptionVO.laterality eq 'RIGHT'}">
+                                <h:outputText value="#{prescriptionVO.visualAcuityRight}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
+                                </h:outputText>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{prescriptionVO.weakEyeSight}">
+                                <h:outputText value=" - " />
+                                <h:outputText value="Ej glas" />
+                            </ui:fragment>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{prescriptionVO.diagnoseSpecial}">
+                            <h:outputText value=" - " />
+                            <h:outputText value="#{bundle[prescriptionVO.laterality.languageKey]}" />
+                            <ui:fragment rendered="#{prescriptionVO.weakEyeSight}">
+                                <h:outputText value=" - " />
+                                <h:outputText value="Ej glas" />
+                            </ui:fragment>
+                        </ui:fragment>
+                    </span>
 
                     <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
@@ -510,7 +582,26 @@
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionDateOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
-                    More values where inserted
+                    <div>
+                        <span class="grant-section-label">Ordinatör</span>
+                        <span class="grant-section-data">
+                            <h:outputText value="#{prescriptionVO.prescriber}" />
+                        </span>
+                    </div>
+                    <div>
+                        <span class="grant-section-label">Anteckningar</span>
+                        <span class="grant-section-data">
+                            <h:outputText value="-" />
+                        </span>
+                    </div>
+                    <div>
+                        <span class="grant-section-label">Receptdatum</span>
+                        <span class="grant-section-data">
+                            <h:outputText value="#{prescriptionVO.date}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{portletBackingBean.locale}" />
+                            </h:outputText>
+                        </span>
+                    </div>
 
                     <h:commandLink styleClass="grant-section-back" immediate="true">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"

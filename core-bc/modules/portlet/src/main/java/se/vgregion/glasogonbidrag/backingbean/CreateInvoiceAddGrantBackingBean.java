@@ -103,9 +103,10 @@ public class CreateInvoiceAddGrantBackingBean {
     @Autowired
     private PersonalNumberValidator personalNumberValidator;
 
+    @Autowired
+    private LiferayUtil liferayUtil;
 
     // Helpers
-    private LiferayUtil liferayUtil;
     private TabUtil tabUtil;
     private boolean newBeneficiary;
 
@@ -306,13 +307,13 @@ public class CreateInvoiceAddGrantBackingBean {
         // Set flow
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_15);
-            grantTypeLabel = "0-15";
+            grantTypeLabel = "grant-type-0-15";
         } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_19);
-            grantTypeLabel = "0-19";
+            grantTypeLabel = "grant-type-0-19";
         } else {
             flow = flow.nextState(AddGrantAction.OTHER);
-            grantTypeLabel = "Övriga";
+            grantTypeLabel = "grant-type-other";
         }
     }
 
@@ -331,6 +332,10 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void changePrescriptionTypeListener() {
+        // Don't do anything.
+    }
+
+    public void changeVisualLateralityListener() {
         // Don't do anything.
     }
 
@@ -683,27 +688,69 @@ public class CreateInvoiceAddGrantBackingBean {
 
             Prescription prescription = grant.getPrescription();
 
+            // Temporary code - start
             if(prescription == null) {
                 System.out.println("--- prescription IS null -----");
             } else {
                 System.out.println("--- prescription is NOT null -----");
             }
+            // Temporary code - end
 
-            //Date prescDate = prescription.getDate();
-            //prescriptionVO.setDate(prescDate);
+            prescriptionVO.setDate(prescription.getDate());
+
+            Diagnose diagnose = prescription.getDiagnose();
+            if(diagnose != null) {
+                DiagnoseType diagnoseType = diagnose.getDiagnoseType();
+
+                // TODO: activate code below when comments work for prescription again
+                //prescriptionVO.setComment(prescription.getComment());
+                prescriptionVO.setPrescriber(prescription.getPrescriber());
+                prescriptionVO.setType(prescription.getDiagnose().getDiagnoseType());
+
+                if(diagnoseType == DiagnoseType.APHAKIA) {
+                    Aphakia aphakia = (Aphakia)diagnose;
+
+                    System.out.println("--- DiagnoseType is Aphakia -----");
 
 
-            // Todo get prescription from DB
-            //prescriptionVO.setDate(grant.getPrescriptionDate());
+                    prescriptionVO.setLaterality(aphakia.getLaterality());
+                } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
+                    Keratoconus keratoconus = (Keratoconus)diagnose;
 
-            //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
-            if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
-                grantType = GRANT_TYPE_AGE_0_TO_15;
-                grantTypeLabel = "0-15";
+                    System.out.println("--- DiagnoseType is Keratoconus -----");
+
+                    prescriptionVO.setLaterality(keratoconus.getLaterality());
+                    prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
+                    prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
+                    prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
+                } else if(diagnoseType == DiagnoseType.SPECIAL) {
+                    Special special = (Special)diagnose;
+
+                    System.out.println("--- DiagnoseType is Special -----");
+
+                    prescriptionVO.setLaterality(special.getLaterality());
+                    prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
+                } else {
+                    // TODO: throw exception
+                }
+
+                grantType = GRANT_TYPE_OTHER;
+
+                grantTypeLabel = "grant-type-other";
             } else {
-                grantType = GRANT_TYPE_AGE_0_TO_19;
-                grantTypeLabel = "0-19";
+
+                //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
+                if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
+                    grantType = GRANT_TYPE_AGE_0_TO_15;
+                    grantTypeLabel = "grant-type-0-15";
+                } else {
+                    grantType = GRANT_TYPE_AGE_0_TO_19;
+                    grantTypeLabel = "grant-type-0-19";
+                }
+
             }
+
+
 
             amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
 
