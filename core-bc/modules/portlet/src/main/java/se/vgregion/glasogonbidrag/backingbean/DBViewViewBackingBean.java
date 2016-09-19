@@ -382,9 +382,9 @@ public class DBViewViewBackingBean {
         Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
 
         AccountingDistribution distribution = new AccountingDistribution();
-        distribution.addRow(new AccountRow(2, 34, 1023, 20202));
-        distribution.addRow(new AccountRow(4, 12, 23, 9402));
-        distribution.addRow(new AccountRow(123, 39, 2346, 7361));
+        distribution.addRow(new AccountRow(2, 34, 9191, 1023, 20202));
+        distribution.addRow(new AccountRow(4, 12, 9191, 23, 9402));
+        distribution.addRow(new AccountRow(123, 39, 9191, 2346, 7361));
 
         invoiceService.updateAddAccountingDistribution(
                 userId, groupId, companyId, inv, distribution);

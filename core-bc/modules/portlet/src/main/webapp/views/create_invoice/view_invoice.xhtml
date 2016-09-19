@@ -6,8 +6,7 @@
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge"
-        xmlns:gb="http://java.sun.com/jsf/composite/gb"
->
+        xmlns:gb="http://java.sun.com/jsf/composite/gb">
 
     <h:head />
 
@@ -204,6 +203,16 @@
                         </c:forEach>
                         </tbody>
                     </table>
+                    <h:form>
+                        <div class="button-row">
+                            <h:commandButton value="generate"
+                                             styleClass="link-btn primary"
+                                             action="#{createInvoiceViewInvoiceBackingBean.generateAccountingDistribution}"
+                                             rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                <f:param name="invoiceId" value="${invoice.id}" />
+                            </h:commandButton>
+                        </div>
+                    </h:form>
                 </gb:box>
 
             </div>
@@ -234,7 +243,6 @@
                                        rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}" >
                             <f:param name="invoiceId" value="${invoice.id}" />
                         </h:commandLink>
-
 
                     </div>
                 </h:form>
