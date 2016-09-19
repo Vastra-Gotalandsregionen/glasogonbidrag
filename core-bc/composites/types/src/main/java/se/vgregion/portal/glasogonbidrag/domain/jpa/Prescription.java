@@ -1,18 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +36,7 @@ public class Prescription {
     private Date modifiedDate;
 
     @OneToOne
+    @JoinColumn(name = "diagnose_id")
     private Diagnose diagnose;
 
     @Column(name = "prescription_date")
@@ -55,9 +44,11 @@ public class Prescription {
     private Date date;
     private String prescriber;
 
-    @Lob
-    @Column(name = "prescriber_comment")
-    private String comment;
+    // TODO: remove comment for line below when problem with comment is solved
+//    @Lob
+//    @Basic(fetch=FetchType.EAGER, optional=true)
+//    @Column(name = "prescriber_comment")
+//    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "beneficiary_id")
@@ -141,13 +132,14 @@ public class Prescription {
         this.prescriber = prescriber;
     }
 
-    public String getComment() {
+    // TODO: remove comment for line below when problem with comment is solved
+/*    public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
+    }*/
 
     public Beneficiary getBeneficiary() {
         return beneficiary;

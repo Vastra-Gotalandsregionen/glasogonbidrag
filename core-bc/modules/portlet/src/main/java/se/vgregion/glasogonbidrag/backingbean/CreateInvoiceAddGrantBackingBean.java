@@ -11,6 +11,7 @@ import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 import se.vgregion.glasogonbidrag.util.GrantUtil;
+import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
@@ -18,12 +19,16 @@ import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.IdentificationRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.DiagnoseService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
@@ -81,6 +86,9 @@ public class CreateInvoiceAddGrantBackingBean {
     private BeneficiaryService beneficiaryService;
 
     @Autowired
+    private DiagnoseService diagnoseService;
+
+    @Autowired
     private GrantService grantService;
 
     @Autowired
@@ -95,20 +103,18 @@ public class CreateInvoiceAddGrantBackingBean {
     @Autowired
     private PersonalNumberValidator personalNumberValidator;
 
+    @Autowired
+    private LiferayUtil liferayUtil;
 
     // Helpers
-
     private TabUtil tabUtil;
-    private String portletNamespace;
     private boolean newBeneficiary;
-    private Locale locale;
 
     // Flow
 
     private CreateInvoiceAddGrantPidFlow flow;
 
     // Main objects
-
     private Invoice invoice;
     private Grant grant;
     private Beneficiary beneficiary;
@@ -129,22 +135,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public TabUtil getTabUtil() {
         return tabUtil;
-    }
-
-    public String getPortletNamespace() {
-        return portletNamespace;
-    }
-
-    public void setPortletNamespace(String portletNamespace) {
-        this.portletNamespace = portletNamespace;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 
     // Getter and Setters for Main objects
@@ -281,7 +271,7 @@ public class CreateInvoiceAddGrantBackingBean {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Detta är inget giltigt personnummer...", "");
 
-            context.addMessage(portletNamespace + ":addGrantForm:personalNumber", message);
+            context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
 
     }
@@ -317,21 +307,19 @@ public class CreateInvoiceAddGrantBackingBean {
         // Set flow
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_15);
-            grantTypeLabel = "0-15";
+            grantTypeLabel = "grant-type-0-15";
         } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
             flow = flow.nextState(AddGrantAction.AGE_0_TO_19);
-            grantTypeLabel = "0-19";
+            grantTypeLabel = "grant-type-0-19";
         } else {
             flow = flow.nextState(AddGrantAction.OTHER);
-            grantTypeLabel = "Övriga";
+            grantTypeLabel = "grant-type-other";
         }
     }
 
     public void prescriptionDateListener() {
         LOGGER.info("prescriptionDateListener(): add {} to grant {}",
                 prescriptionVO.getDate(), grant);
-
-        grant.setPrescriptionDate(prescriptionVO.getDate());
 
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
@@ -344,6 +332,10 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void changePrescriptionTypeListener() {
+        // Don't do anything.
+    }
+
+    public void changeVisualLateralityListener() {
         // Don't do anything.
     }
 
@@ -516,8 +508,49 @@ public class CreateInvoiceAddGrantBackingBean {
         FacesMessage message = null;
 
         // Connect Grant with prescriptionVO
-        String prescriptionTypeName = prescriptionVO.getType().name();
-        LOGGER.info("prescriptionTypeName: " + prescriptionTypeName);
+
+        Prescription prescription = new Prescription();
+        prescription.setDate(prescriptionVO.getDate());
+
+        if(prescriptionVO.getType() != DiagnoseType.NONE) {
+            LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
+
+            // TODO: remove comment for line below when problem with comment is solved
+            //prescription.setComment(prescriptionVO.getComment());
+            prescription.setPrescriber(prescriptionVO.getPrescriber());
+
+            Diagnose diagnose = null;
+
+            if (prescriptionVO.getType() == DiagnoseType.APHAKIA) {
+                Aphakia aphakia = new Aphakia();
+                aphakia.setLaterality(prescriptionVO.getLaterality());
+
+                diagnose = aphakia;
+            } else if (prescriptionVO.getType() == DiagnoseType.KERATOCONUS) {
+                Keratoconus keratoconus = new Keratoconus();
+                keratoconus.setLaterality(prescriptionVO.getLaterality());
+                keratoconus.setVisualAcuityLeft(prescriptionVO.getVisualAcuityLeft());
+                keratoconus.setVisualAcuityRight(prescriptionVO.getVisualAcuityRight());
+                keratoconus.setNoGlasses(prescriptionVO.isNoGlasses());
+
+                diagnose = keratoconus;
+            } else if (prescriptionVO.getType() == DiagnoseType.SPECIAL) {
+                Special special = new Special();
+                special.setLaterality(prescriptionVO.getLaterality());
+                special.setWeakEyeSight(prescriptionVO.isWeakEyeSight());
+
+                diagnose = special;
+            } else {
+                // TODO: Throw exception
+            }
+
+            diagnoseService.create(diagnose);
+
+            prescription.setDiagnose(diagnose);
+        }
+
+        beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
+        grant.setPrescription(prescription);
 
         if (grant.getId() == null) {
             message = persistGrant(userId, groupId, companyId, invoice, grant);
@@ -611,15 +644,6 @@ public class CreateInvoiceAddGrantBackingBean {
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
 
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
-
-        portletNamespace = FacesContext.getCurrentInstance()
-                .getExternalContext().encodeNamespace("");
-
-
         flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
         LOGGER.info("Current state: {}.", flow);
 
@@ -655,27 +679,78 @@ public class CreateInvoiceAddGrantBackingBean {
             System.out.println("--- Found GrantId -----");
 
             //TODO: add find with parts to grantRepository, so that call to beneficiaryRepository.findWithParts will not be necessary.
-            grant = grantRepository.find(grantId);
-            beneficiary = grant.getBeneficiary();
-            beneficiary = beneficiaryRepository.findWithParts(beneficiary.getId());
+            grant = grantRepository.findWithParts(grantId);
+            //grant = grantRepository.find(grantId);
+            beneficiary = beneficiaryRepository.findWithParts(grant.getBeneficiary().getId());
             number = beneficiary.getIdentification().getString();
-
-//            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//
-//            deliveryDate = df.format(grant.getDeliveryDate());
 
             deliveryDate = grant.getDeliveryDate();
 
-            prescriptionVO.setDate(grant.getPrescriptionDate());
+            Prescription prescription = grant.getPrescription();
 
-            //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
-            if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
-                grantType = GRANT_TYPE_AGE_0_TO_15;
-                grantTypeLabel = "0-15";
+            // Temporary code - start
+            if(prescription == null) {
+                System.out.println("--- prescription IS null -----");
             } else {
-                grantType = GRANT_TYPE_AGE_0_TO_19;
-                grantTypeLabel = "0-19";
+                System.out.println("--- prescription is NOT null -----");
             }
+            // Temporary code - end
+
+            prescriptionVO.setDate(prescription.getDate());
+
+            Diagnose diagnose = prescription.getDiagnose();
+            if(diagnose != null) {
+                DiagnoseType diagnoseType = diagnose.getDiagnoseType();
+
+                // TODO: activate code below when comments work for prescription again
+                //prescriptionVO.setComment(prescription.getComment());
+                prescriptionVO.setPrescriber(prescription.getPrescriber());
+                prescriptionVO.setType(prescription.getDiagnose().getDiagnoseType());
+
+                if(diagnoseType == DiagnoseType.APHAKIA) {
+                    Aphakia aphakia = (Aphakia)diagnose;
+
+                    System.out.println("--- DiagnoseType is Aphakia -----");
+
+
+                    prescriptionVO.setLaterality(aphakia.getLaterality());
+                } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
+                    Keratoconus keratoconus = (Keratoconus)diagnose;
+
+                    System.out.println("--- DiagnoseType is Keratoconus -----");
+
+                    prescriptionVO.setLaterality(keratoconus.getLaterality());
+                    prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
+                    prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
+                    prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
+                } else if(diagnoseType == DiagnoseType.SPECIAL) {
+                    Special special = (Special)diagnose;
+
+                    System.out.println("--- DiagnoseType is Special -----");
+
+                    prescriptionVO.setLaterality(special.getLaterality());
+                    prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
+                } else {
+                    // TODO: throw exception
+                }
+
+                grantType = GRANT_TYPE_OTHER;
+
+                grantTypeLabel = "grant-type-other";
+            } else {
+
+                //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
+                if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
+                    grantType = GRANT_TYPE_AGE_0_TO_15;
+                    grantTypeLabel = "grant-type-0-15";
+                } else {
+                    grantType = GRANT_TYPE_AGE_0_TO_19;
+                    grantTypeLabel = "grant-type-0-19";
+                }
+
+            }
+
+
 
             amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
 

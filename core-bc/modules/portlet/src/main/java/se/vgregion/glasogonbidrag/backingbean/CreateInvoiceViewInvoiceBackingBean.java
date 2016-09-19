@@ -46,29 +46,7 @@ public class CreateInvoiceViewInvoiceBackingBean {
     @Autowired
     private FacesUtil facesUtil;
 
-    // Helpers
-
-    private String portletNamespace;
-    private Locale locale;
-
-
     private Invoice invoice;
-
-    public String getPortletNamespace() {
-        return portletNamespace;
-    }
-
-    public void setPortletNamespace(String portletNamespace) {
-        this.portletNamespace = portletNamespace;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 
     public Invoice getInvoice() {
         return invoice;
@@ -117,15 +95,6 @@ public class CreateInvoiceViewInvoiceBackingBean {
 
     @PostConstruct
     protected void init() {
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
-
-        portletNamespace = FacesContext.getCurrentInstance()
-                .getExternalContext().encodeNamespace("");
-
-
         Long invoiceId = facesUtil.fetchId("invoiceId");
 
         if (invoiceId != null) {

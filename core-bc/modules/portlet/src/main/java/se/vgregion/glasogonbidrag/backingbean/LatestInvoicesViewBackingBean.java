@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -33,16 +33,14 @@ public class LatestInvoicesViewBackingBean {
     @Autowired
     private FacesUtil facesUtil;
 
+    @Autowired
+    private LiferayUtil liferayUtil;
+
     private List<Invoice> invoices;
-    private Locale locale;
     private PrettyTime prettyTime; //TODO: Do we need getter and setter?
 
     public List<Invoice> getInvoices() {
         return invoices;
-    }
-
-    public Locale getLocale() {
-        return locale;
     }
 
     public PrettyTime getPrettyTime() {
@@ -64,11 +62,7 @@ public class LatestInvoicesViewBackingBean {
     @PostConstruct
     protected void init() {
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-        locale = themeDisplay.getLocale();
         long userId = themeDisplay.getUserId();
-
-        //TODO: Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
 
         fetchInvoices(userId);
         configurePrettyTime();
@@ -82,7 +76,7 @@ public class LatestInvoicesViewBackingBean {
     }
 
     private void configurePrettyTime() {
-        prettyTime = new PrettyTime(locale);
+        prettyTime = new PrettyTime(liferayUtil.getLocale());
     }
 
 }

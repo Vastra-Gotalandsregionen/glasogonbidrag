@@ -13,6 +13,7 @@
     <h:body>
 
         <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -70,12 +71,12 @@
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{grant.amountAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                         </h:outputText>
                                     </td>
                                     <td class="number">
                                         <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                         </h:outputText>
                                     </td>
                                 </tr>
@@ -119,12 +120,12 @@
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.amountAsKrona}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
                         </tr>
@@ -134,12 +135,12 @@
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.calculateGrantsAmountIncludingVatSumAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
                         </tr>
@@ -151,13 +152,13 @@
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
 
                             <td class="number">
                                 <h:outputText value="#{invoice.calculateDifferenceIncludingVatAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{createInvoiceViewInvoiceBackingBean.locale}" />
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
                         </tr>

@@ -1,6 +1,5 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
-import com.liferay.portal.theme.ThemeDisplay;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -36,18 +34,12 @@ public class ManageBeneficiariesViewBackingBean {
 
     private Beneficiary selectedBeneficiary;
 
-    public Locale locale;
-
     public List<Beneficiary> getBeneficiaries() {
         return beneficiaries;
     }
 
     public Beneficiary getSelectedBeneficiary() {
         return selectedBeneficiary;
-    }
-
-    public Locale getLocale() {
-        return locale;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -58,16 +50,9 @@ public class ManageBeneficiariesViewBackingBean {
         selectedBeneficiary = null;
     }
 
-
     @PostConstruct
     protected void init() {
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
         beneficiaries = beneficiaryRepository.findAllWithParts();
         selectedBeneficiary = null;
-
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
     }
 }

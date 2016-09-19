@@ -13,7 +13,6 @@ import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -36,14 +35,8 @@ public class ListInvoicesViewBackingBean {
 
     private List<Invoice> invoices;
 
-    public Locale locale;
-
     public List<Invoice> getInvoices() {
         return invoices;
-    }
-
-    public Locale getLocale() {
-        return locale;
     }
 
     public String getUserNameById(long userId) {
@@ -52,12 +45,6 @@ public class ListInvoicesViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
-
         //invoices = invoiceRepository.findAllWithParts();
         fetchInvoices();
     }

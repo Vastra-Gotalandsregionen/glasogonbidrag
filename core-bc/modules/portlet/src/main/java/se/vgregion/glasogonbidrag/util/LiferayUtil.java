@@ -10,6 +10,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class LiferayUtil {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(LiferayUtil.class);
+
+    @Autowired
+    private FacesUtil facesUtil;
 
     public String getUserNameById(long userId) {
 
@@ -56,6 +60,20 @@ public class LiferayUtil {
         }
 
         return plid;
+    }
+
+    public Locale getLocale() {
+        //Locale locale = null;
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        Locale locale = themeDisplay.getLocale();
+        // Temporary - make sure we always get Swedish locale
+        locale = Locale.forLanguageTag("sv-SE");
+
+        return locale;
+    }
+
+    public String getPortletNamespace() {
+        return FacesContext.getCurrentInstance().getExternalContext().encodeNamespace("");
     }
 
 

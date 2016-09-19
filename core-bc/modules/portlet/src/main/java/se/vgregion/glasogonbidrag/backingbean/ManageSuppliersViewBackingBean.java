@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Erik Andersson - Monator Technologies AB
@@ -57,8 +56,6 @@ public class ManageSuppliersViewBackingBean {
 
     private Supplier newSupplier;
 
-    public Locale locale;
-
     public Supplier getSelectedSupplier() {
         return selectedSupplier;
     }
@@ -77,10 +74,6 @@ public class ManageSuppliersViewBackingBean {
 
     public Supplier getNewSupplier() {
         return newSupplier;
-    }
-
-    public Locale getLocale() {
-        return locale;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -124,16 +117,10 @@ public class ManageSuppliersViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
         suppliers = supplierRepository.findAllWithInvoices();
         selectedSupplier = null;
         selectedSupplierInvoices = new <Invoice>ArrayList();
         newSupplier = new Supplier();
         viewEditSupplier = facesUtil.fetchBooleanProperty("viewEditSupplier");
-
-        locale = themeDisplay.getLocale();
-        // Temporary - make sure we always get Swedish locale
-        locale = Locale.forLanguageTag("sv-SE");
     }
 }
