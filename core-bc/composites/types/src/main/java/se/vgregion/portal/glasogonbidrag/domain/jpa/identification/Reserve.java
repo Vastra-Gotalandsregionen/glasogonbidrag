@@ -39,6 +39,11 @@ public class Reserve extends Identification {
     }
 
     @Override
+    public int getBirthYear() {
+        return 0; //TODO: Same calculation as personal identification numbers, just skip last 4 digits
+    }
+
+    @Override
     public String getString() {
         return getNumber();
     }

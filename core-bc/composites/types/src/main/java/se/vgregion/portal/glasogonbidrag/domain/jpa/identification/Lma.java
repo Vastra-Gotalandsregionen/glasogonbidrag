@@ -16,12 +16,23 @@ public class Lma extends Identification {
     @Column(unique = true, nullable = false)
     private String number;
 
+    private int birthYear;
+
     public String getNumber() {
         return number;
     }
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    @Override
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 
     @Override

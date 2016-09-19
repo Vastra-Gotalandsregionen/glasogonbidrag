@@ -43,7 +43,9 @@ import java.util.List;
                 name = "glasogonbidrag.invoice.findWithParts",
                 query = "SELECT i " +
                         "FROM Invoice i " +
-                        "LEFT JOIN FETCH i.grants " +
+                        "LEFT JOIN FETCH i.grants g " +
+                        "LEFT JOIN FETCH g.prescription p " +
+                        "LEFT JOIN FETCH p.diagnose " +
                         "LEFT JOIN FETCH i.supplier " +
                         "LEFT JOIN FETCH i.adjustment " +
                         "LEFT JOIN FETCH i.distribution " +

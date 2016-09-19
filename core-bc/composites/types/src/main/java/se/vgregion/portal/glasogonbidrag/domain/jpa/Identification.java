@@ -52,6 +52,8 @@ public abstract class Identification {
 
     public abstract IdentificationType getType();
 
+    public abstract int getBirthYear();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

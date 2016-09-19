@@ -11,11 +11,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Entity
@@ -84,6 +87,7 @@ public class Beneficiary {
     private Identification identification;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
+    @OrderColumn(name = "prescription_date")
     private List<Prescription> prescriptionHistory;
 
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -164,13 +168,16 @@ public class Beneficiary {
         this.prescriptionHistory = prescriptionHistory;
     }
 
-    //    public Prescription getPrescription() {
-//        return prescription;
-//    }
-//
-//    public void setPrescription(Prescription prescription) {
-//        this.prescription = prescription;
-//    }
+    public int calculateAge(Date currentDate) {
+        // TODO: Should the parameter currentDate we injected with a service?
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(currentDate);
+
+        int current = cal.get(Calendar.YEAR);
+        int year = identification.getBirthYear();
+
+        return current - year;
+    }
 
     @Override
     public boolean equals(Object o) {

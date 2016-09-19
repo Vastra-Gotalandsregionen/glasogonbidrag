@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -90,8 +89,7 @@ public class Grant {
     private long amount;
     private long vat;
 
-    private int county;
-    private int municipality;
+    private String municipality;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "beneficiary_id")
@@ -192,20 +190,12 @@ public class Grant {
         this.vat = vat;
     }
 
-    public int getCounty() {
-        return county;
-    }
-
-    public void setCounty(int county) {
-        this.county = county;
-    }
-
-    public int getMunicipality() {
+    public String getMunicipality() {
         return municipality;
     }
 
-    public void setMunicipality(int municipality) {
-        this.municipality = municipality;
+    public void setMunicipality(String responsibilityRegion) {
+        this.municipality = responsibilityRegion;
     }
 
     public Beneficiary getBeneficiary() {

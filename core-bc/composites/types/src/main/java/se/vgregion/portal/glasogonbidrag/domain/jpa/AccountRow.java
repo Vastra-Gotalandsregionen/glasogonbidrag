@@ -48,6 +48,12 @@ public class AccountRow {
     public AccountRow() {
     }
 
+    public AccountRow(int responsibility,
+                      int account, int freeCode,
+                      long amountExclVat) {
+        this(1, responsibility, account, freeCode, amountExclVat);
+    }
+
     public AccountRow(int count, int responsibility,
                       int account, int freeCode,
                       long amountExclVat) {
@@ -63,6 +69,7 @@ public class AccountRow {
         this.count = count;
         this.responsibility = responsibility;
         this.account = account;
+        this.freeCode = freeCode;
         this.amountExclVat = amountExclVat;
     }
 

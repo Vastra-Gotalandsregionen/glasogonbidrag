@@ -20,6 +20,11 @@ public class Protected extends Identification {
     private String magicNumber;
 
     @Override
+    public int getBirthYear() {
+        return 0;
+    }
+
+    @Override
     public String getString() {
         return "XXXXXX-XXXX";
     }
