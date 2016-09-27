@@ -700,12 +700,12 @@ public class CreateInvoiceAddGrantBackingBean {
 
             Diagnose diagnose = prescription.getDiagnose();
             if(diagnose != null) {
-                DiagnoseType diagnoseType = diagnose.getDiagnoseType();
+                DiagnoseType diagnoseType = diagnose.getType();
 
                 // TODO: activate code below when comments work for prescription again
                 //prescriptionVO.setComment(prescription.getComment());
                 prescriptionVO.setPrescriber(prescription.getPrescriber());
-                prescriptionVO.setType(prescription.getDiagnose().getDiagnoseType());
+                prescriptionVO.setType(prescription.getDiagnose().getType());
 
                 if(diagnoseType == DiagnoseType.APHAKIA) {
                     Aphakia aphakia = (Aphakia)diagnose;
