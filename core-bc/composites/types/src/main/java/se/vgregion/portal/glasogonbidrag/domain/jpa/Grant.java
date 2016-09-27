@@ -30,7 +30,8 @@ import java.util.Date;
         @NamedQuery(
                 name = "glasogonbidrag.grant.findWithParts",
                 query = "SELECT g FROM Grant g " +
-                        "LEFT JOIN FETCH g.beneficiary " +
+                        "LEFT JOIN FETCH g.beneficiary b " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "LEFT JOIN FETCH g.prescription " +
                         "WHERE g.id = :id"),
 
