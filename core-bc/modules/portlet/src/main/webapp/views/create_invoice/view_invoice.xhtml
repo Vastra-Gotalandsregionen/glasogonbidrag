@@ -182,7 +182,7 @@
                                 <h:outputText value="Registrerade bidrag" />
                             </td>
                             <td class="number">
-                                <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
+                                <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
