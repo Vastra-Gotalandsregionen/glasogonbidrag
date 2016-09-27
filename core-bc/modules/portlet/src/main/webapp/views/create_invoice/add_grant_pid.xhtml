@@ -58,7 +58,7 @@
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
 
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
 
@@ -112,7 +112,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -167,7 +167,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -205,7 +205,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -468,7 +468,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -576,7 +576,7 @@
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -639,16 +639,11 @@
                     <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara"
                                    action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
-                    <!--
-                    <h:commandLink styleClass="link-btn" value="Spara / gå tillbaka"
-                                   action="#{createInvoiceAddGrantBackingBean.saveGrant}" />
-                     -->
-
                     <h:commandLink styleClass="link-btn" value="Ta bort"
                                    rendered="#{not empty grant.id and mayInvoiceBeChanged}"
                                    action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
 
-                    <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
 
@@ -675,7 +670,7 @@
                                rendered="#{not empty grant.id and mayInvoiceBeChanged}"
                                action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
 
-                <h:link styleClass="link-btn cancel" value="Avbryt" outcome="view_invoice" >
+                <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
                     <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                 </h:link>
 
