@@ -21,6 +21,7 @@
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.validateMayInvoiceBeChanged(invoice)}" scope="request" />
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.validateMayNewGrantsBeAdded(invoice)}" scope="request" />
 
         <div class="msg-wrap">
             <h:messages showSummary="true" showDetail="false" />
@@ -38,7 +39,7 @@
         </ui:fragment>
 
         <!-- Insert beneficiary's identification number -->
-        <ui:fragment rendered="#{flow.showPersonalNumberInput and (invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() ne 0)}">
+        <ui:fragment rendered="#{flow.showPersonalNumberInput and mayNewGrantsBeAdded}">
             <div class="grant-section">
 
                 <gb:grantSectionInput id="personalNumber"
