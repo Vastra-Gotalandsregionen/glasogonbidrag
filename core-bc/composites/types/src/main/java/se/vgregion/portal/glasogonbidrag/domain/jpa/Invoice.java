@@ -182,6 +182,7 @@ public class Invoice {
     @JoinColumn(name = "distribution")
     private AccountingDistribution distribution;
 
+
     @Transient
     private final KronaCalculationUtil currency =
             new KronaCalculationUtil();

@@ -16,6 +16,7 @@ import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
@@ -35,6 +36,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
@@ -69,6 +71,32 @@ public class InvoiceBackingBean {
     public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
     }
+
+    public boolean validateMayNewGrantsBeAdded(Invoice curInvoice) {
+        LOGGER.info("InvoiceBackingBean - validateMayNewGrantsBeAdded()");
+
+        boolean mayNewGrantsBeAdded = false;
+
+        boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
+        boolean isStillAmountLeft = (curInvoice.calculateDifferenceExcludingVatAsKrona().compareTo(BigDecimal.ZERO) != 0);
+
+        mayNewGrantsBeAdded = isStatusInProgress && isStillAmountLeft;
+
+        return mayNewGrantsBeAdded;
+    }
+
+    public boolean validateMayInvoiceBeChanged(Invoice curInvoice) {
+        LOGGER.info("InvoiceBackingBean - validateMayInvoiceBeChanged()");
+
+        boolean mayInvoiceBeChanged = false;
+
+        boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
+
+        mayInvoiceBeChanged = isStatusInProgress;
+
+        return mayInvoiceBeChanged;
+    }
+
 
     // Initializer
 

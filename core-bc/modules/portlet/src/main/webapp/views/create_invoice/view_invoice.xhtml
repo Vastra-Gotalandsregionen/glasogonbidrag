@@ -15,9 +15,57 @@
         <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.validateMayNewGrantsBeAdded(invoice)}" scope="request" />
+
         <div class="row-fluid">
             <div class="span12">
-                <h1>Faktura #{invoice.verificationNumber} - #{invoice.supplier.name}</h1>
+                <div class="gb-invoice-hd">
+
+                    <div class="gb-invoice-hd-left">
+                        <div class="gb-invoice-hd-item">
+                            Faktura <strong>#{invoice.verificationNumber}</strong>
+                        </div>
+                        <div class="gb-invoice-hd-item">
+                            #{invoice.supplier.name}
+                        </div>
+                        <div class="gb-invoice-hd-item">
+                            #{bundle[invoice.status]}
+                        </div>
+
+                    </div>
+
+                    <div class="gb-invoice-hd-right">
+
+                        <h:form>
+                            <div class="button-row">
+
+                                <h:commandLink value="Klarmarkera"
+                                               styleClass="link-btn primary"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
+                                               rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+                                <h:commandLink value="Makulera"
+                                               styleClass="link-btn"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
+                                               rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+
+                                <h:commandLink value="Markera som pågående"
+                                               styleClass="link-btn"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}"
+                                               rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+
+                            </div>
+                        </h:form>
+
+
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -91,7 +139,7 @@
                     </ui:fragment>
 
                     <div class="button-row">
-                        <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag">
+                        <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag" rendered="#{mayNewGrantsBeAdded}">
                             <f:param name="invoiceId" value="${invoice.id}" />
                             <h:outputText value="#{grant.beneficiary.identification}" />
                         </h:link>
@@ -218,36 +266,6 @@
 
             </div>
 
-        </div>
-
-        <div class="row-fluid">
-            <div class="span12">
-                <h:form>
-                    <div class="button-row">
-
-                        <h:commandLink value="Klarmarkera"
-                                       styleClass="link-btn primary"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
-                                        rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-                        <h:commandLink value="Makulera"
-                                       styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
-                                       rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-
-                        <h:commandLink value="Pågående"
-                                       styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}"
-                                       rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-
-                    </div>
-                </h:form>
-            </div>
         </div>
 
     </h:body>

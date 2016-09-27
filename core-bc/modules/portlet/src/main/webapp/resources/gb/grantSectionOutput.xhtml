@@ -24,6 +24,7 @@
     <cc:attribute name="backListener" method-signature="void listener()" />
     <cc:attribute name="backRender"/>
     <cc:attribute name="backShowSection" />
+    <cc:attribute name="mayInvoiceBeChanged" />
 </cc:interface>
 
 <cc:implementation>
@@ -35,6 +36,7 @@
     <c:set var="backListener" value="#{cc.attrs.backListener}"  />
     <c:set var="backRender" value="#{cc.attrs.backRender}" />
     <c:set var="backShowSection" value="#{cc.attrs.backShowSection}" />
+    <c:set var="mayInvoiceBeChanged" value="#{cc.attrs.mayInvoiceBeChanged}" />
 
     <div class="grant-section">
         <div class="grant-section-output">
@@ -61,7 +63,7 @@
 
             </span>
 
-            <h:commandLink styleClass="grant-section-back" immediate="true">
+            <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
                 <f:ajax execute="#{backExecute}" listener="#{backListener}"
                         render="#{backRender}" onevent="function eventHandler(data) {ajaxComplete(data)}">
                 </f:ajax>
