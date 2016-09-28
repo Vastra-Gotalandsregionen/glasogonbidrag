@@ -439,7 +439,14 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public String doSaveGrantAndAddNew() {
-        saveGrant();
+        try {
+            saveGrant();
+        } catch(Exception e) {
+            LOGGER.error(e.getMessage(), e);
+
+            // TODO: notify user that there was an error.
+        }
+
 
         return String.format(
                 "add_grant" +

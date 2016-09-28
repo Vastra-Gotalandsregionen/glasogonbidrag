@@ -28,11 +28,13 @@ import java.util.List;
                 name = "glasogonbidrag.beneficiary.findWithParts",
                 query = "SELECT b FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
                 query = "SELECT b FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.identification = :id"),
 
         @NamedQuery(
@@ -43,6 +45,7 @@ import java.util.List;
                 name = "glasogonbidrag.beneficiary.findAllWithParts",
                 query = "SELECT b FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "ORDER BY b.id ASC"),
 
         @NamedQuery(
@@ -87,7 +90,8 @@ public class Beneficiary {
     private Identification identification;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
-    @OrderColumn(name = "prescription_date")
+    //@OrderColumn(name = "prescription_date")
+    @OrderColumn(name = "prescription_id")
     private List<Prescription> prescriptionHistory;
 
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

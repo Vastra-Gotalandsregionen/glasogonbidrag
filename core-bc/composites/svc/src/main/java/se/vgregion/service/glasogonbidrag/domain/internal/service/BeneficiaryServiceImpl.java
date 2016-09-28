@@ -111,9 +111,12 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         // Set relation from prescription to beneficiary
         prescription.setBeneficiary(beneficiary);
         // Add prescription to beneficiary history
-        beneficiary.getPrescriptionHistory().add(prescription);
 
         em.persist(prescription);
+
+        beneficiary.getPrescriptionHistory().add(prescription);
+
+
 
         try {
             update(beneficiary);
