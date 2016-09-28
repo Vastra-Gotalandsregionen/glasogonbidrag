@@ -15,7 +15,8 @@
         <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
-        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.validateMayNewGrantsBeAdded(invoice)}" scope="request" />
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
+        <c:set var="mayInvoicesBeMarkedCompleted" value="#{invoiceBackingBean.checkMayInvoicesBeMarkedCompleted(invoice)}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -31,6 +32,13 @@
                         <div class="gb-invoice-hd-item">
                             #{bundle[invoice.status]}
                         </div>
+                        <ui:fragment rendered="#{not empty invoice.supplier.email}">
+                            <div class="gb-invoice-hd-item">
+                                <a href="mailto:#{invoice.supplier.email}" class="link-icon link-icon-email">
+                                    <span>Epost</span>
+                                </a>
+                            </div>
+                        </ui:fragment>
 
                     </div>
 
@@ -42,7 +50,7 @@
                                 <h:commandLink value="Klarmarkera"
                                                styleClass="link-btn primary"
                                                action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
-                                               rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                               rendered="#{mayInvoicesBeMarkedCompleted}" >
                                     <f:param name="invoiceId" value="${invoice.id}" />
                                 </h:commandLink>
                                 <h:commandLink value="Makulera"

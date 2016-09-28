@@ -20,8 +20,8 @@
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
-        <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.validateMayInvoiceBeChanged(invoice)}" scope="request" />
-        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.validateMayNewGrantsBeAdded(invoice)}" scope="request" />
+        <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.checkMayInvoiceBeChanged(invoice)}" scope="request" />
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
 
         <div class="msg-wrap">
             <h:messages showSummary="true" showDetail="false" />

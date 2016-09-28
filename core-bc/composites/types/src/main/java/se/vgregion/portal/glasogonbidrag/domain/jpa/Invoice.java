@@ -67,7 +67,7 @@ import java.util.List;
 
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllWithParts",
-                query = "SELECT i " +
+                query = "SELECT distinct i " +
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +

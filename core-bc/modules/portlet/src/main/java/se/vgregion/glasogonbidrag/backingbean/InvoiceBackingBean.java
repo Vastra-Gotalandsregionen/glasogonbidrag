@@ -72,8 +72,8 @@ public class InvoiceBackingBean {
         this.invoice = invoice;
     }
 
-    public boolean validateMayNewGrantsBeAdded(Invoice curInvoice) {
-        LOGGER.info("InvoiceBackingBean - validateMayNewGrantsBeAdded()");
+    public boolean checkMayNewGrantsBeAdded(Invoice curInvoice) {
+        LOGGER.info("InvoiceBackingBean - checkMayNewGrantsBeAdded()");
 
         boolean mayNewGrantsBeAdded = false;
 
@@ -85,8 +85,8 @@ public class InvoiceBackingBean {
         return mayNewGrantsBeAdded;
     }
 
-    public boolean validateMayInvoiceBeChanged(Invoice curInvoice) {
-        LOGGER.info("InvoiceBackingBean - validateMayInvoiceBeChanged()");
+    public boolean checkMayInvoiceBeChanged(Invoice curInvoice) {
+        LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeChanged()");
 
         boolean mayInvoiceBeChanged = false;
 
@@ -95,6 +95,19 @@ public class InvoiceBackingBean {
         mayInvoiceBeChanged = isStatusInProgress;
 
         return mayInvoiceBeChanged;
+    }
+
+    public boolean checkMayInvoicesBeMarkedCompleted(Invoice curInvoice) {
+        LOGGER.info("InvoiceBackingBean - checkMayInvoicesBeMarkedCompleted()");
+
+        boolean mayInvoicesBeMarkedCompleted = false;
+
+        boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
+        boolean isStillAmountLeft = (curInvoice.calculateDifferenceExcludingVatAsKrona().compareTo(BigDecimal.ZERO) != 0);
+
+        mayInvoicesBeMarkedCompleted = isStatusInProgress && !isStillAmountLeft;
+
+        return mayInvoicesBeMarkedCompleted;
     }
 
 

@@ -1,20 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +29,7 @@ import java.util.List;
                         "ORDER BY b.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllWithParts",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT distinct b FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "ORDER BY b.id ASC"),
@@ -91,7 +77,8 @@ public class Beneficiary {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     //@OrderColumn(name = "prescription_date")
-    @OrderColumn(name = "prescription_id")
+    //@OrderBy("date DESC")
+    @OrderColumn(name = "sort_index")
     private List<Prescription> prescriptionHistory;
 
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
