@@ -12,35 +12,41 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithParts",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.identification = :id"),
 
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAll",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllWithParts",
-                query = "SELECT distinct b FROM Beneficiary b " +
+                query = "SELECT DISTINCT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "ORDER BY b.id ASC"),
 
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByFirstName",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.firstName, b.lastName ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByLastName",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.lastName, b.firstName ASC"),
 
 })
