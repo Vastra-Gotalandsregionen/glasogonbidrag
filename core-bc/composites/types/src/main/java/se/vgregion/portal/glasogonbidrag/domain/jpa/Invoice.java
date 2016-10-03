@@ -67,7 +67,7 @@ import java.util.List;
 
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findAllWithParts",
-                query = "SELECT i " +
+                query = "SELECT DISTINCT i " +
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
@@ -181,6 +181,7 @@ public class Invoice {
     @OneToOne
     @JoinColumn(name = "distribution")
     private AccountingDistribution distribution;
+
 
     @Transient
     private final KronaCalculationUtil currency =

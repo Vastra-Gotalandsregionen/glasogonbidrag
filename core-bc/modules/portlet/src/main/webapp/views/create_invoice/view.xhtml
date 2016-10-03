@@ -31,20 +31,20 @@
 
                         <div class="field-row field-row-2">
                             <div class="field-element">
-                                <h:outputLabel for="verificationNumber" value="Verifikationsnr:" />
+                                <h:outputLabel for="verificationNumber" value="#{bundle['verification-number']}:" />
                                 <h:inputText id="verificationNumber" value="#{createInvoiceViewBackingBean.verificationNumber}"
                                              required="true" requiredMessage="#{bundle['reg-invoice-error-input-verification']}"
-                                             pt:placeholder="Skriv in verifikationsnr..." pt:autofocus="true">
+                                             pt:placeholder="#{bundle['enter-verification-number']}..." pt:autofocus="true">
                                 </h:inputText>
                             </div>
 
                             <div class="field-element">
-                                <h:outputLabel for="supplier" value="Leverantör:" />
+                                <h:outputLabel for="supplier" value="#{bundle['supplier']}:" />
                                 <h:selectOneMenu id="supplier" name="world" styleClass="js-select-replace"
                                                  value="#{createInvoiceViewBackingBean.supplier}"
                                                  required="true" requiredMessage="#{bundle['reg-invoice-error-choose-supplier']}"
-                                                 pt:data-placeholder="Väj leverantör">
-                                    <f:selectItem itemValue="#{null}" itemLabel="Välj leverantör" />
+                                                 pt:data-placeholder="#{bundle['select-supplier']}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="#{bundle['select-supplier']}" />
                                     <f:selectItems value="#{createInvoiceViewBackingBean.suppliers}" />
                                 </h:selectOneMenu>
                             </div>
@@ -53,27 +53,27 @@
 
                         <div class="field-row field-row-2">
                             <div class="field-element">
-                                <h:outputLabel for="invoiceNumber" value="Fakturanr:" />
+                                <h:outputLabel for="invoiceNumber" value="#{bundle['invoice-number-short']}:" />
                                 <h:inputText id="invoiceNumber" value="#{createInvoiceViewBackingBean.invoiceNumber}"
-                                             pt:placeholder="Fakturanr eller meddelande..."  />
+                                             pt:placeholder="#{bundle['invoice-number-or-message']}..."  />
                             </div>
 
                             <div class="field-element">
-                                <h:outputLabel for="invoiceAmountIncludingVAT" value="Belopp inkl moms:" />
+                                <h:outputLabel for="invoiceAmountIncludingVAT" value="#{bundle['amount-incl-vat']}:" />
                                 <h:inputText id="invoiceAmountIncludingVAT"
                                              value="#{createInvoiceViewBackingBean.amountWithVat}"
                                              required="true" requiredMessage="#{bundle['reg-invoice-error-input-amount']}"
                                              converterMessage="#{bundle['reg-invoice-error-converting-amount']}"
-                                             pt:placeholder="Fakturabelopp inkl moms">
+                                             pt:placeholder="#{bundle['amount-incl-vat']}">
                                     <f:converter converterId="javax.faces.BigDecimal" />
                                 </h:inputText>
                             </div>
                         </div>
 
                         <div class="button-row">
-                            <h:commandButton id="submitButton" value="Registrera faktura" styleClass="primary"
+                            <h:commandButton id="submitButton" value="#{bundle['register-invoice']}" styleClass="primary"
                                              action="#{createInvoiceViewBackingBean.register}" />
-                            <h:commandButton id="cancelButton" value="Avbryt" styleClass="cancel" immediate="true"
+                            <h:commandButton id="cancelButton" value="#{bundle['cancel']}" styleClass="cancel" immediate="true"
                                              action="#{createInvoiceViewBackingBean.cancel}" />
                         </div>
                     </gb:box>

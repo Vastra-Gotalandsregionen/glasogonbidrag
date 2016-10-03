@@ -439,7 +439,14 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public String doSaveGrantAndAddNew() {
-        saveGrant();
+        try {
+            saveGrant();
+        } catch(Exception e) {
+            LOGGER.error(e.getMessage(), e);
+
+            // TODO: notify user that there was an error.
+        }
+
 
         return String.format(
                 "add_grant" +
@@ -700,12 +707,12 @@ public class CreateInvoiceAddGrantBackingBean {
 
             Diagnose diagnose = prescription.getDiagnose();
             if(diagnose != null) {
-                DiagnoseType diagnoseType = diagnose.getDiagnoseType();
+                DiagnoseType diagnoseType = diagnose.getType();
 
                 // TODO: activate code below when comments work for prescription again
                 //prescriptionVO.setComment(prescription.getComment());
                 prescriptionVO.setPrescriber(prescription.getPrescriber());
-                prescriptionVO.setType(prescription.getDiagnose().getDiagnoseType());
+                prescriptionVO.setType(prescription.getDiagnose().getType());
 
                 if(diagnoseType == DiagnoseType.APHAKIA) {
                     Aphakia aphakia = (Aphakia)diagnose;

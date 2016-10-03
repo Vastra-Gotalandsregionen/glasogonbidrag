@@ -1,20 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,32 +12,41 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithParts",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.identification = :id"),
 
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAll",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.id ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllWithParts",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT DISTINCT b " +
+                        "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "ORDER BY b.id ASC"),
 
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByFirstName",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.firstName, b.lastName ASC"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findAllOrderByLastName",
-                query = "SELECT b FROM Beneficiary b " +
+                query = "SELECT b " +
+                        "FROM Beneficiary b " +
                         "ORDER BY b.lastName, b.firstName ASC"),
 
 })
@@ -87,7 +82,9 @@ public class Beneficiary {
     private Identification identification;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
-    @OrderColumn(name = "prescription_date")
+    //@OrderColumn(name = "prescription_date")
+    //@OrderBy("date DESC")
+    @OrderColumn(name = "sort_index")
     private List<Prescription> prescriptionHistory;
 
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

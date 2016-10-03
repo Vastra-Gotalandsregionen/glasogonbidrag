@@ -15,9 +15,65 @@
         <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
+        <c:set var="mayInvoicesBeMarkedCompleted" value="#{invoiceBackingBean.checkMayInvoicesBeMarkedCompleted(invoice)}" scope="request" />
+
         <div class="row-fluid">
             <div class="span12">
-                <h1>Faktura #{invoice.verificationNumber} - #{invoice.supplier.name}</h1>
+                <div class="gb-invoice-hd">
+
+                    <div class="gb-invoice-hd-left">
+                        <div class="gb-invoice-hd-item">
+                            #{bundle['invoice']} <strong>#{invoice.verificationNumber}</strong>
+                        </div>
+                        <div class="gb-invoice-hd-item">
+                            #{invoice.supplier.name}
+                        </div>
+                        <div class="gb-invoice-hd-item">
+                            #{bundle[invoice.status]}
+                        </div>
+                        <ui:fragment rendered="#{not empty invoice.supplier.email}">
+                            <div class="gb-invoice-hd-item">
+                                <a href="mailto:#{invoice.supplier.email}" class="link-icon link-icon-email">
+                                    <span>#{bundle['email']}</span>
+                                </a>
+                            </div>
+                        </ui:fragment>
+
+                    </div>
+
+                    <div class="gb-invoice-hd-right">
+
+                        <h:form>
+                            <div class="button-row">
+
+                                <h:commandLink value="#{bundle['mark-completed']}"
+                                               styleClass="link-btn primary"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
+                                               rendered="#{mayInvoicesBeMarkedCompleted}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+                                <h:commandLink value="#{bundle['mark-canceled']}"
+                                               styleClass="link-btn"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
+                                               rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+
+                                <h:commandLink value="#{bundle['mark-ongoing']}"
+                                               styleClass="link-btn"
+                                               action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}"
+                                               rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}" >
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+
+                            </div>
+                        </h:form>
+
+
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -26,26 +82,26 @@
             <div class="span6">
 
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="Registrerade bidrag">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['registered-grants']}">
                     <ui:fragment rendered="#{not empty invoice.grants}">
                         <table class="simple-table">
                             <thead>
                             <tr>
                                 <th>
-                                    <h:outputText value="Bidragstagare" />
+                                    <h:outputText value="#{bundle['beneficiary']}" />
                                 </th>
                                 <th>
-                                    <h:outputText value="Recept" />
+                                    <h:outputText value="#{bundle['prescription']}" />
                                 </th>
                                 <th>
-                                    <h:outputText value="Kvitterat" />
+                                    <h:outputText value="#{bundle['acknowledged']}" />
                                 </th>
 
                                 <th class="number">
-                                    <h:outputText value="Exkl. moms" />
+                                    <h:outputText value="#{bundle['excl-vat']}" />
                                 </th>
                                 <th class="number">
-                                    <h:outputText value="Inkl. moms" />
+                                    <h:outputText value="#{bundle['incl-vat']}" />
                                 </th>
                             </tr>
                             </thead>
@@ -87,36 +143,36 @@
                     </ui:fragment>
 
                     <ui:fragment rendered="#{empty invoice.grants}">
-                        <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
+                        <div class="alert alert-info">#{bundle['there-are-no-grants-registered-for-this-invoice']}.</div>
                     </ui:fragment>
 
                     <div class="button-row">
-                        <h:link styleClass="link-btn primary" outcome="add_grant" value="Lägg till nytt bidrag">
+                        <h:link styleClass="link-btn primary" outcome="add_grant" value="#{bundle['add-new-grant']}" rendered="#{mayNewGrantsBeAdded}">
                             <f:param name="invoiceId" value="${invoice.id}" />
                             <h:outputText value="#{grant.beneficiary.identification}" />
                         </h:link>
                     </div>
                 </gb:box>
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="Fakturasammanfattning">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['invoice-summary']}">
                     <table class="simple-table">
                         <thead>
                         <tr>
                             <th>
-                                <h:outputText value="Post" />
+                                <h:outputText value="#{bundle['entry']}" />
                             </th>
                             <th class="number">
-                                <h:outputText value="Exkl. moms" />
+                                <h:outputText value="#{bundle['excl-vat']}" />
                             </th>
                             <th class="number">
-                                <h:outputText value="Inkl. moms" />
+                                <h:outputText value="#{bundle['incl-vat']}" />
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
-                                <h:outputText value="Faktura" />
+                                <h:outputText value="#{bundle['invoice']}" />
                             </td>
                             <td class="number">
                                 <h:outputText value="#{invoice.amountAsKrona}">
@@ -131,10 +187,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="Registrerade bidrag" />
+                                <h:outputText value="#{bundle['registered-grants']}" />
                             </td>
                             <td class="number">
-                                <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
+                                <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                 </h:outputText>
                             </td>
@@ -171,15 +227,15 @@
             <div class="span6">
 
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="Konteringsförslag">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}">
                     <table class="accounting-table">
                         <thead>
                         <tr>
-                            <th>Antal</th>
-                            <th>Ansvar</th>
-                            <th>Konto</th>
-                            <th>Frikod</th>
-                            <th>Summa exkl moms</th>
+                            <th>#{bundle['number-of-count']}</th>
+                            <th>#{bundle['accounting-responsibility']}</th>
+                            <th>#{bundle['accounting-account']}</th>
+                            <th>#{bundle['accounting-free-code']}</th>
+                            <th>#{bundle['sum-excl-vat']}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -206,7 +262,7 @@
                     </table>
                     <h:form>
                         <div class="button-row">
-                            <h:commandButton value="generate"
+                            <h:commandButton value="#{bundle['generate-accounting-proposal']}"
                                              styleClass="link-btn primary"
                                              action="#{createInvoiceViewInvoiceBackingBean.generateAccountingDistribution}"
                                              rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
@@ -218,36 +274,6 @@
 
             </div>
 
-        </div>
-
-        <div class="row-fluid">
-            <div class="span12">
-                <h:form>
-                    <div class="button-row">
-
-                        <h:commandLink value="Klarmarkera"
-                                       styleClass="link-btn primary"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
-                                        rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-                        <h:commandLink value="Makulera"
-                                       styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
-                                       rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-
-                        <h:commandLink value="Pågående"
-                                       styleClass="link-btn"
-                                       action="#{createInvoiceViewInvoiceBackingBean.markUnpaid}"
-                                       rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}" >
-                            <f:param name="invoiceId" value="${invoice.id}" />
-                        </h:commandLink>
-
-                    </div>
-                </h:form>
-            </div>
         </div>
 
     </h:body>

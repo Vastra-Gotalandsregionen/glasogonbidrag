@@ -52,6 +52,7 @@ public class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
 
         try {
             return q.getSingleResult();
+
         } catch (NoResultException e) {
             return null;
         }

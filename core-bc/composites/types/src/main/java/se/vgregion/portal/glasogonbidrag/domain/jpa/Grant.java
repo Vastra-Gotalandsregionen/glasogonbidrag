@@ -25,26 +25,23 @@ import java.util.Date;
 @Entity
 @Table(name = "vgr_glasogonbidrag_grant")
 @NamedQueries({
-
-
         @NamedQuery(
                 name = "glasogonbidrag.grant.findWithParts",
                 query = "SELECT g FROM Grant g " +
-                        "LEFT JOIN FETCH g.beneficiary " +
+                        "LEFT JOIN FETCH g.beneficiary b " +
+                        "LEFT JOIN FETCH b.prescriptionHistory " +
                         "LEFT JOIN FETCH g.prescription " +
                         "WHERE g.id = :id"),
 
-        // TODO: change to findAllByUser
         @NamedQuery(
-                name = "glasogonbidrag.grant.findByUser",
+                name = "glasogonbidrag.grant.findAllByUser",
                 query = "SELECT g " +
                         "FROM Grant g " +
                         "WHERE g.userId = :user " +
                         "ORDER BY g.createDate"),
 
-        // TODO: change to findAllByDate
         @NamedQuery(
-                name = "glasogonbidrag.grant.findByDate",
+                name = "glasogonbidrag.grant.findAllByDate",
                 query = "SELECT g " +
                         "FROM Grant g " +
                         "WHERE DATE_TRUNC('day', g.createDate) = :date"),
@@ -100,6 +97,7 @@ public class Grant {
     private long amount;
     private long vat;
 
+    private String county;
     private String municipality;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -199,6 +197,14 @@ public class Grant {
 
     public void setVat(long vat) {
         this.vat = vat;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public String getMunicipality() {
