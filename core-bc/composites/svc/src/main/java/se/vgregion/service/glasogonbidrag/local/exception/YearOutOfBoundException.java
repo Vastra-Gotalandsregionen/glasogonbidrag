@@ -19,7 +19,10 @@ public class YearOutOfBoundException extends RuntimeException {
         super(cause);
     }
 
-    public YearOutOfBoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public YearOutOfBoundException(String message,
+                                   Throwable cause,
+                                   boolean enableSuppression,
+                                   boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
         @NamedQuery(
                 name = "glasogonbidrag.supplier.findAllWithInvoices",
-                query = "SELECT s " +
+                query = "SELECT DISTINCT s " +
                         "FROM Supplier s " +
                         "LEFT JOIN FETCH s.invoices " +
                         "ORDER BY s.name ASC"),

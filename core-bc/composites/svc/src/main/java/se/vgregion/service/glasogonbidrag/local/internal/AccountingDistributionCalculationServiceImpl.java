@@ -15,7 +15,9 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
+import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.RegionResponsibilityLookupService;
+import se.vgregion.service.glasogonbidrag.local.exception.FreeCodeNotFoundException;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -36,11 +38,14 @@ public class AccountingDistributionCalculationServiceImpl
     @Autowired
     private RegionResponsibilityLookupService regionLookupService;
 
+    @Autowired
+    private AreaCodeLookupService areaCodeLookupService;
+
     @Override
     public AccountingDistribution calculateFrom(Invoice invoice) {
-        List<Grant> grants = invoice.getGrants();
+        LOGGER.info("Generating distribution for {}", invoice);
 
-        LOGGER.info("IS IT NULL? {}", grants == null ? "YES!" : "NO.");
+        List<Grant> grants = invoice.getGrants();
 
         AccountingDistribution distribution = new AccountingDistribution();
 
@@ -63,22 +68,20 @@ public class AccountingDistributionCalculationServiceImpl
 
     private int lookupResponsibility(Grant grant) {
         Beneficiary beneficiary = grant.getBeneficiary();
-        String municipality = grant.getMunicipality();
+        String countyCode = grant.getCounty();
+        String municipalityCode = grant.getMunicipality();
         Identification ident = beneficiary.getIdentification();
-        Prescription prescription = grant.getPrescription();
 
-        Diagnose diagnose = null;
-        if (prescription != null) {
-            diagnose = prescription.getDiagnose();
-        }
+        String municipality = areaCodeLookupService.lookupMunicipalityFromCode(
+                countyCode.concat(municipalityCode));
 
         if (ident.getType() == IdentificationType.PROTECTED) {
             return 30120;
         }
 
-        // TODO: Should this be the code for all Diagnose Types?
-        if (diagnose != null && diagnose.getType() == DiagnoseType.NONE
-                && ident.getType() == IdentificationType.LMA) {
+        if (ident.getType() == IdentificationType.LMA ||
+                ident.getType() == IdentificationType.RESERVE ||
+                ident.getType() == IdentificationType.OTHER) {
             return 30220;
         }
 
@@ -86,15 +89,47 @@ public class AccountingDistributionCalculationServiceImpl
     }
 
     private int lookupFreeCode(Grant grant) {
-        Beneficiary beneficiary = grant.getBeneficiary();
-
-        int freeCode = -1;
-
         Calendar cal = new GregorianCalendar();
+
+        Beneficiary beneficiary = grant.getBeneficiary();
+        Prescription prescription = grant.getPrescription();
+
+        Diagnose diagnose;
+        if (prescription != null) {
+            diagnose = prescription.getDiagnose();
+        } else {
+            throw new IllegalStateException("Diagnose may not be null!");
+        }
+
         int age = beneficiary.calculateAge(cal.getTime());
 
-        if (0 <= age && age <= 18 ) {
-            freeCode = 9191;
+        int freeCode;
+
+        switch (diagnose.getType()) {
+            case APHAKIA:
+                freeCode = 9586;
+                break;
+            case KERATOCONUS:
+                freeCode = 9587;
+                break;
+            case SPECIAL:
+                freeCode = 9588;
+                break;
+            case NONE:
+                if (0 <= age && age <= 7) {
+                    freeCode = 9589;
+                } else if (8 <= age && age <= 19) {
+                    freeCode = 9802;
+                } else {
+                    throw new FreeCodeNotFoundException(
+                            "None diagnose but age is in not between 0 to 19!");
+                }
+                break;
+            default:
+                throw new FreeCodeNotFoundException(
+                        "Diagnose is set to unknown type, " +
+                                "only: APHAKIA, KERATOCONUS, SPECIAL and " +
+                                "NONE are supported!");
         }
 
         return freeCode;
