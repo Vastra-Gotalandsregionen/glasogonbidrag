@@ -15,56 +15,17 @@
 
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
-        <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Historik Bidragstagare">
-
-
-            <!--
-            <div class="chip js-chip-collapsible chip-collapsed">
-                <div class="chip-hd">
-                    <div class="chip-hd-item">
-                        Lorem
-                    </div>
-                    <div class="chip-hd-item">
-                        Ipsum
-                    </div>
-                    <div class="chip-hd-item">
-                        Dolarem
-                    </div>
-                </div>
-                <div class="chip-bd">
-                    <ul class="labeled-list">
-                        <li>
-                            <span class="item-label">
-                                Lorem
-                            </span>
-                            <span class="item-value">
-                                Ipsum
-                            </span>
-                        </li>
-                        <li>
-                            <span class="item-label">
-                                Dolarem
-                            </span>
-                            <span class="item-value">
-                                Consectetur adipiscing elit
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <br />
-            -->
+        <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['beneficiary-history']}">
 
             <ui:fragment rendered="#{empty createInvoiceAddGrantBackingBean.beneficiary}">
                 <div class="alert alert-info">
-                    Ingen bidragstagare vald ännu.
+                    <h:outputText value="#{bundle['no-selected']}" />
                 </div>
             </ui:fragment>
 
             <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
                 <div class="alert alert-info">
-                    Bidragstagaren har inga registrerade bidrag sedan tidigare.
+                    <h:outputText value="#{bundle['there-are-no-grants-registered-for-this-beneficiary']}" />
                 </div>
             </ui:fragment>
 
@@ -93,7 +54,7 @@
                                 <ul class="labeled-list">
                                     <li>
                                         <span class="item-label">
-                                            <h:outputText value="Recept:" />
+                                            <h:outputText value="#{bundle['prescription']}:" />
                                         </span>
                                         <span class="item-value">
                                             <h:outputText value="#{grant.prescriptionDate}">
@@ -103,7 +64,7 @@
                                     </li>
                                     <li>
                                         <span class="item-label">
-                                            <h:outputText value="Kvittens:" />
+                                            <h:outputText value="#{bundle['acknowledgement']}:" />
                                         </span>
                                         <span class="item-value">
                                             <h:outputText value="#{grant.deliveryDate}">
@@ -113,7 +74,7 @@
                                     </li>
                                     <li>
                                         <span class="item-label">
-                                            <h:outputText value="Leverantör:" />
+                                            <h:outputText value="#{bundle['supplier']}:" />
                                         </span>
                                         <span class="item-value">
                                             <h:outputText value="#{grant.invoice.supplier.name}" />
@@ -121,7 +82,7 @@
                                     </li>
                                     <li>
                                         <span class="item-label">
-                                            <h:outputText value="Faktura:" />
+                                            <h:outputText value="#{bundle['invoice']}:" />
                                         </span>
                                         <span class="item-value">
                                             <h:link outcome="view_invoice" target="_BLANK">

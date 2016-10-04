@@ -19,7 +19,7 @@
 
         <h:panelGroup id="invoiceGrantRows" layout="block">
 
-            <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="Registrerade bidrag">
+            <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['registered-grants']}">
 
                 <ui:fragment rendered="#{not empty invoice.grants}">
                     <div class="chip-wrap">
@@ -38,7 +38,7 @@
                                         <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
                                             <f:param name="invoiceId" value="${invoice.id}" />
                                             <f:param name="grantId" value="${grant.id}" />
-                                            <span>Redigera</span>
+                                            <span>#{bundle['edit']}</span>
                                         </h:commandLink>
                                     </div>
                                 </div>
@@ -47,36 +47,10 @@
                     </div>
                 </ui:fragment>
 
-                <ui:remove>
-                    <ui:fragment rendered="#{not empty invoice.grants}">
-                        <table class="simple-table">
-                            <tbody>
-                            <ui:repeat value="#{invoice.grants}" var="grant">
-                                <tr>
-                                    <td>
-                                        <h:outputText value="#{grant.beneficiary.identification}" />
-                                    </td>
-                                    <td class="number">
-                                        <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                        </h:outputText>
-                                    </td>
-                                    <td>
-                                        <h:commandLink styleClass="icon-link icon-link-edit" action="#{createInvoiceAddGrantBackingBean.editGrant}" immediate="true">
-                                            <f:param name="invoiceId" value="${invoice.id}" />
-                                            <f:param name="grantId" value="${grant.id}" />
-                                            <span>Redigera</span>
-                                        </h:commandLink>
-                                    </td>
-                                </tr>
-                            </ui:repeat>
-                            </tbody>
-                        </table>
-                    </ui:fragment>
-                </ui:remove>
-
                 <ui:fragment rendered="#{empty invoice.grants}">
-                    <div class="alert alert-info">Inga bidrag har registrerats för den här fakturan än.</div>
+                    <div class="alert alert-info">
+                        #{bundle['there-are-no-grants-registered-for-this-invoice']}
+                    </div>
                 </ui:fragment>
 
             </gb:box>

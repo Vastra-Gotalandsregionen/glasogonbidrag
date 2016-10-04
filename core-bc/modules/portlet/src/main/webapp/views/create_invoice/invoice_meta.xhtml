@@ -18,12 +18,12 @@
 
         <h:panelGroup id="invoiceMeta" layout="block">
 
-            <gb:box collapsible="true" collapsed="true" styleClass="box-sidebar" title="Fakturainformation">
+            <gb:box collapsible="true" collapsed="true" styleClass="box-sidebar" title="#{bundle['invoice-information']}">
 
                 <ul class="labeled-list">
                     <li>
                         <span class="item-label">
-                            <h:outputText value="Ver.nr:" />
+                            <h:outputText value="#{bundle['verification-number-short']}:" />
                         </span>
                         <span class="item-value">
                             <h:outputText value="#{invoice.verificationNumber}" />
@@ -31,7 +31,7 @@
                     </li>
                     <li>
                         <span class="item-label">
-                            <h:outputText value="Leverantör:" />
+                            <h:outputText value="#{bundle['supplier']}:" />
                         </span>
                         <span class="item-value">
                             <h:outputText value="#{invoice.supplier.name}" />
@@ -39,7 +39,7 @@
                     </li>
                     <li>
                         <span class="item-label">
-                            <h:outputText value="Lev. fakturanr:" />
+                            <h:outputText value="#{bundle['supplier-invoice-number-short']}:" />
                         </span>
                         <span class="item-value">
                             <h:outputText value="#{invoice.invoiceNumber}" />
@@ -47,7 +47,7 @@
                     </li>
                     <li>
                         <span class="item-label">
-                            <h:outputText value="Status:" />
+                            <h:outputText value="#{bundle['status']}:" />
                         </span>
                         <span class="item-value">
                             <h:outputText value="#{bundle[invoice.status]}" />
@@ -55,46 +55,6 @@
                     </li>
 
                 </ul>
-
-                <ui:remove>
-                    <table class="simple-table">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <h:outputText value="Verifikationsnummer" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{invoice.verificationNumber}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputText value="Leverantör" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{invoice.supplier.name}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputText value="Lev. fakturanr." />
-                            </td>
-                            <td>
-                                <h:outputText value="#{invoice.invoiceNumber}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputText value="Status" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{invoice.status}" />
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </ui:remove>
-
 
             </gb:box>
 
