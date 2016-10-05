@@ -21,6 +21,7 @@
     <import resource="databaseContext.xml"/>
     <import resource="webserviceContext.xml" />
     <import resource="classpath*:/serviceContext.xml" />
+    <import resource="classpath*:/integrationContext.xml" />
 
     <context:component-scan base-package="se.vgregion.glasogonbidrag.backingbean"/>
     <context:component-scan base-package="se.vgregion.glasogonbidrag.navigation"/>
