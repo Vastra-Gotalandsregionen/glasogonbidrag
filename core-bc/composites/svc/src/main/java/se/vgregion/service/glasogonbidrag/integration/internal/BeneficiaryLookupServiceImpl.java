@@ -12,6 +12,7 @@ import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.integration.exception.IdentityFormatException;
 import se.vgregion.service.glasogonbidrag.integration.exception.NoBeneficiaryFoundException;
+import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTransport;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
@@ -19,6 +20,8 @@ import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -27,6 +30,11 @@ import java.util.List;
 public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
     private SimpleDateFormat dateFormat;
+
+    private Pattern IDENTITY_FORMAT_PATTERN = Pattern.compile("[0-9]{12}");
+
+    @Autowired
+    private PersonalNumberService personalNumberService;
 
     @Autowired
     private LookupResidentForFullProfileResponderInterface fullProfileClient;
@@ -94,7 +102,9 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return true if the identity is valid otherwise false.
      */
     public boolean validateIdentity(String identity) {
-        return false;
+        Matcher matcher = IDENTITY_FORMAT_PATTERN.matcher(identity);
+
+        return matcher.matches() && personalNumberService.validate(identity);
     }
 
     /**

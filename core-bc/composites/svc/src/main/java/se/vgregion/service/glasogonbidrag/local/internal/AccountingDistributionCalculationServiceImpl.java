@@ -109,12 +109,15 @@ public class AccountingDistributionCalculationServiceImpl
             case APHAKIA:
                 freeCode = 9586;
                 break;
+
             case KERATOCONUS:
                 freeCode = 9587;
                 break;
+
             case SPECIAL:
                 freeCode = 9588;
                 break;
+
             case NONE:
                 if (0 <= age && age <= 7) {
                     freeCode = 9589;
@@ -125,6 +128,7 @@ public class AccountingDistributionCalculationServiceImpl
                             "None diagnose but age is in not between 0 to 19!");
                 }
                 break;
+
             default:
                 throw new FreeCodeNotFoundException(
                         "Diagnose is set to unknown type, " +
