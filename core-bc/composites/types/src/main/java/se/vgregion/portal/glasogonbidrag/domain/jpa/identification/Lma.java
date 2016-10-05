@@ -18,6 +18,14 @@ public class Lma extends Identification {
 
     private int birthYear;
 
+    // Default constructor
+    public Lma() {}
+
+    public Lma(String number) {
+        this.number = number;
+    }
+
+
     public String getNumber() {
         return number;
     }

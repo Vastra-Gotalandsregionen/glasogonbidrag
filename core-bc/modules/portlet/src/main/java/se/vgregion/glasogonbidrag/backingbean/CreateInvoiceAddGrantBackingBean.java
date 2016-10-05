@@ -23,6 +23,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
@@ -234,6 +235,39 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     // Listeners
+
+    public void lmaNumberListener() {
+        LOGGER.info("lmaNumberListener(): number={}", number);
+
+        // TODO: can validations be made?
+        // TODO: Handle none LMA
+
+        Identification identification = identificationRepository.findByLMANumber(number);
+
+        if (identification == null) {
+            // TODO: birthyear should not be hardcoded
+
+            identification = new Lma(number);
+        } else {
+            beneficiary = beneficiaryRepository.findWithPartsByIdent(identification);
+        }
+
+        if (beneficiary == null) {
+            beneficiary = new Beneficiary();
+            beneficiary.setIdentification(identification);
+
+            beneficiary.setFirstName("-");
+            beneficiary.setLastName("-");
+
+
+            newBeneficiary = true;
+        }
+
+        grant.setBeneficiary(beneficiary);
+
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
+    }
 
     public void personalNumberListener() {
         LOGGER.info("personalNumberListener(): number={}", number);

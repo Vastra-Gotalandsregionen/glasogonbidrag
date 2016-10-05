@@ -1,23 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:jsf="http://xmlns.jcp.org/jsf"
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:bridge="http://liferay.com/faces/bridge">
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
 
     <h:head />
 
     <h:body>
+        <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+        <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
+        <c:set var="grantFlow" value="#{createInvoiceAddGrantBackingBean.grantFlow}" scope="request" />
 
-        <div class="field-row field-row-2">
-            <div class="field-element">
-                <h:outputLabel for="lmaNumber" value="LMA-nummer:" />
-                <h:inputText id="lmaNumber" pt:placeholder="Skriv in LMA-nummer..."  />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
+
+        <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.checkMayInvoiceBeChanged(invoice)}" scope="request" />
+        <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
+
+        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
+            <div class="alert alert-info">
+                <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
             </div>
-    </div>
+            <div class="button-row">
+                <h:link styleClass="link-btn primary" value="#{bundle['go-to-overview']}" outcome="view_invoice" >
+                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                </h:link>
+            </div>
+        </ui:fragment>
+
+        <!-- Insert beneficiary's LMA identification number -->
+        <ui:fragment rendered="#{grantFlow.showIdentificationInput and mayNewGrantsBeAdded}">
+            <div class="grant-section">
+
+                <gb:grantSectionInput id="lmaNumber"
+                                      label="#{bundle['lma-number']}"
+                                      value="#{createInvoiceAddGrantBackingBean.number}"
+                                      autofocus="true"
+                                      placeholder="#{bundle['lma-placeholder']}"
+                                      required="true"
+                                      requiredMessage="#{bundle['reg-grant-error-lma-number-is-mandatory']}"
+                                      triggerOnEnter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
+                />
+
+                <div class="button-row">
+                    <h:commandLink id="lmaNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.lmaNumberListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                    </h:commandLink>
+
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
+                        <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                    </h:link>
+
+                </div>
+            </div>
+        </ui:fragment>
+        <ui:fragment rendered="#{grantFlow.showIdentificationOutput}">
+            <div class="grant-section">
+
+                <div class="grant-section-output">
+                    <div class="person-info-row">
+                        <div class="person-info-item personnumber">
+                            <h:outputText value="#{grant.beneficiary.identification}" />
+                        </div>
+                        <div class="person-info-item">
+                            <h:outputText value="#{grant.beneficiary.firstName} #{grant.beneficiary.lastName}" />
+                        </div>
+                    </div>
+
+                    <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
+                        </f:ajax>
+                        <f:param name="showSection" value="ENTER_IDENTIFICATION" />
+                        <span class="hide-accessible">#{bundle['go-back']}</span>
+                    </h:commandLink>
+
+                </div>
+
+            </div>
+        </ui:fragment>
 
     </h:body>
-
 </f:view>

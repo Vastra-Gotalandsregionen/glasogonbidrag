@@ -53,17 +53,18 @@
 
                                     <div class="tabs-content">
                                         <ui:fragment rendered="#{tabUtil.activeIndex == 0}">
-
                                             <div class="msg-wrap">
                                                 <h:messages showSummary="true" showDetail="false" />
                                             </div>
-
                                             <ui:include src="add_grant_pid.xhtml" />
-                                            <ui:include src="add_grant_grant_input.xhtml" />
                                         </ui:fragment>
                                         <ui:fragment rendered="#{tabUtil.activeIndex == 1}">
+                                            <div class="msg-wrap">
+                                                <h:messages showSummary="true" showDetail="false" />
+                                            </div>
                                             <ui:include src="add_grant_lma.xhtml" />
                                         </ui:fragment>
+                                        <ui:include src="add_grant_grant_input.xhtml" />
                                     </div>
                                 </div>
                             </div>
