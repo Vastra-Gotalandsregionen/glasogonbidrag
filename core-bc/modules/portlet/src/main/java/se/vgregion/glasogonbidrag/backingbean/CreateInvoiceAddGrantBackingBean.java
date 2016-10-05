@@ -21,6 +21,7 @@ import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
@@ -536,14 +537,14 @@ public class CreateInvoiceAddGrantBackingBean {
         Prescription prescription = new Prescription();
         prescription.setDate(prescriptionVO.getDate());
 
+        Diagnose diagnose;
+
         if(prescriptionVO.getType() != DiagnoseType.NONE) {
             LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
 
             // TODO: remove comment for line below when problem with comment is solved
             //prescription.setComment(prescriptionVO.getComment());
             prescription.setPrescriber(prescriptionVO.getPrescriber());
-
-            Diagnose diagnose = null;
 
             if (prescriptionVO.getType() == DiagnoseType.APHAKIA) {
                 Aphakia aphakia = new Aphakia();
@@ -565,13 +566,17 @@ public class CreateInvoiceAddGrantBackingBean {
 
                 diagnose = special;
             } else {
-                // TODO: Throw exception
+                throw new RuntimeException("Diagnose cannot be null.");
             }
 
-            diagnoseService.create(diagnose);
-
-            prescription.setDiagnose(diagnose);
+        } else {
+            diagnose = new None();
         }
+
+        diagnoseService.create(diagnose);
+
+        prescription.setDiagnose(diagnose);
+
 
         beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
         grant.setPrescription(prescription);

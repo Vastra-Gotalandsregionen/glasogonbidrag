@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("n")
-@Table(name = "vgr_glasogonbidrag_diagnose_keratoconus")
+@Table(name = "vgr_glasogonbidrag_diagnose_none")
 public class None extends Diagnose {
     @Override
     public DiagnoseType getType() {
