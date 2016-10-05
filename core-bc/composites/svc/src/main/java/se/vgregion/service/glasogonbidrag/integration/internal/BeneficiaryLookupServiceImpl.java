@@ -6,7 +6,9 @@ import se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp2
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileResponseType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileType;
+import se.riv.population.residentmaster.v1.JaNejTYPE;
 import se.riv.population.residentmaster.v1.NamnTYPE;
+import se.riv.population.residentmaster.v1.PersonpostTYPE;
 import se.riv.population.residentmaster.v1.ResidentType;
 import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
@@ -154,10 +156,36 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     private BeneficiaryNameTransport extractNameFromResponse(
             LookupResidentForFullProfileResponseType response) {
         ResidentType resident = getResident(response);
-        NamnTYPE name = resident.getPersonpost().getNamn();
+
+        if (resident.getSekretessmarkering() == JaNejTYPE.N) {
+            return extractNameFromResponse(resident.getPersonpost());
+        } else {
+            return createNameForProtected();
+        }
+    }
+
+    /**
+     * Extract name from response.
+     *
+     * @param person PersonpostTYPE from the response.
+     * @return first and last name of a person.
+     */
+    private BeneficiaryNameTransport extractNameFromResponse(
+            PersonpostTYPE person) {
+        NamnTYPE name = person.getNamn();
 
         return new BeneficiaryNameTransport(
                 name.getFornamn(), name.getEfternamn());
+    }
+
+    /**
+     * If the beneficiary have protected status, we cannot get a name
+     * from the response, create a crossed out name for this user.
+     *
+     * @return a beneficiary name transport with just crosses.
+     */
+    private BeneficiaryNameTransport createNameForProtected() {
+        return new BeneficiaryNameTransport("XXXXXX", "XXXXXX");
     }
 
     /**
