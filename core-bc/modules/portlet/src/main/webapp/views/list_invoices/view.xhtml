@@ -41,6 +41,10 @@
                     <h:outputText value="#{invoice.supplier.name}" />
                 </p:column>
 
+                <p:column headerText="#{bundle['supplier-invoice-number-short']}" sortBy="#{invoice.invoiceNumber}">
+                    <h:outputText value="#{invoice.invoiceNumber}"  />
+                </p:column>
+
                 <p:column headerText="#{bundle['amount']}" sortBy="#{invoice.amountIncludingVatAsKrona}" styleClass="currency">
                     <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
                         <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
