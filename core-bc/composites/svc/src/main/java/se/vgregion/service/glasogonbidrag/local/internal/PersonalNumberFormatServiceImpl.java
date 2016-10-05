@@ -50,18 +50,18 @@ public class PersonalNumberFormatServiceImpl
         if ("-".equals(separator)) {
             if (0 <= numberYear && numberYear <= yearDigits) {
                 year = Integer.toString(century)
-                        .concat(Integer.toString(numberYear));
+                        .concat(String.format("%02d", numberYear));
             } else {
                 year = Integer.toString(century - 1)
-                        .concat(Integer.toString(numberYear));
+                        .concat(String.format("%02d", numberYear));
             }
         } else {
             if (0 <= numberYear && numberYear <= yearDigits) {
                 year = Integer.toString(century - 1)
-                        .concat(Integer.toString(numberYear));
+                        .concat(String.format("%02d", numberYear));
             } else {
                 year = Integer.toString(century - 2)
-                        .concat(Integer.toString(numberYear));
+                        .concat(String.format("%02d", numberYear));
             }
         }
 

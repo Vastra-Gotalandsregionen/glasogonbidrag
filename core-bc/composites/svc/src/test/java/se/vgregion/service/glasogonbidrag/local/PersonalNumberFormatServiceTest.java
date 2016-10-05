@@ -45,6 +45,15 @@ public class PersonalNumberFormatServiceTest {
     }
 
     @Test
+    public void fromBornAtChangeOfMillennia() {
+        String number1 = "200008072399";
+
+        String year = "2005";
+
+        Assert.assertEquals("000807-2399", formatService.from(number1, year));
+    }
+
+    @Test
     public void toLocalNumberFormat() {
         String number1 = "680102-9288";
         String number2 = "121212-1212";
@@ -67,6 +76,15 @@ public class PersonalNumberFormatServiceTest {
         Assert.assertEquals("201212121212", formatService.to(number2, year));
     }
 
+    @Test
+    public void toBornAtChangeOfMillennia() {
+        String number1 = "000807-2399";
+
+        String year = "2005";
+
+        Assert.assertEquals("200008072399", formatService.to(number1, year));
+    }
+    
     @Test
     public void toLocalNumberAgeOver100() {
         String number = "100203+4823";
