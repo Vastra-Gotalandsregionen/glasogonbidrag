@@ -736,8 +736,9 @@ public class CreateInvoiceAddGrantBackingBean {
             prescriptionVO.setDate(prescription.getDate());
 
             Diagnose diagnose = prescription.getDiagnose();
-            if(diagnose != null) {
-                DiagnoseType diagnoseType = diagnose.getType();
+            DiagnoseType diagnoseType = diagnose.getType();
+
+            if(diagnoseType != DiagnoseType.NONE) {
 
                 // TODO: activate code below when comments work for prescription again
                 //prescriptionVO.setComment(prescription.getComment());
