@@ -167,7 +167,6 @@ public class AccountRow {
         amountExclVat = currency.calculateKronaAsParts(valueAsKrona);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -176,7 +175,6 @@ public class AccountRow {
         AccountRow that = (AccountRow) o;
 
         if (account != that.account) return false;
-        if (amountExclVat != that.amountExclVat) return false;
         if (freeCode != that.freeCode) return false;
         if (responsibility != that.responsibility) return false;
 
@@ -188,7 +186,6 @@ public class AccountRow {
         int result = responsibility;
         result = 31 * result + account;
         result = 31 * result + freeCode;
-        result = 31 * result + (int) (amountExclVat ^ (amountExclVat >>> 32));
         return result;
     }
 

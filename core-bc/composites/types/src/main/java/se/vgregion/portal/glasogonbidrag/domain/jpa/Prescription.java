@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +60,7 @@ public class Prescription {
     private List<Grant> grants;
 
     public Prescription() {
+        diagnose = new None();
     }
 
     public long getId() {

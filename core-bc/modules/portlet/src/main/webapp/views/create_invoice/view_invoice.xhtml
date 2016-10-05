@@ -227,7 +227,8 @@
             <div class="span6">
 
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}"
+                        rendered="#{not empty invoice.distribution}">
                     <table class="accounting-table">
                         <thead>
                         <tr>
@@ -239,27 +240,31 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach begin="1" end="3">
+                        <ui:repeat value="#{invoice.distribution.rows}" var="row">
                             <tr>
                                 <td>
-                                    <h:inputText />
+                                    <h:inputText value="#{row.count}" />
                                 </td>
                                 <td>
-                                    <h:inputText />
+                                    <h:inputText value="#{row.responsibility}" />
                                 </td>
                                 <td>
-                                    <h:inputText />
+                                    <h:inputText value="#{row.account}" />
                                 </td>
                                 <td>
-                                    <h:inputText />
+                                    <h:inputText value="#{row.freeCode}" />
                                 </td>
                                 <td>
-                                    <h:inputText />
+                                    <h:inputText value="#{row.amountExclVatAsKrona}" />
                                 </td>
                             </tr>
-                        </c:forEach>
+                        </ui:repeat>
                         </tbody>
                     </table>
+                </gb:box>
+
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}"
+                        rendered="#{empty invoice.distribution}">
                     <h:form>
                         <div class="button-row">
                             <h:commandButton value="#{bundle['generate-accounting-proposal']}"
@@ -271,7 +276,6 @@
                         </div>
                     </h:form>
                 </gb:box>
-
             </div>
 
         </div>

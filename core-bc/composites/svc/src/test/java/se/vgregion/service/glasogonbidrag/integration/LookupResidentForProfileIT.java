@@ -7,14 +7,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import se.riv.population.residentmaster.extended.v1.ExtendedResidentType;
 import se.riv.population.residentmaster.lookupresidentforextendedprofile.v1.rivtabp21.LookupResidentForExtendedProfileResponderInterface;
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileResponseType;
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileType;
 import se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp21.LookupResidentForFullProfileResponderInterface;
+import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileResponseType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileType;
+import se.riv.population.residentmaster.v1.NamnTYPE;
+import se.riv.population.residentmaster.v1.ResidentType;
+import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
 
+import java.util.List;
+import java.util.Objects;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Patrik Björk
@@ -34,29 +44,43 @@ public class LookupResidentForProfileIT {
     @Test
     public void testContext() throws Exception {
         assertNotNull(extendedProfileClient);
+        assertNotNull(fullProfileClient);
     }
 
     @Test
     public void testExtendedProfileRequest() {
         LookupResidentForExtendedProfileType request = new LookupResidentForExtendedProfileType();
 
-        request.getPersonId().add("201010101010");
+        request.getPersonId().add("196801029288");
 
         LookupResidentForExtendedProfileResponseType response = extendedProfileClient
                 .lookupResidentForExtendedProfile("", request);
 
-        LOGGER.info(response.getResident().toString());
+        List<Object> objs = response.getAny();
+        List<ExtendedResidentType> resi = response.getResident();
+        ExtendedResidentType ext = resi.get(0);
+
+        assertTrue(true);
     }
 
     @Test
     public void testFullProfileRequest() {
         LookupResidentForFullProfileType request = new LookupResidentForFullProfileType();
 
-        request.getPersonId().add("201010101010");
+        request.getPersonId().add("196801029288");
+        request.setLookUpSpecification(new LookUpSpecificationType());
 
         LookupResidentForFullProfileResponseType response = fullProfileClient
                 .lookupResidentForFullProfile("", request);
 
-        LOGGER.info(response.getResident().toString());
+        List<Object> objs = response.getAny();
+        List<ResidentType> resis = response.getResident();
+        ResidentType resi = resis.get(0);
+
+        NamnTYPE namn = resi.getPersonpost().getNamn();
+        SvenskAdressTYPE addr = resi.getPersonpost().getFolkbokforingsadress();
+
+
+        assertTrue(true);
     }
 }
