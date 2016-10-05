@@ -37,6 +37,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -265,15 +266,22 @@ public class CreateInvoiceAddGrantBackingBean {
             }
 
             if (beneficiary == null) {
-                // TODO: Integrate with external service.
+                // TODO: Handle the integration better.
                 beneficiary = new Beneficiary();
                 beneficiary.setIdentification(identification);
 
-                // Make service to fix identity in correct format
-                BeneficiaryNameTransport name =
-                        beneficiaryLookupService.fetchName(localFormat);
-                beneficiary.setFirstName(name.getFirstName());
-                beneficiary.setLastName(name.getLastName());
+                // TODO: Temp code
+                Calendar cal = new GregorianCalendar();
+                Date currentDate = cal.getTime();
+
+                BeneficiaryTransport transport =
+                        beneficiaryLookupService
+                                .fetchNameAndAddress(localFormat, currentDate);
+                beneficiary.setFirstName(transport.getName().getFirstName());
+                beneficiary.setLastName(transport.getName().getLastName());
+
+                grant.setCounty(transport.getArea().getCounty());
+                grant.setMunicipality(transport.getArea().getMunicipality());
 
                 newBeneficiary = true;
             }
