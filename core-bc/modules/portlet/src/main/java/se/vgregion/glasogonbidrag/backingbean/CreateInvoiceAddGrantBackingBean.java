@@ -33,6 +33,9 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
+import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -95,6 +98,9 @@ public class CreateInvoiceAddGrantBackingBean {
     private InvoiceService invoiceService;
 
     @Autowired
+    private BeneficiaryLookupService beneficiaryLookupService;
+
+    @Autowired
     private FacesUtil facesUtil;
 
     @Autowired
@@ -102,6 +108,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private PersonalNumberValidator personalNumberValidator;
+
+    @Autowired
+    private PersonalNumberFormatService personalNumberFormatService;
 
     @Autowired
     private LiferayUtil liferayUtil;
@@ -228,6 +237,10 @@ public class CreateInvoiceAddGrantBackingBean {
     public void personalNumberListener() {
         LOGGER.info("personalNumberListener(): number={}", number);
 
+        // TODO: This is temp fix
+        String localFormat = personalNumberFormatService.to(number, "2016");
+        LOGGER.info("personalNumberListener(): localFormat={}", localFormat);
+
         FacesContext context = FacesContext.getCurrentInstance();
 
         // Strip away century digits
@@ -253,9 +266,13 @@ public class CreateInvoiceAddGrantBackingBean {
             if (beneficiary == null) {
                 // TODO: Integrate with external service.
                 beneficiary = new Beneficiary();
-                beneficiary.setFirstName("Sven");
-                beneficiary.setLastName("Göransson");
                 beneficiary.setIdentification(identification);
+
+                // Make service to fix identity in correct format
+                BeneficiaryNameTransport name =
+                        beneficiaryLookupService.fetchName(localFormat);
+                beneficiary.setFirstName(name.getFirstName());
+                beneficiary.setLastName(name.getLastName());
 
                 newBeneficiary = true;
             }

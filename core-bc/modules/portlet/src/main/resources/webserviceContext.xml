@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://cxf.apache.org/jaxws
+          http://cxf.apache.org/schemas/jaxws.xsd
+          http://cxf.apache.org/transports/http/configuration
+          http://cxf.apache.org/schemas/configuration/http-conf.xsd
+          http://cxf.apache.org/configuration/security
+          http://cxf.apache.org/schemas/configuration/security.xsd
+          http://cxf.apache.org/core
+          http://cxf.apache.org/schemas/core.xsd">
+
+    <context:property-placeholder location="file:${user.home}/.hotell/glasogonbidrag/application.properties"/>
+
+    <jaxws:client id="extendedProfileClient"
+                  serviceClass="se.riv.population.residentmaster.lookupresidentforextendedprofile.v1.rivtabp21.LookupResidentForExtendedProfileResponderInterface"
+                  address="https://esbtest.vgregion.se:40131/population/services/lookupResidentForExtendedProfile/v1">
+    </jaxws:client>
+
+    <jaxws:client id="fullProfileClient"
+                  serviceClass="se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp21.LookupResidentForFullProfileResponderInterface"
+                  address="https://esbtest.vgregion.se:40131/population/services/lookupResidentForFullProfile/v1">
+    </jaxws:client>
+
+    <cxf:bus>
+        <cxf:outInterceptors>
+            <ref bean="loggingOutInterceptor"/>
+        </cxf:outInterceptors>
+        <cxf:inInterceptors>
+            <ref bean="loggingInInterceptor"/>
+        </cxf:inInterceptors>
+    </cxf:bus>
+
+    <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor">
+        <property name="prettyLogging" value="true"/>
+    </bean>
+    <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor">
+        <property name="prettyLogging" value="true"/>
+    </bean>
+
+    <!-- The name of each <http:conduit> configuration is matched to the url used by CXF RS. -->
+    <!-- The name value containing the URL pattern can NOT be loaded from a property file -->
+    <http:conduit name="https://esbtest.vgregion.se:40131/.*">
+        <http:tlsClientParameters disableCNCheck="true" >
+            <sec:keyManagers keyPassword="${population.service.keystore.password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${population.service.keystore.password}"
+                        file="${population.service.keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore file="${population.service.truststore}" password="${population.service.truststore.pasword}" type="jks" />
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-jaxws.xml"/>
+
+</beans>
