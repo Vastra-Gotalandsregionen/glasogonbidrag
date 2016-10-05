@@ -7,7 +7,7 @@ import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 public class AddGrantGrantTypeState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
-    public boolean getShowPersonalNumberOutput() {
+    public boolean getShowIdentificationOutput() {
         return true;
     }
 

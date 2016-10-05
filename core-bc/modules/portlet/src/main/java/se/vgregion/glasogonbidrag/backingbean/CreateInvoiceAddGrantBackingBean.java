@@ -36,7 +36,6 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistExce
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
 import javax.annotation.PostConstruct;
@@ -123,7 +122,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Flow
 
-    private CreateInvoiceAddGrantPidFlow flow;
+    private CreateInvoiceAddGrantPidFlow grantFlow;
 
     // Main objects
     private Invoice invoice;
@@ -176,12 +175,12 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Getter and Setters for Flow
 
-    public CreateInvoiceAddGrantPidFlow getFlow() {
-        return flow;
+    public CreateInvoiceAddGrantPidFlow getGrantFlow() {
+        return grantFlow;
     }
 
-    public void setFlow(CreateInvoiceAddGrantPidFlow flow) {
-        this.flow = flow;
+    public void setGrantFlow(CreateInvoiceAddGrantPidFlow grantFlow) {
+        this.grantFlow = grantFlow;
     }
 
     // Getter and Setters for Session data
@@ -291,8 +290,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
             grant.setBeneficiary(beneficiary);
 
-            // Set flow
-            flow = flow.nextState();
+            // Set grantFlow
+            grantFlow = grantFlow.nextState();
         } else {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "reg-grant-error-not-a-valid-personal-number", "");
@@ -318,8 +317,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
         grant.setDeliveryDate(deliveryDate);
 
-        // Set flow
-        flow = flow.nextState();
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
     }
 
     public void grantTypeListener() {
@@ -330,15 +329,15 @@ public class CreateInvoiceAddGrantBackingBean {
             LOGGER.info("grantTypeListener(): addressCheck=");
         }
 
-        // Set flow
+        // Set grantFlow
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
-            flow = flow.nextState(AddGrantAction.AGE_0_TO_15);
+            grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_15);
             grantTypeLabel = "grant-type-0-15";
         } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
-            flow = flow.nextState(AddGrantAction.AGE_0_TO_19);
+            grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_19);
             grantTypeLabel = "grant-type-0-19";
         } else {
-            flow = flow.nextState(AddGrantAction.OTHER);
+            grantFlow = grantFlow.nextState(AddGrantAction.OTHER);
             grantTypeLabel = "grant-type-other";
         }
     }
@@ -353,8 +352,8 @@ public class CreateInvoiceAddGrantBackingBean {
             LOGGER.info("prescriptionDateListener(): addressCheck=");
         }
 
-        // Set flow
-        flow = flow.nextState();
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
     }
 
     public void changePrescriptionTypeListener() {
@@ -367,12 +366,12 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void otherPrescriptionTypeListener() {
         //TODO: Set values in beneficiary
-        flow = flow.nextState();
+        grantFlow = grantFlow.nextState();
     }
 
     public void otherPrescriptionDateListener() {
         //TODO: Set values in beneficiary
-        flow = flow.nextState();
+        grantFlow = grantFlow.nextState();
     }
 
     public void stepBackListener() {
@@ -386,7 +385,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         //TODO: When step back to ENTER_PRESCRIPTION_DATE values for prescription date is lost. When step back to SELECT_GRANT_TYPE value for grant type is lost. However, when step back to ENTER_DELIVERY_DATE, value for deliveryDate is still there.
         switch (state) {
-            case ENTER_PERSONAL_NUMBER:
+            case ENTER_IDENTIFICATION:
                 beneficiary = null; // This should be fetched again
 
                 deliveryDate = null;
@@ -444,7 +443,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 break;
         }
 
-        flow = state.getState();
+        grantFlow = state.getState();
     }
 
     // Actions
@@ -509,7 +508,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 beneficiaryService.create(beneficiary);
             } catch (NoIdentificationException e) {
                 LOGGER.warn("Beneficiary didn't have a identificaiton. " +
-                        "Serious error in this flow.");
+                        "Serious error in this grantFlow.");
 
                 FacesMessage message =
                         new FacesMessage("Generic fatal error...");
@@ -681,8 +680,9 @@ public class CreateInvoiceAddGrantBackingBean {
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
 
-        flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
-        LOGGER.info("Current state: {}.", flow);
+        grantFlow = AddGrantFlowState.ENTER_IDENTIFICATION.getState();
+
+        LOGGER.info("Current state: {}.", grantFlow);
 
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceRepository.findWithParts(invoiceId);
@@ -792,17 +792,17 @@ public class CreateInvoiceAddGrantBackingBean {
 
             amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
 
-            //flow = AddGrantFlowState.ENTER_PERSONAL_NUMBER.getState();
+            //grantFlow = AddGrantFlowState.ENTER_IDENTIFICATION.getState();
 
             if(GRANT_TYPE_OTHER.equals(grantType)) {
-                flow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
+                grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
             }
             else if(GRANT_TYPE_AGE_0_TO_19.equals(grantType) || GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
-                flow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
+                grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
             }
 
-            //flow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
-            LOGGER.info("Current state: {}.", flow);
+            //grantFlow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
+            LOGGER.info("Current state: {}.", grantFlow);
 
 
         } else {

@@ -5,7 +5,7 @@ import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 public class AddGrantAllDataAfterAgeState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
-    public boolean getShowPersonalNumberOutput() {
+    public boolean getShowIdentificationOutput() {
         return true;
     }
 

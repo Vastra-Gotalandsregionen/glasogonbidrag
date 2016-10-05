@@ -3,7 +3,7 @@ package se.vgregion.glasogonbidrag.flow;
 import se.vgregion.glasogonbidrag.flow.state.*;
 
 public enum AddGrantFlowState {
-    ENTER_PERSONAL_NUMBER(new AddGrantPersonalNumberState()),
+    ENTER_IDENTIFICATION(new AddGrantIdentificationState()),
     ENTER_DELIVERY_DATE(new AddGrantDeliveryDateState()),
     SELECT_GRANT_TYPE(new AddGrantGrantTypeState()),
     ENTER_PRESCRIPTION_DATE(new AddGrantPrescriptionDateState()),

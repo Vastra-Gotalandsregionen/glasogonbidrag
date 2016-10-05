@@ -12,14 +12,14 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithParts",
-                query = "SELECT b " +
+                query = "SELECT DISTINCT b " +
                         "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "WHERE b.id = :id"),
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithPartsByIdent",
-                query = "SELECT b " +
+                query = "SELECT DISTINCT b " +
                         "FROM Beneficiary b " +
                         "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +

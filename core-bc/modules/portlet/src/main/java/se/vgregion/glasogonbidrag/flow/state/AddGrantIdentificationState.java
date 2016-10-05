@@ -6,9 +6,9 @@ import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class AddGrantPersonalNumberState extends CreateInvoiceAddGrantPidFlow {
+public class AddGrantIdentificationState extends CreateInvoiceAddGrantPidFlow {
     @Override
-    public boolean getShowPersonalNumberInput() {
+    public boolean getShowIdentificationInput() {
         return true;
     }
 

@@ -9,7 +9,7 @@ import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 public class AddGrantOtherDateState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
-    public boolean getShowPersonalNumberOutput() {
+    public boolean getShowIdentificationOutput() {
         return true;
     }
 

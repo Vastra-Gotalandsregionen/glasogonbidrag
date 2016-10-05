@@ -22,11 +22,11 @@ public abstract class CreateInvoiceAddGrantPidFlow {
 
     // Default view settings
 
-    public boolean getShowPersonalNumberInput() {
+    public boolean getShowIdentificationInput() {
         return false;
     }
 
-    public boolean getShowPersonalNumberOutput() {
+    public boolean getShowIdentificationOutput() {
         return false;
     }
 
@@ -81,8 +81,8 @@ public abstract class CreateInvoiceAddGrantPidFlow {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CreateInvoiceAddGrantPidFlow{");
-        sb.append("getShowPersonalNumberInput=").append(getShowPersonalNumberInput());
-        sb.append(",getShowPersonalNumberOutput=").append(getShowPersonalNumberOutput());
+        sb.append("getShowIdentificationInput=").append(getShowIdentificationInput());
+        sb.append(",getShowIdentificationOutput=").append(getShowIdentificationOutput());
         sb.append(",getShowDeliveryDateInput=").append(getShowDeliveryDateInput());
         sb.append(",getShowDeliveryDateOutput=").append(getShowDeliveryDateOutput());
         sb.append(",getShowGrantTypeInput=").append(getShowGrantTypeInput());
