@@ -269,7 +269,7 @@ public class CreateInvoiceAddGrantBackingBean {
             flow = flow.nextState();
         } else {
             FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Detta är inget giltigt personnummer...", "");
+                    FacesMessage.SEVERITY_ERROR, "reg-grant-error-not-a-valid-personal-number", "");
 
             context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
@@ -678,7 +678,7 @@ public class CreateInvoiceAddGrantBackingBean {
         // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
 
-        tabUtil = new TabUtil(Arrays.asList("Personnummer", "Lma-Nummer"), 0);
+        tabUtil = new TabUtil(Arrays.asList("personal-number", "lma-number"), 0);
 
 
         Long grantId = facesUtil.fetchId("grantId");

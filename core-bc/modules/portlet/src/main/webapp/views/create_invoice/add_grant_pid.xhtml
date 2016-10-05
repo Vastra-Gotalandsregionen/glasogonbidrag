@@ -29,10 +29,10 @@
 
         <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
             <div class="alert alert-info">
-                Samtliga bidrag på fakturan verkar vara registrerade.
+                <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
             </div>
             <div class="button-row">
-                <h:link styleClass="link-btn primary" value="Gå till översikt" outcome="view_invoice" >
+                <h:link styleClass="link-btn primary" value="#{bundle['go-to-overview']}" outcome="view_invoice" >
                     <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                 </h:link>
             </div>
@@ -43,23 +43,23 @@
             <div class="grant-section">
 
                 <gb:grantSectionInput id="personalNumber"
-                                      label="Personnummer"
+                                      label="#{bundle['personal-number']}"
                                       value="#{createInvoiceAddGrantBackingBean.number}"
                                       valueType="personNumber"
                                       autofocus="true"
-                                      placeholder="ÅÅMMDD-XXXX"
+                                      placeholder="#{bundle['personal-number-placeholder']}"
                                       required="true"
-                                      requiredMessage="Du måste fylla i ett personnummer"
+                                      requiredMessage="#{bundle['reg-grant-error-personal-number-is-mandatory']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:personalNumberSubmit"
                 />
 
                 <div class="button-row">
-                    <h:commandLink id="personalNumberSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="personalNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
 
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
 
@@ -84,7 +84,7 @@
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_PERSONAL_NUMBER" />
-                        <span class="hide-accessible">Tillbaka</span>
+                        <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>
 
                 </div>
@@ -97,23 +97,23 @@
             <div class="grant-section">
 
                 <gb:grantSectionInput id="deliveryDate"
-                                      label="Kvitteringsdatum"
+                                      label="#{bundle['delivery-date']}"
                                       value="#{createInvoiceAddGrantBackingBean.deliveryDate}"
                                       valueType="date"
                                       autofocus="true"
-                                      placeholder="ÅÅÅÅ-MM-DD"
+                                      placeholder="#{bundle['delivery-date-placeholder']}"
                                       required="true"
-                                      requiredMessage="Du måste fylla i ett datum"
+                                      requiredMessage="#{bundle['reg-grant-error-delivery-date-required']}"
                                       converterMessage="#{bundle['reg-grant-error-converting-delivery-date']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:deliveryDateSubmit"
                 />
 
                 <div class="button-row">
-                    <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -122,7 +122,7 @@
         </ui:fragment>
 
         <gb:grantSectionOutput rendered="${flow.showDeliveryDateOutput}"
-                               label="Kvitteringsdatum"
+                               label="#{bundle['delivery-date']}"
                                value="#{grant.deliveryDate}"
                                valueType="date"
                                backExecute=":addGrantForm"
@@ -140,7 +140,7 @@
                         <!--
                         http://balusc.omnifaces.org/2015/10/custom-layout-with-hselectoneradio-in.html
                         -->
-                        <h:outputLabel value="Bidragstyp:" />
+                        <h:outputLabel value="#{bundle['grant-type']}:" />
                         <ul class="gb-radio-list">
                             <ui:repeat id="grantTypes" value="#{createInvoiceAddGrantBackingBean.grantTypes}" var="grantType" varStatus="grantTypeStatus">
                                 <li>
@@ -164,11 +164,11 @@
 
 
                 <div class="button-row">
-                    <h:commandLink id="grantTypeSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="grantTypeSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -176,7 +176,7 @@
         </ui:fragment>
 
         <gb:grantSectionOutput rendered="${flow.showGrantTypeOutput}"
-                               label="Bidragstyp"
+                               label="#{bundle['grant-type']}"
                                value="#{bundle[createInvoiceAddGrantBackingBean.grantTypeLabel]}"
                                valueType="raw"
                                backExecute=":addGrantForm"
@@ -190,23 +190,23 @@
             <div class="grant-section">
 
                 <gb:grantSectionInput id="prescriptionDate"
-                                      label="Receptdatum"
+                                      label="#{bundle['prescription-date']}"
                                       value="#{prescriptionVO.date}"
                                       valueType="date"
                                       autofocus="true"
-                                      placeholder="ÅÅÅÅ-MM-DD"
+                                      placeholder="#{bundle['prescription-date-placeholder']}"
                                       required="true"
-                                      requiredMessage="Du måste fylla i ett datum"
+                                      requiredMessage="#{bundle['reg-grant-error-prescription-date-required']}"
                                       converterMessage="#{bundle['reg-grant-error-converting-prescription-date']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:prescriptionDateSubmit"
                 />
 
                 <div class="button-row">
-                    <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -214,7 +214,7 @@
         </ui:fragment>
 
         <gb:grantSectionOutput rendered="${flow.showGrantTypeAgeSection and flow.showPrescriptionDateOutput}"
-                               label="Receptdatum"
+                               label="#{bundle['prescription-date']}"
                                value="#{prescriptionVO.date}"
                                valueType="date"
                                backExecute=":addGrantForm"
@@ -249,7 +249,7 @@
                                             onevent="function eventHandler(data) {ajaxComplete(data)}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
-                                <h:outputLabel for="diagnoseTypeAphakia" value="Afaki:" />
+                                <h:outputLabel for="diagnoseTypeAphakia" value="#{bundle['diagnose-type-aphakia']}:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
@@ -266,7 +266,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralityAphakiaBilateral" value="Bilat." />
+                                        <h:outputLabel for="lateralityAphakiaBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -275,7 +275,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralityAphakiaLeft" value="Vä." />
+                                        <h:outputLabel for="lateralityAphakiaLeft" value="#{bundle['visual-laterality-left-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -284,7 +284,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralityAphakiaRight" value="Hö." />
+                                        <h:outputLabel for="lateralityAphakiaRight" value="#{bundle['visual-laterality-right-short']}" />
                                     </div>
                                 </div>
                             </ui:fragment>
@@ -304,7 +304,7 @@
                                             onevent="function eventHandler(data) {ajaxComplete(data)}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
-                                <h:outputLabel for="diagnoseTypeKeratokonus" value="Keratokonus:" />
+                                <h:outputLabel for="diagnoseTypeKeratokonus" value="#{bundle['diagnose-type-keratoconus']}:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
@@ -327,7 +327,7 @@
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
-                                        <h:outputLabel for="lateralityKeratokonusBilateral" value="Bilat." />
+                                        <h:outputLabel for="lateralityKeratokonusBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -335,14 +335,12 @@
                                                value="LEFT"
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
-                                            <!--
-                                            -->
                                             <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
                                                     onevent="function eventHandler(data) {ajaxComplete(data)}"
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
-                                        <h:outputLabel for="lateralityKeratokonusLeft" value="Vä." />
+                                        <h:outputLabel for="lateralityKeratokonusLeft" value="#{bundle['visual-laterality-left-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -357,12 +355,12 @@
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
-                                        <h:outputLabel for="lateralityKeratokonusRight" value="Hö." />
+                                        <h:outputLabel for="lateralityKeratokonusRight" value="#{bundle['visual-laterality-right-short']}" />
                                     </div>
                                 </div>
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:outputLabel for="keratokonusVisualAcuityLeft" value="Vä" />
+                                        <h:outputLabel for="keratokonusVisualAcuityLeft" value="#{bundle['visual-laterality-left-short']}" />
                                         <h:inputText id="keratokonusVisualAcuityLeft"
                                                      value="#{prescriptionVO.visualAcuityLeft}"
                                                      disabled="#{prescriptionVO.laterality eq 'RIGHT'}"
@@ -373,7 +371,7 @@
                                         </h:inputText>
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="Hö" />
+                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="#{bundle['visual-laterality-right-short']}" />
                                         <h:inputText id="keratokonusVisualAcuityRight"
                                                      value="#{prescriptionVO.visualAcuityRight}"
                                                      disabled="#{prescriptionVO.laterality eq 'LEFT'}"
@@ -383,19 +381,12 @@
                                             <f:converter converterId="javax.faces.Float" />
                                         </h:inputText>
                                     </div>
-                                    <!--
-                                    <div class="prescription-section-field">
-                                        <span>
-                                            Med glaskorr.
-                                        </span>
-                                    </div>
-                                    -->
                                 </div>
                                 <!-- -->
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
                                         <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{prescriptionVO.noGlasses}" pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" />
-                                        <h:outputLabel for="keratokonusNoGlasses" value="Ej glas" />
+                                        <h:outputLabel for="keratokonusNoGlasses" value="#{bundle['no-glasses']}" />
                                     </div>
                                 </div>
                             </ui:fragment>
@@ -416,7 +407,7 @@
                                             onevent="function eventHandler(data) {ajaxComplete(data)}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
-                                <h:outputLabel for="diagnoseTypeSpecial" value="Spec / synsvag:" />
+                                <h:outputLabel for="diagnoseTypeSpecial" value="#{bundle['special-weak-eye-sight']}:" />
                             </div>
                         </div>
                         <div class="prescription-section-fields">
@@ -433,7 +424,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'BILATERAL' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralitySpecialBilateral" value="Bilat." />
+                                        <h:outputLabel for="lateralitySpecialBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -442,7 +433,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralitySpecialLeft" value="Vä." />
+                                        <h:outputLabel for="lateralitySpecialLeft" value="#{bundle['visual-laterality-left-short']}" />
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
@@ -451,13 +442,13 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
-                                        <h:outputLabel for="lateralitySpecialRight" value="Hö." />
+                                        <h:outputLabel for="lateralitySpecialRight" value="#{bundle['visual-laterality-right-short']}" />
                                     </div>
                                 </div>
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
                                         <h:selectBooleanCheckbox id="specialWeakEyeSight" value="#{prescriptionVO.weakEyeSight}" pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" />
-                                        <h:outputLabel for="specialWeakEyeSight" value="Synsvag" />
+                                        <h:outputLabel for="specialWeakEyeSight" value="#{bundle['weak-eye-sight']}" />
                                     </div>
                                 </div>
                             </ui:fragment>
@@ -465,11 +456,11 @@
                     </div>
                 </div>
                 <div class="button-row">
-                    <h:commandLink id="grantTypeOtherSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="grantTypeOtherSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -480,7 +471,7 @@
         <ui:fragment rendered="#{flow.showGrantTypeOtherSection and flow.showPrescriptionTypeOutput}">
             <div class="grant-section">
                 <div class="grant-section-output">
-                    <span class="grant-section-label">Diagnos</span>
+                    <span class="grant-section-label">#{bundle['diagnose']}</span>
                     <span class="grant-section-data">
                         <span>
                             <h:outputText value="#{bundle[prescriptionVO.type.languageKey]}" />
@@ -500,7 +491,7 @@
                                 <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="1" />
                                 </h:outputText>
-                                <h:outputText value=" resp. " />
+                                <h:outputText value=" #{bundle['respectively-short']} " />
                                 <h:outputText value="#{prescriptionVO.visualAcuityRight}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="1" />
                                 </h:outputText>
@@ -520,7 +511,7 @@
 
                             <ui:fragment rendered="#{prescriptionVO.weakEyeSight}">
                                 <h:outputText value=" - " />
-                                <h:outputText value="Ej glas" />
+                                <h:outputText value="#{bundle['no-glasses']}" />
                             </ui:fragment>
                         </ui:fragment>
 
@@ -529,7 +520,7 @@
                             <h:outputText value="#{bundle[prescriptionVO.laterality.languageKey]}" />
                             <ui:fragment rendered="#{prescriptionVO.weakEyeSight}">
                                 <h:outputText value=" - " />
-                                <h:outputText value="Ej glas" />
+                                <h:outputText value="#{bundle['no-glasses']}" />
                             </ui:fragment>
                         </ui:fragment>
                     </span>
@@ -539,7 +530,7 @@
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_TYPE" />
-                        <span class="hide-accessible">Tillbaka</span>
+                        <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>
                 </div>
             </div>
@@ -550,20 +541,20 @@
             <div class="grant-section">
                 <div class="field-row field-row-3">
                     <div class="field-element">
-                        <h:outputLabel for="prescriber" value="Ordinatör:" />
+                        <h:outputLabel for="prescriber" value="#{bundle['prescriber']}:" />
                         <h:inputText id="prescriber" styleClass=""
                                      value="#{prescriptionVO.prescriber}"
-                                     pt:placeholder="Skriv in ordindatör..." pt:autofocus="true" />
+                                     pt:placeholder="#{bundle['prescriber-placeholder']}" pt:autofocus="true" />
                     </div>
                     <div class="field-element">
-                        <h:outputLabel for="prescriptionNote" value="Anteckningar:" />
+                        <h:outputLabel for="prescriptionNote" value="#{bundle['notes']}:" />
                         <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
                     </div>
                     <div class="field-element">
-                        <h:outputLabel for="prescriptionDate2" value="Receptdatum:" />
+                        <h:outputLabel for="prescriptionDate2" value="#{bundle['prescription-date']}:" />
                         <h:inputText id="prescriptionDate2" styleClass="js-input-mask_ js-input-mask-date_"
                                      value="#{prescriptionVO.date}"
-                                     pt:placeholder="ÅÅÅÅ-MM-DD"
+                                     pt:placeholder="#{bundle['prescription-date-placeholder']}"
                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:otherDataAndNotesSubmit">
                             <f:converter converterId="se.vgregion.MultiDateConverter" />
                             <f:attribute name="pattern1" value="yyyy-MM-dd" />
@@ -573,11 +564,11 @@
                     </div>
                 </div>
                 <div class="button-row">
-                    <h:commandLink id="otherDataAndNotesSubmit" styleClass="link-btn primary" value="Fortsätt">
+                    <h:commandLink id="otherDataAndNotesSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
                                 render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
                     </h:commandLink>
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
                 </div>
@@ -589,19 +580,19 @@
             <div class="grant-section">
                 <div class="grant-section-output">
                     <div>
-                        <span class="grant-section-label">Ordinatör</span>
+                        <span class="grant-section-label">#{bundle['prescriber']}</span>
                         <span class="grant-section-data">
                             <h:outputText value="#{prescriptionVO.prescriber}" />
                         </span>
                     </div>
                     <div>
-                        <span class="grant-section-label">Anteckningar</span>
+                        <span class="grant-section-label">#{bundle['notes']}</span>
                         <span class="grant-section-data">
                             <h:outputText value="-" />
                         </span>
                     </div>
                     <div>
-                        <span class="grant-section-label">Receptdatum</span>
+                        <span class="grant-section-label">#{bundle['prescription-date']}</span>
                         <span class="grant-section-data">
                             <h:outputText value="#{prescriptionVO.date}">
                                 <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{portletBackingBean.locale}" />
@@ -614,7 +605,7 @@
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
                         </f:ajax>
                         <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_DATE" />
-                        <span class="hide-accessible">Tillbaka</span>
+                        <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>
                 </div>
             </div>
@@ -625,26 +616,26 @@
             <div class="grant-section">
 
                 <gb:grantSectionInput id="amountWithVat"
-                                      label="Summa"
+                                      label="#{bundle['grant-sum']}"
                                       value="#{createInvoiceAddGrantBackingBean.amountWithVat}"
                                       valueType="amount"
                                       autofocus="true"
-                                      placeholder="Skriv in bidragssumma..."
+                                      placeholder="#{bundle['grant-sum-placeholder']}"
                                       required="true"
-                                      requiredMessage="Du måste fylla i en summa"
+                                      requiredMessage="#{bundle['reg-grant-error-grant-sum-is-mandatory']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:amountWithVatSubmit"
                 />
 
                 <div class="button-row">
 
-                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="Spara"
+                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="#{bundle['save']}"
                                    action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
 
-                    <h:commandLink styleClass="link-btn" value="Ta bort"
+                    <h:commandLink styleClass="link-btn" value="#{bundle['delete']}"
                                    rendered="#{not empty grant.id and mayInvoiceBeChanged}"
                                    action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
 
-                    <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                    <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                     </h:link>
 
@@ -654,7 +645,7 @@
         </ui:fragment>
 
         <gb:grantSectionOutput rendered="${flow.showAmountOutput}"
-                               label="Summa"
+                               label="#{bundle['grant-sum']}"
                                value="#{grant.amountIncludingVatAsKrona}"
                                valueType="currency"
                                locale="#{locale}"
@@ -667,11 +658,11 @@
         <ui:fragment rendered="${flow.showAmountOutput}">
             <div class="button-row">
 
-                <h:commandLink styleClass="link-btn" value="Ta bort"
+                <h:commandLink styleClass="link-btn" value="#{bundle['delete']}"
                                rendered="#{not empty grant.id and mayInvoiceBeChanged}"
                                action="#{createInvoiceAddGrantBackingBean.doDeleteGrant}" />
 
-                <h:link styleClass="link-btn cancel" value="Avbryt / gå till översikt" outcome="view_invoice" >
+                <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                     <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
                 </h:link>
 
