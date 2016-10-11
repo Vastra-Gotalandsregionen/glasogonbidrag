@@ -11,6 +11,7 @@
 
     <h:body>
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+        <c:set var="grantFlow" value="#{createInvoiceAddGrantBackingBean.grantFlow}" scope="request" />
         <c:set var="tabUtil" value="#{createInvoiceAddGrantBackingBean.tabUtil}" scope="request" />
 
         <h:form id="addGrantForm">
@@ -34,34 +35,43 @@
                                     <ul class="tabs-list">
                                         <ui:repeat value="#{tabUtil.tabs}" var="tab">
                                             <li class="#{tabUtil.activeIndex == tab.key ? 'active' : ''}">
-                                                <ui:fragment rendered="#{tabUtil.activeIndex != tab.key}">
 
+                                                <ui:fragment rendered="#{tabUtil.activeIndex != tab.key and not grantFlow.showIdentificationOutput}">
                                                     <h:commandLink styleClass="tab" value="#{bundle[tab.value]}">
                                                         <f:ajax listener="#{tabUtil.changeTabIndexListener(tab.key)}"
-                                                                render=":addGrantForm:grantAddPanel" />
+                                                                render=":addGrantForm:grantAddPanel"
+                                                                onevent="function eventHandler(data) {ajaxComplete(data)}" />
                                                     </h:commandLink>
-
                                                 </ui:fragment>
                                                 <ui:fragment rendered="#{tabUtil.activeIndex == tab.key}">
-
                                                     <span class="tab">#{bundle[tab.value]}</span>
-
                                                 </ui:fragment>
+
                                             </li>
                                         </ui:repeat>
                                     </ul>
 
                                     <div class="tabs-content">
-                                        <ui:fragment rendered="#{tabUtil.activeIndex == 0}">
-                                            <div class="msg-wrap">
-                                                <h:messages showSummary="true" showDetail="false" />
+
+                                        <div class="msg-wrap">
+                                            <h:messages showSummary="true" showDetail="false" />
+                                        </div>
+
+                                        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
+                                            <div class="alert alert-info">
+                                                <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
                                             </div>
+                                            <div class="button-row">
+                                                <h:link styleClass="link-btn primary" value="#{bundle['go-to-overview']}" outcome="view_invoice" >
+                                                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                                                </h:link>
+                                            </div>
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="#{tabUtil.activeIndex == 0}">
                                             <ui:include src="add_grant_pid.xhtml" />
                                         </ui:fragment>
                                         <ui:fragment rendered="#{tabUtil.activeIndex == 1}">
-                                            <div class="msg-wrap">
-                                                <h:messages showSummary="true" showDetail="false" />
-                                            </div>
                                             <ui:include src="add_grant_lma.xhtml" />
                                         </ui:fragment>
                                         <ui:include src="add_grant_grant_input.xhtml" />

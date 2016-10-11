@@ -15,6 +15,7 @@ import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
+import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
@@ -131,8 +132,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private Beneficiary beneficiary;
 
     // Session data
-
-    private String number;
+    private BeneficiaryVO beneficiaryVO;
     private Date deliveryDate;
     private String grantType;
     private String grantTypeLabel;
@@ -166,6 +166,14 @@ public class CreateInvoiceAddGrantBackingBean {
         this.grant = grant;
     }
 
+    public BeneficiaryVO getBeneficiaryVO() {
+        return beneficiaryVO;
+    }
+
+    public void setBeneficiaryVO(BeneficiaryVO beneficiaryVO) {
+        this.beneficiaryVO = beneficiaryVO;
+    }
+
     public Beneficiary getBeneficiary() {
         return beneficiary;
     }
@@ -185,14 +193,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     // Getter and Setters for Session data
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
     public Date getDeliveryDate() {
         return deliveryDate;
@@ -237,17 +237,17 @@ public class CreateInvoiceAddGrantBackingBean {
     // Listeners
 
     public void lmaNumberListener() {
-        LOGGER.info("lmaNumberListener(): number={}", number);
-
         // TODO: can validations be made?
         // TODO: Handle none LMA
 
-        Identification identification = identificationRepository.findByLMANumber(number);
+        String identificationNumber = beneficiaryVO.getIdentificationNumber();
+
+        Identification identification = identificationRepository.findByLMANumber(identificationNumber);
 
         if (identification == null) {
             // TODO: birthyear should not be hardcoded
 
-            identification = new Lma(number);
+            identification = new Lma(identificationNumber);
         } else {
             beneficiary = beneficiaryRepository.findWithPartsByIdent(identification);
         }
@@ -256,9 +256,17 @@ public class CreateInvoiceAddGrantBackingBean {
             beneficiary = new Beneficiary();
             beneficiary.setIdentification(identification);
 
-            beneficiary.setFirstName("-");
-            beneficiary.setLastName("-");
+            if("".equals(beneficiaryVO.getFirstName())) {
+                beneficiary.setFirstName("-");
+            } else {
+                beneficiary.setFirstName(beneficiaryVO.getFirstName());
+            }
 
+            if("".equals(beneficiaryVO.getSurName())) {
+                beneficiary.setLastName("-");
+            } else {
+                beneficiary.setLastName(beneficiaryVO.getSurName());
+            }
 
             newBeneficiary = true;
         }
@@ -270,29 +278,30 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void personalNumberListener() {
-        LOGGER.info("personalNumberListener(): number={}", number);
+
+        String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
         // TODO: This is temp fix
-        String localFormat = personalNumberFormatService.to(number, "2016");
+        String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
         LOGGER.info("personalNumberListener(): localFormat={}", localFormat);
 
         FacesContext context = FacesContext.getCurrentInstance();
 
         // Strip away century digits
-        if(number.length() == 13) {
-            number = number.substring(2, number.length());
+        if(identificationNumber.length() == 13) {
+            identificationNumber = identificationNumber.substring(2, identificationNumber.length());
         }
 
-        boolean isNumberValid = personalNumberValidator.validatePersonalNumber(number);
+        boolean isNumberValid = personalNumberValidator.validatePersonalNumber(identificationNumber);
         System.out.println("isNumberValid: " + isNumberValid);
         // Temp
         //isNumberValid = true;
 
         if(isNumberValid) {
             Identification identification =
-                    identificationRepository.findByPersonalNumber(number);
+                    identificationRepository.findByPersonalNumber(identificationNumber);
             if (identification == null) {
-                identification = new Personal(number);
+                identification = new Personal(identificationNumber);
             } else {
                 beneficiary =
                         beneficiaryRepository.findWithPartsByIdent(identification);
@@ -726,10 +735,11 @@ public class CreateInvoiceAddGrantBackingBean {
         //invoice = newInvoice;
         beneficiary = null;
 
-        number = null;
         deliveryDate = null;
         grantType = null;
         grantTypeLabel = null;
+
+        beneficiaryVO = new BeneficiaryVO();
 
         prescriptionVO = new PrescriptionVO();
 
@@ -753,7 +763,10 @@ public class CreateInvoiceAddGrantBackingBean {
             grant = grantRepository.findWithParts(grantId);
             //grant = grantRepository.find(grantId);
             beneficiary = beneficiaryRepository.findWithParts(grant.getBeneficiary().getId());
-            number = beneficiary.getIdentification().getString();
+
+            //number = beneficiary.getIdentification().getString();
+            beneficiaryVO.setIdentificationNumber(
+                    beneficiary.getIdentification().getString());
 
             deliveryDate = grant.getDeliveryDate();
 

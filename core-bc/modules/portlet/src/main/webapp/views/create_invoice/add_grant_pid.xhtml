@@ -13,6 +13,7 @@
 
     <h:body>
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+        <c:set var="beneficiaryVO" value="#{createInvoiceAddGrantBackingBean.beneficiaryVO}" scope="request" />
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="grantFlow" value="#{createInvoiceAddGrantBackingBean.grantFlow}" scope="request" />
 
@@ -21,24 +22,13 @@
         <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.checkMayInvoiceBeChanged(invoice)}" scope="request" />
         <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
 
-        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
-            <div class="alert alert-info">
-                <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
-            </div>
-            <div class="button-row">
-                <h:link styleClass="link-btn primary" value="#{bundle['go-to-overview']}" outcome="view_invoice" >
-                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
-                </h:link>
-            </div>
-        </ui:fragment>
-
         <!-- Insert beneficiary's identification number -->
         <ui:fragment rendered="#{grantFlow.showIdentificationInput and mayNewGrantsBeAdded}">
             <div class="grant-section">
 
                 <gb:grantSectionInput id="personalNumber"
                                       label="#{bundle['personal-number']}"
-                                      value="#{createInvoiceAddGrantBackingBean.number}"
+                                      value="#{beneficiaryVO.identificationNumber}"
                                       valueType="personNumber"
                                       autofocus="true"
                                       placeholder="#{bundle['personal-number-placeholder']}"

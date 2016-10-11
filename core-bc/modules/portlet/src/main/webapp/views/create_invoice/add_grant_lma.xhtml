@@ -13,6 +13,7 @@
 
     <h:body>
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
+        <c:set var="beneficiaryVO" value="#{createInvoiceAddGrantBackingBean.beneficiaryVO}" scope="request" />
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="grantFlow" value="#{createInvoiceAddGrantBackingBean.grantFlow}" scope="request" />
 
@@ -21,30 +22,49 @@
         <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.checkMayInvoiceBeChanged(invoice)}" scope="request" />
         <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
 
-        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
-            <div class="alert alert-info">
-                <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
-            </div>
-            <div class="button-row">
-                <h:link styleClass="link-btn primary" value="#{bundle['go-to-overview']}" outcome="view_invoice" >
-                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
-                </h:link>
-            </div>
-        </ui:fragment>
-
         <!-- Insert beneficiary's LMA identification number -->
         <ui:fragment rendered="#{grantFlow.showIdentificationInput and mayNewGrantsBeAdded}">
             <div class="grant-section">
 
                 <gb:grantSectionInput id="lmaNumber"
                                       label="#{bundle['lma-number']}"
-                                      value="#{createInvoiceAddGrantBackingBean.number}"
+                                      value="#{beneficiaryVO.identificationNumber}"
                                       autofocus="true"
                                       placeholder="#{bundle['lma-placeholder']}"
                                       required="true"
                                       requiredMessage="#{bundle['reg-grant-error-lma-number-is-mandatory']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
                 />
+
+                <div class="field-row field-row-3">
+                    <div class="field-element">
+                        <h:outputLabel for="firstName" value="#{bundle['first-name']}:" />
+                        <h:inputText id="firstName"
+                                     styleClass=""
+                                     value="#{beneficiaryVO.firstName}"
+                                     pt:placeholder=""
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
+                        />
+                    </div>
+                    <div class="field-element">
+                        <h:outputLabel for="surName" value="#{bundle['surname']}:" />
+                        <h:inputText id="surName"
+                                     styleClass=""
+                                     value="#{beneficiaryVO.surName}"
+                                     pt:placeholder=""
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
+                        />
+                    </div>
+                    <div class="field-element">
+                        <h:outputLabel for="dateOfBirth" value="#{bundle['date-of-birth']}:" />
+                        <h:inputText id="dateOfBirth"
+                                     styleClass=""
+                                     value="#{beneficiaryVO.dateOfOBirth}"
+                                     pt:placeholder=""
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
+                        />
+                    </div>
+                </div>
 
                 <div class="button-row">
                     <h:commandLink id="lmaNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
