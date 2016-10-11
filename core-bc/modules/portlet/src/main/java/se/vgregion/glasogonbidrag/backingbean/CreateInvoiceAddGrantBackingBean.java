@@ -732,12 +732,10 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriptionVO.setType(DiagnoseType.NONE);
         prescriptionVO.setLaterality(VisualLaterality.NONE);
 
-
         // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
 
         tabUtil = new TabUtil(Arrays.asList("personal-number", "lma-number"), 0);
-
 
         Long grantId = facesUtil.fetchId("grantId");
         if(grantId != null) {

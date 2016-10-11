@@ -36,17 +36,16 @@
                     <ui:repeat value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" var="grant">
                         <div class="chip js-chip-collapsible chip-collapsed">
                             <div class="chip-hd">
+                                <div class="chip-hd-item chip-hd-item-short">
+                                    <h:outputText value="#{bundle[grant.prescription.diagnose.type.languageKey.concat('-one-letter')]}" />
+                                </div>
                                 <div class="chip-hd-item chip-hd-item-date">
-
                                     <h:outputText rendered="#{grant.prescription.diagnose.type eq 'NONE'}" value="#{grant.prescription.date}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" />
                                     </h:outputText>
-
-
                                     <h:outputText rendered="#{grant.prescription.diagnose.type ne 'NONE'}" value="#{grant.deliveryDate}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" />
                                     </h:outputText>
-
                                 </div>
                                 <div class="chip-hd-item chip-hd-item-currency">
                                     <h:outputText value="#{grant.amountIncludingVatAsKrona}">
