@@ -7,7 +7,9 @@ public enum DiagnoseType {
     APHAKIA("diagnose-type-aphakia"),
     KERATOCONUS("diagnose-type-keratoconus"),
     SPECIAL("diagnose-type-special"),
-    NONE("diagnose-type-other");
+    NONE("diagnose-type-child");
+
+    // TODO: rename NONE to CHILD
 
     private String languageKey;
 

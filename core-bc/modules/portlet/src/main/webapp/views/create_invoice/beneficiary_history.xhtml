@@ -37,9 +37,16 @@
                         <div class="chip js-chip-collapsible chip-collapsed">
                             <div class="chip-hd">
                                 <div class="chip-hd-item chip-hd-item-date">
-                                    <h:outputText value="#{grant.prescriptionDate}">
+
+                                    <h:outputText rendered="#{grant.prescription.diagnose.type eq 'NONE'}" value="#{grant.prescription.date}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" />
                                     </h:outputText>
+
+
+                                    <h:outputText rendered="#{grant.prescription.diagnose.type ne 'NONE'}" value="#{grant.deliveryDate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    </h:outputText>
+
                                 </div>
                                 <div class="chip-hd-item chip-hd-item-currency">
                                     <h:outputText value="#{grant.amountIncludingVatAsKrona}">
@@ -54,10 +61,19 @@
                                 <ul class="labeled-list">
                                     <li>
                                         <span class="item-label">
+                                            <h:outputText value="#{bundle['diagnose']}:" />
+                                        </span>
+                                        <span class="item-value">
+                                            <h:outputText value="#{bundle[grant.prescription.diagnose.type.languageKey]}">
+                                            </h:outputText>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="item-label">
                                             <h:outputText value="#{bundle['prescription']}:" />
                                         </span>
                                         <span class="item-value">
-                                            <h:outputText value="#{grant.prescriptionDate}">
+                                            <h:outputText value="#{grant.prescription.date}">
                                                 <f:convertDateTime pattern="yyyy-MM-dd" />
                                             </h:outputText>
                                         </span>
