@@ -101,9 +101,7 @@
                                         </span>
                                         <span class="item-value">
                                             <h:link outcome="view_invoice" target="_BLANK">
-                                                <h:outputText value="#{grant.prescriptionDate}">
-                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                                                </h:outputText>
+                                                <h:outputText value="#{grant.invoice.verificationNumber}" />
                                                 <f:param name="invoiceId" value="#{grant.invoice.id}" />
                                             </h:link>
                                         </span>
