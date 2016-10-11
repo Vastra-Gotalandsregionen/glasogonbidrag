@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +19,7 @@ public class DBViewViewBeneficiaryBackingBean {
             LoggerFactory.getLogger(DBViewViewBeneficiaryBackingBean.class);
 
     @Autowired
-    private BeneficiaryRepository beneficiaryRepository;
+    private BeneficiaryService beneficiaryService;
 
     @Autowired
     private FacesUtil util;
@@ -36,6 +36,6 @@ public class DBViewViewBeneficiaryBackingBean {
 
         Long id = util.fetchId("beneficiaryId");
 
-        beneficiary = beneficiaryRepository.findWithParts(id);
+        beneficiary = beneficiaryService.findWithParts(id);
     }
 }

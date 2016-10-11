@@ -12,8 +12,7 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
@@ -38,10 +37,7 @@ public class ManageSuppliersViewBackingBean {
     private LiferayUtil liferayUtil;
 
     @Autowired
-    private SupplierRepository supplierRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceService invoiceService;
 
     @Autowired
     private SupplierService supplierService;
@@ -78,7 +74,7 @@ public class ManageSuppliersViewBackingBean {
 
     public void onRowSelect(SelectEvent event) {
         selectedSupplier = (Supplier) event.getObject();
-        selectedSupplierInvoices = invoiceRepository.findAllBySupplier(selectedSupplier);
+        selectedSupplierInvoices = invoiceService.findAllBySupplier(selectedSupplier);
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -117,7 +113,7 @@ public class ManageSuppliersViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        suppliers = supplierRepository.findAllWithInvoices();
+        suppliers = supplierService.findAllWithInvoices();
         selectedSupplier = null;
         selectedSupplierInvoices = new <Invoice>ArrayList();
         newSupplier = new Supplier();

@@ -1,19 +1,30 @@
-package se.vgregion.service.glasogonbidrag.domain.internal.data;
+package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
-import se.vgregion.service.glasogonbidrag.domain.api.data.AccountingDistributionRepository;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
+import se.vgregion.service.glasogonbidrag.domain.api.service.AccountingDistributionService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class AccountingDistributionRepositoryImpl
-        implements AccountingDistributionRepository {
+@Service
+public class AccountingDistributionServiceImpl implements AccountingDistributionService {
 
     @PersistenceContext
     private EntityManager em;

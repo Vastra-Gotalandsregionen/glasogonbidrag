@@ -11,9 +11,12 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -124,4 +127,58 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Beneficiary find(Long id) {
+        return em.find(Beneficiary.class, id);
+    }
+
+    @Override
+    @Transactional
+    public Beneficiary findWithParts(Long id) {
+        TypedQuery<Beneficiary> q = em.createNamedQuery(
+                "glasogonbidrag.beneficiary.findWithParts", Beneficiary.class);
+        q.setParameter("id", id);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Beneficiary findWithPartsByIdent(Identification identification) {
+        TypedQuery<Beneficiary> q = em.createNamedQuery(
+                "glasogonbidrag.beneficiary.findWithPartsByIdent",
+                Beneficiary.class);
+        q.setParameter("id", identification);
+
+        try {
+            return q.getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Beneficiary> findAll() {
+        TypedQuery<Beneficiary> q = em.createNamedQuery(
+                "glasogonbidrag.beneficiary.findAll", Beneficiary.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public List<Beneficiary> findAllWithParts() {
+        TypedQuery<Beneficiary> q = em.createNamedQuery(
+                "glasogonbidrag.beneficiary.findAllWithParts", Beneficiary.class);
+
+        return q.getResultList();
+    }
+
+
 }

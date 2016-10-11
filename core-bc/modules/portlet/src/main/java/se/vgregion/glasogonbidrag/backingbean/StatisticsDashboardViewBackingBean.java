@@ -12,7 +12,7 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
-import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class StatisticsDashboardViewBackingBean {
     private LiferayUtil liferayUtil;
 
     @Autowired
-    private GrantRepository grantRepository;
+    private GrantService grantService;
 
     KronaCalculationUtil currency;
 
@@ -82,11 +82,11 @@ public class StatisticsDashboardViewBackingBean {
         Date today = new Date();
 
         // Progress today
-        long progressTodayRaw = grantRepository.currentProgressByDate(today);
+        long progressTodayRaw = grantService.currentProgressByDate(today);
         progressToday = currency.calculatePartsAsKrona(progressTodayRaw);
 
         // Grants today
-        List<Grant> todaysGrants = grantRepository.findByDate(today);
+        List<Grant> todaysGrants = grantService.findByDate(today);
         grantCountToday = todaysGrants.size();
 
         // Days of week
@@ -105,7 +105,7 @@ public class StatisticsDashboardViewBackingBean {
         //getGrantsCountOfWeekDaysJSONString
         JSONArray getGrantsCountOfWeekDaysJSON = JSONFactoryUtil.createJSONArray();
         for(Date curDate : datesOfThisWeek) {
-            List<Grant> grantsOfDate = grantRepository.findByDate(curDate);
+            List<Grant> grantsOfDate = grantService.findByDate(curDate);
             getGrantsCountOfWeekDaysJSON.put(grantsOfDate.size());
         }
         grantsCountOfWeekDaysJSONString = getGrantsCountOfWeekDaysJSON.toString();
@@ -117,7 +117,7 @@ public class StatisticsDashboardViewBackingBean {
             long dateProgressRaw;
 
             try {
-                dateProgressRaw = grantRepository.currentProgressByDate(curDate);
+                dateProgressRaw = grantService.currentProgressByDate(curDate);
             } catch(NullPointerException e) {
                 dateProgressRaw = new Long(0);
             }

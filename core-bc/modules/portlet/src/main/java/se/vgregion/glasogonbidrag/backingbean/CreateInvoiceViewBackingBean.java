@@ -12,8 +12,8 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -36,7 +36,7 @@ public class CreateInvoiceViewBackingBean {
             LoggerFactory.getLogger(CreateInvoiceViewBackingBean.class);
 
     @Autowired
-    private SupplierRepository supplierRepository;
+    private SupplierService supplierService;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -125,7 +125,7 @@ public class CreateInvoiceViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Supplier s = supplierRepository.find(supplier);
+        Supplier s = supplierService.find(supplier);
 
         Invoice invoice = new Invoice();
 
@@ -175,7 +175,7 @@ public class CreateInvoiceViewBackingBean {
     protected void init() {
         LOGGER.info("CreateInvoiceViewBackingBean - init()");
 
-        suppliers = supplierRepository.findAllActive();
+        suppliers = supplierService.findAllActive();
     }
 
 }

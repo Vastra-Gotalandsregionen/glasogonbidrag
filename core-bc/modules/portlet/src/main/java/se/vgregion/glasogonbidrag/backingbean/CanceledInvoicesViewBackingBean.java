@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -23,7 +23,7 @@ public class CanceledInvoicesViewBackingBean {
             LoggerFactory.getLogger(CanceledInvoicesViewBackingBean.class);
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceService invoiceService;
 
     @Autowired
     private FacesUtil facesUtil;
@@ -45,7 +45,7 @@ public class CanceledInvoicesViewBackingBean {
     private void fetchInvoices(long userId) {
         int first = 0;
         int results = 10;
-        invoices = invoiceRepository
+        invoices = invoiceService
                 .findAllWithStatusOrderByModificationDate(
                         InvoiceStatus.CANCELED, first, results);
     }

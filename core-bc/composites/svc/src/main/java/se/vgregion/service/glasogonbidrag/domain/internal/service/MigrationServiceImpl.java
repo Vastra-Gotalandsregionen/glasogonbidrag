@@ -1,10 +1,10 @@
-package se.vgregion.service.glasogonbidrag.domain.internal.data;
+package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.domain.api.data.MigrationRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.MigrationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-@Repository
-public class MigrationRepositoryImpl implements MigrationRepository {
+@Service
+public class MigrationServiceImpl implements MigrationService {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(MigrationRepositoryImpl.class);
+            LoggerFactory.getLogger(MigrationServiceImpl.class);
 
     @PersistenceContext
     private EntityManager em;

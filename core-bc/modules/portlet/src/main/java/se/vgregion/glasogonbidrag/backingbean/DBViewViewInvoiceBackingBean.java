@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
@@ -21,9 +20,6 @@ public class DBViewViewInvoiceBackingBean {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DBViewViewInvoiceBackingBean.class);
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -93,7 +89,7 @@ public class DBViewViewInvoiceBackingBean {
 
         Long id = util.fetchId("invoiceId");
 
-        invoice = invoiceRepository.findWithParts(id);
+        invoice = invoiceService.findWithParts(id);
 
         LOGGER.info("Invoice: {}", invoice);
         if (invoice.getGrants().size() > 0) {

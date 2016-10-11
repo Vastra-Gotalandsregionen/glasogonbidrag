@@ -7,24 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountRow;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.IdentificationRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.IdentificationService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
@@ -50,16 +40,7 @@ public class DBViewViewBackingBean {
     private EntityManager em;
 
     @Autowired
-    private SupplierRepository supplierRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private IdentificationRepository identificationRepository;
-
-    @Autowired
-    private BeneficiaryRepository beneficiaryRepository;
+    private IdentificationService identificationService;
 
     @Autowired
     private SupplierService supplierService;
@@ -194,14 +175,14 @@ public class DBViewViewBackingBean {
         long companyId = themeDisplay.getCompanyId();
 
 
-        List<Supplier> suppliers = supplierRepository.findAllByName("Specsavers");
+        List<Supplier> suppliers = supplierService.findAllByName("Specsavers");
         Supplier s = suppliers.get(0);
 
-        Identification id1 = identificationRepository.findByPersonalNumber("11294377-1834");
-        Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
+        Identification id1 = identificationService.findByPersonalNumber("11294377-1834");
+        Beneficiary b1 = beneficiaryService.findWithPartsByIdent(id1);
 
-        Identification id2 = identificationRepository.findByLMANumber("50-008920/4");
-        Beneficiary b2 = beneficiaryRepository.findWithPartsByIdent(id2);
+        Identification id2 = identificationService.findByLMANumber("50-008920/4");
+        Beneficiary b2 = beneficiaryService.findWithPartsByIdent(id2);
 
 
         Calendar cal = Calendar.getInstance();
@@ -266,10 +247,10 @@ public class DBViewViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Identification id1 = identificationRepository.findByPersonalNumber("67652979-0773");
-        Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
+        Identification id1 = identificationService.findByPersonalNumber("67652979-0773");
+        Beneficiary b1 = beneficiaryService.findWithPartsByIdent(id1);
 
-        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        Invoice inv = invoiceService.findByVerificationNumber("E510396");
         long amount = inv.getAmount();
         long vat = inv.getVat();
 
@@ -313,10 +294,10 @@ public class DBViewViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Identification id1 = identificationRepository.findByPersonalNumber("36386944-2631");
-        Beneficiary b1 = beneficiaryRepository.findWithPartsByIdent(id1);
+        Identification id1 = identificationService.findByPersonalNumber("36386944-2631");
+        Beneficiary b1 = beneficiaryService.findWithPartsByIdent(id1);
 
-        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        Invoice inv = invoiceService.findByVerificationNumber("E510396");
         long amount = inv.getAmount();
         long vat = inv.getVat();
 
@@ -356,7 +337,7 @@ public class DBViewViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        Invoice inv = invoiceService.findByVerificationNumber("E510396");
 
         GrantAdjustment adjustment = new GrantAdjustment();
         adjustment.setAmount(60000);
@@ -379,7 +360,7 @@ public class DBViewViewBackingBean {
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        Invoice inv = invoiceRepository.findByVerificationNumber("E510396");
+        Invoice inv = invoiceService.findByVerificationNumber("E510396");
 
         AccountingDistribution distribution = new AccountingDistribution();
         distribution.addRow(new AccountRow(2, 34, 9191, 1023, 20202));
@@ -402,15 +383,15 @@ public class DBViewViewBackingBean {
     }
 
     private void fetchSuppliers() {
-        suppliers = supplierRepository.findAll();
+        suppliers = supplierService.findAll();
     }
 
     private void fetchInvoices() {
-        invoices = invoiceRepository.findAll();
+        invoices = invoiceService.findAll();
     }
 
     private void fetchBeneficiaries() {
-        beneficiaries = beneficiaryRepository.findAll();
+        beneficiaries = beneficiaryService.findAll();
     }
 
 }

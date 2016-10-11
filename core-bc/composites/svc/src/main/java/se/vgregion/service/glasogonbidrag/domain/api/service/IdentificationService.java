@@ -11,4 +11,10 @@ public interface IdentificationService {
     void update(Identification identification);
 
     void delete(Long id);
+
+    Identification find(Long id);
+
+    Identification findByPersonalNumber(String number);
+
+    Identification findByLMANumber(String number);
 }

@@ -14,7 +14,6 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
-import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 
@@ -38,10 +37,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
             LoggerFactory.getLogger(DBViewBeneficiaryBackingBean.class);
 
     @Autowired
-    private BeneficiaryRepository repository;
-
-    @Autowired
-    private BeneficiaryService service;
+    private BeneficiaryService beneficiaryService;
 
     @Autowired
     private FacesUtil util;
@@ -145,7 +141,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
         beneficiary.setIdentification(identification);
 
         try {
-            service.create(beneficiary);
+            beneficiaryService.create(beneficiary);
         } catch (NoIdentificationException e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null,
@@ -163,7 +159,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
     public void doDelete() {
         Long id = util.fetchId("beneficiaryId");
         if (id != null) {
-            service.delete(id);
+            beneficiaryService.delete(id);
         }
 
         loadBeneficiaryList();
@@ -181,7 +177,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
         long groupId = display.getScopeGroupId();
         long companyId = display.getCompanyId();
 
-        service.updateAddPrescription(
+        beneficiaryService.updateAddPrescription(
                 userId, groupId, companyId,
                 beneficiary, prescription);
 
@@ -224,7 +220,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
     }
 
     private void loadBeneficiaryList() {
-        beneficiaries = repository.findAll();
+        beneficiaries = beneficiaryService.findAll();
     }
 
     private void loadBeneficiary() {
@@ -235,7 +231,7 @@ public class DBViewBeneficiaryBackingBean implements Serializable {
         try {
             Long id = util.fetchId("beneficiaryId");
             if (id != null) {
-                beneficiary = repository.find(id);
+                beneficiary = beneficiaryService.find(id);
                 editBeneficiary = true;
                 prescription = new Prescription();
             }

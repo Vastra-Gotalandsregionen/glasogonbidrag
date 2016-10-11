@@ -47,10 +47,10 @@ public class Prescription {
     private String prescriber;
 
     // TODO: remove comment for line below when problem with comment is solved
-//    @Lob
-//    @Basic(fetch=FetchType.EAGER, optional=true)
-//    @Column(name = "prescriber_comment")
-//    private String comment;
+    @Lob()
+    @Basic(fetch=FetchType.EAGER, optional=true)
+    @Column(name = "prescriber_comment")
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "beneficiary_id")
@@ -136,13 +136,13 @@ public class Prescription {
     }
 
     // TODO: remove comment for line below when problem with comment is solved
-/*    public String getComment() {
+    public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-    }*/
+    }
 
     public Beneficiary getBeneficiary() {
         return beneficiary;

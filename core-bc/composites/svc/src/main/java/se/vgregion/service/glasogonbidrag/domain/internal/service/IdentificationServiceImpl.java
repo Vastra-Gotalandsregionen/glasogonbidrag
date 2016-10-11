@@ -8,7 +8,9 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.domain.api.service.IdentificationService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -47,4 +49,38 @@ public class IdentificationServiceImpl implements IdentificationService {
 
         em.remove(identification);
     }
+
+    @Override
+    public Identification find(Long id) {
+        return em.find(Identification.class, id);
+    }
+
+    @Override
+    public Identification findByPersonalNumber(String number) {
+        TypedQuery<Identification> q = em.createNamedQuery(
+                "glasogonbidrag.identification.findByPersonalNumber",
+                Identification.class);
+        q.setParameter("number", number);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Identification findByLMANumber(String number) {
+        TypedQuery<Identification> q = em.createNamedQuery(
+                "glasogonbidrag.identification.findByLMANumber",
+                Identification.class);
+        q.setParameter("number", number);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }

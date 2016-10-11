@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.SupplierRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -22,10 +22,10 @@ public class DBViewViewSupplierBackingBean {
             LoggerFactory.getLogger(DBViewViewSupplierBackingBean.class);
 
     @Autowired
-    private SupplierRepository repository;
+    private SupplierService supplierService;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceService invoiceService;
 
     @Autowired
     private FacesUtil util;
@@ -47,7 +47,7 @@ public class DBViewViewSupplierBackingBean {
 
         String name = util.fetchProperty("supplierName");
 
-        supplier = repository.findAllByName(name).get(0);
-        invoices = invoiceRepository.findAllBySupplier(supplier);
+        supplier = supplierService.findAllByName(name).get(0);
+        invoices = invoiceService.findAllBySupplier(supplier);
     }
 }

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
+import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.GrantUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
-import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
@@ -26,14 +26,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
-import se.vgregion.service.glasogonbidrag.domain.api.data.BeneficiaryRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.IdentificationRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
-import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.DiagnoseService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
@@ -77,16 +70,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final String GRANT_TYPE_OTHER = "2";
 
     @Autowired
-    private BeneficiaryRepository beneficiaryRepository;
-
-    @Autowired
-    private GrantRepository grantRepository;
-
-    @Autowired
-    private IdentificationRepository identificationRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    private IdentificationService identificationService;
 
     @Autowired
     private BeneficiaryService beneficiaryService;
@@ -242,14 +226,14 @@ public class CreateInvoiceAddGrantBackingBean {
 
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        Identification identification = identificationRepository.findByLMANumber(identificationNumber);
+        Identification identification = identificationService.findByLMANumber(identificationNumber);
 
         if (identification == null) {
             // TODO: birthyear should not be hardcoded
 
             identification = new Lma(identificationNumber);
         } else {
-            beneficiary = beneficiaryRepository.findWithPartsByIdent(identification);
+            beneficiary = beneficiaryService.findWithPartsByIdent(identification);
         }
 
         if (beneficiary == null) {
@@ -299,12 +283,12 @@ public class CreateInvoiceAddGrantBackingBean {
 
         if(isNumberValid) {
             Identification identification =
-                    identificationRepository.findByPersonalNumber(identificationNumber);
+                    identificationService.findByPersonalNumber(identificationNumber);
             if (identification == null) {
                 identification = new Personal(identificationNumber);
             } else {
                 beneficiary =
-                        beneficiaryRepository.findWithPartsByIdent(identification);
+                        beneficiaryService.findWithPartsByIdent(identification);
             }
 
             if (beneficiary == null) {
@@ -593,7 +577,7 @@ public class CreateInvoiceAddGrantBackingBean {
             LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
 
             // TODO: remove comment for line below when problem with comment is solved
-            //prescription.setComment(prescriptionVO.getComment());
+            prescription.setComment(prescriptionVO.getComment());
             prescription.setPrescriber(prescriptionVO.getPrescriber());
 
             if (prescriptionVO.getType() == DiagnoseType.APHAKIA) {
@@ -728,7 +712,7 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("Current state: {}.", grantFlow);
 
         long invoiceId = facesUtil.fetchId("invoiceId");
-        invoice = invoiceRepository.findWithParts(invoiceId);
+        invoice = invoiceService.findWithParts(invoiceId);
 
         newBeneficiary = false;
 
@@ -759,10 +743,10 @@ public class CreateInvoiceAddGrantBackingBean {
         if(grantId != null) {
             System.out.println("--- Found GrantId -----");
 
-            //TODO: add find with parts to grantRepository, so that call to beneficiaryRepository.findWithParts will not be necessary.
-            grant = grantRepository.findWithParts(grantId);
-            //grant = grantRepository.find(grantId);
-            beneficiary = beneficiaryRepository.findWithParts(grant.getBeneficiary().getId());
+            //TODO: add find with parts to grantService, so that call to beneficiaryService.findWithParts will not be necessary.
+            grant = grantService.findWithParts(grantId);
+            //grant = grantService.find(grantId);
+            beneficiary = beneficiaryService.findWithParts(grant.getBeneficiary().getId());
 
             //number = beneficiary.getIdentification().getString();
             beneficiaryVO.setIdentificationNumber(
@@ -788,7 +772,7 @@ public class CreateInvoiceAddGrantBackingBean {
             if(diagnoseType != DiagnoseType.NONE) {
 
                 // TODO: activate code below when comments work for prescription again
-                //prescriptionVO.setComment(prescription.getComment());
+                prescriptionVO.setComment(prescription.getComment());
                 prescriptionVO.setPrescriber(prescription.getPrescriber());
                 prescriptionVO.setType(prescription.getDiagnose().getType());
 

@@ -479,7 +479,7 @@
                     </div>
                     <div class="field-element">
                         <h:outputLabel for="prescriptionNote" value="#{bundle['notes']}:" />
-                        <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}"  />
+                        <h:inputTextarea id="prescriptionNote" value="#{prescriptionVO.comment}" pt:maxlength="250"  />
                     </div>
                     <div class="field-element">
                         <h:outputLabel for="prescriptionDate2" value="#{bundle['prescription-date']}:" />
@@ -519,7 +519,7 @@
                     <div>
                         <span class="grant-section-label">#{bundle['notes']}</span>
                         <span class="grant-section-data">
-                            <h:outputText value="-" />
+                            <h:outputText value="#{prescriptionVO.comment}" />
                         </span>
                     </div>
                     <div>

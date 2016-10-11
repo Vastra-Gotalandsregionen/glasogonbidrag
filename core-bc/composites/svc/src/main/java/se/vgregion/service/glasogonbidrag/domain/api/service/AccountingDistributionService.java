@@ -1,15 +1,17 @@
-package se.vgregion.service.glasogonbidrag.domain.api.data;
+package se.vgregion.service.glasogonbidrag.domain.api.service;
 
-import org.springframework.stereotype.Repository;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
+import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 
 import java.util.List;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-@Repository
-public interface AccountingDistributionRepository {
+public interface AccountingDistributionService {
+
     AccountingDistribution find(long id);
 
     AccountingDistribution findWithParts(long id);

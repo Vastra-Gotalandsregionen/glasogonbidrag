@@ -1,7 +1,7 @@
 package se.vgregion.glasogonbidrag.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import se.vgregion.service.glasogonbidrag.domain.api.data.GrantRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class UserProgressRestService {
 
     @Autowired
-    private GrantRepository repository;
+    private GrantService grantService;
 
     @GET
     @Path("user-progress/{userId}")
@@ -31,7 +31,7 @@ public class UserProgressRestService {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
 
-        long progress = repository.currentProgressByUserAndDate(userId, today);
+        long progress = grantService.currentProgressByUserAndDate(userId, today);
 
         Map<String, String> myGoal = new HashMap<>();
         myGoal.put("progress", Long.toString(progress));
@@ -56,7 +56,7 @@ public class UserProgressRestService {
             return Response.status(400).entity(message).build();
         }
 
-        long progress = repository.currentProgressByUserAndDate(userId, date);
+        long progress = grantService.currentProgressByUserAndDate(userId, date);
 
         Map<String, String> myGoal = new HashMap<>();
         myGoal.put("progress", Long.toString(progress));

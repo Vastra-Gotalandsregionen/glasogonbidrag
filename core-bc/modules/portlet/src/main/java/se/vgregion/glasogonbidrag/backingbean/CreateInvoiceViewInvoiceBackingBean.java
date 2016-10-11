@@ -9,16 +9,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
-import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -29,9 +26,6 @@ public class CreateInvoiceViewInvoiceBackingBean {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CreateInvoiceViewInvoiceBackingBean.class);
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -98,7 +92,7 @@ public class CreateInvoiceViewInvoiceBackingBean {
         Long invoiceId = facesUtil.fetchId("invoiceId");
 
         if (invoiceId != null) {
-            invoice = invoiceRepository.findWithParts(invoiceId);
+            invoice = invoiceService.findWithParts(invoiceId);
         } else {
             invoice = new Invoice();
         }

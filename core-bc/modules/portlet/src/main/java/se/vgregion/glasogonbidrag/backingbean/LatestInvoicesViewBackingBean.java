@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
-import se.vgregion.service.glasogonbidrag.domain.api.data.InvoiceRepository;
+import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class LatestInvoicesViewBackingBean {
             LoggerFactory.getLogger(LatestInvoicesViewBackingBean.class);
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceService invoiceService;
 
     @Autowired
     private FacesUtil facesUtil;
@@ -71,7 +71,7 @@ public class LatestInvoicesViewBackingBean {
     private void fetchInvoices(long userId) {
         int first = 0;
         int results = 10;
-        invoices = invoiceRepository
+        invoices = invoiceService
                 .findAllOrderByModificationDate(userId, first, results);
     }
 
