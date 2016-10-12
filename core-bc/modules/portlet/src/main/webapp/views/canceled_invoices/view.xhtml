@@ -46,31 +46,6 @@
                                     </a>
                                 </ui:repeat>
                             </div>
-
-                            <ui:remove>
-                                <h:dataTable styleClass="simple-table" value="#{invoices}" var="invoice">
-                                    <h:column>
-                                        <f:facet name="header">#{bundle['verification-number-short']</f:facet>
-                                        <h:outputLink value="#{viewInvoiceNavigation.navigate(invoice.id)}">
-                                            <h:outputText value="#{invoice.verificationNumber}" />
-                                        </h:outputLink>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">#{bundle['supplier']</f:facet>
-                                        <h:outputText value="#{invoice.supplier.name}" />
-                                    </h:column>
-
-                                    <h:column>
-                                        <f:facet name="header">#{bundle['amount']</f:facet>
-                                        <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2"
-                                                             locale="#{locale}" />
-                                        </h:outputText>
-                                    </h:column>
-                                </h:dataTable>
-                            </ui:remove>
-
-
                         </ui:fragment>
                         <ui:fragment rendered="#{empty invoices}">
                             <div class="alert alert-info">

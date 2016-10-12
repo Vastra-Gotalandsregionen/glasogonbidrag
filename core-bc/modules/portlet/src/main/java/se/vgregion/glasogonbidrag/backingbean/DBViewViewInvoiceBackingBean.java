@@ -93,7 +93,7 @@ public class DBViewViewInvoiceBackingBean {
 
         LOGGER.info("Invoice: {}", invoice);
         if (invoice.getGrants().size() > 0) {
-            LOGGER.info("Grant[1]: {}", invoice.getGrants().get(0));
+            LOGGER.info("Grant[1]: {}", invoice.getGrants().iterator().next());
         }
     }
 }

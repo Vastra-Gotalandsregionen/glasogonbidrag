@@ -23,9 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -159,7 +157,7 @@ public class Invoice {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             mappedBy = "invoice")
-    private List<Grant> grants;
+    private Set<Grant> grants;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
@@ -188,7 +186,7 @@ public class Invoice {
             new KronaCalculationUtil();
 
     public Invoice() {
-        grants = new ArrayList<>();
+        grants = new HashSet<>();
     }
 
     public Long getId() {
@@ -271,11 +269,11 @@ public class Invoice {
         this.amount = amount;
     }
 
-    public List<Grant> getGrants() {
+    public Set<Grant> getGrants() {
         return grants;
     }
 
-    public void setGrants(List<Grant> grants) {
+    public void setGrants(Set<Grant> grants) {
         this.grants = grants;
     }
 

@@ -6,7 +6,9 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -318,7 +320,10 @@ public class InvoiceCalculationTest {
         grant3.setAmount(30000);
         grant3.setVat(7500);
 
-        List<Grant> grants = Arrays.asList(grant1, grant2, grant3);
+        Set<Grant> grants = new HashSet<Grant>();
+        grants.add(grant1);
+        grants.add(grant2);
+        grants.add(grant3);
         invoice.setGrants(grants);
 
         BigDecimal expectedAmount =

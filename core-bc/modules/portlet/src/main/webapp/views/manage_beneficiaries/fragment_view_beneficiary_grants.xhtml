@@ -24,7 +24,7 @@
                 <c:set var="viewPaginator" value="#{selectedBeneficiary.grants.size() gt paginatorRows ? true : false}" scope="request" />
 
                 <p:dataTable var="grant"
-                             value="#{selectedBeneficiary.grants}"
+                             value="#{selectedBeneficiary.grants.toArray()}"
                              rows="#{paginatorRows}"
                              paginator="#{viewPaginator}"
                              paginatorPosition="bottom"

@@ -2,7 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "vgr_glasogonbidrag_supplier")
@@ -88,7 +88,7 @@ public class Supplier {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             mappedBy = "supplier")
-    private List<Invoice> invoices;
+    private Set<Invoice> invoices;
 
 
     public Supplier() {
@@ -174,11 +174,11 @@ public class Supplier {
         this.externalServiceId = externalServiceId;
     }
 
-    public List<Invoice> getInvoices() {
+    public Set<Invoice> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
+    public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
     }
 

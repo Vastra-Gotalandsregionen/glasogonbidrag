@@ -1,11 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "vgr_glasogonbidrag_beneficiary")
@@ -75,7 +71,7 @@ public class Beneficiary {
     private String lastName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
-    private List<Grant> grants;
+    private Set<Grant> grants;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "identification_id")
@@ -84,16 +80,12 @@ public class Beneficiary {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     //@OrderColumn(name = "prescription_date")
     //@OrderBy("date DESC")
-    @OrderColumn(name = "sort_index")
-    private List<Prescription> prescriptionHistory;
-
-//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "prescription_id")
-//    private Prescription prescription;
+    //@OrderColumn(name = "sort_index")
+    private Set<Prescription> prescriptionHistory;
 
     public Beneficiary() {
-        grants = new ArrayList<>();
-        prescriptionHistory = new ArrayList<>();
+        grants = new HashSet<>();
+        prescriptionHistory = new HashSet<>();
 //        prescription = new Prescription();
     }
 
@@ -141,11 +133,11 @@ public class Beneficiary {
         return firstName + " " + lastName;
     }
 
-    public List<Grant> getGrants() {
+    public Set<Grant> getGrants() {
         return grants;
     }
 
-    public void setGrants(List<Grant> grants) {
+    public void setGrants(Set<Grant> grants) {
         this.grants = grants;
     }
 
@@ -157,11 +149,11 @@ public class Beneficiary {
         this.identification = identification;
     }
 
-    public List<Prescription> getPrescriptionHistory() {
+    public Set<Prescription> getPrescriptionHistory() {
         return prescriptionHistory;
     }
 
-    public void setPrescriptionHistory(List<Prescription> prescriptionHistory) {
+    public void setPrescriptionHistory(Set<Prescription> prescriptionHistory) {
         this.prescriptionHistory = prescriptionHistory;
     }
 

@@ -17,6 +17,7 @@ import javax.persistence.TypedQuery;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -129,7 +130,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
 
-        List<Grant> grants = invoice.getGrants();
+        Set<Grant> grants = invoice.getGrants();
         if (grants == null) {
             throw new RuntimeException("List of grants is null");
         }
@@ -317,6 +318,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public List<Invoice> findAllWithParts() {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findAllWithParts", Invoice.class);

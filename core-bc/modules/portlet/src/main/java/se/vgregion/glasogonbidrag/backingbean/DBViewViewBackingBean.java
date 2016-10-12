@@ -25,9 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Component(value = "dbViewViewBackingBean")
 @Scope(value = "request")
@@ -205,7 +203,7 @@ public class DBViewViewBackingBean {
 
 //        b2.getPrescription().setDate(cal.getTime());
 
-        List<Grant> grants = new ArrayList<>();
+        Set<Grant> grants = new HashSet<>();
         grants.add(g1);
         grants.add(g2);
 

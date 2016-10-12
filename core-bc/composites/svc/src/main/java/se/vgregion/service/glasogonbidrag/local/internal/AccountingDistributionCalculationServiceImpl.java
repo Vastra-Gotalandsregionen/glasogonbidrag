@@ -22,6 +22,7 @@ import se.vgregion.service.glasogonbidrag.local.exception.FreeCodeNotFoundExcept
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -45,7 +46,7 @@ public class AccountingDistributionCalculationServiceImpl
     public AccountingDistribution calculateFrom(Invoice invoice) {
         LOGGER.info("Generating distribution for {}", invoice);
 
-        List<Grant> grants = invoice.getGrants();
+        Set<Grant> grants = invoice.getGrants();
 
         AccountingDistribution distribution = new AccountingDistribution();
 

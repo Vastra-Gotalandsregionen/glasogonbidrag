@@ -31,9 +31,8 @@
 
             <ui:fragment rendered="#{not empty createInvoiceAddGrantBackingBean.beneficiary and not empty createInvoiceAddGrantBackingBean.beneficiary.grants}">
 
-
                 <div class="chip-wrap">
-                    <ui:repeat value="#{createInvoiceAddGrantBackingBean.beneficiary.grants}" var="grant">
+                    <ui:repeat value="#{createInvoiceAddGrantBackingBean.beneficiary.grants.toArray()}" var="grant">
                         <div class="chip js-chip-collapsible chip-collapsed">
                             <div class="chip-hd">
                                 <div class="chip-hd-item chip-hd-item-short">

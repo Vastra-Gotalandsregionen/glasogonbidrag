@@ -43,7 +43,7 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayNewGrantsBeAdded(Invoice curInvoice) {
-        LOGGER.info("InvoiceBackingBean - checkMayNewGrantsBeAdded()");
+        //LOGGER.info("InvoiceBackingBean - checkMayNewGrantsBeAdded()");
 
         boolean mayNewGrantsBeAdded = false;
 
@@ -56,7 +56,7 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayInvoiceBeChanged(Invoice curInvoice) {
-        LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeChanged()");
+        //LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeChanged()");
 
         boolean mayInvoiceBeChanged = false;
 
@@ -68,7 +68,7 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayInvoicesBeMarkedCompleted(Invoice curInvoice) {
-        LOGGER.info("InvoiceBackingBean - checkMayInvoicesBeMarkedCompleted()");
+        //LOGGER.info("InvoiceBackingBean - checkMayInvoicesBeMarkedCompleted()");
 
         boolean mayInvoicesBeMarkedCompleted = false;
 

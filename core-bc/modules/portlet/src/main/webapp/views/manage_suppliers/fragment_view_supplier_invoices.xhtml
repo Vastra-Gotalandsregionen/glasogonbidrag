@@ -14,6 +14,9 @@
 
     <h:body>
 
+        <c:set var="selectedSupplier" value="#{manageSuppliersViewBackingBean.selectedSupplier}" scope="request" />
+        <c:set var="selectedSupplierInvoices" value="#{manageSuppliersViewBackingBean.selectedSupplierInvoices}" scope="request" />
+
         <gb:box title="#{bundle['invoices-for']} #{selectedSupplier.name}" collapsible="true" collapsed="false">
 
             <ui:fragment rendered="#{not empty selectedSupplierInvoices}">

@@ -4,7 +4,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -57,7 +57,7 @@ public class Prescription {
     private Beneficiary beneficiary;
 
     @OneToMany(mappedBy = "prescription")
-    private List<Grant> grants;
+    private Set<Grant> grants;
 
     public Prescription() {
         diagnose = new None();
@@ -152,11 +152,11 @@ public class Prescription {
         this.beneficiary = beneficiary;
     }
 
-    public List<Grant> getGrants() {
+    public Set<Grant> getGrants() {
         return grants;
     }
 
-    public void setGrants(List<Grant> grants) {
+    public void setGrants(Set<Grant> grants) {
         this.grants = grants;
     }
 }

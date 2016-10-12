@@ -23,7 +23,7 @@
 
                 <ui:fragment rendered="#{not empty invoice.grants}">
                     <div class="chip-wrap">
-                        <ui:repeat value="#{invoice.grants}" var="grant">
+                        <ui:repeat value="#{invoice.grants.toArray()}" var="grant">
                             <div class="chip #{grant.id == createInvoiceAddGrantBackingBean.grant.id ? 'chip-selected' : ''}">
                                 <div class="chip-hd">
                                     <div class="chip-hd-item chip-hd-item-personalnumber">

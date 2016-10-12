@@ -746,6 +746,7 @@ public class CreateInvoiceAddGrantBackingBean {
             //grant = grantService.find(grantId);
             beneficiary = beneficiaryService.findWithParts(grant.getBeneficiary().getId());
 
+
             //number = beneficiary.getIdentification().getString();
             beneficiaryVO.setIdentificationNumber(
                     beneficiary.getIdentification().getString());
