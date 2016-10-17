@@ -275,6 +275,8 @@ public class Grant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
+        // TODO: is this check alright? We should add message when user tries to add an "identical" grant.
+
         Grant grant = (Grant) o;
 
         if (vat != grant.vat) return false;

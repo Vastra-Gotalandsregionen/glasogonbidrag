@@ -640,6 +640,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
             message =
                     new FacesMessage("Cannot add the same grant twice.");
+
         }
 
         return message;

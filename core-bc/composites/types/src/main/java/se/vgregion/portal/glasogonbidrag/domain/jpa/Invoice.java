@@ -410,13 +410,13 @@ public class Invoice {
 
         Invoice invoice = (Invoice) o;
 
-        return verificationNumber.equals(invoice.verificationNumber);
+        return verificationNumber != null ? verificationNumber.equals(invoice.verificationNumber) : invoice.verificationNumber == null;
 
     }
 
     @Override
     public int hashCode() {
-        return verificationNumber.hashCode();
+        return verificationNumber != null ? verificationNumber.hashCode() : 0;
     }
 
     @Override
