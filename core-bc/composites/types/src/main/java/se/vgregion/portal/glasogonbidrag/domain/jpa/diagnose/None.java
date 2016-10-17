@@ -20,10 +20,20 @@ public class None extends Diagnose {
     }
 
     @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
 
         return obj instanceof None;
+    }
+
+    @Override
+    public String toString() {
+        return "None{}";
     }
 }

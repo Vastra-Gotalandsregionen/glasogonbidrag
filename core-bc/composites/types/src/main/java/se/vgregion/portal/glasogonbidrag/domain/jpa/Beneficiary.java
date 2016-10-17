@@ -203,12 +203,9 @@ public class Beneficiary {
     public String toString() {
         return "Beneficiary{" +
                 "id=" + id +
-                ", createDate=" + createDate +
-                ", modifiedDate=" + modifiedDate +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", grants=" + grants +
-                ", identification=" + identification +
+                ", identification=" + identification.toString() +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,11 +47,10 @@ public class Prescription {
     private Date date;
     private String prescriber;
 
-    // TODO: remove comment for line below when problem with comment is solved
-//    @Lob
-//    @Basic(fetch=FetchType.EAGER, optional=true)
-//    @Column(name = "prescriber_comment")
-//    private String comment;
+    @Lob
+    @Basic(fetch=FetchType.EAGER, optional=true)
+    @Column(name = "prescriber_comment")
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "beneficiary_id")
@@ -60,6 +60,7 @@ public class Prescription {
     private List<Grant> grants;
 
     public Prescription() {
+        grants = new ArrayList<>();
         diagnose = new None();
     }
 
@@ -135,14 +136,13 @@ public class Prescription {
         this.prescriber = prescriber;
     }
 
-    // TODO: remove comment for line below when problem with comment is solved
-/*    public String getComment() {
+    public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-    }*/
+    }
 
     public Beneficiary getBeneficiary() {
         return beneficiary;
@@ -158,5 +158,42 @@ public class Prescription {
 
     public void setGrants(List<Grant> grants) {
         this.grants = grants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Prescription that = (Prescription) o;
+
+        if (beneficiary != null ? !beneficiary.equals(that.beneficiary) : that.beneficiary != null)
+            return false;
+        if (date != null ? !date.equals(that.date) : that.date != null)
+            return false;
+        if (diagnose != null ? !diagnose.equals(that.diagnose) : that.diagnose != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = diagnose != null ? diagnose.hashCode() : 0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (beneficiary != null ? beneficiary.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "id=" + id +
+                ", diagnose=" + diagnose +
+                ", date=" + date +
+                ", prescriber='" + prescriber + '\'' +
+                ", comment='" + comment + '\'' +
+                ", beneficiary=" + beneficiary +
+                '}';
     }
 }
