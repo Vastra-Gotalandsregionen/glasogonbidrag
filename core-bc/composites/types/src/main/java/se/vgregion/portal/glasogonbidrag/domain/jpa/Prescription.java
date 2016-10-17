@@ -12,6 +12,14 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "vgr_glasogonbidrag_prescription")
+@NamedQueries({
+        @NamedQuery(
+                name = "glasogonbidrag.prescription.findLatest",
+                query = "SELECT p " +
+                        "FROM Prescription p " +
+                        "WHERE p.beneficiary = :beneficiary " +
+                        "ORDER BY p.date DESC"),
+})
 public class Prescription {
 
     @Id

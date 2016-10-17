@@ -88,6 +88,9 @@ public class CreateInvoiceAddGrantBackingBean {
     private BeneficiaryLookupService beneficiaryLookupService;
 
     @Autowired
+    private PrescriptionService prescriptionService;
+
+    @Autowired
     private FacesUtil facesUtil;
 
     @Autowired
@@ -120,6 +123,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private Date deliveryDate;
     private String grantType;
     private String grantTypeLabel;
+    private Prescription latestBeneficiaryPrescription;
 
     private PrescriptionVO prescriptionVO;
 
@@ -202,6 +206,14 @@ public class CreateInvoiceAddGrantBackingBean {
         this.grantTypeLabel = grantTypeLabel;
     }
 
+    public Prescription getLatestBeneficiaryPrescription() {
+        return latestBeneficiaryPrescription;
+    }
+
+    public void setLatestBeneficiaryPrescription(Prescription latestBeneficiaryPrescription) {
+        this.latestBeneficiaryPrescription = latestBeneficiaryPrescription;
+    }
+
     public String getAmountWithVat() {
         return amountWithVat;
     }
@@ -265,16 +277,17 @@ public class CreateInvoiceAddGrantBackingBean {
 
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        // TODO: This is temp fix
-        String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
-        LOGGER.info("personalNumberListener(): localFormat={}", localFormat);
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
+        // TODO: This is temp fixes. Should be moved to a service. First we remove century digits, then add them again =).
         // Strip away century digits
         if(identificationNumber.length() == 13) {
             identificationNumber = identificationNumber.substring(2, identificationNumber.length());
         }
+
+
+        String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
+        LOGGER.info("personalNumberListener(): localFormat={}", localFormat);
+
+        FacesContext context = FacesContext.getCurrentInstance();
 
         boolean isNumberValid = personalNumberValidator.validatePersonalNumber(identificationNumber);
         System.out.println("isNumberValid: " + isNumberValid);
@@ -289,6 +302,8 @@ public class CreateInvoiceAddGrantBackingBean {
             } else {
                 beneficiary =
                         beneficiaryService.findWithPartsByIdent(identification);
+
+                latestBeneficiaryPrescription = prescriptionService.findLatest(beneficiary);
             }
 
             if (beneficiary == null) {
@@ -332,20 +347,33 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("deliveryDateListener(): add {} to grant {}",
                 deliveryDate, grant);
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date = null;
-//        try {
-//            date = sdf.parse(deliveryDate);
-//        } catch (ParseException e) {
-//            LOGGER.warn("Exception. {}", e.getMessage());
-//
-//            return;
-//        }
-
         grant.setDeliveryDate(deliveryDate);
 
         // Set grantFlow
         grantFlow = grantFlow.nextState();
+
+        // Check if latestBeneficiaryPrescription exists and diagnosis is A, K or S. Then move to next state. Also, pass a parameter that grant type should
+        // Be automatically chosen. Also pass info about diagnosis to populate
+
+        if(latestBeneficiaryPrescription != null) {
+            Diagnose diagnose = latestBeneficiaryPrescription.getDiagnose();
+            DiagnoseType diagnoseType = diagnose.getType();
+
+            // Foobar
+            if(diagnoseType != DiagnoseType.NONE) {
+                grantFlow = grantFlow.nextState(AddGrantAction.OTHER);
+                grantTypeLabel = "grant-type-other";
+
+                prescriptionVO.setType(diagnoseType);
+                prescriptionVO = populateDiagnoseData(prescriptionVO, diagnose);
+
+                grantType = GRANT_TYPE_OTHER;
+                //grantFlow = grantFlow.nextState();
+                // If we jump to "next step" we could even jump to step after this (with prescriber, comment etc)
+                // If we only populate fields, then we should not also autopopulate prescription fields.
+            }
+        }
+
     }
 
     public void grantTypeListener() {
@@ -715,6 +743,8 @@ public class CreateInvoiceAddGrantBackingBean {
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceService.findWithParts(invoiceId);
 
+        latestBeneficiaryPrescription = null;
+
         newBeneficiary = false;
 
         //invoice = newInvoice;
@@ -747,6 +777,7 @@ public class CreateInvoiceAddGrantBackingBean {
             //grant = grantService.find(grantId);
             beneficiary = beneficiaryService.findWithParts(grant.getBeneficiary().getId());
 
+            latestBeneficiaryPrescription = prescriptionService.findLatest(beneficiary);
 
             //number = beneficiary.getIdentification().getString();
             beneficiaryVO.setIdentificationNumber(
@@ -771,37 +802,29 @@ public class CreateInvoiceAddGrantBackingBean {
 
             if(diagnoseType != DiagnoseType.NONE) {
 
-                // TODO: activate code below when comments work for prescription again
                 prescriptionVO.setComment(prescription.getComment());
                 prescriptionVO.setPrescriber(prescription.getPrescriber());
                 prescriptionVO.setType(prescription.getDiagnose().getType());
 
-                if(diagnoseType == DiagnoseType.APHAKIA) {
-                    Aphakia aphakia = (Aphakia)diagnose;
+                prescriptionVO = populateDiagnoseData(prescriptionVO, diagnose);
 
-                    System.out.println("--- DiagnoseType is Aphakia -----");
-
-
-                    prescriptionVO.setLaterality(aphakia.getLaterality());
-                } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
-                    Keratoconus keratoconus = (Keratoconus)diagnose;
-
-                    System.out.println("--- DiagnoseType is Keratoconus -----");
-
-                    prescriptionVO.setLaterality(keratoconus.getLaterality());
-                    prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
-                    prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
-                    prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
-                } else if(diagnoseType == DiagnoseType.SPECIAL) {
-                    Special special = (Special)diagnose;
-
-                    System.out.println("--- DiagnoseType is Special -----");
-
-                    prescriptionVO.setLaterality(special.getLaterality());
-                    prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
-                } else {
-                    // TODO: throw exception
-                }
+                // Code below has been moved to the method populateDiagnoseData. Remove commented code when this has been tested properly.
+//                if(diagnoseType == DiagnoseType.APHAKIA) {
+//                    Aphakia aphakia = (Aphakia)diagnose;
+//                    prescriptionVO.setLaterality(aphakia.getLaterality());
+//                } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
+//                    Keratoconus keratoconus = (Keratoconus)diagnose;
+//                    prescriptionVO.setLaterality(keratoconus.getLaterality());
+//                    prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
+//                    prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
+//                    prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
+//                } else if(diagnoseType == DiagnoseType.SPECIAL) {
+//                    Special special = (Special)diagnose;
+//                    prescriptionVO.setLaterality(special.getLaterality());
+//                    prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
+//                } else {
+//                    // TODO: throw exception
+//                }
 
                 grantType = GRANT_TYPE_OTHER;
 
@@ -839,6 +862,30 @@ public class CreateInvoiceAddGrantBackingBean {
         } else {
             grant = new Grant();
         }
+    }
+
+    private PrescriptionVO populateDiagnoseData(PrescriptionVO prescriptionVO, Diagnose diagnose) {
+
+        DiagnoseType diagnoseType = diagnose.getType();
+
+        if(diagnoseType == DiagnoseType.APHAKIA) {
+            Aphakia aphakia = (Aphakia)diagnose;
+            prescriptionVO.setLaterality(aphakia.getLaterality());
+        } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
+            Keratoconus keratoconus = (Keratoconus)diagnose;
+            prescriptionVO.setLaterality(keratoconus.getLaterality());
+            prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
+            prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
+            prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
+        } else if(diagnoseType == DiagnoseType.SPECIAL) {
+            Special special = (Special)diagnose;
+            prescriptionVO.setLaterality(special.getLaterality());
+            prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
+        } else {
+            // TODO: throw exception
+        }
+
+        return prescriptionVO;
     }
 
 }
