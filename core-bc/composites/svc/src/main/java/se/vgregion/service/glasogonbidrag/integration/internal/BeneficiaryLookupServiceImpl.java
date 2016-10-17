@@ -164,6 +164,14 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
         }
     }
 
+    private String extractName(String name, String defaultNameValue) {
+        if(name == null) {
+            return defaultNameValue;
+        } else {
+            return name;
+        }
+    }
+
     /**
      * Extract name from response.
      *
@@ -175,7 +183,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
         NamnTYPE name = person.getNamn();
 
         return new BeneficiaryNameTransport(
-                name.getFornamn(), name.getEfternamn());
+                extractName(name.getFornamn(), ""), extractName(name.getEfternamn(), ""));
     }
 
     /**

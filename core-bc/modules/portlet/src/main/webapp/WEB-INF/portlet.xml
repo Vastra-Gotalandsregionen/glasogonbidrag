@@ -53,29 +53,6 @@
 
 
     <portlet>
-        <portlet-name>glasogonbidrag-db-view</portlet-name>
-        <display-name>glasogonbidrag-db-view</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
-
-        <init-param>
-            <name>javax.portlet.faces.defaultViewId.view</name>
-            <value>/views/db_view/view.xhtml</value>
-        </init-param>
-
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>VIEW</portlet-mode>
-        </supports>
-
-        <portlet-info>
-            <title>glasogonbidrag-db-view</title>
-            <short-title>glasogonbidrag-db-view</short-title>
-            <keywords>glasogonbidrag-db-view</keywords>
-        </portlet-info>
-    </portlet>
-
-
-    <portlet>
         <portlet-name>glasogonbidrag-latest-invoices</portlet-name>
         <display-name>glasogonbidrag-latest-invoices</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
