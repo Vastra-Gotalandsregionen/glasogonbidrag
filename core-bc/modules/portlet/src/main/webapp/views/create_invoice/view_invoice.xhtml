@@ -67,6 +67,12 @@
                                     <f:param name="invoiceId" value="${invoice.id}" />
                                 </h:commandLink>
 
+                                <h:link value="#{bundle['create-new-invoice']}"
+                                        styleClass="link-btn"
+                                        outcome="view"
+                                        rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}"
+                                />
+
                             </div>
                         </h:form>
 
