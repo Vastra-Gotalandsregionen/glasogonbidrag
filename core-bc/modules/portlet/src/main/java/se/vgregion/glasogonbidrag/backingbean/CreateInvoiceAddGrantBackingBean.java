@@ -367,10 +367,12 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriptionVO.setType(diagnoseType);
                 prescriptionVO = populateDiagnoseData(prescriptionVO, diagnose);
 
+                prescriptionVO.setComment(latestBeneficiaryPrescription.getComment());
+                prescriptionVO.setDate(latestBeneficiaryPrescription.getDate());
+                prescriptionVO.setPrescriber(latestBeneficiaryPrescription.getPrescriber());
+
                 grantType = GRANT_TYPE_OTHER;
-                //grantFlow = grantFlow.nextState();
-                // If we jump to "next step" we could even jump to step after this (with prescriber, comment etc)
-                // If we only populate fields, then we should not also autopopulate prescription fields.
+                grantFlow = grantFlow.nextState();
             }
         }
 
