@@ -39,9 +39,26 @@
 
             <div class="field-row field-row-2">
                 <div class="field-element">
-                    <h:outputLabel for="supplierEmail" value="#{bundle['email']}:" />
-                    <h:inputText id="supplierEmail"
-                                 value="#{selectedSupplier.email}"
+                    <h:outputLabel for="supplierEmailInvoice" value="#{bundle['email-invoice-related']}:" />
+                    <h:inputText id="supplierEmailInvoice"
+                                 value="#{selectedSupplier.emailInvoice}"
+                                 required="false">
+                    </h:inputText>
+                </div>
+                <div class="field-element">
+                    <h:outputLabel for="supplierEmailInfo" value="#{bundle['email-info-related']}:" />
+                    <h:inputText id="supplierEmailInfo"
+                                 value="#{selectedSupplier.emailInfo}"
+                                 required="false">
+                    </h:inputText>
+                </div>
+            </div>
+
+            <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel for="supplierPhone" value="#{bundle['phone']}:" />
+                    <h:inputText id="supplierPhone"
+                                 value="#{selectedSupplier.phone}"
                                  required="false">
                     </h:inputText>
                 </div>

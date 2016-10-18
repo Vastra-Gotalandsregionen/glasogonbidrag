@@ -35,15 +35,36 @@
                 </li>
                 <li>
                     <span class="item-label">
-                        <h:outputText value="#{bundle['email']}:" />
+                        <h:outputText value="#{bundle['email-invoice-related']}:" />
                     </span>
                     <span class="item-value">
-                        <ui:fragment rendered="#{not empty selectedSupplier.email}">
-                            <a href="mailto:#{selectedSupplier.email}">#{selectedSupplier.email}</a>
+                        <ui:fragment rendered="#{not empty selectedSupplier.emailInvoice}">
+                            <a href="mailto:#{selectedSupplier.emailInvoice}">#{selectedSupplier.emailInvoice}</a>
                         </ui:fragment>
-                        <ui:fragment rendered="#{empty selectedSupplier.email}">
+                        <ui:fragment rendered="#{empty selectedSupplier.emailInvoice}">
                             -
                         </ui:fragment>
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="#{bundle['email-info-related']}:" />
+                    </span>
+                    <span class="item-value">
+                        <ui:fragment rendered="#{not empty selectedSupplier.emailInfo}">
+                            <a href="mailto:#{selectedSupplier.emailInfo}">#{selectedSupplier.emailInfo}</a>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty selectedSupplier.emailInfo}">
+                            -
+                        </ui:fragment>
+                    </span>
+                </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="#{bundle['phone']}:" />
+                    </span>
+                    <span class="item-value">
+                        <h:outputText value="#{selectedSupplier.phone}" />
                     </span>
                 </li>
                 <li>

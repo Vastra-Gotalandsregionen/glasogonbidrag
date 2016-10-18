@@ -32,11 +32,17 @@
                         <div class="gb-invoice-hd-item">
                             #{bundle[invoice.status]}
                         </div>
-                        <ui:fragment rendered="#{not empty invoice.supplier.email}">
+                        <ui:fragment rendered="#{not empty invoice.supplier.emailInvoice}">
                             <div class="gb-invoice-hd-item">
-                                <a href="mailto:#{invoice.supplier.email}" class="link-icon link-icon-email">
+                                <a href="mailto:#{invoice.supplier.emailInvoice}" class="link-icon link-icon-email">
                                     <span>#{bundle['email']}</span>
                                 </a>
+                            </div>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{not empty invoice.supplier.phone}">
+                            <div class="gb-invoice-hd-item">
+                                #{bundle["phone-short"]}: #{invoice.supplier.phone}
                             </div>
                         </ui:fragment>
 

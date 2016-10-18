@@ -76,10 +76,18 @@ public class Supplier {
     @Column(name = "supplier_name")
     private String name;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "email_invoice")
+    private String emailInvoice;
 
+    @Column(name = "email_info")
+    private String emailInfo;
+
+    @Column(name = "active")
     private boolean active;
+
+
+    @Column(name = "phone")
+    private String phone;
 
     @Column(name = "external_service_id")
     private String externalServiceId;
@@ -142,12 +150,20 @@ public class Supplier {
         this.modifiedDate = modifiedDate;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailInvoice() {
+        return emailInvoice;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailInvoice(String email) {
+        this.emailInvoice = email;
+    }
+
+    public String getEmailInfo() {
+        return emailInfo;
+    }
+
+    public void setEmailInfo(String emailInfo) {
+        this.emailInfo = emailInfo;
     }
 
     public String getName() {
@@ -164,6 +180,14 @@ public class Supplier {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getExternalServiceId() {
