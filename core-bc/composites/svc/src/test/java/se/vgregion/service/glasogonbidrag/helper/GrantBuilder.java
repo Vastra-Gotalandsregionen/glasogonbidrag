@@ -26,6 +26,12 @@ public class GrantBuilder {
         return this;
     }
 
+    public GrantBuilder delivery(int year, int month, int dayOfMonth) {
+        this.deliveryDate =
+                new GregorianCalendar(year, month, dayOfMonth).getTime();
+        return this;
+    }
+
     public GrantBuilder amount(BigDecimal krona) {
         this.krona = krona;
         return this;

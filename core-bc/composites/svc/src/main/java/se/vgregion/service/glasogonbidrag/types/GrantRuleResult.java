@@ -38,4 +38,12 @@ public class GrantRuleResult {
     public boolean hasViolations() {
         return !violations.isEmpty();
     }
+
+    public int warnings() {
+        return warnings.size();
+    }
+
+    public int violations() {
+        return violations.size();
+    }
 }

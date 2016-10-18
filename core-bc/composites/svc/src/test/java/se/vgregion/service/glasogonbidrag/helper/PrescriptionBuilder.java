@@ -38,6 +38,12 @@ public class PrescriptionBuilder {
         return this;
     }
 
+    public PrescriptionBuilder date(int year, int month, int dayOfMonth) {
+        this.date =
+                new GregorianCalendar(year, month, dayOfMonth).getTime();
+        return this;
+    }
+
     public PrescriptionBuilder prescriber(String prescriber) {
         this.prescriber = prescriber;
         return this;
