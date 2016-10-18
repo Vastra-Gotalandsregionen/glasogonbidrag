@@ -16,6 +16,7 @@
 
         <c:set var="suppliers" value="#{manageSuppliersViewBackingBean.suppliers}" scope="request" />
         <c:set var="selectedSupplier" value="#{manageSuppliersViewBackingBean.selectedSupplier}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="suppliersDataTable"
                      var="supplier"
@@ -32,12 +33,12 @@
             <p:ajax event="rowSelect"
                     listener="#{manageSuppliersViewBackingBean.onRowSelect}"
                     update=":manageSuppliersForm:detailsPanel"
-                    oncomplete="ajaxComplete()"
+                    oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
             <p:ajax event="rowUnselect"
                     listener="#{manageSuppliersViewBackingBean.onRowUnselect}"
                     update=":manageSuppliersForm:detailsPanel"
-                    oncomplete="ajaxComplete()"
+                    oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
              />
 
             <p:column headerText="#{bundle['supplier']}"

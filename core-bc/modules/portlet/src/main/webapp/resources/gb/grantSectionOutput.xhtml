@@ -25,6 +25,7 @@
     <cc:attribute name="backRender"/>
     <cc:attribute name="backShowSection" />
     <cc:attribute name="mayInvoiceBeChanged" />
+    <cc:attribute name="portletNamespace" />
 </cc:interface>
 
 <cc:implementation>
@@ -37,6 +38,7 @@
     <c:set var="backRender" value="#{cc.attrs.backRender}" />
     <c:set var="backShowSection" value="#{cc.attrs.backShowSection}" />
     <c:set var="mayInvoiceBeChanged" value="#{cc.attrs.mayInvoiceBeChanged}" />
+    <c:set var="portletNamespace" value="#{cc.attrs.portletNamespace}" />
 
     <div class="grant-section">
         <div class="grant-section-output">
@@ -65,8 +67,8 @@
 
             <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
                 <f:ajax execute="#{backExecute}" listener="#{backListener}"
-                        render="#{backRender}" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                </f:ajax>
+                        render="#{backRender}"
+                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                 <f:param name="showSection" value="#{backShowSection}" />
                 <span class="hide-accessible">Tillbaka</span>
             </h:commandLink>

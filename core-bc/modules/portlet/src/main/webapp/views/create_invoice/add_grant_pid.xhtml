@@ -40,7 +40,8 @@
                 <div class="button-row">
                     <h:commandLink id="personalNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.personalNumberListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
 
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
@@ -65,8 +66,8 @@
 
                     <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                         <f:param name="showSection" value="ENTER_IDENTIFICATION" />
                         <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>

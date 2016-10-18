@@ -42,7 +42,8 @@
                 <div class="button-row">
                     <h:commandLink id="deliveryDateSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.deliveryDateListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -60,7 +61,9 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="ENTER_DELIVERY_DATE"
-                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}" />
+                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}"
+                               portletNamespace="#{portletNamespace}"
+        />
 
         <!-- Choose the grant type -->
         <ui:fragment rendered="#{grantFlow.showGrantTypeInput}">
@@ -97,7 +100,8 @@
                 <div class="button-row">
                     <h:commandLink id="grantTypeSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.grantTypeListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -114,7 +118,9 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="SELECT_GRANT_TYPE"
-                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}" />
+                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}"
+                               portletNamespace="#{portletNamespace}"
+        />
 
         <!-- Grant Type 0-15 or 0-19 -->
         <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showPrescriptionDateInput}">
@@ -135,7 +141,8 @@
                 <div class="button-row">
                     <h:commandLink id="prescriptionDateSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.prescriptionDateListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -152,7 +159,9 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="ENTER_PRESCRIPTION_DATE"
-                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}" />
+                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}"
+                               portletNamespace="#{portletNamespace}"
+        />
 
         <!-- Grant type others -->
         <ui:fragment rendered="#{grantFlow.showGrantTypeOtherSection and grantFlow.showPrescriptionTypeInput}">
@@ -177,7 +186,7 @@
                                        pt:autofocus="#{prescriptionVO.diagnoseAphakia or prescriptionVO.diagnoseNone ? 'true' : null}"
                                        pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                     <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
                                 <h:outputLabel for="diagnoseTypeAphakia" value="#{bundle['diagnose-type-aphakia']}:" />
@@ -232,7 +241,7 @@
                                        pt:autofocus="#{prescriptionVO.diagnoseKeratokonus ? 'true' : null}"
                                        pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                     <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
                                 <h:outputLabel for="diagnoseTypeKeratokonus" value="#{bundle['diagnose-type-keratoconus']}:" />
@@ -254,7 +263,7 @@
                                             <!--
                                             -->
                                             <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
-                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
@@ -267,7 +276,7 @@
                                                pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                             <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
-                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
@@ -282,7 +291,7 @@
                                             <!--
                                             -->
                                             <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
-                                                    onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                                     execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
 
                                         </input>
@@ -335,7 +344,7 @@
                                        pt:autofocus="#{prescriptionVO.diagnoseSpecial ? 'true' : null}"
                                        pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                     <f:ajax listener="#{createInvoiceAddGrantBackingBean.changePrescriptionTypeListener}"
-                                            onevent="function eventHandler(data) {ajaxComplete(data)}"
+                                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
                                             execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
                                 </input>
                                 <h:outputLabel for="diagnoseTypeSpecial" value="#{bundle['special-weak-eye-sight']}:" />
@@ -389,7 +398,8 @@
                 <div class="button-row">
                     <h:commandLink id="grantTypeOtherSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionTypeListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -458,8 +468,8 @@
 
                     <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                         <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_TYPE" />
                         <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>
@@ -497,7 +507,8 @@
                 <div class="button-row">
                     <h:commandLink id="otherDataAndNotesSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.otherPrescriptionDateListener}"
-                                render=":addGrantForm:grantAddPanel" onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                render=":addGrantForm:grantAddPanel"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
                     <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
                         <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
@@ -533,8 +544,8 @@
 
                     <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
                         <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory" onevent="function eventHandler(data) {ajaxComplete(data)}">
-                        </f:ajax>
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                         <f:param name="showSection" value="ENTER_GRANT_STATE_OTHER_DATE" />
                         <span class="hide-accessible">#{bundle['go-back']}</span>
                     </h:commandLink>
@@ -584,7 +595,9 @@
                                backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
                                backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                backShowSection="#{grantFlow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}"
-                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}" />
+                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}"
+                               portletNamespace="#{portletNamespace}"
+        />
 
         <ui:fragment rendered="${grantFlow.showAmountOutput}">
             <div class="button-row">

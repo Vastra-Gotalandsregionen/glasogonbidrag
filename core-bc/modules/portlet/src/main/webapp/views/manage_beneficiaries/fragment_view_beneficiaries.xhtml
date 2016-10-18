@@ -16,6 +16,7 @@
 
         <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.beneficiaries}" scope="request" />
         <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="beneficiariesDataTable"
                      var="beneficiary"
@@ -33,12 +34,12 @@
             <p:ajax event="rowSelect"
                     listener="#{manageBeneficiariesViewBackingBean.onRowSelect}"
                     update=":manageBeneficiariesForm:detailsPanel"
-                    oncomplete="ajaxComplete()"
+                    oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
             <p:ajax event="rowUnselect"
                     listener="#{manageBeneficiariesViewBackingBean.onRowUnselect}"
                     update=":manageBeneficiariesForm:detailsPanel"
-                    oncomplete="ajaxComplete()"
+                    oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
 
             <p:column headerText="#{bundle['personal-number']}" sortBy="#{beneficiary.identification.id}">

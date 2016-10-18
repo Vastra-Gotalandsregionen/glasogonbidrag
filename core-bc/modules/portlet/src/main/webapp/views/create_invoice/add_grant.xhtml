@@ -40,7 +40,7 @@
                                                     <h:commandLink styleClass="tab" value="#{bundle[tab.value]}">
                                                         <f:ajax listener="#{tabUtil.changeTabIndexListener(tab.key)}"
                                                                 render=":addGrantForm:grantAddPanel"
-                                                                onevent="function eventHandler(data) {ajaxComplete(data)}" />
+                                                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                                                     </h:commandLink>
                                                 </ui:fragment>
                                                 <ui:fragment rendered="#{tabUtil.activeIndex == tab.key}">
