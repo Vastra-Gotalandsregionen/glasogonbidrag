@@ -474,7 +474,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result4 =
-                validationService.test(child13ExactAmount);
+                validationService.test(child13UnderAmount);
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
