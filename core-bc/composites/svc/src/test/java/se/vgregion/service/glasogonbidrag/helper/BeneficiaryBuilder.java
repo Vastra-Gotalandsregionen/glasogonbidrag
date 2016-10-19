@@ -24,16 +24,16 @@ public class BeneficiaryBuilder {
     private Identification identification;
 
     BeneficiaryBuilder() {
-        this.hasParent = false;
+        hasParent = false;
     }
 
     BeneficiaryBuilder(GrantBuilder parent) {
-        this.hasParent = true;
+        hasParent = true;
         this.parent = parent;
     }
 
     BeneficiaryBuilder(String firstName, String lastName) {
-        this.hasParent = false;
+        hasParent = false;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -50,6 +50,7 @@ public class BeneficiaryBuilder {
 
     public BeneficiaryBuilder identification(String number) {
         identification = new Personal(number);
+        identification.setId(0L);
         return this;
     }
 

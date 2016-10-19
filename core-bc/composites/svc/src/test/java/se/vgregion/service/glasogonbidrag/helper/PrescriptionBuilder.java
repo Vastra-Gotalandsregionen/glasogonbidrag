@@ -30,6 +30,7 @@ public class PrescriptionBuilder {
 
     public PrescriptionBuilder diagnose(Diagnose diagnose) {
         this.diagnose = diagnose;
+        this.diagnose.setId(0L);
         return this;
     }
 
