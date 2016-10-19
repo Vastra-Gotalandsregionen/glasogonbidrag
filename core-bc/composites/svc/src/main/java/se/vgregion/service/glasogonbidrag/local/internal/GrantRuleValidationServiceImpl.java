@@ -3,7 +3,6 @@ package se.vgregion.service.glasogonbidrag.local.internal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
@@ -31,8 +30,10 @@ public class GrantRuleValidationServiceImpl
     private static Date PRE_20160620;
 
     static {
-        PRE_20160301 = new GregorianCalendar(2016, 3, 1, 0, 0, 0).getTime();
-        PRE_20160620 = new GregorianCalendar(2016, 6, 20, 0, 0, 0).getTime();
+        PRE_20160301 = new GregorianCalendar(
+                2016, Calendar.MARCH, 1, 0, 0, 0).getTime();
+        PRE_20160620 = new GregorianCalendar(
+                2016, Calendar.JUNE, 20, 0, 0, 0).getTime();
     }
 
     @Autowired
@@ -57,10 +58,8 @@ public class GrantRuleValidationServiceImpl
         Date birthDate = grant.getBeneficiary()
                 .getIdentification().getBirthDate();
 
-        // Fetch data from grant
+        // Fetch data from grant and calculate data used by checks
         List<Grant> grants = fetchGrantsPerCalendarForLatestRecipe(grant);
-
-        // Calculate data used by checks
         long totalAmount = calculateAmount(grants);
 
         // If one has more than one grant generate a warning!
@@ -120,7 +119,8 @@ public class GrantRuleValidationServiceImpl
             if (deliveryDate.before(PRE_20160301)) {
                 // For the old system a recipe must be granted before
                 // the age of 16.
-                if (!testRecipeDateBeforeAge16(recipeDate, null)) {
+                if (!testRecipeDateBeforeAge16(
+                        recipeDate, addYears(birthDate, 16))) {
                     result.add(new GrantRuleViolation(
                             "violation-recipe-date-after-age-16-" +
                                     "pre-20160301"));
@@ -128,7 +128,8 @@ public class GrantRuleValidationServiceImpl
 
                 // For the old system a recipe need to be delivered
                 // at most 6 months after one have come of age 16
-                if (testDeliveryDateIs6MonthAfterAge16(recipeDate, null)) {
+                if (testDeliveryDateIs6MonthAfterAge16(
+                        deliveryDate, addYears(birthDate, 16))) {
                     result.add(new GrantRuleViolation(
                             "violation-delivery-date-6-month-after-age-16-" +
                                     "pre-20160301"));
@@ -140,7 +141,8 @@ public class GrantRuleValidationServiceImpl
             if (!deliveryDate.before(PRE_20160301)) {
                 // For the new and new new system a recipe must be granted
                 // before the age of 20.
-                if (!testRecipeDateBeforeAge20(recipeDate, null)) {
+                if (!testRecipeDateBeforeAge20(
+                        recipeDate, addYears(birthDate, 20))) {
                     result.add(new GrantRuleViolation(
                             "violation-recipe-date-after-age-20-" +
                                     "post-20160301"));
@@ -148,7 +150,8 @@ public class GrantRuleValidationServiceImpl
 
                 // For the new and new new system a recipe need to be
                 // delivered at most 6 months after one have come of age 20
-                if (testDeliveryDateIs6MonthAfterAge20(recipeDate, null)) {
+                if (testDeliveryDateIs6MonthAfterAge20(
+                        deliveryDate, addYears(birthDate, 20))) {
                     result.add(new GrantRuleViolation(
                             "violation-delivery-date-6-month-after-age-20-" +
                                     "post-20160301"));
@@ -241,71 +244,6 @@ public class GrantRuleValidationServiceImpl
         return result;
     }
 
-    // Helpers
-
-    public List<Grant> fetchGrantsPerCalendarForLatestRecipe(Grant grant) {
-        Prescription prescription = grant.getPrescription();
-        List<Grant> grants = prescription.getGrants();
-
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(grant.getDeliveryDate());
-
-        int suppliedYear = cal.get(Calendar.YEAR);
-
-        List<Grant> calendarGrants = new ArrayList<>();
-        for (Grant g : grants) {
-            cal.setTime(g.getDeliveryDate());
-
-            if (cal.get(Calendar.YEAR) == suppliedYear) {
-                calendarGrants.add(g);
-            }
-        }
-
-        return calendarGrants;
-    }
-
-    public int calculateBeneficiaryAge() {
-        return 0;
-    }
-
-    public int calculateAmount(List<Grant> grants) {
-        return 0;
-    }
-
-    public Calendar getCalendar(Date date) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-
-        return cal;
-    }
-
-    public Date addMonths(Date date, int months) {
-        Calendar cal = getCalendar(date);
-        cal.add(Calendar.MONTH, months);
-
-        return cal.getTime();
-    }
-
-    public Date addYears(Date date, int years) {
-        Calendar cal = getCalendar(date);
-        cal.add(Calendar.YEAR, years);
-
-        return cal.getTime();
-    }
-
-    public boolean inRange(Date date, Date start, Date end) {
-        return inRange(date, start, end, true, false);
-    }
-
-    public boolean inRange(Date date,
-                           Date start, Date end,
-                           boolean includeStart, boolean includeEnd) {
-        boolean startCondition =
-                includeStart ? !date.before(start) : date.after(start);
-        boolean endCondition =
-                includeEnd ? !date.after(end) : date.before(end);
-        return startCondition && endCondition;
-    }
 
     // Tests
 
@@ -372,26 +310,99 @@ public class GrantRuleValidationServiceImpl
     }
 
     public boolean testAmountLessThanOrEqual800(long totalAmount) {
-        return totalAmount <= 800;
+        return totalAmount <= amountAsKrona(800L);
     }
 
     public boolean testAmountLessThanOrEqual1000(long totalAmount) {
-        return totalAmount <= 1000;
+        return totalAmount <= amountAsKrona(1000L);
     }
 
     public boolean testAmountLessThanOrEqual1600(long totalAmount) {
-        return totalAmount <= 1600;
+        return totalAmount <= amountAsKrona(1600L);
     }
 
     public boolean testAmountLessThanOrEqual2000(long totalAmount) {
-        return totalAmount <= 2000;
+        return totalAmount <= amountAsKrona(2000L);
     }
 
     public boolean testAmountLessThanOrEqual2400(long totalAmount) {
-        return totalAmount <= 2400;
+        return totalAmount <= amountAsKrona(2400L);
     }
 
     public boolean testAmountLessThanOrEqual3000(long totalAmount) {
-        return totalAmount <= 3000;
+        return totalAmount <= amountAsKrona(3000L);
+    }
+
+
+    // Helpers
+
+    public List<Grant> fetchGrantsPerCalendarForLatestRecipe(Grant grant) {
+        Prescription prescription = grant.getPrescription();
+        List<Grant> grants = prescription.getGrants();
+
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(grant.getDeliveryDate());
+
+        int suppliedYear = cal.get(Calendar.YEAR);
+
+        List<Grant> calendarGrants = new ArrayList<>();
+        for (Grant g : grants) {
+            cal.setTime(g.getDeliveryDate());
+
+            if (cal.get(Calendar.YEAR) == suppliedYear) {
+                calendarGrants.add(g);
+            }
+        }
+
+        return calendarGrants;
+    }
+
+    public long calculateAmount(List<Grant> grants) {
+        long sum = 0L;
+
+        for (Grant grant : grants) {
+            sum = sum + grant.getAmount() + grant.getVat();
+        }
+
+        return sum;
+    }
+
+    public Calendar getCalendar(Date date) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+
+        return cal;
+    }
+
+    public Date addMonths(Date date, int months) {
+        Calendar cal = getCalendar(date);
+        cal.add(Calendar.MONTH, months);
+
+        return cal.getTime();
+    }
+
+    public Date addYears(Date date, int years) {
+        Calendar cal = getCalendar(date);
+        cal.add(Calendar.YEAR, years);
+
+        return cal.getTime();
+    }
+
+    public boolean inRange(Date date, Date start, Date end) {
+        return inRange(date, start, end, true, false);
+    }
+
+    public boolean inRange(Date date,
+                           Date start, Date end,
+                           boolean includeStart, boolean includeEnd) {
+        boolean startCondition =
+                includeStart ? !date.before(start) : date.after(start);
+        boolean endCondition =
+                includeEnd ? !date.after(end) : date.before(end);
+        return startCondition && endCondition;
+    }
+
+    private long amountAsKrona(long amount) {
+        return amount * 100L;
     }
 }
