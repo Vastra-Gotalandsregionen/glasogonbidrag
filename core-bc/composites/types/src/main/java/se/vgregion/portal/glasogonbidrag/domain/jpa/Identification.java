@@ -12,6 +12,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -52,7 +53,7 @@ public abstract class Identification {
 
     public abstract IdentificationType getType();
 
-    public abstract int getBirthYear();
+    public abstract Date getBirthDate();
 
     @Override
     public boolean equals(Object o) {

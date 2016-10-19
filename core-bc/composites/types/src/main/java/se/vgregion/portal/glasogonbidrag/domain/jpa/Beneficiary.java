@@ -165,17 +165,6 @@ public class Beneficiary {
         this.prescriptionHistory = prescriptionHistory;
     }
 
-    public int calculateAge(Date currentDate) {
-        // TODO: Should the parameter currentDate we injected with a service?
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(currentDate);
-
-        int current = cal.get(Calendar.YEAR);
-        int year = identification.getBirthYear();
-
-        return current - year;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

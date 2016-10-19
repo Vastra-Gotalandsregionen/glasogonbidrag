@@ -7,6 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -19,15 +22,19 @@ public class Reserve extends Identification {
     @Column(name = "reserve_number", unique = true, nullable = false)
     private String number;
 
+    @Column(name = "birth_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
+
     /**
      * Default constructor
      */
     public Reserve() {
-
     }
 
-    public Reserve(String number) {
+    public Reserve(String number, Date birthDate) {
         this.number = number;
+        this.birthDate = birthDate;
     }
 
     public String getNumber() {
@@ -39,8 +46,8 @@ public class Reserve extends Identification {
     }
 
     @Override
-    public int getBirthYear() {
-        return 0; //TODO: Same calculation as personal identification numbers, just skip last 4 digits
+    public Date getBirthDate() {
+        return birthDate;
     }
 
     @Override
