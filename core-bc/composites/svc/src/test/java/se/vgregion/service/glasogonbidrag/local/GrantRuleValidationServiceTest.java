@@ -73,8 +73,7 @@ public class GrantRuleValidationServiceTest {
                 .prescription(p)
                 .build();
 
-        GrantRuleResult result1 = validationService.test(
-                firstGrant, new GregorianCalendar(2016, 5, 4).getTime());
+        GrantRuleResult result1 = validationService.test(firstGrant);
 
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertFalse(result1.hasViolations());
@@ -87,8 +86,7 @@ public class GrantRuleValidationServiceTest {
                 .prescription(p)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(
-                secondGrant, new GregorianCalendar(2016, 5, 4).getTime());
+        GrantRuleResult result2 = validationService.test(secondGrant);
 
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertFalse(result2.hasViolations());
@@ -124,8 +122,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result = validationService.test(
-                grant, new GregorianCalendar(2016, 5, 6).getTime());
+        GrantRuleResult result = validationService.test(grant);
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -157,8 +154,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result = validationService.test(
-                grant, new GregorianCalendar(2016, 5, 6).getTime());
+        GrantRuleResult result = validationService.test(grant);
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -210,11 +206,9 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult resultPre20160301 = validationService.test(
-                grantOver16Pre20160301,
-                new GregorianCalendar(2014, 7, 15).getTime());
+                grantOver16Pre20160301);
         GrantRuleResult resultPost20160301 = validationService.test(
-                grantOver16Post20160301,
-                new GregorianCalendar(2018, 1, 6).getTime());
+                grantOver16Post20160301);
 
         Assert.assertFalse(resultPre20160301.hasWarnings());
         Assert.assertTrue(resultPre20160301.hasViolations());
@@ -271,10 +265,9 @@ public class GrantRuleValidationServiceTest {
 
 
         GrantRuleResult resultUnder20Year = validationService.test(
-                grantUnder20Year,
-                new GregorianCalendar(2016, 5, 31).getTime());
+                grantUnder20Year);
         GrantRuleResult resultOver20Year = validationService.test(
-                grantOver20Year, new GregorianCalendar(2016, 5, 6).getTime());
+                grantOver20Year);
 
         Assert.assertFalse(resultUnder20Year.hasViolations());
         Assert.assertFalse(resultUnder20Year.hasWarnings());
@@ -310,8 +303,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult past6MonthResult = validationService.test(
-                over16deliveryDatePast6Month,
-                new GregorianCalendar(2013, 12, 16).getTime());
+                over16deliveryDatePast6Month);
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
         Assert.assertEquals(1, past6MonthResult.violations());
@@ -343,9 +335,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult past6MonthResult = validationService.test(
-                over20deliveryDatePast6Month,
-                new GregorianCalendar(2015, 2, 1).getTime());
+        GrantRuleResult past6MonthResult =
+                validationService.test(over20deliveryDatePast6Month);
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
         Assert.assertEquals(1, past6MonthResult.violations());
@@ -360,8 +351,6 @@ public class GrantRuleValidationServiceTest {
      */
     @Test
     public void children0To15Max1000kr() {
-        Date testDate = new GregorianCalendar(2016, 7, 4).getTime();
-
         // Testing when a beneficiary of age 13 receives more than 1000 SEK.
         // This should produce no warnings, and one violation since the amount
         // exceeds 1000 SEK.
@@ -383,8 +372,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(
-                child13AboveAmount, testDate);
+        GrantRuleResult result1 = validationService.test(child13AboveAmount);
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -428,8 +416,8 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(
-                child13AboveAmountMultiple, testDate);
+        GrantRuleResult result2 =
+                validationService.test(child13AboveAmountMultiple);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -459,8 +447,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 = validationService.test(
-                child13ExactAmount, testDate);
+        GrantRuleResult result3 =
+                validationService.test(child13ExactAmount);
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -485,8 +473,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 = validationService.test(
-                child13ExactAmount, testDate);
+        GrantRuleResult result4 =
+                validationService.test(child13ExactAmount);
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -497,8 +485,6 @@ public class GrantRuleValidationServiceTest {
      */
     @Test
     public void children16To19Max800kr() {
-        Date testDate = new GregorianCalendar(2016, 7, 4).getTime();
-
         // Testing when a beneficiary of age 18 receives more than 800 SEK.
         // This should produce no warnings, and one violation since the amount
         // exceeds 800 SEK.
@@ -520,8 +506,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(
-                child18AboveAmount, testDate);
+        GrantRuleResult result1 =
+                validationService.test(child18AboveAmount);
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -565,8 +551,8 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(
-                child18AboveAmountMultiple, testDate);
+        GrantRuleResult result2 =
+                validationService.test(child18AboveAmountMultiple);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -596,8 +582,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 = validationService.test(
-                child18ExactAmount, testDate);
+        GrantRuleResult result3 =
+                validationService.test(child18ExactAmount);
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -622,8 +608,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 = validationService.test(
-                child18UnderAmount, testDate);
+        GrantRuleResult result4 =
+                validationService.test(child18UnderAmount);
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -634,8 +620,6 @@ public class GrantRuleValidationServiceTest {
      */
     @Test
     public void children0To19Max1600krPost20160620() {
-        Date testDate = new GregorianCalendar(2016, 10, 31).getTime();
-
         // Testing when a beneficiary of age 16 receives more than 1600 SEK.
         // This should produce no warnings, and one violation since the amount
         // exceeds 1600 SEK.
@@ -657,8 +641,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(
-                child16AboveAmount, testDate);
+        GrantRuleResult result1 =
+                validationService.test(child16AboveAmount);
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -702,8 +686,8 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(
-                child16AboveAmountMultiple, testDate);
+        GrantRuleResult result2 =
+                validationService.test(child16AboveAmountMultiple);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -733,8 +717,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 = validationService.test(
-                child16ExactAmount, testDate);
+        GrantRuleResult result3 =
+                validationService.test(child16ExactAmount);
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -759,8 +743,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 = validationService.test(
-                child16UnderAmount, testDate);
+        GrantRuleResult result4 =
+                validationService.test(child16UnderAmount);
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -774,7 +758,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 1, 9).getTime(),
                 new GregorianCalendar(2016, 1, 14).getTime(),
-                new GregorianCalendar(2016, 2, 1).getTime(),
                 "violation-amount-greater-than-2000-" +
                         "for-aphakia-and-special-pre-20160620");
     }
@@ -788,7 +771,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 7, 9).getTime(),
                 new GregorianCalendar(2016, 7, 14).getTime(),
-                new GregorianCalendar(2016, 8, 1).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-aphakia-and-special-post-20160620");
     }
@@ -802,7 +784,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 1, 9).getTime(),
                 new GregorianCalendar(2016, 1, 14).getTime(),
-                new GregorianCalendar(2016, 2, 1).getTime(),
                 "violation-amount-greater-than-2000-" +
                         "for-aphakia-and-special-pre-20160620");
     }
@@ -816,7 +797,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 7, 9).getTime(),
                 new GregorianCalendar(2016, 7, 14).getTime(),
-                new GregorianCalendar(2016, 8, 1).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-aphakia-and-special-post-20160620");
     }
@@ -830,7 +810,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 1, 9).getTime(),
                 new GregorianCalendar(2016, 1, 14).getTime(),
-                new GregorianCalendar(2016, 2, 1).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-keratoconus-pre-20160620");
     }
@@ -844,7 +823,6 @@ public class GrantRuleValidationServiceTest {
                 new GregorianCalendar(2010, 3, 10).getTime(),
                 new GregorianCalendar(2016, 7, 9).getTime(),
                 new GregorianCalendar(2016, 7, 14).getTime(),
-                new GregorianCalendar(2016, 8, 1).getTime(),
                 "violation-amount-greater-than-3000-" +
                         "for-keratoconus-post-20160620");
     }
@@ -856,7 +834,6 @@ public class GrantRuleValidationServiceTest {
                                             Date prescriptionDate,
                                             Date deliveryDate1,
                                             Date deliveryDate2,
-                                            Date testDate,
                                             String violation) {
         // Test when grant exceed amount.
         Grant grant1 = GrantFactory.newGrant()
@@ -876,7 +853,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(grant1, testDate);
+        GrantRuleResult result1 = validationService.test(grant1);
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -914,7 +891,7 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(grant2, testDate);
+        GrantRuleResult result2 = validationService.test(grant2);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -939,7 +916,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant3, testDate);
+        GrantRuleResult result3 = validationService.test(grant3);
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -961,7 +938,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 = validationService.test(grant4, testDate);
+        GrantRuleResult result4 = validationService.test(grant4);
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }

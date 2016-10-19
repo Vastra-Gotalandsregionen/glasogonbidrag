@@ -35,5 +35,5 @@ public interface GrantRuleValidationService {
      * @param grant the grant that should be validated
      * @return
      */
-    GrantRuleResult test(Grant grant, Date currentDate);
+    GrantRuleResult test(Grant grant);
 }
