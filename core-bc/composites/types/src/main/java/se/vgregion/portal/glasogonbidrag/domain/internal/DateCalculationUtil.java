@@ -51,6 +51,6 @@ public class DateCalculationUtil {
      * @return Return the date part from a personal number.
      */
     public String extractDateFromPersonalNumbers(String localFormat) {
-        return localFormat.substring(0, 6);
+        return localFormat.substring(0, 8);
     }
 }
