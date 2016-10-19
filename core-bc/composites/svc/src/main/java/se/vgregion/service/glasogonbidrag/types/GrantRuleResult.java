@@ -11,16 +11,15 @@ public class GrantRuleResult {
     private List<GrantRuleWarning> warnings = new ArrayList<>();
 
     public void add(GrantRuleViolation violation) {
-        if (violations.contains(violation)) {
+        if (!violations.contains(violation)) {
             violations.add(violation);
         }
     }
 
     public void add(GrantRuleWarning warning) {
-        if (warnings.contains(warning)) {
+        if (!warnings.contains(warning)) {
             warnings.add(warning);
         }
-
     }
 
     public List<GrantRuleViolation> getViolations() {
