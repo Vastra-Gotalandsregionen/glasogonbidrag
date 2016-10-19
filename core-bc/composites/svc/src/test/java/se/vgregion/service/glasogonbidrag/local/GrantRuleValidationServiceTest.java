@@ -27,6 +27,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static java.util.Calendar.JANUARY;
+import static java.util.Calendar.FEBRUARY;
+import static java.util.Calendar.MARCH;
+import static java.util.Calendar.APRIL;
+import static java.util.Calendar.MAY;
+import static java.util.Calendar.JUNE;
+import static java.util.Calendar.JULY;
+import static java.util.Calendar.AUGUST;
+import static java.util.Calendar.OCTOBER;
+import static java.util.Calendar.DECEMBER;
+
 /**
  * @author Martin Lind - Monator Technologies AB
  */
@@ -62,11 +73,11 @@ public class GrantRuleValidationServiceTest {
                 .diagnose(new Aphakia(VisualLaterality.BILATERAL))
                 .comment("Problem på båda ögonen.")
                 .prescriber("Yngve Johansson")
-                .date(2016, 3, 6)
+                .date(2016, MARCH, 6)
                 .build();
 
         Grant firstGrant = GrantFactory.newGrant()
-                .delivery(2016, 4, 1)
+                .delivery(2016, APRIL, 1)
                 .amount(new BigDecimal("1000"))
                 .area("14", "61")
                 .beneficiary(b)
@@ -79,7 +90,7 @@ public class GrantRuleValidationServiceTest {
         Assert.assertFalse(result1.hasViolations());
 
         Grant secondGrant = GrantFactory.newGrant()
-                .delivery(2016, 4, 12)
+                .delivery(2016, APRIL, 12)
                 .amount(new BigDecimal("1000"))
                 .area("14", "61")
                 .beneficiary(b)
@@ -106,7 +117,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void violationIfNotInVGR() {
         Grant grant = GrantFactory.newGrant()
-                .delivery(2016, 5, 4)
+                .delivery(2016, MAY, 4)
                 .amount(new BigDecimal("1000"))
                 .area("17", "30")
                 .beneficiary()
@@ -116,7 +127,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 1, 3)
+                    .date(2016, JANUARY, 3)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -138,7 +149,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void deliveryDateIs12MonthsAfterRecipeDate() {
         Grant grant = GrantFactory.newGrant()
-                .delivery(2016, 5, 4)
+                .delivery(2016, MAY, 4)
                 .amount(new BigDecimal("800"))
                 .area("14", "73")
                 .beneficiary()
@@ -148,7 +159,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2015, 1, 3)
+                    .date(2015, JANUARY, 3)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -172,7 +183,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void recipeDateIssuedAfter16thBirthday() {
         Grant grantOver16Pre20160301 = GrantFactory.newGrant()
-                .delivery(2014, 4, 17)
+                .delivery(2014, APRIL, 17)
                 .amount(new BigDecimal("800"))
                 .area("14", "89")
                 .beneficiary()
@@ -182,14 +193,14 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2014, 3, 3)
+                    .date(2014, MARCH, 3)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
                 .build();
 
         Grant grantOver16Post20160301 = GrantFactory.newGrant()
-                .delivery(2017, 12, 17)
+                .delivery(2017, DECEMBER, 17)
                 .amount(new BigDecimal("800"))
                 .area("14", "47")
                 .beneficiary()
@@ -199,7 +210,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2017, 12, 6)
+                    .date(2017, DECEMBER, 6)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -219,7 +230,6 @@ public class GrantRuleValidationServiceTest {
 
         Assert.assertFalse(resultPost20160301.hasWarnings());
         Assert.assertFalse(resultPost20160301.hasViolations());
-        Assert.assertEquals(1, resultPost20160301.violations());
     }
 
     /**
@@ -230,7 +240,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void recipeDateIssuedAfter20thBirthday() {
         Grant grantUnder20Year = GrantFactory.newGrant()
-                .delivery(2016, 5, 3)
+                .delivery(2016, MAY, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "84")
                 .beneficiary()
@@ -240,14 +250,14 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 4, 23)
+                    .date(2016, APRIL, 23)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
                 .build();
 
         Grant grantOver20Year = GrantFactory.newGrant()
-                .delivery(2016, 4, 21)
+                .delivery(2016, APRIL, 21)
                 .amount(new BigDecimal("800"))
                 .area("14", "35")
                 .beneficiary()
@@ -257,7 +267,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 2, 4)
+                    .date(2016, FEBRUARY, 4)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -286,7 +296,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void deliveryDate6MonthAfter16thBirthday() {
         Grant over16deliveryDatePast6Month = GrantFactory.newGrant()
-                .delivery(2013, 8, 19)
+                .delivery(2013, AUGUST, 19)
                 .amount(new BigDecimal("800"))
                 .area("14", "15")
                 .beneficiary()
@@ -296,7 +306,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2013, 1, 26)
+                    .date(2013, JANUARY, 26)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -319,7 +329,7 @@ public class GrantRuleValidationServiceTest {
     @Test
     public void deliveryDate6MonthAfter20thBirthday() {
         Grant over20deliveryDatePast6Month = GrantFactory.newGrant()
-                .delivery(2017, 10, 3)
+                .delivery(2017, OCTOBER, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "87")
                 .beneficiary()
@@ -329,7 +339,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 12, 13)
+                    .date(2016, DECEMBER, 13)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -356,7 +366,7 @@ public class GrantRuleValidationServiceTest {
         // exceeds 1000 SEK.
 
         Grant child13AboveAmount = GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("1200"))
                 .area("14", "95")
                 .beneficiary()
@@ -366,7 +376,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -396,20 +406,20 @@ public class GrantRuleValidationServiceTest {
 
         Prescription prescription = PrescriptionFactory.newPrescription()
                 .comment("")
-                .date(2016, 5, 18)
+                .date(2016, MAY, 18)
                 .diagnose(new None())
                 .prescriber("")
                 .build();
 
         GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "95")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
         Grant child13AboveAmountMultiple = GrantFactory.newGrant()
-                .delivery(2016, 6, 19)
+                .delivery(2016, JUNE, 19)
                 .amount(new BigDecimal("300"))
                 .area("14", "95")
                 .beneficiary(beneficiary)
@@ -431,7 +441,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child13ExactAmount = GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("1000"))
                 .area("14", "95")
                 .beneficiary()
@@ -441,7 +451,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -457,7 +467,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child13UnderAmount = GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("500"))
                 .area("14", "95")
                 .beneficiary()
@@ -467,7 +477,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -490,7 +500,7 @@ public class GrantRuleValidationServiceTest {
         // exceeds 800 SEK.
 
         Grant child18AboveAmount = GrantFactory.newGrant()
-               .delivery(2016, 6, 3)
+               .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("1000"))
                 .area("14", "96")
                 .beneficiary()
@@ -500,7 +510,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -531,20 +541,20 @@ public class GrantRuleValidationServiceTest {
 
         Prescription prescription = PrescriptionFactory.newPrescription()
                 .comment("")
-                .date(2016, 5, 18)
+                .date(2016, MAY, 18)
                 .diagnose(new None())
                 .prescriber("")
                 .build();
 
         GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
         Grant child18AboveAmountMultiple = GrantFactory.newGrant()
-                .delivery(2016, 6, 18)
+                .delivery(2016, JUNE, 18)
                 .amount(new BigDecimal("300"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
@@ -566,7 +576,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child18ExactAmount = GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "96")
                 .beneficiary()
@@ -576,7 +586,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -592,7 +602,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child18UnderAmount = GrantFactory.newGrant()
-                .delivery(2016, 6, 3)
+                .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("600"))
                 .area("14", "96")
                 .beneficiary()
@@ -602,7 +612,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 5, 18)
+                    .date(2016, MAY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -625,7 +635,7 @@ public class GrantRuleValidationServiceTest {
         // exceeds 1600 SEK.
 
         Grant child16AboveAmount = GrantFactory.newGrant()
-                .delivery(2016, 8, 3)
+                .delivery(2016, AUGUST, 3)
                 .amount(new BigDecimal("2000"))
                 .area("14", "96")
                 .beneficiary()
@@ -635,7 +645,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 7, 18)
+                    .date(2016, JULY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -666,20 +676,20 @@ public class GrantRuleValidationServiceTest {
 
         Prescription prescription = PrescriptionFactory.newPrescription()
                 .comment("")
-                .date(2016, 7, 18)
+                .date(2016, JULY, 18)
                 .diagnose(new None())
                 .prescriber("")
                 .build();
 
         GrantFactory.newGrant()
-                .delivery(2016, 8, 3)
+                .delivery(2016, AUGUST, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
         Grant child16AboveAmountMultiple = GrantFactory.newGrant()
-                .delivery(2016, 8, 13)
+                .delivery(2016, AUGUST, 13)
                 .amount(new BigDecimal("900"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
@@ -701,7 +711,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child16ExactAmount = GrantFactory.newGrant()
-                .delivery(2016, 8, 3)
+                .delivery(2016, AUGUST, 3)
                 .amount(new BigDecimal("1600"))
                 .area("14", "96")
                 .beneficiary()
@@ -711,7 +721,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 7, 18)
+                    .date(2016, JULY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -727,7 +737,7 @@ public class GrantRuleValidationServiceTest {
         // This should produce no warnings and no violations.
 
         Grant child16UnderAmount = GrantFactory.newGrant()
-                .delivery(2016, 8, 3)
+                .delivery(2016, AUGUST, 3)
                 .amount(new BigDecimal("1200"))
                 .area("14", "96")
                 .beneficiary()
@@ -737,7 +747,7 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .prescription()
                     .comment("")
-                    .date(2016, 7, 18)
+                    .date(2016, JULY, 18)
                     .diagnose(new None())
                     .prescriber("")
                 .end()
@@ -755,9 +765,9 @@ public class GrantRuleValidationServiceTest {
                 new Aphakia(VisualLaterality.BILATERAL),
                 "196803012340",
                 new BigDecimal("2000"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 1, 9).getTime(),
-                new GregorianCalendar(2016, 1, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JANUARY, 9).getTime(),
+                new GregorianCalendar(2016, JANUARY, 14).getTime(),
                 "violation-amount-greater-than-2000-" +
                         "for-aphakia-and-special-pre-20160620");
     }
@@ -768,9 +778,9 @@ public class GrantRuleValidationServiceTest {
                 new Aphakia(VisualLaterality.BILATERAL),
                 "196803012340",
                 new BigDecimal("2400"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 7, 9).getTime(),
-                new GregorianCalendar(2016, 7, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JULY, 9).getTime(),
+                new GregorianCalendar(2016, JULY, 14).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-aphakia-and-special-post-20160620");
     }
@@ -781,9 +791,9 @@ public class GrantRuleValidationServiceTest {
                 new Special(VisualLaterality.BILATERAL, false),
                 "197304194579",
                 new BigDecimal("2000"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 1, 9).getTime(),
-                new GregorianCalendar(2016, 1, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JANUARY, 9).getTime(),
+                new GregorianCalendar(2016, JANUARY, 14).getTime(),
                 "violation-amount-greater-than-2000-" +
                         "for-aphakia-and-special-pre-20160620");
     }
@@ -794,9 +804,9 @@ public class GrantRuleValidationServiceTest {
                 new Special(VisualLaterality.BILATERAL, false),
                 "197304194579",
                 new BigDecimal("2400"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 7, 9).getTime(),
-                new GregorianCalendar(2016, 7, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JULY, 9).getTime(),
+                new GregorianCalendar(2016, JULY, 14).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-aphakia-and-special-post-20160620");
     }
@@ -807,9 +817,9 @@ public class GrantRuleValidationServiceTest {
                 new Keratoconus(VisualLaterality.LEFT, 0.0f, 0.3f, false),
                 "193912207143",
                 new BigDecimal("2400"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 1, 9).getTime(),
-                new GregorianCalendar(2016, 1, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JANUARY, 9).getTime(),
+                new GregorianCalendar(2016, JANUARY, 14).getTime(),
                 "violation-amount-greater-than-2400-" +
                         "for-keratoconus-pre-20160620");
     }
@@ -820,9 +830,9 @@ public class GrantRuleValidationServiceTest {
                 new Keratoconus(VisualLaterality.LEFT, 0.0f, 0.3f, false),
                 "193912207143",
                 new BigDecimal("3000"),
-                new GregorianCalendar(2010, 3, 10).getTime(),
-                new GregorianCalendar(2016, 7, 9).getTime(),
-                new GregorianCalendar(2016, 7, 14).getTime(),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JULY, 9).getTime(),
+                new GregorianCalendar(2016, JULY, 14).getTime(),
                 "violation-amount-greater-than-3000-" +
                         "for-keratoconus-post-20160620");
     }
