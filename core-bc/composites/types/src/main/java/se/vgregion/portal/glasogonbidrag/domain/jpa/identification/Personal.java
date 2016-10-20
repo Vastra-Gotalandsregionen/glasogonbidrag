@@ -1,5 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa.identification;
 
+import se.vgregion.portal.glasogonbidrag.domain.internal.DateCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 
@@ -7,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue("p")
@@ -16,9 +19,13 @@ public class Personal extends Identification {
     @Column(name = "pid_number", unique = true, nullable = false)
     private String number;
 
-    // Default constructor
-    public Personal() {
+    @Transient
+    private final DateCalculationUtil dateUtil = new DateCalculationUtil();
 
+    /**
+     * Default constructor
+     */
+    public Personal() {
     }
 
     public Personal(String number) {
@@ -34,8 +41,9 @@ public class Personal extends Identification {
     }
 
     @Override
-    public int getBirthYear() {
-        return 0;
+    public Date getBirthDate() {
+        String date = dateUtil.extractDateFromPersonalNumbers(number);
+        return dateUtil.dateFromString(date);
     }
 
     public boolean isValid() {

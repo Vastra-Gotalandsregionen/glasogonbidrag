@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountRow;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
@@ -20,6 +19,7 @@ import se.vgregion.service.glasogonbidrag.local.api.RegionResponsibilityLookupSe
 import se.vgregion.service.glasogonbidrag.local.exception.FreeCodeNotFoundException;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
@@ -102,7 +102,15 @@ public class AccountingDistributionCalculationServiceImpl
             throw new IllegalStateException("Diagnose may not be null!");
         }
 
-        int age = beneficiary.calculateAge(cal.getTime());
+        int age;
+        if (beneficiary != null && beneficiary.getIdentification() != null) {
+            Date birthDay = beneficiary.getIdentification().getBirthDate();
+            Date prescriptionDate = grant.getPrescription().getDate();
+            age = calculateYearsBetween(birthDay, prescriptionDate);
+        } else {
+            throw new IllegalStateException(
+                    "Beneficiary and it's Identification may not be null!");
+        }
 
         int freeCode;
 
@@ -120,14 +128,7 @@ public class AccountingDistributionCalculationServiceImpl
                 break;
 
             case NONE:
-                if (0 <= age && age <= 7) {
-                    freeCode = 9589;
-                } else if (8 <= age && age <= 19) {
-                    freeCode = 9802;
-                } else {
-                    throw new FreeCodeNotFoundException(
-                            "None diagnose but age is in not between 0 to 19!");
-                }
+                freeCode = lookupNoneDiagnoseFreeCode(age);
                 break;
 
             default:
@@ -138,5 +139,37 @@ public class AccountingDistributionCalculationServiceImpl
         }
 
         return freeCode;
+    }
+
+    private int lookupNoneDiagnoseFreeCode(int age) {
+        if (0 <= age && age <= 7) {
+            return 9589;
+        } else if (8 <= age && age <= 19) {
+            return 9802;
+        } else {
+            throw new FreeCodeNotFoundException(
+                    "None diagnose but age is in not between 0 to 19!");
+        }
+    }
+
+    private int calculateYearsBetween(Date first, Date last) {
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH)
+                || (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)
+                && a.get(Calendar.DAY_OF_MONTH) >
+                    b.get(Calendar.DAY_OF_MONTH))) {
+            diff = diff - 1;
+        }
+
+        return diff;
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        return cal;
     }
 }

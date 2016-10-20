@@ -7,6 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue("l")
@@ -16,10 +19,20 @@ public class Lma extends Identification {
     @Column(unique = true, nullable = false)
     private String number;
 
-    private int birthYear;
+    @Column(name = "birth_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
 
-    // Default constructor
-    public Lma() {}
+    /**
+     * Default constructor
+     */
+    public Lma() {
+    }
+
+    public Lma(String number, Date birthDate) {
+        this.number = number;
+        this.birthDate = birthDate;
+    }
 
     public Lma(String number) {
         this.number = number;
@@ -35,12 +48,12 @@ public class Lma extends Identification {
     }
 
     @Override
-    public int getBirthYear() {
-        return birthYear;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthYear(int birthYear) {
-        this.birthYear = birthYear;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override

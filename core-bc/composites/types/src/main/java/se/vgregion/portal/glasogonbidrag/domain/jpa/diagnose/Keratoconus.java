@@ -21,6 +21,20 @@ public class Keratoconus extends Diagnose {
     private float visualAcuityLeft;
     private boolean noGlasses;
 
+    public Keratoconus() {
+        this(VisualLaterality.NONE, 0.0f, 0.0f, false);
+    }
+
+    public Keratoconus(VisualLaterality laterality,
+                       float visualAcuityRight,
+                       float visualAcuityLeft,
+                       boolean noGlasses) {
+        this.laterality = laterality;
+        this.visualAcuityRight = visualAcuityRight;
+        this.visualAcuityLeft = visualAcuityLeft;
+        this.noGlasses = noGlasses;
+    }
+
     public VisualLaterality getLaterality() {
         return laterality;
     }
@@ -56,5 +70,41 @@ public class Keratoconus extends Diagnose {
     @Override
     public DiagnoseType getType() {
         return DiagnoseType.KERATOCONUS;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Keratoconus that = (Keratoconus) o;
+
+        if (noGlasses != that.noGlasses) return false;
+        if (Float.compare(that.visualAcuityLeft, visualAcuityLeft) != 0)
+            return false;
+        if (Float.compare(that.visualAcuityRight, visualAcuityRight) != 0)
+            return false;
+        if (laterality != that.laterality) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = laterality.hashCode();
+        result = 31 * result + (visualAcuityRight != +0.0f ? Float.floatToIntBits(visualAcuityRight) : 0);
+        result = 31 * result + (visualAcuityLeft != +0.0f ? Float.floatToIntBits(visualAcuityLeft) : 0);
+        result = 31 * result + (noGlasses ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Keratoconus{" +
+                "laterality=" + laterality +
+                ", visualAcuityRight=" + visualAcuityRight +
+                ", visualAcuityLeft=" + visualAcuityLeft +
+                ", noGlasses=" + noGlasses +
+                '}';
     }
 }

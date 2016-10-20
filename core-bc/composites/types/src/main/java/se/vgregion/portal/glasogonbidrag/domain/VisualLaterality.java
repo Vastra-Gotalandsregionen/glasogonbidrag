@@ -11,7 +11,7 @@ public enum VisualLaterality {
 
     private String languageKey;
 
-    VisualLaterality(String languageKey) {
+    private VisualLaterality(String languageKey) {
         this.languageKey = languageKey;
     }
 

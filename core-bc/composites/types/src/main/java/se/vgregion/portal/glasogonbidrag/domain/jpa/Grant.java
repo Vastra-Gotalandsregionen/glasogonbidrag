@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -61,6 +62,9 @@ import java.util.Date;
 })
 public class Grant {
 
+    private static SimpleDateFormat DATE_FORMAT =
+            new SimpleDateFormat("yyyy-MM-dd");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -89,10 +93,6 @@ public class Grant {
     @Column(name = "delivery_date")
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
-
-//    @Column(name = "prescription_date")
-//    @Temporal(TemporalType.DATE)
-//    private Date prescriptionDate;
 
     private long amount;
     private long vat;
@@ -174,14 +174,6 @@ public class Grant {
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
-
-//    public Date getPrescriptionDate() {
-//        return prescriptionDate;
-//    }
-
-//    public void setPrescriptionDate(Date prescriptionDate) {
-//        this.prescriptionDate = prescriptionDate;
-//    }
 
     public long getAmount() {
         return amount;
@@ -303,9 +295,9 @@ public class Grant {
     public String toString() {
         return "Grant{" +
                 "id=" + id +
-                ", deliveryDate=" + deliveryDate +
-                ", vat=" + vat +
-                ", amount=" + amount +
+                ", deliveryDate=" + DATE_FORMAT.format(deliveryDate) +
+                ", amount=" + currency.format(amount) +
+                ", vat=" + currency.format(vat) +
                 '}';
     }
 }

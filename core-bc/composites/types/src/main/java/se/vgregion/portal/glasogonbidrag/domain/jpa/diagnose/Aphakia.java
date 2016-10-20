@@ -18,6 +18,14 @@ public class Aphakia extends Diagnose {
 
     private VisualLaterality laterality;
 
+    public Aphakia() {
+        this(VisualLaterality.NONE);
+    }
+
+    public Aphakia(VisualLaterality laterality) {
+        this.laterality = laterality;
+    }
+
     public VisualLaterality getLaterality() {
         return laterality;
     }
@@ -29,5 +37,22 @@ public class Aphakia extends Diagnose {
     @Override
     public DiagnoseType getType() {
         return DiagnoseType.APHAKIA;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Aphakia aphakia = (Aphakia) o;
+
+        if (laterality != aphakia.laterality) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return laterality.hashCode();
     }
 }

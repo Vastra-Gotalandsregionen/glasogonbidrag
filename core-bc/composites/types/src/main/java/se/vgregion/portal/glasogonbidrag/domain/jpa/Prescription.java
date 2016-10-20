@@ -3,7 +3,9 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -54,8 +56,7 @@ public class Prescription {
     private Date date;
     private String prescriber;
 
-    // TODO: remove comment for line below when problem with comment is solved
-    @Lob()
+    @Lob
     @Basic(fetch=FetchType.EAGER, optional=true)
     @Column(name = "prescriber_comment")
     private String comment;
@@ -68,6 +69,7 @@ public class Prescription {
     private Set<Grant> grants;
 
     public Prescription() {
+        grants = new HashSet<>();
         diagnose = new None();
     }
 
@@ -143,7 +145,6 @@ public class Prescription {
         this.prescriber = prescriber;
     }
 
-    // TODO: remove comment for line below when problem with comment is solved
     public String getComment() {
         return comment;
     }
@@ -166,5 +167,42 @@ public class Prescription {
 
     public void setGrants(Set<Grant> grants) {
         this.grants = grants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Prescription that = (Prescription) o;
+
+        if (beneficiary != null ? !beneficiary.equals(that.beneficiary) : that.beneficiary != null)
+            return false;
+        if (date != null ? !date.equals(that.date) : that.date != null)
+            return false;
+        if (diagnose != null ? !diagnose.equals(that.diagnose) : that.diagnose != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = diagnose != null ? diagnose.hashCode() : 0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (beneficiary != null ? beneficiary.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "id=" + id +
+                ", diagnose=" + diagnose +
+                ", date=" + date +
+                ", prescriber='" + prescriber + '\'' +
+                ", comment='" + comment + '\'' +
+                ", beneficiary=" + beneficiary +
+                '}';
     }
 }

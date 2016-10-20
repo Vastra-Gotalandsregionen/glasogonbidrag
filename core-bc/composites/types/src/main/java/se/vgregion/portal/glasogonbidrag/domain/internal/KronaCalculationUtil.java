@@ -37,6 +37,13 @@ public class KronaCalculationUtil {
         return new ValueAndVat(amount, vat);
     }
 
+    public String format(long krona) {
+        BigDecimal value = new BigDecimal(krona)
+                .divide(PARTS_PER_KRONA, BigDecimal.ROUND_DOWN);
+
+        return value.toString().concat(" kr");
+    }
+
     /**
      * Utility class to return single object encapsulating both VAT and
      * the actual value.
