@@ -276,6 +276,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void personalNumberListener() {
 
+        // TODO: Upgrade the PersonaNumberFormatService so that it can sanitize user input.
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
         // TODO: This is temp fixes. Should be moved to a service. First we remove century digits, then add them again =).
@@ -297,44 +298,57 @@ public class CreateInvoiceAddGrantBackingBean {
 
         if(isNumberValid) {
             Identification identification =
-                    identificationService.findByPersonalNumber(identificationNumber);
+                    identificationService.findByPersonalNumber(localFormat);
             if (identification == null) {
-                identification = new Personal(identificationNumber);
+                identification = new Personal(localFormat);
             } else {
-                beneficiary =
-                        beneficiaryService.findWithPartsByIdent(identification);
+                beneficiary = beneficiaryService
+                        .findWithPartsByIdent(identification);
 
-                latestBeneficiaryPrescription = prescriptionService.findLatest(beneficiary);
+                latestBeneficiaryPrescription = prescriptionService
+                        .findLatest(beneficiary);
             }
+
+            // TODO: Temp code
+            Calendar cal = new GregorianCalendar();
+            Date currentDate = cal.getTime();
+
+            BeneficiaryTransport transport =
+                    beneficiaryLookupService
+                            .fetchNameAndAddress(localFormat, currentDate);
 
             if (beneficiary == null) {
                 // TODO: Handle the integration better.
                 beneficiary = new Beneficiary();
                 beneficiary.setIdentification(identification);
 
-                // TODO: Temp code
-                Calendar cal = new GregorianCalendar();
-                Date currentDate = cal.getTime();
-
-                BeneficiaryTransport transport =
-                        beneficiaryLookupService
-                                .fetchNameAndAddress(localFormat, currentDate);
-                beneficiary.setFirstName(transport.getName().getFirstName());
-                beneficiary.setLastName(transport.getName().getLastName());
-
-                grant.setCounty(transport.getArea().getCounty());
-                grant.setMunicipality(transport.getArea().getMunicipality());
-
                 newBeneficiary = true;
             }
+
+            beneficiary.setFirstName(transport.getName().getFirstName());
+            beneficiary.setLastName(transport.getName().getLastName());
+
+            grant.setCounty(transport.getArea().getCounty());
+            grant.setMunicipality(transport.getArea().getMunicipality());
 
             LOGGER.info("createInvoiceAddGrantBackingBean - " +
                     "personNumberListener(): {}", beneficiary);
 
             grant.setBeneficiary(beneficiary);
 
-            // Set grantFlow
-            grantFlow = grantFlow.nextState();
+            if (grant.getCounty() == null
+                    || grant.getMunicipality() == null
+                    || grant.getCounty().trim().isEmpty()
+                    || grant.getMunicipality().trim().isEmpty()) {
+
+                FacesMessage message = new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, "reg-grant-error-could-not-fetch-area", "");
+
+                context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
+            } else {
+                // Set grantFlow
+                grantFlow = grantFlow.nextState();
+            }
         } else {
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "reg-grant-error-not-a-valid-personal-number", "");
@@ -342,6 +356,8 @@ public class CreateInvoiceAddGrantBackingBean {
             context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
 
+        // TODO: Handle if anything is not correct with the grant.
+        // TODO: This method should be refactored, we want to lookup the beneficiary even if we already have stored it before.
     }
 
     public void deliveryDateListener() {
@@ -388,15 +404,19 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         // Set grantFlow
-        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
-            grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_15);
-            grantTypeLabel = "grant-type-0-15";
-        } else if (GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
-            grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_19);
-            grantTypeLabel = "grant-type-0-19";
-        } else {
-            grantFlow = grantFlow.nextState(AddGrantAction.OTHER);
-            grantTypeLabel = "grant-type-other";
+        switch (grantType) {
+            case GRANT_TYPE_AGE_0_TO_15:
+                grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_15);
+                grantTypeLabel = "grant-type-0-15";
+                break;
+            case GRANT_TYPE_AGE_0_TO_19:
+                grantFlow = grantFlow.nextState(AddGrantAction.AGE_0_TO_19);
+                grantTypeLabel = "grant-type-0-19";
+                break;
+            default:
+                grantFlow = grantFlow.nextState(AddGrantAction.OTHER);
+                grantTypeLabel = "grant-type-other";
+                break;
         }
     }
 
