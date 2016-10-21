@@ -28,6 +28,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
@@ -659,7 +660,11 @@ public class CreateInvoiceAddGrantBackingBean {
         return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
     }
 
-    public FacesMessage persistGrant(long userId, long groupId, long companyId, Invoice invoice, Grant grant) {
+    public FacesMessage persistGrant(long userId,
+                                     long groupId,
+                                     long companyId,
+                                     Invoice invoice,
+                                     Grant grant) {
         FacesMessage message = null;
 
         try {
@@ -668,9 +673,18 @@ public class CreateInvoiceAddGrantBackingBean {
         } catch (GrantAlreadyExistException e) {
             LOGGER.warn("Cannot add the same grant twice.");
 
-            message =
-                    new FacesMessage("Cannot add the same grant twice.");
+            message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "reg-grant-error-same-grant-twice",
+                    "");
 
+        } catch (GrantMissingAreaException e) {
+            LOGGER.warn("Couldn't fetch County or Municipality from integration!");
+
+            message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "reg-grant-error-could-not-fetch-area",
+                    "");
         }
 
         return message;
@@ -680,7 +694,12 @@ public class CreateInvoiceAddGrantBackingBean {
         FacesMessage message = null;
 
         // TODO: only updated if data has changed
-        grantService.update(grant);
+        try {
+            grantService.update(grant);
+        } catch (GrantMissingAreaException e) {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "", ""); // TODO: Add language key
+        }
 
         return message;
     }

@@ -2,6 +2,7 @@ package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 
 import java.util.Date;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface GrantService {
-    void create(Grant grant);
+    void create(Grant grant) throws GrantMissingAreaException;
 
-    void update(Grant grant);
+    void update(Grant grant) throws GrantMissingAreaException;
 
     void delete(Long id);
 

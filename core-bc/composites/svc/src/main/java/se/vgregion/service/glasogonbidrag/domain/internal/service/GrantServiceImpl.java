@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,16 +26,20 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     @Transactional
-    public void create(Grant grant) {
+    public void create(Grant grant) throws GrantMissingAreaException {
         LOGGER.info("Persisting grant: {}", grant);
+
+        checkGrantArea(grant);
 
         em.persist(grant);
     }
 
     @Override
     @Transactional
-    public void update(Grant grant) {
+    public void update(Grant grant) throws GrantMissingAreaException {
         LOGGER.info("Updating grant: {}", grant);
+
+        checkGrantArea(grant);
 
         em.merge(grant);
     }
@@ -133,4 +138,12 @@ public class GrantServiceImpl implements GrantService {
         }
     }
 
+    private void checkGrantArea(Grant grant) throws GrantMissingAreaException {
+        if (grant.getMunicipality() == null
+                || grant.getMunicipality().trim().isEmpty()
+                || grant.getCounty() == null
+                || grant.getCounty().trim().isEmpty()) {
+            throw new GrantMissingAreaException();
+        }
+    }
 }

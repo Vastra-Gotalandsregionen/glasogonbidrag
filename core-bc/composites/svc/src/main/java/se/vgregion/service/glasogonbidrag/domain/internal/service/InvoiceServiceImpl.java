@@ -2,13 +2,16 @@ package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
+import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,6 +33,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private GrantService grantService;
 
     @Override
     @Transactional
@@ -58,21 +64,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setModifiedDate(date);
 
         em.persist(invoice);
-
-        // Set user, group and company id of all grants.
-        //  Also set creation date and modification date of all grants.
-        for (Grant grant : invoice.getGrants()) {
-            grant.setUserId(userId);
-            grant.setGroupId(groupId);
-            grant.setCompanyId(companyId);
-
-            grant.setCreateDate(date);
-            grant.setModifiedDate(date);
-
-            grant.setInvoice(invoice);
-
-            em.persist(grant);
-        }
     }
 
     /**
@@ -124,7 +115,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public void updateAddGrant(long userId, long groupId, long companyId,
                                Invoice invoice, Grant grant)
-            throws GrantAlreadyExistException {
+            throws GrantAlreadyExistException, GrantMissingAreaException {
         LOGGER.info("Add grant {} to invoice {}", grant, invoice);
 
         Calendar cal = Calendar.getInstance();
@@ -153,7 +144,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Add grant to the invoice object and update it.
         invoice.addGrant(grant);
 
-        em.persist(grant);
+        grantService.create(grant);
 
         this.update(invoice);
     }
