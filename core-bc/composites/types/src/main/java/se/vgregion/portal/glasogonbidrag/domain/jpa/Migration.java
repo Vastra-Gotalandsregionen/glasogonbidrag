@@ -4,17 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumns;
-import javax.persistence.MapsId;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -43,10 +41,10 @@ public class Migration {
     private Date date;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "migration")
-    private List<Invoice> invoices;
+    private Set<Invoice> invoices;
 
     public Migration() {
-        invoices = new ArrayList<>();
+        invoices = new HashSet<>();
     }
 
     public long getId() {
@@ -65,11 +63,11 @@ public class Migration {
         this.date = date;
     }
 
-    public List<Invoice> getInvoices() {
+    public Set<Invoice> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
+    public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
     }
 
