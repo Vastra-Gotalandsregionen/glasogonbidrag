@@ -102,11 +102,11 @@ public class AccountingDistributionCalculationServiceImpl
             throw new IllegalStateException("Diagnose may not be null!");
         }
 
-        int age;
+        Date birthDate;
+        Date deliveryDate;
         if (beneficiary != null && beneficiary.getIdentification() != null) {
-            Date birthDay = beneficiary.getIdentification().getBirthDate();
-            Date prescriptionDate = grant.getPrescription().getDate();
-            age = calculateYearsBetween(birthDay, prescriptionDate);
+            birthDate = beneficiary.getIdentification().getBirthDate();
+            deliveryDate = grant.getDeliveryDate();
         } else {
             throw new IllegalStateException(
                     "Beneficiary and it's Identification may not be null!");
@@ -128,7 +128,7 @@ public class AccountingDistributionCalculationServiceImpl
                 break;
 
             case NONE:
-                freeCode = lookupNoneDiagnoseFreeCode(age);
+                freeCode = lookupNoneDiagnoseFreeCode(birthDate, deliveryDate);
                 break;
 
             default:
@@ -141,35 +141,26 @@ public class AccountingDistributionCalculationServiceImpl
         return freeCode;
     }
 
-    private int lookupNoneDiagnoseFreeCode(int age) {
-        if (0 <= age && age <= 7) {
+    private int lookupNoneDiagnoseFreeCode(Date birthday, Date deliveryDate) {
+        Calendar cal = new GregorianCalendar();
+
+        cal.setTime(birthday);
+        cal.add(Calendar.YEAR, 8);
+        Date birthday8 = cal.getTime();
+
+        cal.setTime(birthday);
+        cal.add(Calendar.YEAR, 20);
+        cal.add(Calendar.MONTH, 6);
+        Date birthday20 = cal.getTime();
+
+        if (!deliveryDate.before(birthday) && deliveryDate.before(birthday8)) {
             return 9589;
-        } else if (8 <= age && age <= 19) {
+        } else if (!deliveryDate.before(birthday8)
+                && deliveryDate.before(birthday20)) {
             return 9802;
         } else {
             throw new FreeCodeNotFoundException(
                     "None diagnose but age is in not between 0 to 19!");
         }
-    }
-
-    private int calculateYearsBetween(Date first, Date last) {
-        Calendar a = getCalendar(first);
-        Calendar b = getCalendar(last);
-
-        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH)
-                || (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)
-                && a.get(Calendar.DAY_OF_MONTH) >
-                    b.get(Calendar.DAY_OF_MONTH))) {
-            diff = diff - 1;
-        }
-
-        return diff;
-    }
-
-    public static Calendar getCalendar(Date date) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        return cal;
     }
 }
