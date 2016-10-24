@@ -154,6 +154,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
             Invoice invoice, AccountingDistribution distribution) {
+        // TODO: if the invoice is any other status than IN_PROGRESS throw exception.
         LOGGER.info("Add distribution {} to invoice {}",
                 distribution, invoice);
 
@@ -187,7 +188,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // remove old distribution.
         if (old != null) {
-            em.remove(old);
+            AccountingDistribution distrib =
+                    em.find(AccountingDistribution.class, old.getId());
+            em.remove(distrib);
         }
     }
 

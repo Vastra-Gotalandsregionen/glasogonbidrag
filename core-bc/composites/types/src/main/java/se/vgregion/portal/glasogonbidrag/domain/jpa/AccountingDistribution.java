@@ -1,5 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -67,7 +68,10 @@ public class AccountingDistribution {
 
     // Accounting Distribution Specific
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "distribution")
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "distribution",
+            cascade = CascadeType.ALL)
     private List<AccountRow> rows;
 
     public AccountingDistribution() {
