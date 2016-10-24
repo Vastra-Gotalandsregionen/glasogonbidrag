@@ -273,24 +273,19 @@
                         </ui:repeat>
                         </tbody>
                     </table>
-                </gb:box>
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}"
-                        rendered="#{empty invoice.distribution}">
                     <h:form>
                         <div class="button-row">
                             <h:commandButton value="#{bundle['generate-accounting-proposal']}"
                                              styleClass="link-btn primary"
                                              action="#{createInvoiceViewInvoiceBackingBean.generateAccountingDistribution}"
-                                             rendered="#{empty invoice.status or invoice.status eq 'IN_PROGRESS'}" >
+                                             rendered="#{invoice.status eq 'IN_PROGRESS'}" >
                                 <f:param name="invoiceId" value="${invoice.id}" />
                             </h:commandButton>
                         </div>
                     </h:form>
                 </gb:box>
             </div>
-
         </div>
-
     </h:body>
 </f:view>

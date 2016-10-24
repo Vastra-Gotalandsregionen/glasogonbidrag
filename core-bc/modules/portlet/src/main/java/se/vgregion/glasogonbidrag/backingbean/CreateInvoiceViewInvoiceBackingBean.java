@@ -5,18 +5,22 @@ import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import se.vgregion.glasogonbidrag.constants.GbConstants;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
+import se.vgregion.service.glasogonbidrag.local.api.InvoiceValidationService;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -34,12 +38,17 @@ public class CreateInvoiceViewInvoiceBackingBean {
     @Autowired
     private AccountingDistributionCalculationService accountingService;
 
+    @Autowired
+    private InvoiceValidationService invoiceValidationService;
 
     @Autowired
     private CreateInvoiceAddGrantBackingBean addGrantBackingBean;
 
     @Autowired
-    private FacesUtil facesUtil;
+    private FacesUtil util;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private Invoice invoice;
 
@@ -69,9 +78,21 @@ public class CreateInvoiceViewInvoiceBackingBean {
     }
 
     public void generateAccountingDistribution() {
-        //TODO: Warn if the invoice is not completed. Call not finished invoiceValidationService.
+        if (!invoiceValidationService.validateInvoice(invoice)) {
+            Locale locale = util.getLocale();
+            String localizedMessage = messageSource
+                    .getMessage("view-invoice-error-amount-mismatch",
+                            new Object[0], locale);
 
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+            FacesMessage message =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            localizedMessage, localizedMessage);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return;
+        }
+
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
@@ -85,7 +106,7 @@ public class CreateInvoiceViewInvoiceBackingBean {
 
     @PostConstruct
     protected void init() {
-        Long invoiceId = facesUtil.fetchId("invoiceId");
+        Long invoiceId = util.fetchId("invoiceId");
 
         if (invoiceId != null) {
             invoice = invoiceService.findWithParts(invoiceId);
