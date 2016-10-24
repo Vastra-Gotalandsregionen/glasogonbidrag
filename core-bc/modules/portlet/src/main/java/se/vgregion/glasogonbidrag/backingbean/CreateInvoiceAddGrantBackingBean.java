@@ -922,8 +922,8 @@ public class CreateInvoiceAddGrantBackingBean {
             Special special = (Special)diagnose;
             prescriptionVO.setLaterality(special.getLaterality());
             prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
-        } else {
-            // TODO: throw exception
+//        } else {
+//            // TODO: throw exception
         }
 
         return prescriptionVO;

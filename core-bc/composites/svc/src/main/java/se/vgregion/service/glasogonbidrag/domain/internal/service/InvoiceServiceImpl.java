@@ -160,6 +160,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
 
+        AccountingDistribution old = invoice.getDistribution();
+
         // Set user, group and company id of new distribution
         distribution.setUserId(userId);
         distribution.setGroupId(groupId);
@@ -182,6 +184,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         em.persist(distribution);
 
         this.update(invoice);
+
+        // remove old distribution.
+        if (old != null) {
+            em.remove(old);
+        }
     }
 
     @Override

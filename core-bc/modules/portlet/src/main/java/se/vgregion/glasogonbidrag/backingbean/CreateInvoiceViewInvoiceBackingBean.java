@@ -69,20 +69,15 @@ public class CreateInvoiceViewInvoiceBackingBean {
     }
 
     public void generateAccountingDistribution() {
-        //TODO: Warn if the invoice is not completed.
+        //TODO: Warn if the invoice is not completed. Call not finished invoiceValidationService.
 
-        LOGGER.info("Generating!");
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
 
-        LOGGER.info("IS IT NULL? {}", accountingService == null ? "YES!" : "NO.");
-
         AccountingDistribution distribution =
                 accountingService.calculateFrom(invoice);
-
-        invoice.setStatus(InvoiceStatus.CANCELED);
 
         invoiceService.updateAddAccountingDistribution(
                 userId, groupId, companyId, invoice, distribution);
