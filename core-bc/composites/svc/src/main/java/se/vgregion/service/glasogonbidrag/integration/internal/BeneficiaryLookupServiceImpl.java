@@ -2,6 +2,11 @@ package se.vgregion.service.glasogonbidrag.integration.internal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.riv.population.residentmaster.extended.v1.AdministrativIndelningType;
+import se.riv.population.residentmaster.extended.v1.ExtendedResidentType;
+import se.riv.population.residentmaster.lookupresidentforextendedprofile.v1.rivtabp21.LookupResidentForExtendedProfileResponderInterface;
+import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileResponseType;
+import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileType;
 import se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp21.LookupResidentForFullProfileResponderInterface;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileResponseType;
@@ -19,6 +24,7 @@ import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTransport;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
+import javax.naming.ldap.ExtendedResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +45,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     private PersonalNumberService personalNumberService;
 
     @Autowired
-    private LookupResidentForFullProfileResponderInterface fullProfileClient;
+    private LookupResidentForExtendedProfileResponderInterface profileClient;
 
     public BeneficiaryLookupServiceImpl() {
         dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -54,12 +60,12 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                             "without a hyphen.");
         }
 
-        LookupResidentForFullProfileResponseType response =
-                fullProfileClient.lookupResidentForFullProfile(
+        LookupResidentForExtendedProfileResponseType response =
+                profileClient.lookupResidentForExtendedProfile(
                         "", generateRequest(identity, date));
 
         return new BeneficiaryTransport(
-                extractNameFromResponse(response),
+        extractNameFromResponse(response),
                 extractAreaFromRequest(response));
     }
 
@@ -71,8 +77,8 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                             "without a hyphen.");
         }
 
-        LookupResidentForFullProfileResponseType response =
-                fullProfileClient.lookupResidentForFullProfile(
+        LookupResidentForExtendedProfileResponseType response =
+                profileClient.lookupResidentForExtendedProfile(
                         "", generateRequest(identity));
 
         return extractNameFromResponse(response);
@@ -87,8 +93,8 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                             "without a hyphen.");
         }
 
-        LookupResidentForFullProfileResponseType response =
-                fullProfileClient.lookupResidentForFullProfile(
+        LookupResidentForExtendedProfileResponseType response =
+                profileClient.lookupResidentForExtendedProfile(
                         "", generateRequest(identity, date));
 
         return extractAreaFromRequest(response);
@@ -115,7 +121,8 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @param identity to fetch data for.
      * @return Request for the specified identity.
      */
-    public LookupResidentForFullProfileType generateRequest(String identity) {
+    public LookupResidentForExtendedProfileType generateRequest(
+            String identity) {
         return generateRequest(identity, null);
     }
 
@@ -127,10 +134,10 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @param date request data from this historic time, must be in the past.
      * @return Request for the specified identity at specified date.
      */
-    public LookupResidentForFullProfileType generateRequest(String identity,
-                                                            Date date) {
-        LookupResidentForFullProfileType request =
-                new LookupResidentForFullProfileType();
+    public LookupResidentForExtendedProfileType generateRequest(
+            String identity, Date date) {
+        LookupResidentForExtendedProfileType request =
+                new LookupResidentForExtendedProfileType();
         request.getPersonId().add(identity);
 
         if (date != null) {
@@ -154,21 +161,13 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      *         surname.
      */
     private BeneficiaryNameTransport extractNameFromResponse(
-            LookupResidentForFullProfileResponseType response) {
-        ResidentType resident = getResident(response);
+            LookupResidentForExtendedProfileResponseType response) {
+        ExtendedResidentType resident = getResident(response);
 
         if (resident.getSekretessmarkering() == JaNejTYPE.N) {
             return extractNameFromResponse(resident.getPersonpost());
         } else {
             return createNameForProtected();
-        }
-    }
-
-    private String extractName(String name, String defaultNameValue) {
-        if(name == null) {
-            return defaultNameValue;
-        } else {
-            return name;
         }
     }
 
@@ -183,7 +182,23 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
         NamnTYPE name = person.getNamn();
 
         return new BeneficiaryNameTransport(
-                extractName(name.getFornamn(), ""), extractName(name.getEfternamn(), ""));
+                extractName(name.getFornamn(), ""),
+                extractName(name.getEfternamn(), ""));
+    }
+
+    /**
+     * Will return default string if value is null.
+     *
+     * @param name name to use, if this is null use defaultNameValue
+     * @param defaultNameValue default value.
+     * @return A string that isn't null
+     */
+    private String extractName(String name, String defaultNameValue) {
+        if(name == null) {
+            return defaultNameValue;
+        } else {
+            return name;
+        }
     }
 
     /**
@@ -203,18 +218,53 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * county and municipality, this is that we extract.
      *
      * @param response A response from the lookupResident service with
-     *                 Full Profile support.
+     *                 Extended Profile support.
      * @return BeneficiaryAreaTransport which contains county code and
      *         municipality code.
      */
     private BeneficiaryAreaTransport extractAreaFromRequest(
-            LookupResidentForFullProfileResponseType response) {
-        ResidentType resident = getResident(response);
+            LookupResidentForExtendedProfileResponseType response) {
+        ExtendedResidentType resident = getResident(response);
+        AdministrativIndelningType registeredAddress =
+                resident.getFolkbokforingsaddressIndelning();
+
+
+        if (registeredAddress.getDebiteringsgruppKod() == null) {
+            return extractAreaFromRequest(resident);
+        } else {
+            return createAreaFromAccountCode(
+                    registeredAddress.getDebiteringsgruppKod());
+        }
+    }
+
+    /**
+     * The registered address contains the county and municipality
+     * codes used, this method extract these from the resident object.
+     *
+     * @param resident resident object from the response.
+     * @return Area transport with the beneficiary's county code
+     *         and municipality code.
+     */
+    private BeneficiaryAreaTransport extractAreaFromRequest(
+            ExtendedResidentType resident) {
         SvenskAdressTYPE address = resident
                 .getPersonpost().getFolkbokforingsadress();
 
         return new BeneficiaryAreaTransport(
                 address.getKommunKod(), address.getLanKod());
+    }
+
+    /**
+     * If the beneficiary have a account code we should use this instead
+     * of the registered address.
+     *
+     * @return the account code split in two.
+     */
+    private BeneficiaryAreaTransport createAreaFromAccountCode(
+            String accountCode) {
+        return new BeneficiaryAreaTransport(
+                accountCode.substring(2),
+                accountCode.substring(0, 2));
     }
 
     /**
@@ -226,14 +276,14 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * use this service in this way.
      *
      * @param response A response from the lookupResident service with
-     *                 Full Profile support.
-     * @return ResidentType if there is only one.
+     *                 Extended Profile support.
+     * @return ExtendedResidentType if there is only one.
      * @throws NoBeneficiaryFoundException
      *         Will be thrown if we have more than one ResidentType.
      */
-    private ResidentType getResident(
-            LookupResidentForFullProfileResponseType response) {
-        List<ResidentType> residentTypes = response.getResident();
+    private ExtendedResidentType getResident(
+            LookupResidentForExtendedProfileResponseType response) {
+        List<ExtendedResidentType> residentTypes = response.getResident();
         if (residentTypes.size() < 1) {
             throw new NoBeneficiaryFoundException(
                     "No resident with supplied id.");
