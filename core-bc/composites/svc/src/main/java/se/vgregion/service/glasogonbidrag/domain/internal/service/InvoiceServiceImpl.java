@@ -75,7 +75,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     @Transactional
-    public void update(Invoice invoice) {
+    public Invoice update(Invoice invoice) {
         LOGGER.info("Updating invoice: {}", invoice);
 
         Calendar cal = Calendar.getInstance();
@@ -108,12 +108,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Update modification date of this invoice
         invoice.setModifiedDate(date);
 
-        em.merge(invoice);
+        return em.merge(invoice);
     }
 
     @Override
     @Transactional
-    public void updateAddGrant(long userId, long groupId, long companyId,
+    public Invoice updateAddGrant(long userId, long groupId, long companyId,
                                Invoice invoice, Grant grant)
             throws GrantAlreadyExistException, GrantMissingAreaException {
         LOGGER.info("Add grant {} to invoice {}", grant, invoice);
@@ -146,12 +146,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         grantService.create(grant);
 
-        this.update(invoice);
+        // We have modified the invoice, update this to reflect this.
+        invoice.setModifiedDate(date);
+
+        return this.update(invoice);
     }
 
     @Override
     @Transactional
-    public void updateAddAccountingDistribution(
+    public Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
             Invoice invoice, AccountingDistribution distribution) {
         // TODO: if the invoice is any other status than IN_PROGRESS throw exception.
@@ -184,19 +187,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Persist the distribution.
         em.persist(distribution);
 
-        this.update(invoice);
+        Invoice newInvoice = this.update(invoice);
 
         // remove old distribution.
         if (old != null) {
-            AccountingDistribution distrib =
+            AccountingDistribution distributionToRemove =
                     em.find(AccountingDistribution.class, old.getId());
-            em.remove(distrib);
+            em.remove(distributionToRemove);
         }
+
+        return newInvoice;
     }
 
     @Override
     @Transactional
-    public void updateDeleteGrant(Invoice invoice, Long grantId) {
+    public Invoice updateDeleteGrant(Invoice invoice, Long grantId) {
         Grant grant = em.find(Grant.class, grantId);
 
         invoice.removeGrant(grant);
@@ -209,17 +214,20 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setModifiedDate(date);
 
-        em.merge(invoice);
+        Invoice newInvoice = em.merge(invoice);
+
         em.remove(grant);
+
+        return newInvoice;
     }
 
     @Override
     @Transactional
-    public void updateAddGrantAdjustment(long userId,
-                                         long groupId,
-                                         long companyId,
-                                         Invoice invoice,
-                                         GrantAdjustment adjustment)
+    public Invoice updateAddGrantAdjustment(long userId,
+                                            long groupId,
+                                            long companyId,
+                                            Invoice invoice,
+                                            GrantAdjustment adjustment)
             throws GrantAdjustmentAlreadySetException {
         LOGGER.info("Add grant adjustment {} to invoice {}",
                 adjustment, invoice);
@@ -249,7 +257,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setModifiedDate(date);
 
         em.persist(adjustment);
-        em.merge(invoice);
+
+        return em.merge(invoice);
     }
 
     @Override

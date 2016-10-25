@@ -8,7 +8,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 public interface IdentificationService {
     void create(Identification identification);
 
-    void update(Identification identification);
+    Identification update(Identification identification);
 
     void delete(Long id);
 

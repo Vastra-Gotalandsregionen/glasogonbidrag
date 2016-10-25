@@ -36,12 +36,12 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     @Transactional
-    public void update(Grant grant) throws GrantMissingAreaException {
+    public Grant update(Grant grant) throws GrantMissingAreaException {
         LOGGER.info("Updating grant: {}", grant);
 
         checkGrantArea(grant);
 
-        em.merge(grant);
+        return em.merge(grant);
     }
 
     @Override

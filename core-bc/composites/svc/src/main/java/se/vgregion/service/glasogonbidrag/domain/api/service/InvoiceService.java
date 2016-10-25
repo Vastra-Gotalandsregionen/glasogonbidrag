@@ -15,19 +15,22 @@ public interface InvoiceService {
     void create(long userId, long groupId, long companyId,
                 Invoice invoice);
 
-    void update(Invoice invoice);
+    Invoice update(Invoice invoice);
 
-    void updateAddGrant(long userId, long groupId, long companyId,
-                        Invoice invoice, Grant grant)
+    Invoice updateAddGrant(long userId, long groupId, long companyId,
+                           Invoice invoice, Grant grant)
             throws GrantAlreadyExistException, GrantMissingAreaException;
 
-    void updateDeleteGrant(Invoice invoice, Long grantId);
+    Invoice updateDeleteGrant(Invoice invoice, Long grantId);
 
-    void updateAddGrantAdjustment(long userId, long groupId, long companyId,
-                                  Invoice invoice, GrantAdjustment adjustment)
+    Invoice updateAddGrantAdjustment(long userId,
+                                     long groupId,
+                                     long companyId,
+                                     Invoice invoice,
+                                     GrantAdjustment adjustment)
         throws GrantAdjustmentAlreadySetException;
 
-    void updateAddAccountingDistribution(
+    Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
             Invoice invoice, AccountingDistribution distribution);
 

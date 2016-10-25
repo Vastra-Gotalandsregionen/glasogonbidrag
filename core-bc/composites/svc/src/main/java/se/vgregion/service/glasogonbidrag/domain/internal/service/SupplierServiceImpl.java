@@ -35,10 +35,10 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     @Transactional
-    public void update(Supplier supplier) {
+    public Supplier update(Supplier supplier) {
         LOGGER.info("Updating supplier: {}", supplier);
 
-        em.merge(supplier);
+        return em.merge(supplier);
     }
 
     @Override
