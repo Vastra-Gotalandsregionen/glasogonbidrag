@@ -1,5 +1,7 @@
 package se.vgregion.service.glasogonbidrag.types;
 
+import se.vgregion.service.glasogonbidrag.local.internal.GrantRuleValidationServiceImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,26 @@ public class GrantRuleResult {
 
     public List<GrantRuleWarning> getWarnings() {
         return warnings;
+    }
+
+    public List<String> getViolationStrings() {
+        List<String> errorCodes = new ArrayList<>();
+
+        for (GrantRuleViolation entry : violations) {
+            errorCodes.add(entry.getErrorCode());
+        }
+
+        return errorCodes;
+    }
+
+    public List<String> getWarningStrings() {
+        List<String> errorCodes = new ArrayList<>();
+
+        for (GrantRuleWarning entry : warnings) {
+            errorCodes.add(entry.getErrorCode());
+        }
+
+        return errorCodes;
     }
 
     public boolean hasWarnings() {
