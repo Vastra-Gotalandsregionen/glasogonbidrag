@@ -293,9 +293,12 @@ public class Grant {
 
     @Override
     public String toString() {
+
+        String deliveryDateString = deliveryDate == null ? "" : DATE_FORMAT.format(deliveryDate);
+
         return "Grant{" +
                 "id=" + id +
-                ", deliveryDate=" + DATE_FORMAT.format(deliveryDate) +
+                ", deliveryDate=" + deliveryDateString +
                 ", amount=" + currency.format(amount) +
                 ", vat=" + currency.format(vat) +
                 '}';

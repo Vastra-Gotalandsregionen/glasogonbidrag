@@ -586,7 +586,18 @@ public class CreateInvoiceAddGrantBackingBean {
 
         LOGGER.info("CreateInvoiceAddGrantBackingBean - saveGrant - Invoice id: " + tempInvoiceId);
 
-        //GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
+        GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
+
+        for(String violationString : grantRuleResult.getViolationStrings()) {
+            FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, violationString, "");
+            FacesContext.getCurrentInstance().addMessage(null, violationMessage);
+        }
+
+        for(String warningString : grantRuleResult.getWarningStrings()) {
+            FacesMessage warningMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, warningString, "");
+            FacesContext.getCurrentInstance().addMessage(null, warningMessage);
+        }
+
 
         // Insert beneficiary first.
         if (newBeneficiary) {
