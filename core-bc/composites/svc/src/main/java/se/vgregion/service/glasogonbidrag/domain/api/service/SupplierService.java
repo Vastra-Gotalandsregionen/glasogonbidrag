@@ -10,7 +10,7 @@ import java.util.List;
 public interface SupplierService {
     void create(Supplier supplier);
 
-    void update(Supplier supplier);
+    Supplier update(Supplier supplier);
 
     void delete(Long id);
 

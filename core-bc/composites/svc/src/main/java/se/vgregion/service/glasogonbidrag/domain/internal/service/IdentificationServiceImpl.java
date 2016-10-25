@@ -34,10 +34,10 @@ public class IdentificationServiceImpl implements IdentificationService {
 
     @Override
     @Transactional
-    public void update(Identification identification) {
+    public Identification update(Identification identification) {
         LOGGER.info("Updating identification: {}", identification);
 
-        em.merge(identification);
+        return em.merge(identification);
     }
 
     @Override

@@ -56,7 +56,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     }
 
     @Transactional(rollbackFor = { NoIdentificationException.class })
-    public void update(Beneficiary beneficiary)
+    public Beneficiary update(Beneficiary beneficiary)
             throws NoIdentificationException {
         // Require that identification is set.
         Identification identification = beneficiary.getIdentification();
@@ -75,7 +75,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         beneficiary.setModifiedDate(date);
 
         LOGGER.info("Updating beneficiary: {}", beneficiary);
-        em.merge(beneficiary);
+        return em.merge(beneficiary);
     }
 
     @Transactional
@@ -93,7 +93,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
     @Override
     @Transactional
-    public void updateAddPrescription(
+    public Beneficiary updateAddPrescription(
             long userId, long groupId, long companyId,
             Beneficiary beneficiary, Prescription prescription) {
         LOGGER.info("Add prescription: {} to beneficiary {}.",
@@ -119,10 +119,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
         beneficiary.getPrescriptionHistory().add(prescription);
 
-
-
         try {
-            update(beneficiary);
+            return update(beneficiary);
         } catch (NoIdentificationException e) {
             throw new RuntimeException(e);
         }

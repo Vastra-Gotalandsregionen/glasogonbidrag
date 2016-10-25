@@ -13,11 +13,12 @@ import java.util.List;
 public interface BeneficiaryService {
     void create(Beneficiary beneficiary) throws NoIdentificationException;
 
-    void update(Beneficiary beneficiary) throws NoIdentificationException;
+    Beneficiary update(Beneficiary beneficiary)
+            throws NoIdentificationException;
 
-    void updateAddPrescription(long userId, long groupId, long companyId,
-                               Beneficiary beneficiary,
-                               Prescription prescription);
+    Beneficiary updateAddPrescription(
+            long userId, long groupId, long companyId,
+            Beneficiary beneficiary, Prescription prescription);
 
     void delete(Long id);
 

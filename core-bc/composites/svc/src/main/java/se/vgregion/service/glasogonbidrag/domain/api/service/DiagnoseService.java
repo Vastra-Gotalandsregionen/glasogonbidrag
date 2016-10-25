@@ -8,7 +8,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 public interface DiagnoseService {
     void create(Diagnose diagnose);
 
-    void update(Diagnose diagnose);
+    Diagnose update(Diagnose diagnose);
 
     void delete(Long id);
 }

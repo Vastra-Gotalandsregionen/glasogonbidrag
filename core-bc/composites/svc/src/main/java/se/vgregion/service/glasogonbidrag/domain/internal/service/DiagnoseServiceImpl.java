@@ -32,10 +32,10 @@ public class DiagnoseServiceImpl implements DiagnoseService {
 
     @Override
     @Transactional
-    public void update(Diagnose diagnose) {
+    public Diagnose update(Diagnose diagnose) {
         LOGGER.info("Updating diagnose: {}", diagnose);
 
-        em.merge(diagnose);
+        return em.merge(diagnose);
     }
 
     @Override

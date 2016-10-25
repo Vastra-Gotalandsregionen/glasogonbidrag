@@ -13,7 +13,7 @@ import java.util.List;
 public interface GrantService {
     void create(Grant grant) throws GrantMissingAreaException;
 
-    void update(Grant grant) throws GrantMissingAreaException;
+    Grant update(Grant grant) throws GrantMissingAreaException;
 
     void delete(Long id);
 
