@@ -31,8 +31,10 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistExce
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
+import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
+import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -71,7 +73,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private static final String GRANT_TYPE_OTHER = "2";
 
     @Autowired
-    private IdentificationService identificationService;
+    private BeneficiaryLookupService beneficiaryLookupService;
 
     @Autowired
     private BeneficiaryService beneficiaryService;
@@ -83,10 +85,14 @@ public class CreateInvoiceAddGrantBackingBean {
     private GrantService grantService;
 
     @Autowired
-    private InvoiceService invoiceService;
+    private GrantRuleValidationService grantRuleValidationService;
 
     @Autowired
-    private BeneficiaryLookupService beneficiaryLookupService;
+    private IdentificationService identificationService;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
 
     @Autowired
     private PrescriptionService prescriptionService;
@@ -579,6 +585,8 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         LOGGER.info("CreateInvoiceAddGrantBackingBean - saveGrant - Invoice id: " + tempInvoiceId);
+
+        //GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
 
         // Insert beneficiary first.
         if (newBeneficiary) {

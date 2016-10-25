@@ -16,7 +16,7 @@
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
-        <c:set var="mayInvoicesBeMarkedCompleted" value="#{invoiceBackingBean.checkMayInvoicesBeMarkedCompleted(invoice)}" scope="request" />
+        <c:set var="mayInvoiceBeMarkedCompleted" value="#{invoiceBackingBean.checkMayInvoiceBeMarkedCompleted(invoice)}" scope="request" />
 
         <div class="row-fluid">
             <div class="span12">
@@ -56,7 +56,7 @@
                                 <h:commandLink value="#{bundle['mark-completed']}"
                                                styleClass="link-btn primary"
                                                action="#{createInvoiceViewInvoiceBackingBean.markPaid}"
-                                               rendered="#{mayInvoicesBeMarkedCompleted}" >
+                                               rendered="#{mayInvoiceBeMarkedCompleted}" >
                                     <f:param name="invoiceId" value="${invoice.id}" />
                                 </h:commandLink>
                                 <h:commandLink value="#{bundle['mark-canceled']}"
@@ -239,40 +239,47 @@
             <div class="span6">
 
 
-                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}"
-                        rendered="#{not empty invoice.distribution}">
-                    <table class="accounting-table">
-                        <thead>
-                        <tr>
-                            <th>#{bundle['number-of-count']}</th>
-                            <th>#{bundle['accounting-responsibility']}</th>
-                            <th>#{bundle['accounting-account']}</th>
-                            <th>#{bundle['accounting-free-code']}</th>
-                            <th>#{bundle['sum-excl-vat']}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{invoice.distribution.rows}" var="row">
+                <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}">
+
+                    <ui:fragment rendered="#{not empty invoice.distribution}">
+
+                        <div class="alert alert-info">
+                            Notera: Konteringsförslag kan vara felaktigt. Uppdateras inte korrekt (just nu) när ett bidrag ändras. Skall åtgärdas.
+                        </div>
+
+                        <table class="accounting-table">
+                            <thead>
                             <tr>
-                                <td>
-                                    <h:inputText value="#{row.count}" />
-                                </td>
-                                <td>
-                                    <h:inputText value="#{row.responsibility}" />
-                                </td>
-                                <td>
-                                    <h:inputText value="#{row.account}" />
-                                </td>
-                                <td>
-                                    <h:inputText value="#{row.freeCode}" />
-                                </td>
-                                <td>
-                                    <h:inputText value="#{row.amountExclVatAsKrona}" />
-                                </td>
+                                <th>#{bundle['number-of-count']}</th>
+                                <th>#{bundle['accounting-responsibility']}</th>
+                                <th>#{bundle['accounting-account']}</th>
+                                <th>#{bundle['accounting-free-code']}</th>
+                                <th>#{bundle['sum-excl-vat']}</th>
                             </tr>
-                        </ui:repeat>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            <ui:repeat value="#{invoice.distribution.rows}" var="row">
+                                <tr>
+                                    <td>
+                                        <h:inputText value="#{row.count}" />
+                                    </td>
+                                    <td>
+                                        <h:inputText value="#{row.responsibility}" />
+                                    </td>
+                                    <td>
+                                        <h:inputText value="#{row.account}" />
+                                    </td>
+                                    <td>
+                                        <h:inputText value="#{row.freeCode}" />
+                                    </td>
+                                    <td>
+                                        <h:inputText value="#{row.amountExclVatAsKrona}" />
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                            </tbody>
+                        </table>
+                    </ui:fragment>
 
                     <h:form>
                         <div class="button-row">

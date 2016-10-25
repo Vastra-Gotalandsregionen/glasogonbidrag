@@ -67,17 +67,17 @@ public class InvoiceBackingBean {
         return mayInvoiceBeChanged;
     }
 
-    public boolean checkMayInvoicesBeMarkedCompleted(Invoice curInvoice) {
-        //LOGGER.info("InvoiceBackingBean - checkMayInvoicesBeMarkedCompleted()");
+    public boolean checkMayInvoiceBeMarkedCompleted(Invoice curInvoice) {
+        //LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeMarkedCompleted()");
 
-        boolean mayInvoicesBeMarkedCompleted = false;
+        boolean mayInvoiceBeMarkedCompleted = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
         boolean isStillAmountLeft = (curInvoice.calculateDifferenceExcludingVatAsKrona().compareTo(BigDecimal.ZERO) != 0);
 
-        mayInvoicesBeMarkedCompleted = isStatusInProgress && !isStillAmountLeft;
+        mayInvoiceBeMarkedCompleted = isStatusInProgress && !isStillAmountLeft;
 
-        return mayInvoicesBeMarkedCompleted;
+        return mayInvoiceBeMarkedCompleted;
     }
 
 
