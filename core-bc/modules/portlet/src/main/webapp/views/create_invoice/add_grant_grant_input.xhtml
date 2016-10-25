@@ -537,7 +537,7 @@
                         <span class="grant-section-label">#{bundle['prescription-date']}</span>
                         <span class="grant-section-data">
                             <h:outputText value="#{prescriptionVO.date}">
-                                <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{portletBackingBean.locale}" />
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{portletBackingBean.locale}" timeZone="Europe/Stockholm" />
                             </h:outputText>
                         </span>
                     </div>

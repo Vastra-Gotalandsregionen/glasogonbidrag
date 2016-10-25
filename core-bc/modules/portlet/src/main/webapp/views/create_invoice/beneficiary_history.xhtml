@@ -40,10 +40,10 @@
                                 </div>
                                 <div class="chip-hd-item chip-hd-item-date">
                                     <h:outputText rendered="#{grant.prescription.diagnose.type eq 'NONE'}" value="#{grant.prescription.date}">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                     </h:outputText>
                                     <h:outputText rendered="#{grant.prescription.diagnose.type ne 'NONE'}" value="#{grant.deliveryDate}">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                     </h:outputText>
                                 </div>
                                 <div class="chip-hd-item chip-hd-item-currency">
@@ -72,7 +72,7 @@
                                         </span>
                                         <span class="item-value">
                                             <h:outputText value="#{grant.prescription.date}">
-                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                             </h:outputText>
                                         </span>
                                     </li>
@@ -82,7 +82,7 @@
                                         </span>
                                         <span class="item-value">
                                             <h:outputText value="#{grant.deliveryDate}">
-                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                             </h:outputText>
                                         </span>
                                     </li>

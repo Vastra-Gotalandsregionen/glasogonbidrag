@@ -39,13 +39,13 @@
 
                     <p:column headerText="#{bundle['acknowledgement']}">
                         <h:outputText value="#{grant.deliveryDate}">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                         </h:outputText>
                     </p:column>
 
                     <p:column headerText="#{bundle['prescription']}">
                         <h:outputText value="#{grant.prescription.date}">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                         </h:outputText>
                     </p:column>
 

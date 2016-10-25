@@ -129,12 +129,12 @@
                                     </td>
                                     <td>
                                         <h:outputText value="#{grant.prescription.date}">
-                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                         </h:outputText>
                                     </td>
                                     <td>
                                         <h:outputText value="#{grant.deliveryDate}">
-                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
                                         </h:outputText>
                                     </td>
                                     <td class="number">

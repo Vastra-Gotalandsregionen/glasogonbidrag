@@ -59,7 +59,7 @@
 
                 <ui:fragment rendered="#{valueType eq 'date'}">
                     <h:outputText value="#{value}">
-                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{locale}" />
+                        <f:convertDateTime type="date" pattern="yyyy-MM-dd" locale="#{locale}" timeZone="Europe/Stockholm" />
                     </h:outputText>
                 </ui:fragment>
 
