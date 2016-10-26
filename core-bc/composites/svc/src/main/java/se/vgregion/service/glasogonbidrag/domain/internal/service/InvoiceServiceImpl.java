@@ -154,6 +154,70 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
+    public Grant updateGrant(Invoice invoice, Grant grant)
+            throws GrantMissingAreaException {
+
+        AccountingDistribution distribution = invoice.getDistribution();
+
+        invoice.setDistribution(null);
+
+        LOGGER.info("Updating grant: {} on invoice: {}", grant, invoice);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+
+        invoice.setModifiedDate(date);
+        grant.setModifiedDate(date);
+
+        Grant newGrant = em.merge(grant);
+
+        // remove old distribution.
+        if (distribution != null) {
+            distribution = em.find(
+                    AccountingDistribution.class,
+                    distribution.getId());
+            em.remove(distribution);
+        }
+
+        return newGrant;
+    }
+
+    @Override
+    @Transactional
+    public Invoice updateDeleteGrant(Invoice invoice, long grantId) {
+        Grant grant = em.find(Grant.class, grantId);
+
+        AccountingDistribution distribution = invoice.getDistribution();
+
+        invoice.removeGrant(grant);
+        invoice.setDistribution(null);
+        grant.setInvoice(null);
+
+        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+
+        // We have modified the invoice, update this to reflect this.
+        invoice.setModifiedDate(date);
+
+        Invoice newInvoice = em.merge(invoice);
+
+        em.remove(grant);
+
+        // remove old distribution.
+        if (distribution != null) {
+            distribution = em.find(
+                    AccountingDistribution.class,
+                    distribution.getId());
+            em.remove(distribution);
+        }
+
+        return newInvoice;
+    }
+
+    @Override
+    @Transactional
     public Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
             Invoice invoice, AccountingDistribution distribution) {
@@ -194,40 +258,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             AccountingDistribution distributionToRemove =
                     em.find(AccountingDistribution.class, old.getId());
             em.remove(distributionToRemove);
-        }
-
-        return newInvoice;
-    }
-
-    @Override
-    @Transactional
-    public Invoice updateDeleteGrant(Invoice invoice, long grantId) {
-        Grant grant = em.find(Grant.class, grantId);
-
-        AccountingDistribution distribution = invoice.getDistribution();
-
-        invoice.removeGrant(grant);
-        invoice.setDistribution(null);
-        grant.setInvoice(null);
-
-        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
-
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-
-        // We have modified the invoice, update this to reflect this.
-        invoice.setModifiedDate(date);
-
-        Invoice newInvoice = em.merge(invoice);
-
-        em.remove(grant);
-
-        // remove old distribution.
-        if (distribution != null) {
-            distribution = em.find(
-                    AccountingDistribution.class,
-                    distribution.getId());
-            em.remove(distribution);
         }
 
         return newInvoice;

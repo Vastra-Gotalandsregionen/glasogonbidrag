@@ -21,6 +21,9 @@ public interface InvoiceService {
                            Invoice invoice, Grant grant)
             throws GrantAlreadyExistException, GrantMissingAreaException;
 
+    Grant updateGrant(Invoice invoice, Grant grant)
+        throws GrantMissingAreaException;
+
     Invoice updateDeleteGrant(Invoice invoice, long grantId);
 
     Invoice updateAddGrantAdjustment(long userId,
