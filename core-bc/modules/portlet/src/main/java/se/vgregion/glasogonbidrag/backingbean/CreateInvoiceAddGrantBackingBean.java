@@ -586,19 +586,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
         LOGGER.info("CreateInvoiceAddGrantBackingBean - saveGrant - Invoice id: " + tempInvoiceId);
 
-        GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
-
-        for(String violationString : grantRuleResult.getViolationStrings()) {
-            FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, violationString, "");
-            FacesContext.getCurrentInstance().addMessage(null, violationMessage);
-        }
-
-        for(String warningString : grantRuleResult.getWarningStrings()) {
-            FacesMessage warningMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, warningString, "");
-            FacesContext.getCurrentInstance().addMessage(null, warningMessage);
-        }
-
-
         // Insert beneficiary first.
         if (newBeneficiary) {
             try {
@@ -677,6 +664,7 @@ public class CreateInvoiceAddGrantBackingBean {
             diagnose = new None();
         }
 
+        // TODO: fix this. We should not have to persist diagnose here. This should be done when persisting grant.
         diagnoseService.create(diagnose);
 
         prescription.setDiagnose(diagnose);
@@ -685,29 +673,53 @@ public class CreateInvoiceAddGrantBackingBean {
         beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
         grant.setPrescription(prescription);
 
-        if (grant.getId() == null) {
-            message = persistGrant(userId, groupId, companyId, invoice, grant);
-        } else {
-            message = updateGrant(userId, groupId, companyId, grant);
+
+        GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
+
+
+        LOGGER.info("saveGrant - hasViolations: " + grantRuleResult.hasViolations() + " and hasWarnings: " + grantRuleResult.hasWarnings());
+
+        for (String violationString : grantRuleResult.getViolationStrings()) {
+            LOGGER.info("saveGrant - violationString: " + violationString);
+            FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, violationString, "");
+            FacesContext.getCurrentInstance().addMessage(null, violationMessage);
         }
 
-        if(message != null) {
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        if(grantRuleResult.hasViolations()) {
             return null;
+        }
+
+        // TODO: this is totally useless =)
+        for (String warningString : grantRuleResult.getWarningStrings()) {
+            LOGGER.info("saveGrant - warningString: " + warningString);
+            FacesMessage warningMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, warningString, "");
+            FacesContext.getCurrentInstance().addMessage(null, warningMessage);
+        }
+
+
+
+        // TODO: make this nicer =).
+        if (!grantRuleResult.hasViolations()) {
+            if (grant.getId() == null) {
+                message = persistGrant(userId, groupId, companyId);
+            } else {
+                message = updateGrant(userId, groupId, companyId);
+            }
+
+            if(message != null) {
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
         }
 
         return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
     }
 
-    public FacesMessage persistGrant(long userId,
-                                     long groupId,
-                                     long companyId,
-                                     Invoice invoice,
-                                     Grant grant) {
+    public FacesMessage persistGrant(long userId, long groupId, long companyId) {
         FacesMessage message = null;
 
         try {
-            invoiceService.updateAddGrant(userId, groupId, companyId,
+            invoice = invoiceService.updateAddGrant(userId, groupId, companyId,
                     invoice, grant);
         } catch (GrantAlreadyExistException e) {
             LOGGER.warn("Cannot add the same grant twice.");
@@ -729,12 +741,12 @@ public class CreateInvoiceAddGrantBackingBean {
         return message;
     }
 
-    public FacesMessage updateGrant(long userId, long groupId, long companyId, Grant grant) {
+    public FacesMessage updateGrant(long userId, long groupId, long companyId) {
         FacesMessage message = null;
 
         // TODO: only updated if data has changed
         try {
-            grantService.update(grant);
+            grant = grantService.update(grant);
         } catch (GrantMissingAreaException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "", ""); // TODO: Add language key
