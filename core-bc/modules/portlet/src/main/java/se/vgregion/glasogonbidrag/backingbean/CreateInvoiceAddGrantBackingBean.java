@@ -725,6 +725,7 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public FacesMessage persistGrant(long userId, long groupId, long companyId) {
+        Locale locale = facesUtil.getLocale();
         FacesMessage message = null;
 
         try {
@@ -733,17 +734,26 @@ public class CreateInvoiceAddGrantBackingBean {
         } catch (GrantAlreadyExistException e) {
             LOGGER.warn("Cannot add the same grant twice.");
 
+            String localizedMessage = messageSource
+                    .getMessage("reg-grant-error-same-grant-twice",
+                            new Object[0], locale);
+
+
             message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
-                    "reg-grant-error-same-grant-twice",
+                    localizedMessage,
                     "");
 
         } catch (GrantMissingAreaException e) {
             LOGGER.warn("Couldn't fetch County or Municipality from integration!");
 
+            String localizedMessage = messageSource
+                    .getMessage("reg-grant-error-could-not-fetch-area",
+                            new Object[0], locale);
+
             message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
-                    "reg-grant-error-could-not-fetch-area",
+                    localizedMessage,
                     "");
         }
 
@@ -751,14 +761,21 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public FacesMessage updateGrant(long userId, long groupId, long companyId) {
+        Locale locale = facesUtil.getLocale();
         FacesMessage message = null;
 
         // TODO: only updated if data has changed
         try {
             grant = grantService.update(grant);
         } catch (GrantMissingAreaException e) {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                    "", ""); // TODO: Add language key
+            String localizedMessage = messageSource
+                    .getMessage("reg-grant-error-could-not-fetch-area",
+                            new Object[0], locale);
+
+            message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    localizedMessage,
+                    "");
         }
 
         return message;
