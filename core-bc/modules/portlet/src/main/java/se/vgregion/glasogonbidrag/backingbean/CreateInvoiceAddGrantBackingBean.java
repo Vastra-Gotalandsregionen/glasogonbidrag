@@ -556,13 +556,21 @@ public class CreateInvoiceAddGrantBackingBean {
             // TODO: notify user that there was an error.
         }
 
+        boolean hasNoMessages = FacesContext.getCurrentInstance().getMessageList().size() == 0;
+        boolean redirect = hasNoMessages;
 
-        return String.format(
-                "add_grant" +
-                        "?invoiceId=%d" +
-                        "&faces-redirect=true" +
-                        "&includeViewParams=true",
-                invoice.getId());
+        String returnStr = null;
+
+        if(hasNoMessages) {
+            returnStr = String.format(
+                    "add_grant" +
+                            "?invoiceId=%d" +
+                            "&faces-redirect=%b" +
+                            "&includeViewParams=true",
+                    invoice.getId(), redirect);
+        }
+
+        return returnStr;
     }
 
     public String doSaveGrantAndShowOverview() {
@@ -677,7 +685,7 @@ public class CreateInvoiceAddGrantBackingBean {
         GrantRuleResult grantRuleResult = grantRuleValidationService.test(grant);
 
 
-        LOGGER.info("saveGrant - hasViolations: " + grantRuleResult.hasViolations() + " and hasWarnings: " + grantRuleResult.hasWarnings());
+        LOGGER.info("---------------------------- saveGrant - hasViolations: " + grantRuleResult.hasViolations() + " and hasWarnings: " + grantRuleResult.hasWarnings());
 
         for (String violationString : grantRuleResult.getViolationStrings()) {
             LOGGER.info("saveGrant - violationString: " + violationString);
@@ -686,6 +694,7 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         if(grantRuleResult.hasViolations()) {
+            //return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?includeViewParams=true";
             return null;
         }
 
