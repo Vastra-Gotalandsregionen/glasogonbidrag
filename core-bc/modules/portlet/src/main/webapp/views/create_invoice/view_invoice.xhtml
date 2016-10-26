@@ -281,12 +281,11 @@
                         </table>
                     </ui:fragment>
 
-                    <h:form>
+                    <h:form rendered="#{invoice.status eq 'IN_PROGRESS' and mayInvoiceBeMarkedCompleted}">
                         <div class="button-row">
                             <h:commandButton value="#{bundle['generate-accounting-proposal']}"
                                              styleClass="link-btn primary"
-                                             action="#{createInvoiceViewInvoiceBackingBean.generateAccountingDistribution}"
-                                             rendered="#{invoice.status eq 'IN_PROGRESS'}" >
+                                             action="#{createInvoiceViewInvoiceBackingBean.generateAccountingDistribution}">
                                 <f:param name="invoiceId" value="${invoice.id}" />
                             </h:commandButton>
                         </div>
