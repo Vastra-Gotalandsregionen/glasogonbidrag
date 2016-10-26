@@ -201,10 +201,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public Invoice updateDeleteGrant(Invoice invoice, Long grantId) {
+    public Invoice updateDeleteGrant(Invoice invoice, long grantId) {
         Grant grant = em.find(Grant.class, grantId);
 
+        AccountingDistribution distribution = invoice.getDistribution();
+
         invoice.removeGrant(grant);
+        invoice.setDistribution(null);
         grant.setInvoice(null);
 
         LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
@@ -212,11 +215,20 @@ public class InvoiceServiceImpl implements InvoiceService {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
 
+        // We have modified the invoice, update this to reflect this.
         invoice.setModifiedDate(date);
 
         Invoice newInvoice = em.merge(invoice);
 
         em.remove(grant);
+
+        // remove old distribution.
+        if (distribution != null) {
+            distribution = em.find(
+                    AccountingDistribution.class,
+                    distribution.getId());
+            em.remove(distribution);
+        }
 
         return newInvoice;
     }
@@ -282,7 +294,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         TypedQuery<Invoice> q = em.createNamedQuery(
                 "glasogonbidrag.invoice.findWithParts", Invoice.class);
         q.setParameter("id", id);
-
 
         try {
             return q.getSingleResult();
