@@ -4,6 +4,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -104,13 +105,18 @@ public class CreateInvoiceAddGrantBackingBean {
     private GrantUtil grantUtil;
 
     @Autowired
+    private LiferayUtil liferayUtil;
+
+
+    @Autowired
     private PersonalNumberValidator personalNumberValidator;
 
     @Autowired
     private PersonalNumberFormatService personalNumberFormatService;
 
     @Autowired
-    private LiferayUtil liferayUtil;
+    private MessageSource messageSource;
+
 
     // Helpers
     private TabUtil tabUtil;
@@ -687,28 +693,22 @@ public class CreateInvoiceAddGrantBackingBean {
 
         LOGGER.info("---------------------------- saveGrant - hasViolations: " + grantRuleResult.hasViolations() + " and hasWarnings: " + grantRuleResult.hasWarnings());
 
-        for (String violationString : grantRuleResult.getViolationStrings()) {
-            LOGGER.info("saveGrant - violationString: " + violationString);
-            FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, violationString, "");
-            FacesContext.getCurrentInstance().addMessage(null, violationMessage);
-        }
-
         if(grantRuleResult.hasViolations()) {
-            //return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?includeViewParams=true";
+            Locale locale = facesUtil.getLocale();
+
+            for (String violationString : grantRuleResult.getViolationStrings()) {
+                String localizedMessage = messageSource
+                        .getMessage(violationString,
+                                new Object[0], locale);
+
+                FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, localizedMessage, "");
+                FacesContext.getCurrentInstance().addMessage(null, violationMessage);
+            }
+
             return null;
         }
 
-        // TODO: this is totally useless =)
-        for (String warningString : grantRuleResult.getWarningStrings()) {
-            LOGGER.info("saveGrant - warningString: " + warningString);
-            FacesMessage warningMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, warningString, "");
-            FacesContext.getCurrentInstance().addMessage(null, warningMessage);
-        }
-
-
-
-        // TODO: make this nicer =).
-        if (!grantRuleResult.hasViolations()) {
+        else {
             if (grant.getId() == null) {
                 message = persistGrant(userId, groupId, companyId);
             } else {
