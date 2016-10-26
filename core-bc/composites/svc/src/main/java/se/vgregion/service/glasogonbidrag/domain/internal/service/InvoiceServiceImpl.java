@@ -12,6 +12,7 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
+import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -154,7 +155,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public Grant updateGrant(Invoice invoice, Grant grant)
+    public InvoiceGrantTuple updateGrant(Invoice invoice, Grant grant)
             throws GrantMissingAreaException {
 
         AccountingDistribution distribution = invoice.getDistribution();
@@ -169,7 +170,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setModifiedDate(date);
         grant.setModifiedDate(date);
 
+        Invoice newInvoice = em.merge(invoice);
+
         Grant newGrant = em.merge(grant);
+
 
         // remove old distribution.
         if (distribution != null) {
@@ -179,7 +183,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             em.remove(distribution);
         }
 
-        return newGrant;
+        return new InvoiceGrantTuple(newInvoice, newGrant);
     }
 
     @Override
