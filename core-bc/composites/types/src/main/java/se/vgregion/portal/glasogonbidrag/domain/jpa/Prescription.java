@@ -3,10 +3,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -47,7 +44,7 @@ public class Prescription {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "diagnose_id")
     private Diagnose diagnose;
 
@@ -65,11 +62,10 @@ public class Prescription {
     @JoinColumn(name = "beneficiary_id")
     private Beneficiary beneficiary;
 
-    @OneToMany(mappedBy = "prescription")
-    private Set<Grant> grants;
+    @OneToOne(mappedBy = "prescription")
+    private Grant grant;
 
     public Prescription() {
-        grants = new HashSet<>();
         diagnose = new None();
     }
 
@@ -161,12 +157,12 @@ public class Prescription {
         this.beneficiary = beneficiary;
     }
 
-    public Set<Grant> getGrants() {
-        return grants;
+    public Grant getGrant() {
+        return grant;
     }
 
-    public void setGrants(Set<Grant> grants) {
-        this.grants = grants;
+    public void setGrant(Grant grant) {
+        this.grant = grant;
     }
 
     @Override

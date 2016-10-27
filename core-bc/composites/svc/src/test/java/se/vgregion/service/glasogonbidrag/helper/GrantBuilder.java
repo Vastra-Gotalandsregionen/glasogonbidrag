@@ -1,6 +1,5 @@
 package se.vgregion.service.glasogonbidrag.helper;
 
-import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
@@ -90,9 +89,7 @@ public class GrantBuilder {
             prescription.setBeneficiary(beneficiary);
         }
 
-        if (!prescription.getGrants().contains(grant)) {
-            prescription.getGrants().add(grant);
-        }
+        prescription.setGrant(grant);
 
         beneficiary.getGrants().add(grant);
 

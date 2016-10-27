@@ -24,8 +24,11 @@ import se.vgregion.service.glasogonbidrag.types.GrantRuleViolation;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleWarning;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.Calendar.JANUARY;
 import static java.util.Calendar.FEBRUARY;
@@ -63,6 +66,8 @@ public class GrantRuleValidationServiceTest {
      */
     @Test
     public void warnIfBeneficiaryHaveMoreThanOneGrantOnOnePrescription() {
+        Set<Grant> historicalGrants = new HashSet<>();
+
         Beneficiary b = BeneficiaryFactory.newBeneficiary()
                 .firstName("Jens")
                 .lastName("Blaut")
@@ -84,7 +89,10 @@ public class GrantRuleValidationServiceTest {
                 .prescription(p)
                 .build();
 
-        GrantRuleResult result1 = validationService.test(firstGrant);
+        historicalGrants.add(firstGrant);
+
+        GrantRuleResult result1 = validationService.test(
+                firstGrant, historicalGrants);
 
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertFalse(result1.hasViolations());
@@ -97,7 +105,10 @@ public class GrantRuleValidationServiceTest {
                 .prescription(p)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(secondGrant);
+        historicalGrants.add(secondGrant);
+
+        GrantRuleResult result2 = validationService.test(
+                secondGrant, historicalGrants);
 
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertFalse(result2.hasViolations());
@@ -133,7 +144,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result = validationService.test(grant);
+        GrantRuleResult result = validationService.test(
+                grant, new HashSet<>(Arrays.asList(grant)));
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -165,7 +177,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result = validationService.test(grant);
+        GrantRuleResult result = validationService.test(
+                grant, new HashSet<>(Arrays.asList(grant)));
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -217,9 +230,12 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult resultPre20160301 = validationService.test(
-                grantOver16Pre20160301);
+                grantOver16Pre20160301,
+                new HashSet<>(Arrays.asList(grantOver16Pre20160301)));
+
         GrantRuleResult resultPost20160301 = validationService.test(
-                grantOver16Post20160301);
+                grantOver16Post20160301,
+                new HashSet<>(Arrays.asList(grantOver16Post20160301)));
 
         Assert.assertFalse(resultPre20160301.hasWarnings());
         Assert.assertTrue(resultPre20160301.hasViolations());
@@ -273,11 +289,13 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-
         GrantRuleResult resultUnder20Year = validationService.test(
-                grantUnder20Year);
+                grantUnder20Year,
+                new HashSet<>(Arrays.asList(grantUnder20Year)));
+
         GrantRuleResult resultOver20Year = validationService.test(
-                grantOver20Year);
+                grantOver20Year,
+                new HashSet<>(Arrays.asList(grantOver20Year)));
 
         Assert.assertFalse(resultUnder20Year.hasViolations());
         Assert.assertFalse(resultUnder20Year.hasWarnings());
@@ -313,7 +331,9 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult past6MonthResult = validationService.test(
-                over16deliveryDatePast6Month);
+                over16deliveryDatePast6Month,
+                new HashSet<>(Arrays.asList(over16deliveryDatePast6Month)));
+
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
         Assert.assertEquals(1, past6MonthResult.violations());
@@ -345,8 +365,10 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult past6MonthResult =
-                validationService.test(over20deliveryDatePast6Month);
+        GrantRuleResult past6MonthResult = validationService.test(
+                over20deliveryDatePast6Month,
+                new HashSet<>(Arrays.asList(over20deliveryDatePast6Month)));
+
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
         Assert.assertEquals(1, past6MonthResult.violations());
@@ -382,7 +404,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(child13AboveAmount);
+        GrantRuleResult result1 = validationService.test(
+                child13AboveAmount,
+                new HashSet<>(Arrays.asList(child13AboveAmount)));
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -411,14 +435,14 @@ public class GrantRuleValidationServiceTest {
                 .prescriber("")
                 .build();
 
-        GrantFactory.newGrant()
+        Grant child13AboveAmountMultipleFirst = GrantFactory.newGrant()
                 .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "95")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
-        Grant child13AboveAmountMultiple = GrantFactory.newGrant()
+        Grant child13AboveAmountMultipleSecond = GrantFactory.newGrant()
                 .delivery(2016, JUNE, 19)
                 .amount(new BigDecimal("300"))
                 .area("14", "95")
@@ -426,8 +450,11 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 =
-                validationService.test(child13AboveAmountMultiple);
+        GrantRuleResult result2 = validationService.test(
+                child13AboveAmountMultipleSecond,
+                new HashSet<>(Arrays.asList(
+                        child13AboveAmountMultipleFirst,
+                        child13AboveAmountMultipleSecond)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -457,8 +484,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 =
-                validationService.test(child13ExactAmount);
+        GrantRuleResult result3 = validationService.test(
+                child13ExactAmount,
+                new HashSet<>(Arrays.asList(child13ExactAmount)));
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -483,8 +511,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 =
-                validationService.test(child13UnderAmount);
+        GrantRuleResult result4 = validationService.test(
+                child13UnderAmount,
+                new HashSet<>(Arrays.asList(child13UnderAmount)));
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -516,8 +545,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 =
-                validationService.test(child18AboveAmount);
+        GrantRuleResult result1 = validationService.test(
+                child18AboveAmount,
+                new HashSet<>(Arrays.asList(child18AboveAmount)));
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -546,14 +576,14 @@ public class GrantRuleValidationServiceTest {
                 .prescriber("")
                 .build();
 
-        GrantFactory.newGrant()
+        Grant child18AboveAmountMultipleFirst = GrantFactory.newGrant()
                 .delivery(2016, JUNE, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
-        Grant child18AboveAmountMultiple = GrantFactory.newGrant()
+        Grant child18AboveAmountMultipleSecond = GrantFactory.newGrant()
                 .delivery(2016, JUNE, 18)
                 .amount(new BigDecimal("300"))
                 .area("14", "96")
@@ -561,8 +591,11 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 =
-                validationService.test(child18AboveAmountMultiple);
+        GrantRuleResult result2 = validationService.test(
+                child18AboveAmountMultipleSecond,
+                new HashSet<>(Arrays.asList(
+                        child18AboveAmountMultipleFirst,
+                        child18AboveAmountMultipleSecond)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -592,8 +625,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 =
-                validationService.test(child18ExactAmount);
+        GrantRuleResult result3 = validationService.test(
+                child18ExactAmount,
+                new HashSet<>(Arrays.asList(child18ExactAmount)));
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -618,8 +652,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 =
-                validationService.test(child18UnderAmount);
+        GrantRuleResult result4 = validationService.test(
+                child18UnderAmount,
+                new HashSet<>(Arrays.asList(child18UnderAmount)));
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -651,8 +686,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 =
-                validationService.test(child16AboveAmount);
+        GrantRuleResult result1 = validationService.test(
+                child16AboveAmount,
+                new HashSet<>(Arrays.asList(child16AboveAmount)));
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -681,14 +717,14 @@ public class GrantRuleValidationServiceTest {
                 .prescriber("")
                 .build();
 
-        GrantFactory.newGrant()
+        Grant child16AboveAmountMultipleFirst = GrantFactory.newGrant()
                 .delivery(2016, AUGUST, 3)
                 .amount(new BigDecimal("800"))
                 .area("14", "96")
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
-        Grant child16AboveAmountMultiple = GrantFactory.newGrant()
+        Grant child16AboveAmountMultipleSecond = GrantFactory.newGrant()
                 .delivery(2016, AUGUST, 13)
                 .amount(new BigDecimal("900"))
                 .area("14", "96")
@@ -696,8 +732,11 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 =
-                validationService.test(child16AboveAmountMultiple);
+        GrantRuleResult result2 = validationService.test(
+                child16AboveAmountMultipleSecond,
+                new HashSet<>(Arrays.asList(
+                        child16AboveAmountMultipleFirst,
+                        child16AboveAmountMultipleSecond)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -727,8 +766,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 =
-                validationService.test(child16ExactAmount);
+        GrantRuleResult result3 = validationService.test(
+                child16ExactAmount,
+                new HashSet<>(Arrays.asList(child16ExactAmount)));
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -753,8 +793,9 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 =
-                validationService.test(child16UnderAmount);
+        GrantRuleResult result4 = validationService.test(
+                child16UnderAmount,
+                new HashSet<>(Arrays.asList(child16UnderAmount)));
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -863,7 +904,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result1 = validationService.test(grant1);
+        GrantRuleResult result1 = validationService.test(
+                grant1, new HashSet<>(Arrays.asList(grant1)));
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -885,7 +927,7 @@ public class GrantRuleValidationServiceTest {
                 .prescriber("")
                 .build();
 
-        GrantFactory.newGrant()
+        Grant grant2_1 = GrantFactory.newGrant()
                 .delivery(deliveryDate1)
                 .amount(amount.divide(new BigDecimal("2"))
                               .add(new BigDecimal("100")))
@@ -893,7 +935,7 @@ public class GrantRuleValidationServiceTest {
                 .beneficiary(beneficiary)
                 .prescription(prescription)
                 .build();
-        Grant grant2 = GrantFactory.newGrant()
+        Grant grant2_2 = GrantFactory.newGrant()
                 .delivery(deliveryDate2)
                 .amount(amount.divide(new BigDecimal("2")))
                 .area("14", "96")
@@ -901,7 +943,8 @@ public class GrantRuleValidationServiceTest {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result2 = validationService.test(grant2);
+        GrantRuleResult result2 = validationService.test(
+                grant2_2, new HashSet<>(Arrays.asList(grant2_1, grant2_2)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -926,7 +969,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant3);
+        GrantRuleResult result3 = validationService.test(
+                grant3, new HashSet<>(Arrays.asList(grant3)));
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -948,7 +992,8 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result4 = validationService.test(grant4);
+        GrantRuleResult result4 = validationService.test(
+                grant4, new HashSet<>(Arrays.asList(grant4)));
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }

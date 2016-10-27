@@ -47,7 +47,8 @@ public class GrantRuleValidationServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public GrantRuleResult test(Grant grant) {
+    public GrantRuleResult test(final Grant grant,
+                                final Set<Grant> historicalGrants) {
         GrantRuleResult result = new GrantRuleResult();
 
         // Fetch data we need
@@ -60,7 +61,8 @@ public class GrantRuleValidationServiceImpl
                 .getIdentification().getBirthDate();
 
         // Fetch data from grant and calculate data used by checks
-        List<Grant> grants = fetchGrantsPerCalendarForLatestRecipe(grant);
+        List<Grant> grants = fetchGrantsPerCalendarForLatestRecipe(
+                grant, historicalGrants);
         long totalAmount = calculateAmount(grants);
 
         // If one has more than one grant generate a warning!
@@ -337,9 +339,9 @@ public class GrantRuleValidationServiceImpl
 
     // Helpers
 
-    public List<Grant> fetchGrantsPerCalendarForLatestRecipe(Grant grant) {
+    public List<Grant> fetchGrantsPerCalendarForLatestRecipe(
+            Grant grant, Set<Grant> historicalGrants) {
         Prescription prescription = grant.getPrescription();
-        Set<Grant> grants = prescription.getGrants();
 
         Calendar cal = new GregorianCalendar();
         cal.setTime(grant.getDeliveryDate());
@@ -347,10 +349,11 @@ public class GrantRuleValidationServiceImpl
         int suppliedYear = cal.get(Calendar.YEAR);
 
         List<Grant> calendarGrants = new ArrayList<>();
-        for (Grant g : grants) {
+        for (Grant g : historicalGrants) {
             cal.setTime(g.getDeliveryDate());
 
-            if (cal.get(Calendar.YEAR) == suppliedYear) {
+            if (g.getPrescription().equals(prescription) &&
+                    cal.get(Calendar.YEAR) == suppliedYear) {
                 calendarGrants.add(g);
             }
         }

@@ -5,6 +5,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -35,5 +36,6 @@ public interface GrantRuleValidationService {
      * @param grant the grant that should be validated
      * @return
      */
-    GrantRuleResult test(Grant grant);
+    GrantRuleResult test(final Grant grant,
+                         final Set<Grant> historicalGrants);
 }
