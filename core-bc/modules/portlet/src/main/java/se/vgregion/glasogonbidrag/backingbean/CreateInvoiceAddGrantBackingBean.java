@@ -36,6 +36,7 @@ import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
+import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -766,7 +767,11 @@ public class CreateInvoiceAddGrantBackingBean {
 
         // TODO: only updated if data has changed
         try {
-            grant = grantService.update(grant);
+            InvoiceGrantTuple result = invoiceService
+                    .updateGrant(invoice, grant);
+
+            invoice = result.getInvoice();
+            grant = result.getGrant();
         } catch (GrantMissingAreaException e) {
             String localizedMessage = messageSource
                     .getMessage("reg-grant-error-could-not-fetch-area",

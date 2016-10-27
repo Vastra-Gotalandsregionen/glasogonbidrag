@@ -4,7 +4,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 
 /**
- * @author Martin Lind
+ * @author Martin Lind - Monator Technologies AB
  */
 public class InvoiceGrantTuple {
     private final Invoice invoice;
