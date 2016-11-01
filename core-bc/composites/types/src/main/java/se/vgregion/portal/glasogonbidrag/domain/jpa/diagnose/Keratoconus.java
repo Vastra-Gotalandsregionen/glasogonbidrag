@@ -3,6 +3,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
+import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -33,6 +34,14 @@ public class Keratoconus extends Diagnose {
         this.visualAcuityRight = visualAcuityRight;
         this.visualAcuityLeft = visualAcuityLeft;
         this.noGlasses = noGlasses;
+    }
+
+    // Helper method for creating Keratoconus object from value object.
+    public Keratoconus(DiagnoseValueObject value) {
+        this(value.getLaterality(),
+                value.getVisualAcuityRight(),
+                value.getVisualAcuityLeft(),
+                value.isNoGlasses());
     }
 
     public VisualLaterality getLaterality() {
