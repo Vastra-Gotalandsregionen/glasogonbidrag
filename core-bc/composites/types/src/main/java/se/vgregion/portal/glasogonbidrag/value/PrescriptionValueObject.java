@@ -13,9 +13,9 @@ import java.util.Date;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class DiagnoseValueObject {
+public class PrescriptionValueObject {
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DiagnoseValueObject.class);
+            LoggerFactory.getLogger(PrescriptionValueObject.class);
 
     private DiagnoseType type;
     private VisualLaterality laterality;
@@ -27,7 +27,7 @@ public class DiagnoseValueObject {
     private float visualAcuityRight;
     private boolean weakEyeSight;
 
-    public DiagnoseValueObject() {
+    public PrescriptionValueObject() {
         type = DiagnoseType.NONE;
     }
 
@@ -126,7 +126,7 @@ public class DiagnoseValueObject {
         Constructor<? extends Diagnose> constructor;
         Class<? extends Diagnose> reference = type.getDiagnoseClass();
         try {
-            constructor = reference.getConstructor(DiagnoseValueObject.class);
+            constructor = reference.getConstructor(PrescriptionValueObject.class);
         } catch (NoSuchMethodException e) {
             LOGGER.info("Diagnose of class {} don't contain a constructor" +
                             "to build from value object.",

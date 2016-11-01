@@ -2,7 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
-import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ public class None extends Diagnose {
 
     // Helper method for creating Keratoconus object from value object.
     @SuppressWarnings("unused")
-    public None(DiagnoseValueObject ignore) {
+    public None(PrescriptionValueObject ignore) {
         this();
     }
 
@@ -47,5 +47,13 @@ public class None extends Diagnose {
     @Override
     public String toString() {
         return "None{}";
+    }
+
+    @Override
+    public PrescriptionValueObject getValueObject() {
+        PrescriptionValueObject vo = new PrescriptionValueObject();
+        vo.setType(DiagnoseType.NONE);
+
+        return vo;
     }
 }

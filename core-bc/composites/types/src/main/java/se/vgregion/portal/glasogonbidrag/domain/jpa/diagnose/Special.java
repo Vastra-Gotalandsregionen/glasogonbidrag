@@ -3,7 +3,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
-import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -30,7 +30,7 @@ public class Special extends Diagnose {
     }
 
     // Helper method for creating Keratoconus object from value object.
-    public Special(DiagnoseValueObject value) {
+    public Special(PrescriptionValueObject value) {
         this(value.getLaterality(), value.isWeakEyeSight());
     }
 
@@ -81,5 +81,15 @@ public class Special extends Diagnose {
                 "laterality=" + laterality +
                 ", weakEyeSight=" + weakEyeSight +
                 '}';
+    }
+
+    @Override
+    public PrescriptionValueObject getValueObject() {
+        PrescriptionValueObject vo = new PrescriptionValueObject();
+        vo.setType(DiagnoseType.SPECIAL);
+        vo.setLaterality(laterality);
+        vo.setWeakEyeSight(weakEyeSight);
+
+        return vo;
     }
 }

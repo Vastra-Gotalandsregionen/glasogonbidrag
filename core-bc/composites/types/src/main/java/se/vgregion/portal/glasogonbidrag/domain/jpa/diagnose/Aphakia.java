@@ -3,7 +3,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
-import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class Aphakia extends Diagnose {
     }
 
     // Helper method for creating Keratoconus object from value object.
-    public Aphakia(DiagnoseValueObject value) {
+    public Aphakia(PrescriptionValueObject value) {
         this(value.getLaterality());
     }
 
@@ -60,5 +60,21 @@ public class Aphakia extends Diagnose {
     @Override
     public int hashCode() {
         return laterality.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Aphakia{" +
+                "laterality=" + laterality +
+                '}';
+    }
+
+    @Override
+    public PrescriptionValueObject getValueObject() {
+        PrescriptionValueObject vo = new PrescriptionValueObject();
+        vo.setType(DiagnoseType.APHAKIA);
+        vo.setLaterality(laterality);
+
+        return vo;
     }
 }

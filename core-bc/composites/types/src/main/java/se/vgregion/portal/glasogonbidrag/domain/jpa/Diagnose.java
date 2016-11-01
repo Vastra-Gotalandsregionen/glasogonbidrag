@@ -1,6 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -38,4 +39,7 @@ public abstract class Diagnose {
     public String toString() {
         return getType().toString();
     }
+
+    // Value object helper
+    public abstract PrescriptionValueObject getValueObject();
 }
