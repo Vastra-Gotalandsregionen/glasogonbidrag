@@ -271,19 +271,6 @@
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
-                                               jsf:id="lateralityKeratokonusLeft" pt:name="#{hiddenKeratokonusLaterality.clientId}"
-                                               value="LEFT"
-                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
-                                               pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
-                                            <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
-                                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
-                                                    execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
-
-                                        </input>
-                                        <h:outputLabel for="lateralityKeratokonusLeft" value="#{bundle['visual-laterality-left-short']}" />
-                                    </div>
-                                    <div class="prescription-section-field">
-                                        <input type="radio" class="gb-radio-input"
                                                jsf:id="lateralityKeratokonusRight" pt:name="#{hiddenKeratokonusLaterality.clientId}"
                                                value="RIGHT"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
@@ -297,13 +284,26 @@
                                         </input>
                                         <h:outputLabel for="lateralityKeratokonusRight" value="#{bundle['visual-laterality-right-short']}" />
                                     </div>
+                                    <div class="prescription-section-field">
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralityKeratokonusLeft" pt:name="#{hiddenKeratokonusLaterality.clientId}"
+                                               value="LEFT"
+                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
+                                               pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                            <f:ajax listener="#{createInvoiceAddGrantBackingBean.changeVisualLateralityListener}"
+                                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
+                                                    execute=":addGrantForm" render=":addGrantForm:grantAddPanel" />
+
+                                        </input>
+                                        <h:outputLabel for="lateralityKeratokonusLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                    </div>
                                 </div>
                                 <div class="prescription-section-fieldset">
                                     <div class="prescription-section-field">
-                                        <h:outputLabel for="keratokonusVisualAcuityLeft" value="#{bundle['visual-laterality-left-short']}" />
-                                        <h:inputText id="keratokonusVisualAcuityLeft"
-                                                     value="#{prescriptionVO.visualAcuityLeft}"
-                                                     disabled="#{prescriptionVO.laterality eq 'RIGHT'}"
+                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="#{bundle['visual-laterality-right-short']}" />
+                                        <h:inputText id="keratokonusVisualAcuityRight"
+                                                     value="#{prescriptionVO.visualAcuityRight}"
+                                                     disabled="#{prescriptionVO.laterality eq 'LEFT'}"
                                                      pt:placeholder=""
                                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit"
                                                      styleClass="input-very-short">
@@ -311,10 +311,10 @@
                                         </h:inputText>
                                     </div>
                                     <div class="prescription-section-field">
-                                        <h:outputLabel for="keratokonusVisualAcuityRight" value="#{bundle['visual-laterality-right-short']}" />
-                                        <h:inputText id="keratokonusVisualAcuityRight"
-                                                     value="#{prescriptionVO.visualAcuityRight}"
-                                                     disabled="#{prescriptionVO.laterality eq 'LEFT'}"
+                                        <h:outputLabel for="keratokonusVisualAcuityLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                        <h:inputText id="keratokonusVisualAcuityLeft"
+                                                     value="#{prescriptionVO.visualAcuityLeft}"
+                                                     disabled="#{prescriptionVO.laterality eq 'RIGHT'}"
                                                      pt:placeholder=""
                                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit"
                                                      styleClass="input-very-short">
@@ -368,21 +368,21 @@
                                     </div>
                                     <div class="prescription-section-field">
                                         <input type="radio" class="gb-radio-input"
-                                               jsf:id="lateralitySpecialLeft" pt:name="#{hiddenSpecialLaterality.clientId}"
-                                               value="BILATERAL"
-                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
-                                               pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
-                                        </input>
-                                        <h:outputLabel for="lateralitySpecialLeft" value="#{bundle['visual-laterality-left-short']}" />
-                                    </div>
-                                    <div class="prescription-section-field">
-                                        <input type="radio" class="gb-radio-input"
                                                jsf:id="lateralitySpecialRight" pt:name="#{hiddenSpecialLaterality.clientId}"
                                                value="BILATERAL"
                                                pt:checked="#{prescriptionVO.laterality eq 'RIGHT' ? 'checked' : null}"
                                                pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
                                         </input>
                                         <h:outputLabel for="lateralitySpecialRight" value="#{bundle['visual-laterality-right-short']}" />
+                                    </div>
+                                    <div class="prescription-section-field">
+                                        <input type="radio" class="gb-radio-input"
+                                               jsf:id="lateralitySpecialLeft" pt:name="#{hiddenSpecialLaterality.clientId}"
+                                               value="BILATERAL"
+                                               pt:checked="#{prescriptionVO.laterality eq 'LEFT' ? 'checked' : null}"
+                                               pt:data-triggeronenter="#{portletNamespace}:addGrantForm:grantTypeOtherSubmit" >
+                                        </input>
+                                        <h:outputLabel for="lateralitySpecialLeft" value="#{bundle['visual-laterality-left-short']}" />
                                     </div>
                                 </div>
                                 <div class="prescription-section-fieldset">
@@ -429,16 +429,10 @@
                             <h:outputText value=" - " />
 
                             <ui:fragment rendered="#{prescriptionVO.laterality eq 'BILATERAL'}">
-                                <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
-                                </h:outputText>
-                                <h:outputText value=" #{bundle['respectively-short']} " />
                                 <h:outputText value="#{prescriptionVO.visualAcuityRight}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="1" />
                                 </h:outputText>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{prescriptionVO.laterality eq 'LEFT'}">
+                                <h:outputText value=" #{bundle['respectively-short']} " />
                                 <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="1" />
                                 </h:outputText>
@@ -446,6 +440,12 @@
 
                             <ui:fragment rendered="#{prescriptionVO.laterality eq 'RIGHT'}">
                                 <h:outputText value="#{prescriptionVO.visualAcuityRight}">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="1" />
+                                </h:outputText>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{prescriptionVO.laterality eq 'LEFT'}">
+                                <h:outputText value="#{prescriptionVO.visualAcuityLeft}">
                                     <f:convertNumber groupingUsed="true" minFractionDigits="1" />
                                 </h:outputText>
                             </ui:fragment>
