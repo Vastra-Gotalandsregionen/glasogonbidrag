@@ -3,11 +3,11 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
+import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -27,6 +27,11 @@ public class Special extends Diagnose {
     public Special(VisualLaterality laterality, boolean weakEyeSight) {
         this.laterality = laterality;
         this.weakEyeSight = weakEyeSight;
+    }
+
+    // Helper method for creating Keratoconus object from value object.
+    public Special(DiagnoseValueObject value) {
+        this(value.getLaterality(), value.isWeakEyeSight());
     }
 
     public VisualLaterality getLaterality() {

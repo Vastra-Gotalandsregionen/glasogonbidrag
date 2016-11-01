@@ -1,29 +1,35 @@
 package se.vgregion.portal.glasogonbidrag.domain;
 
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
+
 /**
  * @author Martin Lind - Monator Technologies AB
  */
 public enum DiagnoseType {
-    APHAKIA("diagnose-type-aphakia"),
-    KERATOCONUS("diagnose-type-keratoconus"),
-    SPECIAL("diagnose-type-special"),
-    NONE("diagnose-type-child");
+    APHAKIA("diagnose-type-aphakia", Aphakia.class),
+    KERATOCONUS("diagnose-type-keratoconus", Keratoconus.class),
+    SPECIAL("diagnose-type-special", Special.class),
+    NONE("diagnose-type-child", None.class);
 
     // TODO: rename NONE to CHILD
 
     private String languageKey;
+    private Class<? extends Diagnose> diagnoseClass;
 
-    DiagnoseType(String languageKey) {
+    DiagnoseType(String languageKey, Class<? extends Diagnose> diagnoseClass) {
         this.languageKey = languageKey;
+        this.diagnoseClass = diagnoseClass;
     }
 
     public String getLanguageKey() {
         return languageKey;
     }
 
-//    @Override
-//    public String toString() {
-//        return languageKey;
-//    }
-
+    public Class<? extends Diagnose> getDiagnoseClass() {
+        return diagnoseClass;
+    }
 }

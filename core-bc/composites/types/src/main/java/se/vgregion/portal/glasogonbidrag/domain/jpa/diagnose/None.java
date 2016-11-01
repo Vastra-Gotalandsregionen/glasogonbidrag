@@ -2,6 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose;
 
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.value.DiagnoseValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -14,6 +15,17 @@ import javax.persistence.Table;
 @DiscriminatorValue("n")
 @Table(name = "vgr_glasogonbidrag_diagnose_none")
 public class None extends Diagnose {
+
+    public None() {
+
+    }
+
+    // Helper method for creating Keratoconus object from value object.
+    @SuppressWarnings("unused")
+    public None(DiagnoseValueObject ignore) {
+        this();
+    }
+
     @Override
     public DiagnoseType getType() {
         return DiagnoseType.NONE;
