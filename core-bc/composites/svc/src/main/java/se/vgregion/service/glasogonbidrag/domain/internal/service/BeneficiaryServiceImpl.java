@@ -2,13 +2,20 @@ package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.DiagnoseService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -89,41 +96,6 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
         LOGGER.info("Deleting identification: {}", identification);
         em.remove(identification);
-    }
-
-    @Override
-    @Transactional
-    public Beneficiary updateAddPrescription(
-            long userId, long groupId, long companyId,
-            Beneficiary beneficiary, Prescription prescription) {
-        LOGGER.info("Add prescription: {} to beneficiary {}.",
-                prescription, beneficiary);
-
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-
-        // Set user, group and company id of new prescription.
-        prescription.setUserId(userId);
-        prescription.setGroupId(groupId);
-        prescription.setCompanyId(companyId);
-
-        // Set creation date and modification date of new prescription
-        prescription.setCreateDate(date);
-        prescription.setModifiedDate(date);
-
-        // Set relation from prescription to beneficiary
-        prescription.setBeneficiary(beneficiary);
-        // Add prescription to beneficiary history
-
-        em.persist(prescription);
-
-        beneficiary.getPrescriptionHistory().add(prescription);
-
-        try {
-            return update(beneficiary);
-        } catch (NoIdentificationException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

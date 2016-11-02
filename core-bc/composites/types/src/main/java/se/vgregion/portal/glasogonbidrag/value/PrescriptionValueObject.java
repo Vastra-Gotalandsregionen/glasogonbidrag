@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +30,7 @@ public class PrescriptionValueObject {
 
     public PrescriptionValueObject() {
         type = DiagnoseType.NONE;
+        laterality = VisualLaterality.NONE;
     }
 
     public DiagnoseType getType() {
@@ -157,6 +159,27 @@ public class PrescriptionValueObject {
         }
 
         return result;
+    }
+
+    public Prescription getPrescription() {
+        Prescription p = new Prescription();
+
+        p.setDiagnose(getDiagnose());
+        p.setComment(comment);
+        p.setPrescriber(prescriber);
+        p.setDate(date);
+
+        return p;
+    }
+
+    public void patchPrescription(Prescription prescription) {
+        prescription.setComment(comment);
+        prescription.setPrescriber(prescriber);
+        prescription.setDate(date);
+
+        Diagnose diagnose = getDiagnose();
+        diagnose.setId(prescription.getDiagnose().getId());
+        prescription.setDiagnose(diagnose);
     }
 
     private Diagnose fallbackDiagnose() {

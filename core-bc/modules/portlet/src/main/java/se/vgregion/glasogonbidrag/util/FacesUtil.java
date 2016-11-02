@@ -38,11 +38,10 @@ public class FacesUtil {
         return (PortletRequest)externalContext.getRequest();
     }
 
-    public Long fetchId(String parameterName) {
-
+    public long fetchId(String parameterName) {
         String value = fetchProperty(parameterName);
 
-        Long id = null;
+        long id = -1;
 
         if(value != null) {
             id = Long.parseLong(value);

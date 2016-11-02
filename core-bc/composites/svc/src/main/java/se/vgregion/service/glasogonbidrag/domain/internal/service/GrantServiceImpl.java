@@ -9,6 +9,7 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,8 +47,8 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        Grant grant = em.find(Grant.class, id);
+    public void delete(long id) {
+        Grant grant = find(id);
 
         LOGGER.info("Deleting grant: {}", grant);
 
@@ -55,13 +56,15 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
-    public Grant find(Long id) {
-        return em.find(Grant.class, id);
+    public Grant find(long id) {
+        return id > 0 ? em.find(Grant.class, id) : null;
     }
 
     @Override
     @Transactional
     public Grant findWithParts(long id) {
+        if (id == -1) return null;
+
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findWithParts", Grant.class);
         q.setParameter("id", id);
@@ -88,6 +91,8 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     public List<Grant> findByUser(long userId) {
+        if (userId == -1) return new ArrayList<>();
+
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findAllByUser", Grant.class);
         q.setParameter("user", userId);
@@ -118,6 +123,8 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     public long currentProgressByUserAndDate(long userId, Date date) {
+        if (userId == -1) return 0;
+
         TypedQuery<Long> q = em.createNamedQuery(
                 "glasogonbidrag.grant.currentProgressByUserAndDate",
                 Long.class);

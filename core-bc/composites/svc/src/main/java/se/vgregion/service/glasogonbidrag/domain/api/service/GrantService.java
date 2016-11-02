@@ -15,9 +15,9 @@ public interface GrantService {
 
     Grant update(Grant grant) throws GrantMissingAreaException;
 
-    void delete(Long id);
+    void delete(long id);
 
-    Grant find(Long id);
+    Grant find(long id);
 
     Grant findWithParts(long id);
 

@@ -9,6 +9,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.domain.api.service.PrescriptionService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -32,13 +33,16 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     @Transactional
     public Prescription findLatest(Beneficiary beneficiary) {
-
         TypedQuery<Prescription> q = em.createNamedQuery(
                 "glasogonbidrag.prescription.findLatest", Prescription.class);
         q.setParameter("beneficiary", beneficiary);
         q.setMaxResults(1);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 
