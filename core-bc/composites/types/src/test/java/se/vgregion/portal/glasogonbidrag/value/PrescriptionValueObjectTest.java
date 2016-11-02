@@ -13,10 +13,10 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class DiagnoseValueObjectTest {
+public class PrescriptionValueObjectTest {
     @Test
     public void testAphakiaInstance() {
-        DiagnoseValueObject vo = new DiagnoseValueObject();
+        PrescriptionValueObject vo = new PrescriptionValueObject();
         vo.setType(DiagnoseType.APHAKIA);
         vo.setLaterality(VisualLaterality.LEFT);
 
@@ -30,7 +30,7 @@ public class DiagnoseValueObjectTest {
 
     @Test
     public void testKeratoconusInstance() {
-        DiagnoseValueObject vo = new DiagnoseValueObject();
+        PrescriptionValueObject vo = new PrescriptionValueObject();
         vo.setType(DiagnoseType.KERATOCONUS);
         vo.setLaterality(VisualLaterality.BILATERAL);
         vo.setVisualAcuityRight(0.4f);
@@ -47,7 +47,7 @@ public class DiagnoseValueObjectTest {
 
     @Test
     public void testSpecialInstance() {
-        DiagnoseValueObject vo = new DiagnoseValueObject();
+        PrescriptionValueObject vo = new PrescriptionValueObject();
         vo.setType(DiagnoseType.SPECIAL);
         vo.setLaterality(VisualLaterality.RIGHT);
         vo.setWeakEyeSight(false);
@@ -62,7 +62,7 @@ public class DiagnoseValueObjectTest {
 
     @Test
     public void testNoneInstance() {
-        DiagnoseValueObject vo = new DiagnoseValueObject();
+        PrescriptionValueObject vo = new PrescriptionValueObject();
         vo.setType(DiagnoseType.NONE);
 
         Diagnose diagnose = vo.getDiagnose();

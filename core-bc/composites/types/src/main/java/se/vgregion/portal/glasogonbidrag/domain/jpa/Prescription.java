@@ -1,6 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -200,5 +201,15 @@ public class Prescription {
                 ", comment='" + comment + '\'' +
                 ", beneficiary=" + beneficiary +
                 '}';
+    }
+
+    public PrescriptionValueObject getValueObject() {
+        PrescriptionValueObject vo = diagnose.getValueObject();
+
+        vo.setComment(comment);
+        vo.setPrescriber(prescriber);
+        vo.setDate(date);
+
+        return vo;
     }
 }

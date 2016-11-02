@@ -2,6 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,6 +32,7 @@ import java.util.Date;
                 name = "glasogonbidrag.grant.findWithParts",
                 query = "SELECT g FROM Grant g " +
                         "LEFT JOIN FETCH g.beneficiary b " +
+                        "LEFT JOIN FETCH b.grants " +
                         "LEFT JOIN FETCH b.prescriptionHistory " +
                         "LEFT JOIN FETCH g.prescription " +
                         "WHERE g.id = :id"),
@@ -105,7 +107,7 @@ public class Grant {
     @JoinColumn(name = "beneficiary_id")
     private Beneficiary beneficiary;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
@@ -294,8 +296,8 @@ public class Grant {
 
     @Override
     public String toString() {
-
-        String deliveryDateString = deliveryDate == null ? "" : DATE_FORMAT.format(deliveryDate);
+        String deliveryDateString =
+                deliveryDate == null ? "" : DATE_FORMAT.format(deliveryDate);
 
         return "Grant{" +
                 "id=" + id +

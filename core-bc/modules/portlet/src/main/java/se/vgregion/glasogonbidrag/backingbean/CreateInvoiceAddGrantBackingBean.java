@@ -17,16 +17,11 @@ import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
-import se.vgregion.glasogonbidrag.viewobject.PrescriptionVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
-import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
+import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
@@ -34,15 +29,16 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -140,7 +136,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private String grantTypeLabel;
     private Prescription latestBeneficiaryPrescription;
 
-    private PrescriptionVO prescriptionVO;
+    private PrescriptionValueObject prescriptionValueObject;
 
     private String amountWithVat;
 
@@ -237,12 +233,12 @@ public class CreateInvoiceAddGrantBackingBean {
         this.amountWithVat = amountWithVat;
     }
 
-    public PrescriptionVO getPrescriptionVO() {
-        return prescriptionVO;
+    public PrescriptionValueObject getPrescriptionValueObject() {
+        return prescriptionValueObject;
     }
 
-    public void setPrescriptionVO(PrescriptionVO prescriptionVO) {
-        this.prescriptionVO = prescriptionVO;
+    public void setPrescriptionValueObject(PrescriptionValueObject prescriptionValueObject) {
+        this.prescriptionValueObject = prescriptionValueObject;
     }
 
     // Listeners
@@ -393,16 +389,13 @@ public class CreateInvoiceAddGrantBackingBean {
             // Foobar
             if(diagnoseType != DiagnoseType.NONE) {
                 grantFlow = grantFlow.nextState(AddGrantAction.OTHER);
-                grantTypeLabel = "grant-type-other";
 
-                prescriptionVO.setType(diagnoseType);
-                prescriptionVO = populateDiagnoseData(prescriptionVO, diagnose);
-
-                prescriptionVO.setComment(latestBeneficiaryPrescription.getComment());
-                prescriptionVO.setDate(latestBeneficiaryPrescription.getDate());
-                prescriptionVO.setPrescriber(latestBeneficiaryPrescription.getPrescriber());
+                prescriptionValueObject =
+                        latestBeneficiaryPrescription.getValueObject();
 
                 grantType = GRANT_TYPE_OTHER;
+                grantTypeLabel = "grant-type-other";
+
                 grantFlow = grantFlow.nextState();
             }
         }
@@ -436,7 +429,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void prescriptionDateListener() {
         LOGGER.info("prescriptionDateListener(): add {} to grant {}",
-                prescriptionVO.getDate(), grant);
+                prescriptionValueObject.getDate(), grant);
 
         if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
                 GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
@@ -484,7 +477,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 grantType = null;
                 grantTypeLabel = null;
 
-                prescriptionVO = new PrescriptionVO();
+                prescriptionValueObject = new PrescriptionValueObject();
 
                 //amountWithVat = null;
                 break;
@@ -492,7 +485,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 grantType = null;
                 grantTypeLabel = null;
 
-                prescriptionVO = new PrescriptionVO();
+                prescriptionValueObject = new PrescriptionValueObject();
 
                 //amountWithVat = null;
                 break;
@@ -500,25 +493,24 @@ public class CreateInvoiceAddGrantBackingBean {
                 grantType = null;
                 grantTypeLabel = null;
 
-                prescriptionVO = new PrescriptionVO();
+                prescriptionValueObject = new PrescriptionValueObject();
 
                 //amountWithVat = null;
                 break;
             case ENTER_PRESCRIPTION_DATE:
+                Date prescriptionDate = prescriptionValueObject.getDate();
 
-                Date prescriptionDate = prescriptionVO.getDate();
+                prescriptionValueObject = new PrescriptionValueObject();
 
-                prescriptionVO = new PrescriptionVO();
-
-                prescriptionVO.setDate(prescriptionDate);
+                prescriptionValueObject.setDate(prescriptionDate);
 
                 //amountWithVat = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_TYPE:
 
-                prescriptionVO.setDate(null);
-                prescriptionVO.setComment(null);
-                prescriptionVO.setPrescriber(null);
+                prescriptionValueObject.setDate(null);
+                prescriptionValueObject.setComment(null);
+                prescriptionValueObject.setPrescriber(null);
 
                 //amountWithVat = null;
                 break;
@@ -555,186 +547,184 @@ public class CreateInvoiceAddGrantBackingBean {
                 invoice.getId());
     }
 
-    public String doSaveGrantAndAddNew() {
-        try {
-            saveGrant();
-        } catch(Exception e) {
-            LOGGER.error(e.getMessage(), e);
-
-            // TODO: notify user that there was an error.
-        }
-
-        boolean hasNoMessages = FacesContext.getCurrentInstance().getMessageList().size() == 0;
-        boolean redirect = hasNoMessages;
-
-        String returnStr = null;
-
-        if(hasNoMessages) {
-            returnStr = String.format(
-                    "add_grant" +
-                            "?invoiceId=%d" +
-                            "&faces-redirect=%b" +
-                            "&includeViewParams=true",
-                    invoice.getId(), redirect);
-        }
-
-        return returnStr;
+    public String doSave() {
+        String responseView = String.format(
+                "add_grant" +
+                        "?faces-redirect=true" +
+                        "&includeViewParams=true" +
+                        "&invoiceId=%d", invoice.getId());
+        return saveObjects(responseView);
     }
 
-    public String doSaveGrantAndShowOverview() {
-        return saveGrant();
+    public String doSaveAndReturn() {
+        String responseView = String.format(
+                "view_invoice" +
+                        "?faces-redirect=true" +
+                        "&invoiceId=%d", invoice.getId());
+        return saveObjects(responseView);
     }
 
-    public String saveGrant() {
+    private String saveObjects(String responseView) {
+        // This should do the thing
+        List<FacesMessage> messages = handleObjects();
 
-        // Fetch theme display
-        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
-
-        long userId = themeDisplay.getUserId();
-        long groupId = themeDisplay.getScopeGroupId();
-        long companyId = themeDisplay.getCompanyId();
-
-        long tempInvoiceId = -1;
-        Invoice tempInvoice = grant.getInvoice();
-        if(tempInvoice != null) {
-            tempInvoiceId = tempInvoice.getId();
+        // If everything went well:
+        // return and overview view
+        if (!messages.isEmpty()) {
+            addMessagesToContext(messages);
+            return null;
         }
 
-        LOGGER.info("CreateInvoiceAddGrantBackingBean - saveGrant - Invoice id: " + tempInvoiceId);
+        // otherwise return the view.
+        return responseView;
+    }
 
-        // Insert beneficiary first.
-        if (newBeneficiary) {
-            try {
-                beneficiaryService.create(beneficiary);
-            } catch (NoIdentificationException e) {
-                LOGGER.warn("Beneficiary didn't have a identificaiton. " +
-                        "Serious error in this grantFlow.");
+    private void addMessagesToContext(List<FacesMessage> messages) {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-                FacesMessage message =
-                        new FacesMessage("Generic fatal error...");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-
-                return null;
-            }
+        for (FacesMessage message : messages) {
+            context.addMessage(null, message);
         }
+    }
+
+    private List<FacesMessage> handleObjects() {
+        FacesMessage message = null;
+
+        // Store a list of messages, this is all errors we've received.
+        List<FacesMessage> messages = new ArrayList<>();
+
+        // Populate domain objects from View objects.
+        message = assignAmount();
+        if (message != null) {
+            messages.add(message);
+
+            return messages;
+        }
+
+        // Validate the data
+        List<FacesMessage> violationMessages = setupAndValidateObjects();
+        if (violationMessages != null) {
+            messages.addAll(violationMessages);
+
+            return messages;
+        }
+
+        // TODO: I think this parts below should be run in an transaction.
+
+        // Handle beneficiary
+        message = handleBeneficiaryObject();
+        if (message != null) {
+            messages.add(message);
+
+            return messages;
+        }
+
+        // Handle grant
+        message = handleGrantObject();
+        if (message != null) {
+            messages.add(message);
+
+            return messages;
+        }
+
+        return messages;
+    }
+
+    private FacesMessage assignAmount() {
+        Locale locale = facesUtil.getLocale();
 
         if (amountWithVat == null || amountWithVat.trim().isEmpty()) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
+            String localizedMessage = messageSource
+                    .getMessage("reg-grant-need-to-enter-amount",
+                            new Object[0], locale);
 
-            LOGGER.info("Return to view. amount Not filled in");
-
-            return "view?faces-redirect=true";
+            return new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    localizedMessage,
+                    "");
         }
 
         try {
             BigDecimal amountWithVatDecimal = new BigDecimal(amountWithVat);
             grant.setAmountIncludingVatAsKrona(amountWithVatDecimal);
         } catch (NumberFormatException e) {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Need to choose a", "");
+            String localizedMessage = messageSource
+                    .getMessage("reg-grant-amount-is-not-a-number",
+                            new Object[0], locale);
 
-            return "view?faces-redirect=true";
+            return new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    localizedMessage,
+                    "");
         }
 
-        FacesMessage message = null;
-
-        // Connect Grant with prescriptionVO
-
-        Prescription prescription = new Prescription();
-        prescription.setDate(prescriptionVO.getDate());
-
-        Diagnose diagnose;
-
-        if(prescriptionVO.getType() != DiagnoseType.NONE) {
-            LOGGER.info("saveGrant - this is DiagnoseType OTHER. Should save Comment, Prescriber and Diagnose.");
-
-            // TODO: remove comment for line below when problem with comment is solved
-            prescription.setComment(prescriptionVO.getComment());
-            prescription.setPrescriber(prescriptionVO.getPrescriber());
-
-            if (prescriptionVO.getType() == DiagnoseType.APHAKIA) {
-                Aphakia aphakia = new Aphakia();
-                aphakia.setLaterality(prescriptionVO.getLaterality());
-
-                diagnose = aphakia;
-            } else if (prescriptionVO.getType() == DiagnoseType.KERATOCONUS) {
-                Keratoconus keratoconus = new Keratoconus();
-                keratoconus.setLaterality(prescriptionVO.getLaterality());
-                keratoconus.setVisualAcuityLeft(prescriptionVO.getVisualAcuityLeft());
-                keratoconus.setVisualAcuityRight(prescriptionVO.getVisualAcuityRight());
-                keratoconus.setNoGlasses(prescriptionVO.isNoGlasses());
-
-                diagnose = keratoconus;
-            } else if (prescriptionVO.getType() == DiagnoseType.SPECIAL) {
-                Special special = new Special();
-                special.setLaterality(prescriptionVO.getLaterality());
-                special.setWeakEyeSight(prescriptionVO.isWeakEyeSight());
-
-                diagnose = special;
-            } else {
-                throw new RuntimeException("Diagnose cannot be null.");
-            }
-
-        } else {
-            diagnose = new None();
-        }
-
-        // TODO: fix this. We should not have to persist diagnose here. This should be done when persisting grant.
-        diagnoseService.create(diagnose);
-
-        prescription.setDiagnose(diagnose);
-
-
-        beneficiaryService.updateAddPrescription(userId, groupId, companyId, beneficiary, prescription);
-        grant.setPrescription(prescription);
-
-
-        // TODO: We need historical grants including this grant in a list.
-        GrantRuleResult grantRuleResult = grantRuleValidationService.test(
-                grant, new HashSet<>(Arrays.asList(grant)));
-
-
-        LOGGER.info("---------------------------- saveGrant - hasViolations: " + grantRuleResult.hasViolations() + " and hasWarnings: " + grantRuleResult.hasWarnings());
-
-        if(grantRuleResult.hasViolations()) {
-            Locale locale = facesUtil.getLocale();
-
-            for (String violationString : grantRuleResult.getViolationStrings()) {
-                String localizedMessage = messageSource
-                        .getMessage(violationString,
-                                new Object[0], locale);
-
-                FacesMessage violationMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, localizedMessage, "");
-                FacesContext.getCurrentInstance().addMessage(null, violationMessage);
-            }
-
-            return null;
-        }
-
-        else {
-            if (grant.getId() == null) {
-                message = persistGrant(userId, groupId, companyId);
-            } else {
-                message = updateGrant(userId, groupId, companyId);
-            }
-
-            if(message != null) {
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return null;
-            }
-        }
-
-        return "view_invoice?faces-redirect=true&invoiceId=" + invoice.getId();
+        return null;
     }
 
-    public FacesMessage persistGrant(long userId, long groupId, long companyId) {
+    // TODO: Verify that this method actually setup all relations
+    private List<FacesMessage> setupAndValidateObjects() {
+
+        if (grant.getPrescription() == null) {
+            Prescription prescription =
+                    prescriptionValueObject.getPrescription();
+            grant.setPrescription(prescription);
+        } else {
+            prescriptionValueObject.patchPrescription(grant.getPrescription());
+        }
+
+        // TODO: Should we move code that set relation from grant to prescription here?
+
+        beneficiary.getGrants().add(grant);
+
+        GrantRuleResult result = grantRuleValidationService.test(
+                grant, beneficiary.getGrants());
+
+        if(result.hasViolations()) {
+            Locale locale = facesUtil.getLocale();
+
+            List<FacesMessage> messages = new ArrayList<>();
+
+            for (String violation : result.getViolationStrings()) {
+                String localizedMessage = messageSource
+                        .getMessage(violation,
+                                new Object[0], locale);
+
+                messages.add(new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, localizedMessage, ""));
+            }
+
+            return messages;
+        } else {
+            return null;
+        }
+    }
+
+    private FacesMessage handleBeneficiaryObject() {
         Locale locale = facesUtil.getLocale();
-        FacesMessage message = null;
+
+        if (beneficiary.getId() == null) {
+            try {
+                beneficiaryService.create(beneficiary);
+            } catch (NoIdentificationException e) {
+                String localizedMessage = messageSource.getMessage(
+                        "reg-grant-beneficiary-do-not-have-identification",
+                        new Object[0], locale);
+
+                return new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR,
+                        localizedMessage,
+                        "");
+            }
+        }
+
+        return null;
+    }
+
+    private FacesMessage handleGrantObject() {
+        Locale locale = facesUtil.getLocale();
 
         try {
-            invoice = invoiceService.updateAddGrant(userId, groupId, companyId,
-                    invoice, grant);
+            storeOrUpdateGrant();
         } catch (GrantAlreadyExistException e) {
             LOGGER.warn("Cannot add the same grant twice.");
 
@@ -742,12 +732,10 @@ public class CreateInvoiceAddGrantBackingBean {
                     .getMessage("reg-grant-error-same-grant-twice",
                             new Object[0], locale);
 
-
-            message = new FacesMessage(
+            return new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
                     localizedMessage,
                     "");
-
         } catch (GrantMissingAreaException e) {
             LOGGER.warn("Couldn't fetch County or Municipality from integration!");
 
@@ -755,38 +743,47 @@ public class CreateInvoiceAddGrantBackingBean {
                     .getMessage("reg-grant-error-could-not-fetch-area",
                             new Object[0], locale);
 
-            message = new FacesMessage(
+            return new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    localizedMessage,
+                    "");
+        } catch (NoIdentificationException e) {
+            String localizedMessage = messageSource.getMessage(
+                    "reg-grant-beneficiary-do-not-have-identification",
+                    new Object[0], locale);
+
+            return new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
                     localizedMessage,
                     "");
         }
 
-        return message;
+        return null;
     }
 
-    public FacesMessage updateGrant(long userId, long groupId, long companyId) {
-        Locale locale = facesUtil.getLocale();
-        FacesMessage message = null;
+    private void storeOrUpdateGrant()
+            throws GrantAlreadyExistException, GrantMissingAreaException,
+                   NoIdentificationException {
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
 
-        // TODO: only updated if data has changed
-        try {
-            InvoiceGrantTuple result = invoiceService
-                    .updateGrant(invoice, grant);
+        if (grant.getId() == null) {
+            InvoiceBeneficiaryTuple tuple = invoiceService
+                    .updateAddGrant(
+                            userId, groupId, companyId, invoice, grant);
+
+            invoice = tuple.getInvoice();
+            beneficiary = tuple.getBeneficiary();
+        } else {
+            // TODO: Add more code here.
+            InvoiceGrantTuple result =
+                    invoiceService.updateGrant(invoice, grant);
 
             invoice = result.getInvoice();
             grant = result.getGrant();
-        } catch (GrantMissingAreaException e) {
-            String localizedMessage = messageSource
-                    .getMessage("reg-grant-error-could-not-fetch-area",
-                            new Object[0], locale);
-
-            message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR,
-                    localizedMessage,
-                    "");
         }
-
-        return message;
     }
 
     // Facelet styling methods
@@ -842,18 +839,67 @@ public class CreateInvoiceAddGrantBackingBean {
     public void init() {
         LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
 
-        grantFlow = AddGrantFlowState.ENTER_IDENTIFICATION.getState();
+        // Initialize with start states.
+        setupDefaults();
 
         LOGGER.info("Current state: {}.", grantFlow);
 
+        // Fetch properties from user navigation.
         long invoiceId = facesUtil.fetchId("invoiceId");
+        long grantId = facesUtil.fetchId("grantId");
+
         invoice = invoiceService.findWithParts(invoiceId);
+        grant = grantService.findWithParts(grantId);
+
+        // TODO: if existing (already persited) grant - load from DB (if not already loaded)
+        if (grant == null) {
+            grant = new Grant();
+            return;
+        }
+
+        beneficiary = grant.getBeneficiary();
+        latestBeneficiaryPrescription =
+                prescriptionService.findLatest(beneficiary);
+
+        // Populate beneficiaryVO (not moved yet)
+        beneficiaryVO.setIdentificationNumber(
+                beneficiary.getIdentification().getString());
+        deliveryDate = grant.getDeliveryDate();
+
+        Prescription prescription = grant.getPrescription();
+        prescriptionValueObject = prescription.getValueObject();
+
+        if (prescriptionValueObject.getType() != DiagnoseType.NONE) {
+            grantType = GRANT_TYPE_OTHER;
+            grantTypeLabel = "grant-type-other";
+        } else {
+            //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
+            if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
+                grantType = GRANT_TYPE_AGE_0_TO_15;
+                grantTypeLabel = "grant-type-0-15";
+            } else {
+                grantType = GRANT_TYPE_AGE_0_TO_19;
+                grantTypeLabel = "grant-type-0-19";
+            }
+        }
+
+        amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
+
+        if(GRANT_TYPE_OTHER.equals(grantType)) {
+            grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
+        }
+        else if(GRANT_TYPE_AGE_0_TO_19.equals(grantType) || GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
+            grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
+        }
+    }
+
+    private void setupDefaults() {
+        grantFlow = AddGrantFlowState.ENTER_IDENTIFICATION.getState();
 
         latestBeneficiaryPrescription = null;
 
         newBeneficiary = false;
 
-        //invoice = newInvoice;
         beneficiary = null;
 
         deliveryDate = null;
@@ -862,136 +908,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
         beneficiaryVO = new BeneficiaryVO();
 
-        prescriptionVO = new PrescriptionVO();
+        prescriptionValueObject = new PrescriptionValueObject();
 
-        // TODO: if existing (already persited) grant - load from DB (if not already loaded)
-        // TODO: If new grant and beneficiary has a type other diagnose registered before, then load this diagnose
-        prescriptionVO.setType(DiagnoseType.NONE);
-        prescriptionVO.setLaterality(VisualLaterality.NONE);
-
-        // Todo: different types and conditions will affect the default number of amountWithVat
         amountWithVat = "800";
 
         tabUtil = new TabUtil(Arrays.asList("personal-number", "lma-number"), 0);
-
-        Long grantId = facesUtil.fetchId("grantId");
-        if(grantId != null) {
-            System.out.println("--- Found GrantId -----");
-
-            //TODO: add find with parts to grantService, so that call to beneficiaryService.findWithParts will not be necessary.
-            grant = grantService.findWithParts(grantId);
-            //grant = grantService.find(grantId);
-            beneficiary = beneficiaryService.findWithParts(grant.getBeneficiary().getId());
-
-            latestBeneficiaryPrescription = prescriptionService.findLatest(beneficiary);
-
-            //number = beneficiary.getIdentification().getString();
-            beneficiaryVO.setIdentificationNumber(
-                    beneficiary.getIdentification().getString());
-
-            deliveryDate = grant.getDeliveryDate();
-
-            Prescription prescription = grant.getPrescription();
-
-            // Temporary code - start
-            if(prescription == null) {
-                System.out.println("--- prescription IS null -----");
-            } else {
-                System.out.println("--- prescription is NOT null -----");
-            }
-            // Temporary code - end
-
-            prescriptionVO.setDate(prescription.getDate());
-
-            Diagnose diagnose = prescription.getDiagnose();
-            DiagnoseType diagnoseType = diagnose.getType();
-
-            if(diagnoseType != DiagnoseType.NONE) {
-
-                prescriptionVO.setComment(prescription.getComment());
-                prescriptionVO.setPrescriber(prescription.getPrescriber());
-                prescriptionVO.setType(prescription.getDiagnose().getType());
-
-                prescriptionVO = populateDiagnoseData(prescriptionVO, diagnose);
-
-                // Code below has been moved to the method populateDiagnoseData. Remove commented code when this has been tested properly.
-//                if(diagnoseType == DiagnoseType.APHAKIA) {
-//                    Aphakia aphakia = (Aphakia)diagnose;
-//                    prescriptionVO.setLaterality(aphakia.getLaterality());
-//                } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
-//                    Keratoconus keratoconus = (Keratoconus)diagnose;
-//                    prescriptionVO.setLaterality(keratoconus.getLaterality());
-//                    prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
-//                    prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
-//                    prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
-//                } else if(diagnoseType == DiagnoseType.SPECIAL) {
-//                    Special special = (Special)diagnose;
-//                    prescriptionVO.setLaterality(special.getLaterality());
-//                    prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
-//                } else {
-//                    // TODO: throw exception
-//                }
-
-                grantType = GRANT_TYPE_OTHER;
-
-                grantTypeLabel = "grant-type-other";
-            } else {
-
-                //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
-                if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
-                    grantType = GRANT_TYPE_AGE_0_TO_15;
-                    grantTypeLabel = "grant-type-0-15";
-                } else {
-                    grantType = GRANT_TYPE_AGE_0_TO_19;
-                    grantTypeLabel = "grant-type-0-19";
-                }
-
-            }
-
-
-
-            amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
-
-            //grantFlow = AddGrantFlowState.ENTER_IDENTIFICATION.getState();
-
-            if(GRANT_TYPE_OTHER.equals(grantType)) {
-                grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
-            }
-            else if(GRANT_TYPE_AGE_0_TO_19.equals(grantType) || GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
-                grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
-            }
-
-            //grantFlow = AddGrantFlowState.ENTER_AMOUNT_AFTER_AGE.getState();
-            LOGGER.info("Current state: {}.", grantFlow);
-
-
-        } else {
-            grant = new Grant();
-        }
     }
-
-    private PrescriptionVO populateDiagnoseData(PrescriptionVO prescriptionVO, Diagnose diagnose) {
-
-        DiagnoseType diagnoseType = diagnose.getType();
-
-        if(diagnoseType == DiagnoseType.APHAKIA) {
-            Aphakia aphakia = (Aphakia)diagnose;
-            prescriptionVO.setLaterality(aphakia.getLaterality());
-        } else if(diagnoseType == DiagnoseType.KERATOCONUS) {
-            Keratoconus keratoconus = (Keratoconus)diagnose;
-            prescriptionVO.setLaterality(keratoconus.getLaterality());
-            prescriptionVO.setNoGlasses(keratoconus.isNoGlasses());
-            prescriptionVO.setVisualAcuityLeft(keratoconus.getVisualAcuityLeft());
-            prescriptionVO.setVisualAcuityRight(keratoconus.getVisualAcuityRight());
-        } else if(diagnoseType == DiagnoseType.SPECIAL) {
-            Special special = (Special)diagnose;
-            prescriptionVO.setLaterality(special.getLaterality());
-            prescriptionVO.setWeakEyeSight(special.isWeakEyeSight());
-//        } else {
-//            // TODO: throw exception
-        }
-
-        return prescriptionVO;
-    }
-
 }

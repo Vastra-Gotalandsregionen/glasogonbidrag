@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -13,9 +14,9 @@ import java.util.Date;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class DiagnoseValueObject {
+public class PrescriptionValueObject {
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DiagnoseValueObject.class);
+            LoggerFactory.getLogger(PrescriptionValueObject.class);
 
     private DiagnoseType type;
     private VisualLaterality laterality;
@@ -27,8 +28,9 @@ public class DiagnoseValueObject {
     private float visualAcuityRight;
     private boolean weakEyeSight;
 
-    public DiagnoseValueObject() {
+    public PrescriptionValueObject() {
         type = DiagnoseType.NONE;
+        laterality = VisualLaterality.NONE;
     }
 
     public DiagnoseType getType() {
@@ -126,7 +128,7 @@ public class DiagnoseValueObject {
         Constructor<? extends Diagnose> constructor;
         Class<? extends Diagnose> reference = type.getDiagnoseClass();
         try {
-            constructor = reference.getConstructor(DiagnoseValueObject.class);
+            constructor = reference.getConstructor(PrescriptionValueObject.class);
         } catch (NoSuchMethodException e) {
             LOGGER.info("Diagnose of class {} don't contain a constructor" +
                             "to build from value object.",
@@ -157,6 +159,27 @@ public class DiagnoseValueObject {
         }
 
         return result;
+    }
+
+    public Prescription getPrescription() {
+        Prescription p = new Prescription();
+
+        p.setDiagnose(getDiagnose());
+        p.setComment(comment);
+        p.setPrescriber(prescriber);
+        p.setDate(date);
+
+        return p;
+    }
+
+    public void patchPrescription(Prescription prescription) {
+        prescription.setComment(comment);
+        prescription.setPrescriber(prescriber);
+        prescription.setDate(date);
+
+        Diagnose diagnose = getDiagnose();
+        diagnose.setId(prescription.getDiagnose().getId());
+        prescription.setDiagnose(diagnose);
     }
 
     private Diagnose fallbackDiagnose() {

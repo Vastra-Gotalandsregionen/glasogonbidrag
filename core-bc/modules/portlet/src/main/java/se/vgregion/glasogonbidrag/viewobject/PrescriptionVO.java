@@ -2,6 +2,7 @@ package se.vgregion.glasogonbidrag.viewobject;
 
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 
 import java.util.Date;
 
@@ -99,6 +100,7 @@ public class PrescriptionVO {
         return type == DiagnoseType.APHAKIA;
     }
 
+    // TODO: Fix spelling, keratoconus with c instead of k.
     public boolean isDiagnoseKeratokonus() {
         return type == DiagnoseType.KERATOCONUS;
     }
@@ -110,7 +112,4 @@ public class PrescriptionVO {
     public boolean isDiagnoseSpecial() {
         return type == DiagnoseType.SPECIAL;
     }
-
-
-
 }

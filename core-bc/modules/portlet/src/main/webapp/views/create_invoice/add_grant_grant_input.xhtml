@@ -15,7 +15,7 @@
         <c:set var="invoice" value="#{createInvoiceAddGrantBackingBean.invoice}" scope="request" />
         <c:set var="grant" value="#{createInvoiceAddGrantBackingBean.grant}" scope="request" />
         <c:set var="grantFlow" value="#{createInvoiceAddGrantBackingBean.grantFlow}" scope="request" />
-        <c:set var="prescriptionVO" value="#{createInvoiceAddGrantBackingBean.prescriptionVO}" scope="request" />
+        <c:set var="prescriptionVO" value="#{createInvoiceAddGrantBackingBean.prescriptionValueObject}" scope="request" />
 
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
@@ -571,7 +571,7 @@
                 <div class="button-row">
 
                     <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="#{bundle['save']}"
-                                   action="#{createInvoiceAddGrantBackingBean.doSaveGrantAndAddNew}" />
+                                   action="#{createInvoiceAddGrantBackingBean.doSave}" />
 
                     <h:commandLink styleClass="link-btn" value="#{bundle['delete']}"
                                    rendered="#{not empty grant.id and mayInvoiceBeChanged}"

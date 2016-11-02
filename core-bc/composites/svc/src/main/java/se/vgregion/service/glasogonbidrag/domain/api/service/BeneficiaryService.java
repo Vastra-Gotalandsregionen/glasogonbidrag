@@ -1,9 +1,12 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
+import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
 
 import java.util.List;
 
@@ -15,10 +18,6 @@ public interface BeneficiaryService {
 
     Beneficiary update(Beneficiary beneficiary)
             throws NoIdentificationException;
-
-    Beneficiary updateAddPrescription(
-            long userId, long groupId, long companyId,
-            Beneficiary beneficiary, Prescription prescription);
 
     void delete(Long id);
 

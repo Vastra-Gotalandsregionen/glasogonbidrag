@@ -5,6 +5,8 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
+import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
 import java.util.List;
@@ -18,9 +20,12 @@ public interface InvoiceService {
 
     Invoice update(Invoice invoice);
 
-    Invoice updateAddGrant(long userId, long groupId, long companyId,
-                           Invoice invoice, Grant grant)
-            throws GrantAlreadyExistException, GrantMissingAreaException;
+    InvoiceBeneficiaryTuple updateAddGrant(
+            long userId, long groupId, long companyId,
+            Invoice invoice, Grant grant)
+        throws GrantAlreadyExistException,
+               GrantMissingAreaException,
+               NoIdentificationException;
 
     InvoiceGrantTuple updateGrant(Invoice invoice, Grant grant)
         throws GrantMissingAreaException;

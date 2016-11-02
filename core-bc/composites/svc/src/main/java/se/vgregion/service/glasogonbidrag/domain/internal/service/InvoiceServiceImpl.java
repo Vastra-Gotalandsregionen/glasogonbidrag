@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
+import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
+import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
 import javax.persistence.EntityManager;
@@ -37,6 +41,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private GrantService grantService;
+
+    @Autowired
+    private BeneficiaryService beneficiaryService;
 
     @Override
     @Transactional
@@ -114,13 +121,19 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public Invoice updateAddGrant(long userId, long groupId, long companyId,
-                               Invoice invoice, Grant grant)
-            throws GrantAlreadyExistException, GrantMissingAreaException {
+    public InvoiceBeneficiaryTuple updateAddGrant(
+            long userId, long groupId, long companyId,
+            Invoice invoice, Grant grant)
+    throws GrantAlreadyExistException,
+           GrantMissingAreaException,
+           NoIdentificationException {
         LOGGER.info("Add grant {} to invoice {}", grant, invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
+
+        Beneficiary beneficiary = grant.getBeneficiary();
+        Prescription prescription = grant.getPrescription();
 
         Set<Grant> grants = invoice.getGrants();
         if (grants == null) {
@@ -131,6 +144,34 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new GrantAlreadyExistException("Grant is already set.");
         }
 
+        updateGrantData(grant, userId, groupId, companyId, date);
+        updatePrescriptionData(prescription, userId, groupId, companyId, date);
+
+        // Setup relation from the grant to the invoice and
+        // from the invoice to the grant.
+        grant.setInvoice(invoice);
+        invoice.addGrant(grant);
+
+        beneficiary.getPrescriptionHistory().add(prescription);
+        prescription.setBeneficiary(beneficiary);
+
+        grantService.create(grant);
+
+        // We have modified the invoice, update this to reflect this.
+        invoice.setModifiedDate(date);
+        beneficiary.setModifiedDate(date);
+
+        Beneficiary newBeneficiary = beneficiaryService.update(beneficiary);
+        Invoice newInvoice = this.update(invoice);
+
+        return new InvoiceBeneficiaryTuple(newInvoice, newBeneficiary);
+    }
+
+    private void updateGrantData(Grant grant,
+                                 long userId,
+                                 long groupId,
+                                 long companyId,
+                                 Date date) {
         // Set user, group and company id of new grant.
         grant.setUserId(userId);
         grant.setGroupId(groupId);
@@ -140,18 +181,68 @@ public class InvoiceServiceImpl implements InvoiceService {
         grant.setCreateDate(date);
         grant.setModifiedDate(date);
 
-        // Setup relation from the grant to the invoice.
-        grant.setInvoice(invoice);
-        // Add grant to the invoice object and update it.
-        invoice.addGrant(grant);
-
-        grantService.create(grant);
-
-        // We have modified the invoice, update this to reflect this.
-        invoice.setModifiedDate(date);
-
-        return this.update(invoice);
     }
+
+    private void updatePrescriptionData(Prescription prescription,
+                                        long userId,
+                                        long groupId,
+                                        long companyId,
+                                        Date date) {
+        // Set user, group and company id of new prescription.
+        prescription.setUserId(userId);
+        prescription.setGroupId(groupId);
+        prescription.setCompanyId(companyId);
+
+        // Update creation date and modification date of new prescription.
+        prescription.setCreateDate(date);
+        prescription.setModifiedDate(date);
+
+    }
+
+//    @Override
+//    @Transactional
+//    public BeneficiaryGrantTuple updateAddPrescription(
+//            long userId, long groupId, long companyId,
+//            Invoice invoice,
+//            Beneficiary beneficiary,
+//            Grant grant)
+//            throws GrantMissingAreaException, NoIdentificationException {
+//        Prescription prescription = grant.getPrescription();
+//
+//        LOGGER.info("Add prescription: {} to beneficiary {}.",
+//                prescription, beneficiary);
+//
+//        Calendar cal = Calendar.getInstance();
+//        Date date = cal.getTime();
+//
+//        // Check if old prescription exists for this grant.
+//        // If it exists, we want to remove this from the beneficiaries,
+//        // prescription history, and later remove it from the database.
+//
+//        // Set user, group and company id of new prescription.
+//        prescription.setUserId(userId);
+//        prescription.setGroupId(groupId);
+//        prescription.setCompanyId(companyId);
+//
+//        // Set creation date and modification date of new prescription
+//        prescription.setCreateDate(date);
+//        prescription.setModifiedDate(date);
+//
+//        // Set relation from prescription to beneficiary
+//        prescription.setBeneficiary(beneficiary);
+//        prescription.setGrant(grant);
+//
+//        // Add prescription to beneficiary history
+//
+//        // Setup relation from grant to prescription.
+//        grant.setPrescription(prescription);
+//        grant.setModifiedDate(date);
+//
+//        diagnoseService.create(prescription.getDiagnose());
+//        Grant newGrant = grantService.update(grant);
+//
+//        return new BeneficiaryGrantTuple(newBeneficiary, newGrant);
+//    }
 
     @Override
     @Transactional
@@ -172,8 +263,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice newInvoice = em.merge(invoice);
 
-        Grant newGrant = em.merge(grant);
-
+        Grant newGrant = grantService.update(grant);
 
         // remove old distribution.
         if (distribution != null) {
