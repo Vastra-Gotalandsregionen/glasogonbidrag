@@ -11,6 +11,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,17 @@ public class ListInvoicesViewBackingBean {
     @Autowired
     private InvoiceService invoiceService;
 
+    private List<String> filterDataStatuses;
+
     private List<Invoice> invoices;
+
+    public List<String> getFilterDataStatuses() {
+        return filterDataStatuses;
+    }
+
+    public void setFilterDataStatuses(List<String> filterDataStatuses) {
+        this.filterDataStatuses = filterDataStatuses;
+    }
 
     public List<Invoice> getInvoices() {
         return invoices;
@@ -44,8 +55,19 @@ public class ListInvoicesViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        //invoices = invoiceService.findAllWithParts();
         fetchInvoices();
+        initFilterData();
+    }
+
+    private void initFilterData() {
+
+        // TODO: refactor this nicer when more work with filters has been done
+        filterDataStatuses = new ArrayList<String>();
+        filterDataStatuses.add("invoice-status-in-progress");
+        filterDataStatuses.add("invoice-status-completed");
+        filterDataStatuses.add("invoice-status-canceled");
+        filterDataStatuses.add("invoice-status-replaced");
+
     }
 
     private void fetchInvoices() {

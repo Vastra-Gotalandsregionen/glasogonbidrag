@@ -19,6 +19,7 @@
             <h1>#{bundle['search-invoices']}</h1>
 
             <p:dataTable var="invoice" value="#{invoices}"
+                         widgetVar="invoicesTable"
                          rows="5"
                          paginator="true"
                          paginatorPosition="bottom"
@@ -26,6 +27,8 @@
                          rowsPerPageTemplate="1, 5,10,15,20, 50" >
                 <p:column headerText="#{bundle['verification-number-short']}"
                           sortBy="#{invoice.verificationNumber}"
+                          filterBy="#{invoice.verificationNumber}"
+                          filterMatchMode="contains"
                 >
                     <!--
                     filterBy="#{invoice.verificationNumber}"
@@ -37,7 +40,15 @@
                     </a>
                 </p:column>
 
-                <p:column headerText="#{bundle['supplier']}" sortBy="#{invoice.supplier.name}">
+                <p:column headerText="#{bundle['supplier']}"
+                          sortBy="#{invoice.supplier.name}"
+                          filterBy="#{invoice.supplier.name}"
+                          filterMatchMode="contains"
+                >
+                    <!--
+                          filterBy="#{invoice.supplier.name}"
+                          filterMatchMode="contains"
+                    -->
                     <h:outputText value="#{invoice.supplier.name}" />
                 </p:column>
 
@@ -55,7 +66,18 @@
                     <h:outputText value="#{invoice.grants.size()}" />
                 </p:column>
 
-                <p:column headerText="#{bundle['status']}" sortBy="#{invoice.status}">
+                <p:column headerText="#{bundle['status']}"
+                          sortBy="#{invoice.status}"
+                          filterBy="#{invoice.status}"
+                          filterMatchMode="exact"
+                >
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
+                            <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{listInvoicesViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+
                     <h:outputText value="#{bundle[invoice.status]}" />
                 </p:column>
 
