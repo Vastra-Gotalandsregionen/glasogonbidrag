@@ -76,6 +76,10 @@ public class GrantRuleValidationServiceImpl
             result.add(new GrantRuleViolation("violation-not-in-vgr"));
         }
 
+        if (testRecipeDateAfterDeliveryDate(recipeDate, deliveryDate)) {
+            result.add(new GrantRuleViolation(
+                    "violation-recipe-date-after-delivery-date"));
+        }
 
         if (diagnose.getType() == DiagnoseType.NONE) {
             // When a don't have a special kind of diagnosis this
@@ -286,6 +290,11 @@ public class GrantRuleValidationServiceImpl
 //                && recipeDate.before(dateOf20thBirthday);
 //    }
 //    // END
+
+    private boolean testRecipeDateAfterDeliveryDate(Date recipeDate,
+                                                    Date deliveryDate) {
+        return recipeDate.after(deliveryDate);
+    }
 
     public boolean testRecipeDateBeforeAge16(Date recipeDate,
                                              Date dateOf16thBirthday) {
