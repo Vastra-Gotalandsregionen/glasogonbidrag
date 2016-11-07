@@ -30,7 +30,7 @@ public interface InvoiceService {
     InvoiceGrantTuple updateGrant(Invoice invoice, Grant grant)
         throws GrantMissingAreaException;
 
-    Invoice updateDeleteGrant(Invoice invoice, long grantId);
+    InvoiceBeneficiaryTuple updateDeleteGrant(Invoice invoice, long grantId);
 
     Invoice updateAddGrantAdjustment(long userId,
                                      long groupId,

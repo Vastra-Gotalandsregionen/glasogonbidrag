@@ -155,7 +155,6 @@ public class Invoice {
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
             mappedBy = "invoice")
     private Set<Grant> grants;
 

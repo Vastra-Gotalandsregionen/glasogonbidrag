@@ -155,6 +155,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         beneficiary.getPrescriptionHistory().add(prescription);
         prescription.setBeneficiary(beneficiary);
 
+        em.persist(grant.getPrescription());
         grantService.create(grant);
 
         // We have modified the invoice, update this to reflect this.
@@ -276,16 +277,31 @@ public class InvoiceServiceImpl implements InvoiceService {
         return new InvoiceGrantTuple(newInvoice, newGrant);
     }
 
+    // FIXME: Deleting one grant when two is present don't work.
+    // Might be the remove function from set.
     @Override
     @Transactional
-    public Invoice updateDeleteGrant(Invoice invoice, long grantId) {
+    public InvoiceBeneficiaryTuple updateDeleteGrant(Invoice invoice,
+                                                     long grantId) {
         Grant grant = em.find(Grant.class, grantId);
 
         AccountingDistribution distribution = invoice.getDistribution();
+        Beneficiary beneficiary = grant.getBeneficiary();
 
+        // Remove grant from invoice. Invalidate distribution.
         invoice.removeGrant(grant);
         invoice.setDistribution(null);
+
+        Prescription prescription = grant.getPrescription();
+        prescription.setBeneficiary(null);
+
+        // Remove invoice from grant. And other mappings
         grant.setInvoice(null);
+        grant.setBeneficiary(null);
+        grant.setPrescription(null);
+
+        beneficiary.getPrescriptionHistory().remove(prescription);
+        beneficiary.getGrants().remove(grant);
 
         LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
 
@@ -295,9 +311,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         // We have modified the invoice, update this to reflect this.
         invoice.setModifiedDate(date);
 
-        Invoice newInvoice = em.merge(invoice);
-
+        // Remove grant and prescription.
+        em.remove(prescription);
         em.remove(grant);
+
+        Invoice newInvoice = em.merge(invoice); // TODO: wrong number of grants.
+        Beneficiary newBeneficiary = em.merge(beneficiary);
 
         // remove old distribution.
         if (distribution != null) {
@@ -307,7 +326,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             em.remove(distribution);
         }
 
-        return newInvoice;
+        return new InvoiceBeneficiaryTuple(newInvoice, newBeneficiary);
     }
 
     @Override

@@ -107,7 +107,7 @@ public class Grant {
     @JoinColumn(name = "beneficiary_id")
     private Beneficiary beneficiary;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 

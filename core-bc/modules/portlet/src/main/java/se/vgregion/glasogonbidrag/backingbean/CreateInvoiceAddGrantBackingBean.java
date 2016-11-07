@@ -537,7 +537,11 @@ public class CreateInvoiceAddGrantBackingBean {
 
         Long grantId = grant.getId();
 
-        invoiceService.updateDeleteGrant(invoice, grantId);
+        InvoiceBeneficiaryTuple tuple = invoiceService.updateDeleteGrant(
+                invoice, grantId);
+
+        invoice = tuple.getInvoice();
+        beneficiary = tuple.getBeneficiary();
 
         return String.format(
                 "add_grant" +
