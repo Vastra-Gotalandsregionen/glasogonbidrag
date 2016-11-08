@@ -19,12 +19,18 @@
 
         <div class="row-fluid">
 
-            <div class="span4">
-                <ui:include src="fragment_progress_this_week_chart.xhtml" />
-            </div>
+            <ui:fragment rendered="false">
+                <div class="span4">
+                    <ui:include src="fragment_progress_this_week_chart.xhtml" />
+                </div>
 
-            <div class="span4">
-                <ui:include src="fragment_grants_this_week_chart.xhtml" />
+                <div class="span4">
+                    <ui:include src="fragment_grants_this_week_chart.xhtml" />
+                </div>
+            </ui:fragment>
+
+            <div class="span8">
+                <ui:include src="fragment_statistics_table.xhtml" />
             </div>
 
             <div class="span4">
