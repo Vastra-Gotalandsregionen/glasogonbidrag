@@ -13,26 +13,11 @@
 
     <h:body>
 
-        <!--
-        <h1>
-            <h:outputText value="#{bundle['statistics']}" />
-        </h1>
-        -->
-
         <div class="row-fluid">
-
-            <div class="span4">
-                <ui:include src="fragment_progress_this_week_chart.xhtml" />
-            </div>
-
-            <div class="span4">
-                <ui:include src="fragment_grants_this_week_chart.xhtml" />
-            </div>
-
-            <div class="span4">
-                <ui:include src="fragment_kpi.xhtml" />
-            </div>
-
+            <h:panelGroup id="statisticsPanel">
+                <ui:include src="fragment_statistics_filters.xhtml" />
+                <ui:include src="fragment_statistics_table.xhtml" />
+            </h:panelGroup>
         </div>
 
     </h:body>

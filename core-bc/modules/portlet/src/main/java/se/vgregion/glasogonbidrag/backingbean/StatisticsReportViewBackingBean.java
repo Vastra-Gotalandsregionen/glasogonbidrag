@@ -28,13 +28,13 @@ import java.util.List;
 /**
  * @author Erik Andersson - Monator Technologies AB
  */
-@Component(value = "statisticsDashboardViewBackingBean")
+@Component(value = "statisticsReportViewBackingBean")
 @Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class StatisticsDashboardViewBackingBean {
+public class StatisticsReportViewBackingBean {
 
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(StatisticsDashboardViewBackingBean.class);
+            LoggerFactory.getLogger(StatisticsReportViewBackingBean.class);
 
     @Autowired
     private DateUtil dateUtil;
@@ -48,21 +48,7 @@ public class StatisticsDashboardViewBackingBean {
     @Autowired
     private StatisticsMockUtil statisticsMockUtil;
 
-
-    @Autowired
-    private GrantService grantService;
-
-    KronaCalculationUtil currency;
-
-    private String daysOfWeekJSONString;
-
-    private int grantCountToday;
-
-    private String grantsCountOfWeekDaysJSONString;
-
-    private BigDecimal progressToday;
-
-    private String progressOfWeekJSONString;
+    // Attributes
 
     private int statisticsFilterBirthYearMin;
 
@@ -88,25 +74,11 @@ public class StatisticsDashboardViewBackingBean {
 
     private List<StatisticsVO> statisticsVOs;
 
-    public String getDaysOfWeekJSONString() {
-        return daysOfWeekJSONString;
-    }
+    private int grantCountTotal;
 
-    public int getGrantCountToday() {
-        return grantCountToday;
-    }
+    private int grantSumTotal;
 
-    public String getGrantsCountOfWeekDaysJSONString() {
-        return grantsCountOfWeekDaysJSONString;
-    }
-
-    public BigDecimal getProgressToday() {
-        return progressToday;
-    }
-
-    public String getProgressOfWeekJSONString() {
-        return progressOfWeekJSONString;
-    }
+    // Getters and Setters
 
     public int getStatisticsFilterBirthYearMin() {
         return statisticsFilterBirthYearMin;
@@ -204,88 +176,47 @@ public class StatisticsDashboardViewBackingBean {
         this.statisticsVOs = statisticsVOs;
     }
 
+    public int getGrantCountTotal() {
+        return grantCountTotal;
+    }
+
+    public void setGrantCountTotal(int grantCountTotal) {
+        this.grantCountTotal = grantCountTotal;
+    }
+
+    public int getGrantSumTotal() {
+        return grantSumTotal;
+    }
+
+    public void setGrantSumTotal(int grantSumTotal) {
+        this.grantSumTotal = grantSumTotal;
+    }
+
+    // Listeners
+
     public void changeStatisticsFilterListener() {
     }
 
     public void searchStatistics() {
         LOGGER.info("searchStatistics");
 
-        String labelPrefix = "Kommun";
-        int numberOfHits = 20;
-
-        // TODO: Ugly code
-        if(statisticsGrouping.equals("age")) {
-            labelPrefix = "Alder";
-            numberOfHits = 60;
-        } else if(statisticsGrouping.equals("gender")) {
-            labelPrefix = "Kon";
-            numberOfHits = 3;
-        } else if(statisticsGrouping.equals("grantType")) {
-            labelPrefix = "Bidragstyp";
-            numberOfHits = 6;
-        }
-
-        //statisticsVOs = getDummyStatisticsVO(labelPrefix, numberOfHits);
         statisticsVOs = statisticsMockUtil.getStatistics(statisticsGrouping, statisticsFilterGender, statisticsFilterBirthYearStart, statisticsFilterBirthYearStop);
+
+        for(StatisticsVO statisticsVO : statisticsVOs) {
+            grantCountTotal += statisticsVO.getNumberOfGrants();
+            grantSumTotal += statisticsVO.getGrantsSum();
+        }
     }
 
     @PostConstruct
     protected void init() {
         LOGGER.info("init");
 
-        currency = new KronaCalculationUtil();
-
-        Date today = new Date();
-
-        // Progress today
-        long progressTodayRaw = grantService.currentProgressByDate(today);
-        progressToday = currency.calculatePartsAsKrona(progressTodayRaw);
-
-        // Grants today
-        List<Grant> todaysGrants = grantService.findByDate(today);
-        grantCountToday = todaysGrants.size();
-
-        // Days of week
-        List<Date> datesOfThisWeek = dateUtil.getDatesOfThisWeek();
-
-        JSONArray daysOfWeekJSON = JSONFactoryUtil.createJSONArray();
-        for(Date date : datesOfThisWeek) {
-            SimpleDateFormat format = new SimpleDateFormat("EEE", liferayUtil.getLocale());
-            String dateString = format.format(date);
-            daysOfWeekJSON.put(dateString);
-        }
-
-        daysOfWeekJSONString = daysOfWeekJSON.toString();
-
-        // Grants counts of week days
-        //getGrantsCountOfWeekDaysJSONString
-        JSONArray getGrantsCountOfWeekDaysJSON = JSONFactoryUtil.createJSONArray();
-        for(Date curDate : datesOfThisWeek) {
-            List<Grant> grantsOfDate = grantService.findByDate(curDate);
-            getGrantsCountOfWeekDaysJSON.put(grantsOfDate.size());
-        }
-        grantsCountOfWeekDaysJSONString = getGrantsCountOfWeekDaysJSON.toString();
-
-        // Progress of week
-        JSONArray progressOfWeekJSON = JSONFactoryUtil.createJSONArray();
-
-        for(Date curDate : datesOfThisWeek) {
-            long dateProgressRaw;
-
-            try {
-                dateProgressRaw = grantService.currentProgressByDate(curDate);
-            } catch(NullPointerException e) {
-                dateProgressRaw = new Long(0);
-            }
-
-            BigDecimal dateProgress = currency.calculatePartsAsKrona(dateProgressRaw);
-            progressOfWeekJSON.put(dateProgress.intValueExact());
-        }
-
-        progressOfWeekJSONString = progressOfWeekJSON.toString();
-
         // Dummy data for statistics
         statisticsVOs = new ArrayList<StatisticsVO>();
+        grantCountTotal = 0;
+        grantSumTotal = 0;
+
         statisticsFilterGender = "";
         statisticsGrouping = "";
         statisticsTimePeriod = "today";
@@ -297,24 +228,6 @@ public class StatisticsDashboardViewBackingBean {
 
         statisticsFilterBirthYearStart = statisticsFilterBirthYearMin;
         statisticsFilterBirthYearStop = statisticsFilterBirthYearMax;
-
-        // Temp
-        //statisticsVOs = getDummyStatisticsVO("Kommun", 20);
-    }
-
-    private List<StatisticsVO> getDummyStatisticsVO(String labelPrefix, int numberOfHits) {
-        ArrayList<StatisticsVO> statisticsItems = new ArrayList<StatisticsVO>();
-
-        for (int i = 1; i <= numberOfHits; i++) {
-            StatisticsVO item = new StatisticsVO();
-            item.setLabel(labelPrefix + " " + i);
-            item.setNumberOfGrants(5*i);
-            item.setGrantsSum(200*i);
-
-            statisticsItems.add(item);
-        }
-
-        return statisticsItems;
     }
 
 

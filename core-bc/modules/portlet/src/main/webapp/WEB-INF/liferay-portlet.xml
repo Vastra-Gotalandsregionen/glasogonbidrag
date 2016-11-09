@@ -54,4 +54,19 @@
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
     </portlet>
 
+    <portlet>
+        <portlet-name>glasogonbidrag-statistics-export</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
+        <portlet-name>glasogonbidrag-statistics-report</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+
 </liferay-portlet-app>

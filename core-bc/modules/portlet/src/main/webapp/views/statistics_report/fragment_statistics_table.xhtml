@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pe="http://primefaces.org/ui/extensions"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
+
+        <ui:fragment rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
+            <div>
+                <h:form>
+                    <h:commandLink value="Exportera till PDF" target="_BLANK">
+                        <p:dataExporter type="pdf" target=":statisticsTable" fileName="glasogonbidrag_statistics_report" pageOnly="true" />
+                    </h:commandLink>
+                </h:form>
+            </div>
+        </ui:fragment>
+
+        <p:dataTable id="statisticsTable" var="statisticsVO" value="#{statisticsReportViewBackingBean.statisticsVOs}" rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
+            <p:column headerText="Label" sortBy="#{statisticsVO.label}">
+                <h:outputText value="#{statisticsVO.label}" />
+            </p:column>
+            <p:column headerText="Antal bidrag" sortBy="#{statisticsVO.numberOfGrants}" styleClass="number">
+                <h:outputText value="#{statisticsVO.numberOfGrants}">
+                    <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Summa" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
+                <h:outputText value="#{statisticsVO.grantsSum}">
+                    <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
+                </h:outputText>
+            </p:column>
+
+
+
+            <p:columnGroup type="footer">
+                <p:row styleClass="total-row">
+                    <p:column colspan="1" footerText="Totalt:" />
+                    <p:column styleClass="number">
+                        <f:facet name="footer">
+                            <h:outputText value="#{statisticsReportViewBackingBean.grantCountTotal}">
+                                <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+                    <p:column styleClass="number">
+                        <f:facet name="footer">
+                            <h:outputText value="#{statisticsReportViewBackingBean.grantSumTotal}">
+                                <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+                </p:row>
+            </p:columnGroup>
+
+
+
+        </p:dataTable>
+
+
+    </h:body>
+</f:view>

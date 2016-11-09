@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
+
+        <h:panelGroup id="statisticsFilters">
+
+            <h:form>
+
+                <h2>Sök statistisk data</h2>
+
+                <div class="statistics-filter-wrap">
+
+                    <div class="statistics-filter-row">
+                        <div class="statistics-filter-item">
+                            <p:outputLabel styleClass="filter-label" for="statisticsGrouping" value="Gruppera efter: " />
+                            <p:selectOneMenu id="statisticsGrouping" value="#{statisticsReportViewBackingBean.statisticsGrouping}">
+                                <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsFilterListener}"
+                                        event="valueChange"
+                                        execute="@form"
+                                        render=":statisticsFilters"
+                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                <f:selectItem itemLabel="Välj en" itemValue="" />
+                                <f:selectItem itemLabel="Kommun" itemValue="municipality" />
+                                <f:selectItem itemLabel="Ålder" itemValue="age" />
+                                <f:selectItem itemLabel="Kön" itemValue="gender" />
+                                <f:selectItem itemLabel="Bidragstyp" itemValue="grantType" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="statistics-filter-item">
+                            <p:outputLabel styleClass="filter-label" for="statisticsTimePeriod" value="Tidsperiod: " />
+                            <p:selectOneMenu id="statisticsTimePeriod" value="#{statisticsReportViewBackingBean.statisticsTimePeriod}">
+                                <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsFilterListener}"
+                                        event="valueChange"
+                                        execute="@form"
+                                        render=":statisticsFilters"
+                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                <f:selectItem itemLabel="Idag" itemValue="today" />
+                                <f:selectItem itemLabel="Igår" itemValue="yesterday" />
+                                <f:selectItem itemLabel="Denna vecka" itemValue="thisWeek" />
+                                <f:selectItem itemLabel="Föregående vecka" itemValue="previousWeek" />
+                                <f:selectItem itemLabel="Denna månad" itemValue="thisMonth" />
+                                <f:selectItem itemLabel="Föregående månad" itemValue="previousMonth" />
+                                <f:selectItem itemLabel="Detta år" itemValue="thisYear" />
+                                <f:selectItem itemLabel="Föregående år" itemValue="previousYear" />
+                                <f:selectItem itemLabel="Eget intervall" itemValue="customPeriod" />
+                            </p:selectOneMenu>
+                        </div>
+                        <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsTimePeriod eq 'customPeriod'}">
+                            <div class="statistics-filter-item">
+                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodStartDate" value="Från:" />
+                                <p:calendar id="statisticsTimePeriodStartDate" value="#{statisticsReportViewBackingBean.statisticsTimePeriodStartDate}" />
+                            </div>
+                            <div class="statistics-filter-item">
+                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodEndDate" value="Till:" />
+                                <p:calendar id="statisticsTimePeriodEndDate" value="#{statisticsReportViewBackingBean.statisticsTimePeriodEndDate}" />
+                            </div>
+                        </ui:fragment>
+                    </div>
+
+                    <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsGrouping ne ''}">
+
+                        <div class="statistics-filter-row">
+
+                            <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsGrouping ne 'gender'}">
+                                <div class="statistics-filter-item">
+                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGender" value="Kön: " />
+                                    <p:selectOneMenu id="statisticsFilterGender" value="#{statisticsReportViewBackingBean.statisticsFilterGender}">
+                                        <f:selectItem itemLabel="Alla" itemValue="" />
+                                        <f:selectItem itemLabel="Man" itemValue="man" />
+                                        <f:selectItem itemLabel="Kvinna" itemValue="woman" />
+                                        <f:selectItem itemLabel="Uppgift saknas" itemValue="not-available" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsGrouping ne 'grantType'}">
+                                <div class="statistics-filter-item">
+                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGrantType" value="Bidragstyp: " />
+                                    <p:selectOneMenu id="statisticsFilterGrantType" value="#{statisticsReportViewBackingBean.statisticsFilterGrantType}">
+                                        <f:selectItem itemLabel="Alla" itemValue="" />
+                                        <f:selectItem itemLabel="Barn" itemValue="children" />
+                                        <f:selectItem itemLabel="Special - Afaki" itemValue="aphakia" />
+                                        <f:selectItem itemLabel="Special - Keratokonus" itemValue="keratoconus" />
+                                        <f:selectItem itemLabel="Special - Synsvag" itemValue="special" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </ui:fragment>
+
+                            <div class="statistics-filter-item">
+                                <p:outputLabel styleClass="filter-label" for="statisticsFilterIdentification" value="Identifikationstyp: " />
+                                <p:selectOneMenu id="statisticsFilterIdentification" value="#{statisticsReportViewBackingBean.statisticsFilterIdentification}">
+                                    <f:selectItem itemLabel="Alla" itemValue="" />
+                                    <f:selectItem itemLabel="Personnumer" itemValue="personalnumber" />
+                                    <f:selectItem itemLabel="Skyddad identitet" itemValue="protected" />
+                                    <f:selectItem itemLabel="Ej personnummer (LMA)" itemValue="lma" />
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="statistics-filter-item">
+                                <h:outputText
+                                        id="statisticsFilterAgeToBirthYear"
+                                        value="Födelseår från #{statisticsReportViewBackingBean.statisticsFilterBirthYearStart} till #{statisticsReportViewBackingBean.statisticsFilterBirthYearStop}" />
+                                <p:slider for="hiddenStatisticsFilterBirthYearStart,hiddenStatisticsFilterBirthYearStop"
+                                          display="statisticsFilterAgeToBirthYear"
+                                          range="true"
+                                          displayTemplate="Födelseår från {min} till {max}"
+                                          minValue="#{statisticsReportViewBackingBean.statisticsFilterBirthYearMin}"
+                                          maxValue="#{statisticsReportViewBackingBean.statisticsFilterBirthYearMax}"
+                                />
+                                <h:inputHidden id="hiddenStatisticsFilterBirthYearStart" value="#{statisticsReportViewBackingBean.statisticsFilterBirthYearStart}" />
+                                <h:inputHidden id="hiddenStatisticsFilterBirthYearStop" value="#{statisticsReportViewBackingBean.statisticsFilterBirthYearStop}" />
+                            </div>
+
+                        </div>
+
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
+                    </ui:fragment>
+
+                    <div class="statistics-filter-button-row">
+                        <c:set var="searchLabel" scope="request" value="#{empty statisticsReportViewBackingBean.statisticsVOs ? 'Sök' : 'Uppdatera sökning'}" />
+
+
+                        <h:commandLink styleClass="link-btn primary" value="#{searchLabel}">
+                            <f:ajax listener="#{statisticsReportViewBackingBean.searchStatistics}"
+                                    execute="@form"
+                                    render=":statisticsPanel"
+                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                        </h:commandLink>
+                    </div>
+
+
+                </div>
+
+            </h:form>
+
+        </h:panelGroup>
+
+
+    </h:body>
+</f:view>

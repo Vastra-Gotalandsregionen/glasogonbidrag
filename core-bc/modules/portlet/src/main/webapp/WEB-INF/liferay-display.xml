@@ -13,6 +13,8 @@
         <portlet id="glasogonbidrag-manage-beneficiaries"/>
         <portlet id="glasogonbidrag-manage-suppliers"/>
         <portlet id="glasogonbidrag-statistics-dashboard"/>
+        <portlet id="glasogonbidrag-statistics-export"/>
+        <portlet id="glasogonbidrag-statistics-report"/>
     </category>
 
 </display>
