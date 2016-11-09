@@ -2,6 +2,7 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,6 +42,17 @@ public abstract class Identification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "ident_number", unique = true, nullable = false)
+    private String number;
+
+    public Identification() {
+
+    }
+
+    public Identification(String number) {
+        this.number = number;
+    }
+
     public Long getId() {
         return id;
     }
@@ -49,7 +61,13 @@ public abstract class Identification {
         this.id = id;
     }
 
-    public abstract String getString();
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public abstract IdentificationType getType();
 
@@ -62,18 +80,18 @@ public abstract class Identification {
 
         Identification that = (Identification) o;
 
-        return getString() != null ?
-                getString().equals(that.getString()) :
-                that.getString() == null;
+        if (!number.equals(that.number)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return getString() != null ? getString().hashCode() : 0;
+        return number.hashCode();
     }
 
     @Override
     public String toString() {
-        return getString();
+        return this.number;
     }
 }

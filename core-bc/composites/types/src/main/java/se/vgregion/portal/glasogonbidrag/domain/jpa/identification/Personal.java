@@ -16,9 +16,6 @@ import java.util.Date;
 @Table(name = "vgr_glasogonbidrag_identification_personal")
 public class Personal extends Identification {
 
-    @Column(name = "pid_number", unique = true, nullable = false)
-    private String number;
-
     @Transient
     private final DateCalculationUtil dateUtil = new DateCalculationUtil();
 
@@ -29,20 +26,12 @@ public class Personal extends Identification {
     }
 
     public Personal(String number) {
-        this.number = number;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+        super(number);
     }
 
     @Override
     public Date getBirthDate() {
-        String date = dateUtil.extractDateFromPersonalNumbers(number);
+        String date = dateUtil.extractDateFromPersonalNumbers(getNumber());
         return dateUtil.dateFromString(date);
     }
 
@@ -50,10 +39,10 @@ public class Personal extends Identification {
     public boolean isValid() {
         boolean isValid = false;
 
-        String tenCharNumber = number;
+        String tenCharNumber = getNumber();
 
         int length = tenCharNumber.length();
-        if (number.contains("-")) {
+        if (tenCharNumber.contains("-")) {
             length = length - 1;
         }
 
@@ -84,32 +73,8 @@ public class Personal extends Identification {
     }
 
     @Override
-    public String getString() {
-        return number;
-    }
-
-    @Override
     public IdentificationType getType() {
         return IdentificationType.PERSONAL;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Personal that = (Personal) o;
-
-        return number != null ? number.equals(that.number) : that.number == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (number != null ? number.hashCode() : 0);
-        return result;
     }
 
     private int[] stringToNumberArray(String number) {
