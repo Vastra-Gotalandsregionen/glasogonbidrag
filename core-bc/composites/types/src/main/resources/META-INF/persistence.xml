@@ -23,6 +23,7 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceListDTO</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO</class>
 
         <properties>
