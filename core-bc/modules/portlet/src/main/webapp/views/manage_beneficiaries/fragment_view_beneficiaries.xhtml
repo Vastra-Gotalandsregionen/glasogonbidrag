@@ -14,7 +14,7 @@
 
     <h:body>
 
-        <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.beneficiaries}" scope="request" />
+        <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.lazyDataModel}" scope="request" />
         <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
@@ -28,8 +28,7 @@
                      rowsPerPageTemplate="1,5,10,15,20,50"
                      selectionMode="single"
                      selection="#{selectedBeneficiary}"
-                     rowKey="#{beneficiary.id}"
-        >
+                     lazy="true">
 
             <p:ajax event="rowSelect"
                     listener="#{manageBeneficiariesViewBackingBean.onRowSelect}"
@@ -37,21 +36,21 @@
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
             <p:ajax event="rowUnselect"
-                    listener="#{manageBeneficiariesViewBackingBean.onRowUnselect}"
+                    listener="#{manageBeneficiariesViewBackingBean.onRowDeselect}"
                     update=":manageBeneficiariesForm:detailsPanel"
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
 
-            <p:column headerText="#{bundle['personal-number']}" sortBy="#{beneficiary.identification.id}">
-                <h:outputText value="#{beneficiary.identification}" />
+            <p:column headerText="#{bundle['personal-number']}" sortBy="#{beneficiary.number}">
+                <h:outputText value="#{beneficiary.number}" />
             </p:column>
 
-            <p:column headerText="#{bundle['name']}" sortBy="#{beneficiary.lastName}">
+            <p:column headerText="#{bundle['name']}" sortBy="#{beneficiary.fullName}">
                 <h:outputText value="#{beneficiary.fullName}" />
             </p:column>
 
-            <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{beneficiary.grants.size()}">
-                <h:outputText value="#{beneficiary.grants.size()}" />
+            <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{beneficiary.count}">
+                <h:outputText value="#{beneficiary.count}" />
             </p:column>
 
         </p:dataTable>
