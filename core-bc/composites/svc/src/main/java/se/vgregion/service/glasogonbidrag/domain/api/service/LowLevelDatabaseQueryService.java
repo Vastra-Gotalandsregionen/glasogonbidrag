@@ -1,6 +1,7 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
 import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 
 import java.util.List;
@@ -9,6 +10,12 @@ import java.util.List;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface LowLevelDatabaseQueryService {
+
+    int countInvoices();
+
+    List<InvoiceDTO> listInvoices(
+            LowLevelSortOrder sort, int firstResults, int maxResult)
+                throws Exception;
 
     int countBeneficiaries();
 

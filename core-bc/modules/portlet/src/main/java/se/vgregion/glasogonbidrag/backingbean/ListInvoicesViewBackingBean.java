@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.datamodel.InvoiceLazyDataModel;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -33,8 +35,12 @@ public class ListInvoicesViewBackingBean {
     @Autowired
     private InvoiceService invoiceService;
 
+    @Autowired
+    private LowLevelDatabaseQueryService queryService;
+
     private List<String> filterDataStatuses;
 
+    private InvoiceLazyDataModel lazyDataModel;
     private List<Invoice> invoices;
 
     public List<String> getFilterDataStatuses() {
@@ -43,6 +49,10 @@ public class ListInvoicesViewBackingBean {
 
     public void setFilterDataStatuses(List<String> filterDataStatuses) {
         this.filterDataStatuses = filterDataStatuses;
+    }
+
+    public InvoiceLazyDataModel getLazyDataModel() {
+        return lazyDataModel;
     }
 
     public List<Invoice> getInvoices() {
@@ -72,6 +82,7 @@ public class ListInvoicesViewBackingBean {
 
     private void fetchInvoices() {
         invoices = invoiceService.findAllWithParts();
+        lazyDataModel = new InvoiceLazyDataModel(invoiceService, queryService);
     }
 
 }

@@ -1,7 +1,10 @@
 package se.vgregion.portal.glasogonbidrag.domain.dto;
 
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
+
+import java.math.BigDecimal;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -19,6 +22,9 @@ public class InvoiceDTO {
 //    private String owner;
 
     private Invoice invoice;
+
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
 
     public InvoiceDTO(long id, String verificationNumber,
                       String supplier, String invoiceNumber,
@@ -67,6 +73,10 @@ public class InvoiceDTO {
 
     public long getAmount() {
         return amount;
+    }
+
+    public BigDecimal getAmountAsKrona() {
+        return currency.calculatePartsAsKrona(amount);
     }
 
     public long getCount() {

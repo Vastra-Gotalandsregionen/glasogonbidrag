@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
 import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 
@@ -24,6 +25,56 @@ public class LowLevelDatabaseQueryServiceImpl
 
     @PersistenceContext
     private EntityManager em;
+
+    public int countInvoices() {
+        String query =
+                "SELECT COUNT(*) " +
+                "FROM Invoice i";
+
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+
+        Long result = q.getSingleResult();
+
+        LOGGER.info("countInvoices() - " +
+                        "The query {} got the result {}",
+                query, result);
+
+        return result.intValue();
+    }
+
+    public List<InvoiceDTO> listInvoices(
+            LowLevelSortOrder sort, int firstResults, int maxResult)
+                throws Exception {
+        StringBuilder query = new StringBuilder();
+        query.append(
+                "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
+                           "InvoiceDTO( " +
+                                "i.id, i.verificationNumber, s.name," +
+                                "i.invoiceNumber, i.amount, COUNT(g), " +
+                                "i.status, s.name ) " + // TODO: last s.name is wrong should be owner, when this is added...
+                "FROM Invoice i " +
+                "LEFT JOIN i.supplier s " +
+                "LEFT JOIN i.grants g ");
+
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
+
+        query.append("GROUP BY i.id, s.name ");
+        query.append("ORDER BY ").append(sort.toString());
+
+        TypedQuery<InvoiceDTO> q =
+                em.createQuery(query.toString(), InvoiceDTO.class);
+        q.setFirstResult(firstResults);
+        q.setMaxResults(maxResult);
+
+        List<InvoiceDTO> result = q.getResultList();
+
+        LOGGER.info("listInvoices() - The query {} found {} results",
+                query, result.size());
+
+        return result;
+    }
 
     @Override
     public int countBeneficiaries() {
