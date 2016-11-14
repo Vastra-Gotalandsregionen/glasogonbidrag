@@ -64,10 +64,10 @@ public class InvoiceLazyDataModel extends LazyDataModel<InvoiceDTO> {
 
     @Override
     public List<InvoiceDTO> load(int first,
-                                     int pageSize,
-                                     String sortField,
-                                     SortOrder sortOrder,
-                                     Map<String, Object> filters) {
+                                 int pageSize,
+                                 String sortField,
+                                 SortOrder sortOrder,
+                                 Map<String, Object> filters) {
         List<InvoiceDTO> results;
 
         try {

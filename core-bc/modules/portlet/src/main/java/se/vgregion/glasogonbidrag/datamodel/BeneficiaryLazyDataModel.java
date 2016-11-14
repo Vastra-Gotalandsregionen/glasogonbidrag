@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Martin Lind
+ * @author Martin Lind - Monator Tehcnologies AB
  */
 public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
     private final static Logger LOGGER =
