@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
 import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 
@@ -25,6 +26,54 @@ public class LowLevelDatabaseQueryServiceImpl
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public int countSuppliers() {
+        String query =
+                "SELECT COUNT(*) " +
+                "FROM Supplier i";
+
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+
+        Long result = q.getSingleResult();
+
+        LOGGER.info("countSuppliers() - " +
+                        "The query {} got the result {}",
+                query, result);
+
+        return result.intValue();
+    }
+
+    @Override
+    public List<SupplierDTO> listSuppliers(
+            LowLevelSortOrder sort, int firstResults, int maxResult)
+                throws Exception {
+        StringBuilder query = new StringBuilder();
+        query.append(
+                "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
+                           "SupplierDTO( " +
+                                "s.id, s.name, s.externalServiceId," +
+                                "COUNT(i), s.active ) " +
+                "FROM Supplier s " +
+                "LEFT JOIN s.invoices i " +
+                "GROUP BY s.id " +
+                "ORDER BY ");
+        query.append(sort.toString());
+
+
+        TypedQuery<SupplierDTO> q =
+                em.createQuery(query.toString(), SupplierDTO.class);
+
+        q.setFirstResult(firstResults);
+        q.setMaxResults(maxResult);
+
+        List<SupplierDTO> result = q.getResultList();
+
+        LOGGER.info("listSuppliers() - The query {} found {} results",
+                query, result.size());
+
+        return result;
+    }
 
     public int countInvoices() {
         String query =

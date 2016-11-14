@@ -29,21 +29,21 @@
                      selectionMode="single"
                      selection="#{selectedSupplier}"
                      rowKey="#{supplier.id}"
-        >
+                     lazy="true">
+
             <p:ajax event="rowSelect"
                     listener="#{manageSuppliersViewBackingBean.onRowSelect}"
                     update=":manageSuppliersForm:detailsPanel"
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
+
             <p:ajax event="rowUnselect"
-                    listener="#{manageSuppliersViewBackingBean.onRowUnselect}"
+                    listener="#{manageSuppliersViewBackingBean.onRowDeselect}"
                     update=":manageSuppliersForm:detailsPanel"
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
              />
 
-            <p:column headerText="#{bundle['supplier']}"
-                      sortBy="#{supplier.name}"
-            >
+            <p:column headerText="#{bundle['supplier']}" sortBy="#{supplier.name}">
                 <!--
                 <h:link value="#{supplier.name}" outcome="view_supplier">
                     <f:param name="supplierId" value="#{supplier.id}" />
@@ -56,14 +56,13 @@
                 <h:outputText value="#{supplier.externalServiceId}" />
             </p:column>
 
-            <p:column headerText="#{bundle['number-of-invoices']}" sortBy="#{supplier.invoices.size()}" styleClass="number">
-                <h:outputText value="#{supplier.invoices.size()}" />
+            <p:column headerText="#{bundle['number-of-invoices']}" sortBy="#{supplier.count}" styleClass="number">
+                <h:outputText value="#{supplier.count}" />
             </p:column>
 
             <p:column headerText="#{bundle['active']}" sortBy="#{supplier.active}">
                 <h:outputText value="#{supplier.active ? bundle['yes'] : bundle['no']}" />
             </p:column>
-
 
         </p:dataTable>
 

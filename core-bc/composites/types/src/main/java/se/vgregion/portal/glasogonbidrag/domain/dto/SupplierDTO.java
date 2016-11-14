@@ -7,13 +7,21 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
  */
 public class SupplierDTO {
     private final long id;
+
+    private final String name;
     private final String externalServiceId;
     private final long count;
     private final boolean active;
+
     private final Supplier supplier;
 
-    public SupplierDTO(long id, String externalServiceId, long count, boolean active) {
+    public SupplierDTO(long id,
+                       String name,
+                       String externalServiceId,
+                       long count,
+                       boolean active) {
         this.id = id;
+        this.name = name;
         this.externalServiceId = externalServiceId;
         this.count = count;
         this.active = active;
@@ -22,7 +30,9 @@ public class SupplierDTO {
 
     public SupplierDTO(Supplier supplier) {
         this.supplier = supplier;
+
         this.id = supplier.getId();
+        this.name = supplier.getName();
         this.externalServiceId = supplier.getExternalServiceId();
         this.count = supplier.getInvoices().size();
         this.active = supplier.isActive();
@@ -30,6 +40,10 @@ public class SupplierDTO {
 
     public long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getExternalServiceId() {
