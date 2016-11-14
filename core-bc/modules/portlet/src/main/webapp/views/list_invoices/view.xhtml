@@ -82,6 +82,12 @@
                 </p:column>
 
                 <!-- Owner temporary removed -->
+                <ui:remove>
+                    <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
+                        <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
+                    </p:column>
+                </ui:remove>
+
             </p:dataTable>
         </h:form>
 
