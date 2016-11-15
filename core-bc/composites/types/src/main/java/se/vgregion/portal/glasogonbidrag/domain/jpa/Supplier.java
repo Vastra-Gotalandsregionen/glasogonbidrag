@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -85,6 +87,11 @@ public class Supplier {
     @Column(name = "active")
     private boolean active;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Basic(fetch=FetchType.EAGER, optional=true)
+    @Column(name = "supplier_comment", columnDefinition = "text")
+    private String comment;
 
     @Column(name = "phone")
     private String phone;
@@ -180,6 +187,14 @@ public class Supplier {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getPhone() {

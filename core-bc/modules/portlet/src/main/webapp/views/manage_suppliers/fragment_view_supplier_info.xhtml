@@ -75,6 +75,19 @@
                         <h:outputText value="#{selectedSupplier.active ? 'Ja' : 'Nej'}" />
                     </span>
                 </li>
+                <li>
+                    <span class="item-label">
+                        <h:outputText value="#{bundle['comment']}:" />
+                    </span>
+                    <span class="item-value">
+                        <ui:fragment rendered="#{not empty selectedSupplier.comment}">
+                            #{selectedSupplier.comment}
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty selectedSupplier.comment}">
+                            -
+                        </ui:fragment>
+                    </span>
+                </li>
             </ul>
 
             <div class="button-row">
