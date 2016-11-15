@@ -4,24 +4,24 @@ package se.vgregion.service.glasogonbidrag.types;
  * @author Martin Lind - Monator Technologies AB
  */
 public class BeneficiaryTransport {
-    private BeneficiaryNameTransport name;
-    private BeneficiaryAreaTransport area;
+    private BeneficiaryNameTuple name;
+    private BeneficiaryAreaTuple area;
 
     public BeneficiaryTransport() {
-        this(new BeneficiaryNameTransport(), new BeneficiaryAreaTransport());
+        this(new BeneficiaryNameTuple(), new BeneficiaryAreaTuple());
     }
 
-    public BeneficiaryTransport(BeneficiaryNameTransport name,
-                                BeneficiaryAreaTransport area) {
+    public BeneficiaryTransport(BeneficiaryNameTuple name,
+                                BeneficiaryAreaTuple area) {
         this.name = name;
         this.area = area;
     }
 
-    public BeneficiaryNameTransport getName() {
+    public BeneficiaryNameTuple getName() {
         return name;
     }
 
-    public void setName(BeneficiaryNameTransport name) {
+    public void setName(BeneficiaryNameTuple name) {
         if (area == null) {
             throw new NullPointerException("Name may not be null!");
         }
@@ -29,11 +29,11 @@ public class BeneficiaryTransport {
         this.name = name;
     }
 
-    public BeneficiaryAreaTransport getArea() {
+    public BeneficiaryAreaTuple getArea() {
         return area;
     }
 
-    public void setArea(BeneficiaryAreaTransport area) {
+    public void setArea(BeneficiaryAreaTuple area) {
         if (area == null) {
             throw new NullPointerException("Area may not be null!");
         }

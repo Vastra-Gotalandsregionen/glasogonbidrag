@@ -32,6 +32,7 @@ import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
@@ -778,7 +779,7 @@ public class CreateInvoiceAddGrantBackingBean {
         String caseWorker = themeDisplay.getUser().getScreenName();
 
         if (grant.getId() == null) {
-            InvoiceBeneficiaryTuple tuple = invoiceService
+            InvoiceBeneficiaryIdentificationTuple tuple = invoiceService
                     .updateAddGrant(
                             userId, groupId, companyId,
                             caseWorker, invoice, grant);

@@ -3,14 +3,14 @@ package se.vgregion.service.glasogonbidrag.types;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class BeneficiaryAreaTransport {
+public class BeneficiaryAreaTuple {
     private String county;
     private String municipality;
 
-    public BeneficiaryAreaTransport() {
+    public BeneficiaryAreaTuple() {
     }
 
-    public BeneficiaryAreaTransport(String municipality, String county) {
+    public BeneficiaryAreaTuple(String municipality, String county) {
         this.municipality = municipality;
         this.county = county;
     }
@@ -36,7 +36,7 @@ public class BeneficiaryAreaTransport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BeneficiaryAreaTransport that = (BeneficiaryAreaTransport) o;
+        BeneficiaryAreaTuple that = (BeneficiaryAreaTuple) o;
 
         if (county != null ? !county.equals(that.county) : that.county != null)
             return false;

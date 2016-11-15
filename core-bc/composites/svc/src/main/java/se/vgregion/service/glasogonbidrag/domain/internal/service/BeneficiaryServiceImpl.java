@@ -2,20 +2,13 @@ package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.DiagnoseService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
-import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -63,7 +56,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     }
 
     @Transactional(rollbackFor = { NoIdentificationException.class })
-    public Beneficiary update(Beneficiary beneficiary)
+    public BeneficiaryIdentificationTuple update(Beneficiary beneficiary)
             throws NoIdentificationException {
         // Require that identification is set.
         Identification identification = beneficiary.getIdentification();
@@ -73,7 +66,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         }
 
         LOGGER.info("Updating identification: {}", identification);
-        em.merge(identification);
+        Identification newIdentification = em.merge(identification);
 
         // Update modification date
         Calendar cal = Calendar.getInstance();
@@ -82,7 +75,10 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         beneficiary.setModifiedDate(date);
 
         LOGGER.info("Updating beneficiary: {}", beneficiary);
-        return em.merge(beneficiary);
+        Beneficiary newBeneficiary = em.merge(beneficiary);
+
+        return new BeneficiaryIdentificationTuple(
+                newBeneficiary, newIdentification);
     }
 
     @Transactional
