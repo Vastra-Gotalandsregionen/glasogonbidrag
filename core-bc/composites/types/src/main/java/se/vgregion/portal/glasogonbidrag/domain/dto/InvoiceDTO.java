@@ -9,19 +9,18 @@ import java.math.BigDecimal;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-// TODO: Add owner when owner is added to main relation.
 public class InvoiceDTO {
-    private long id;
+    private final long id;
 
-    private String verificationNumber;
-    private String supplier;
-    private String invoiceNumber;
-    private long amount;
-    private long count;
-    private InvoiceStatus status;
-//    private String owner;
+    private final String verificationNumber;
+    private final String supplier;
+    private final String invoiceNumber;
+    private final long amount;
+    private final long count;
+    private final InvoiceStatus status;
+    private final String caseWorker;
 
-    private Invoice invoice;
+    private final Invoice invoice;
 
     private final KronaCalculationUtil currency =
             new KronaCalculationUtil();
@@ -29,7 +28,7 @@ public class InvoiceDTO {
     public InvoiceDTO(long id, String verificationNumber,
                       String supplier, String invoiceNumber,
                       long amount, long count, InvoiceStatus status,
-                      String owner) {
+                      String caseWorker) {
         this.id = id;
         this.verificationNumber = verificationNumber;
         this.supplier = supplier;
@@ -37,7 +36,7 @@ public class InvoiceDTO {
         this.amount = amount;
         this.count = count;
         this.status = status;
-//        this.owner = owner;
+        this.caseWorker = caseWorker;
 
         this.invoice = null;
     }
@@ -52,7 +51,7 @@ public class InvoiceDTO {
         this.amount = invoice.getAmount();
         this.count = invoice.getGrants().size();
         this.status = invoice.getStatus();
-//        this.owner = invoice.getOwner;
+        this.caseWorker = invoice.getCaseWorker();
     }
 
     public long getId() {
@@ -87,9 +86,9 @@ public class InvoiceDTO {
         return status;
     }
 
-//    public String getOwner() {
-//        return owner;
-//    }
+    public String getCaseWorker() {
+        return caseWorker;
+    }
 
     public Invoice getInvoice() {
         return invoice;
