@@ -242,7 +242,7 @@ public class StatisticsDashboardViewBackingBean {
         progressToday = currency.calculatePartsAsKrona(progressTodayRaw);
 
         // Grants today
-        List<Grant> todaysGrants = grantService.findByDate(today);
+        List<Grant> todaysGrants = grantService.findAllByDate(today);
         grantCountToday = todaysGrants.size();
 
         // Days of week
@@ -261,7 +261,7 @@ public class StatisticsDashboardViewBackingBean {
         //getGrantsCountOfWeekDaysJSONString
         JSONArray getGrantsCountOfWeekDaysJSON = JSONFactoryUtil.createJSONArray();
         for(Date curDate : datesOfThisWeek) {
-            List<Grant> grantsOfDate = grantService.findByDate(curDate);
+            List<Grant> grantsOfDate = grantService.findAllByDate(curDate);
             getGrantsCountOfWeekDaysJSON.put(grantsOfDate.size());
         }
         grantsCountOfWeekDaysJSONString = getGrantsCountOfWeekDaysJSON.toString();

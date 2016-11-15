@@ -21,11 +21,9 @@ public interface GrantService {
 
     Grant findWithParts(long id);
 
-    // TODO: Should be renamed to findAllByUser
-    List<Grant> findByUser(long userId);
+    List<Grant> findAllByUser(long userId);
 
-    // TODO: Should be renamed to findAllByDate
-    List<Grant> findByDate(Date date);
+    List<Grant> findAllByDate(Date date);
 
     List<Grant> findAllByCaseWorker(String caseWorker);
 
