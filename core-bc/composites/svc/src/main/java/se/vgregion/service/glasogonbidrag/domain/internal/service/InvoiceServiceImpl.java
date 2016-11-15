@@ -14,7 +14,8 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlread
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
@@ -124,7 +125,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public InvoiceBeneficiaryTuple updateAddGrant(
+    public InvoiceBeneficiaryIdentificationTuple updateAddGrant(
             long userId, long groupId, long companyId,
             String caseWorker,
             Invoice invoice, Grant grant)
@@ -166,10 +167,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setModifiedDate(date);
         beneficiary.setModifiedDate(date);
 
-        Beneficiary newBeneficiary = beneficiaryService.update(beneficiary);
+        BeneficiaryIdentificationTuple transport =
+                beneficiaryService.update(beneficiary);
         Invoice newInvoice = this.update(caseWorker, invoice);
 
-        return new InvoiceBeneficiaryTuple(newInvoice, newBeneficiary);
+        return new InvoiceBeneficiaryIdentificationTuple(
+                newInvoice,
+                transport.getBeneficiary(),
+                transport.getIdentification());
     }
 
     private void updateGrantData(Grant grant,

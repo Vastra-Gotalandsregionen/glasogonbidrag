@@ -2,26 +2,25 @@ package se.vgregion.service.glasogonbidrag.types;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class InvoiceBeneficiaryTuple {
-    private final Invoice invoice;
+public class BeneficiaryIdentificationTuple {
     private final Beneficiary beneficiary;
+    private final Identification identification;
 
-    public InvoiceBeneficiaryTuple(Invoice invoice,
-                                   Beneficiary beneficiary) {
-        this.invoice = invoice;
+    public BeneficiaryIdentificationTuple(Beneficiary beneficiary,
+                                          Identification identification) {
         this.beneficiary = beneficiary;
-    }
-
-    public Invoice getInvoice() {
-        return invoice;
+        this.identification = identification;
     }
 
     public Beneficiary getBeneficiary() {
         return beneficiary;
     }
+
+    public Identification getIdentification() {
+            return identification;
+        }
 }

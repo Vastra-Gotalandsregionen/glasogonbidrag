@@ -6,6 +6,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlread
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
+import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
 
@@ -21,7 +22,7 @@ public interface InvoiceService {
 
     Invoice update(String caseWorker, Invoice invoice);
 
-    InvoiceBeneficiaryTuple updateAddGrant(
+    InvoiceBeneficiaryIdentificationTuple updateAddGrant(
             long userId, long groupId, long companyId,
             String caseWorker,
             Invoice invoice, Grant grant)

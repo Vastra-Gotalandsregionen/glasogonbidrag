@@ -7,24 +7,19 @@ import se.riv.population.residentmaster.extended.v1.ExtendedResidentType;
 import se.riv.population.residentmaster.lookupresidentforextendedprofile.v1.rivtabp21.LookupResidentForExtendedProfileResponderInterface;
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileResponseType;
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileType;
-import se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp21.LookupResidentForFullProfileResponderInterface;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
-import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileResponseType;
-import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookupResidentForFullProfileType;
 import se.riv.population.residentmaster.v1.JaNejTYPE;
 import se.riv.population.residentmaster.v1.NamnTYPE;
 import se.riv.population.residentmaster.v1.PersonpostTYPE;
-import se.riv.population.residentmaster.v1.ResidentType;
 import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.integration.exception.IdentityFormatException;
 import se.vgregion.service.glasogonbidrag.integration.exception.NoBeneficiaryFoundException;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberService;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTransport;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTuple;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
-import javax.naming.ldap.ExtendedResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +65,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     }
 
     @Override
-    public BeneficiaryNameTransport fetchName(String identity) {
+    public BeneficiaryNameTuple fetchName(String identity) {
         if (!validateIdentity(identity)) {
             throw new IdentityFormatException(
                     "The format of the identity must be twelve numbers " +
@@ -85,7 +80,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     }
 
     @Override
-    public BeneficiaryAreaTransport fetchAddress(String identity,
+    public BeneficiaryAreaTuple fetchAddress(String identity,
                                                  Date date) {
         if (!validateIdentity(identity)) {
             throw new IdentityFormatException(
@@ -160,7 +155,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return BeneficiaryNameTransport which contains first name and
      *         surname.
      */
-    private BeneficiaryNameTransport extractNameFromResponse(
+    private BeneficiaryNameTuple extractNameFromResponse(
             LookupResidentForExtendedProfileResponseType response) {
         ExtendedResidentType resident = getResident(response);
 
@@ -177,11 +172,11 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @param person PersonpostTYPE from the response.
      * @return first and last name of a person.
      */
-    private BeneficiaryNameTransport extractNameFromResponse(
+    private BeneficiaryNameTuple extractNameFromResponse(
             PersonpostTYPE person) {
         NamnTYPE name = person.getNamn();
 
-        return new BeneficiaryNameTransport(
+        return new BeneficiaryNameTuple(
                 extractName(name.getFornamn(), ""),
                 extractName(name.getEfternamn(), ""));
     }
@@ -207,8 +202,8 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      *
      * @return a beneficiary name transport with just crosses.
      */
-    private BeneficiaryNameTransport createNameForProtected() {
-        return new BeneficiaryNameTransport("XXXXXX", "XXXXXX");
+    private BeneficiaryNameTuple createNameForProtected() {
+        return new BeneficiaryNameTuple("XXXXXX", "XXXXXX");
     }
 
     /**
@@ -222,7 +217,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return BeneficiaryAreaTransport which contains county code and
      *         municipality code.
      */
-    private BeneficiaryAreaTransport extractAreaFromRequest(
+    private BeneficiaryAreaTuple extractAreaFromRequest(
             LookupResidentForExtendedProfileResponseType response) {
         ExtendedResidentType resident = getResident(response);
         AdministrativIndelningType registeredAddress =
@@ -245,12 +240,12 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return Area transport with the beneficiary's county code
      *         and municipality code.
      */
-    private BeneficiaryAreaTransport extractAreaFromRequest(
+    private BeneficiaryAreaTuple extractAreaFromRequest(
             ExtendedResidentType resident) {
         SvenskAdressTYPE address = resident
                 .getPersonpost().getFolkbokforingsadress();
 
-        return new BeneficiaryAreaTransport(
+        return new BeneficiaryAreaTuple(
                 address.getKommunKod(), address.getLanKod());
     }
 
@@ -260,9 +255,9 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      *
      * @return the account code split in two.
      */
-    private BeneficiaryAreaTransport createAreaFromAccountCode(
+    private BeneficiaryAreaTuple createAreaFromAccountCode(
             String accountCode) {
-        return new BeneficiaryAreaTransport(
+        return new BeneficiaryAreaTuple(
                 accountCode.substring(2),
                 accountCode.substring(0, 2));
     }
