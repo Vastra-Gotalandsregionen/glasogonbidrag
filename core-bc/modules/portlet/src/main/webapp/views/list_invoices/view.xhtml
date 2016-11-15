@@ -33,13 +33,9 @@
                           filterMatchMode="contains"
                 >
 
-                    <ui:fragment rendered="false">
-                        <f:facet name="filter">
-                            <div class="gb-table-filter">
-                                <p:inputText onkeyup="PF('invoicesTable').filter();" />
-                            </div>
-                        </f:facet>
-                    </ui:fragment>
+                    <f:facet name="filter">
+                        <p:inputText onkeyup="PF('invoicesTable').filter();" />
+                    </f:facet>
 
                     <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                         <h:outputText value="#{invoice.verificationNumber}" />
@@ -51,11 +47,8 @@
                           filterBy="#{invoice.supplier}"
                           filterMatchMode="contains"
                 >
-
                     <f:facet name="filter">
-                        <div class="gb-table-filter">
-                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
-                        </div>
+                        <p:inputText onkeyup="PF('invoicesTable').filter();" />
                     </f:facet>
 
                     <h:outputText value="#{invoice.supplier}" />
@@ -67,9 +60,7 @@
                           filterMatchMode="contains"
                 >
                     <f:facet name="filter">
-                        <div class="gb-table-filter">
-                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
-                        </div>
+                        <p:inputText onkeyup="PF('invoicesTable').filter();" />
                     </f:facet>
 
                     <h:outputText value="#{invoice.invoiceNumber}"  />
@@ -95,13 +86,12 @@
                           sortBy="#{invoice.status}"
                           filterBy="#{invoice.status}"
                           filterMatchMode="exact">
+
                     <f:facet name="filter">
-                        <div class="gb-table-filter">
-                            <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
-                                <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
-                                <f:selectItems value="#{listInvoicesViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
-                            </p:selectOneMenu>
-                        </div>
+                        <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
+                            <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{listInvoicesViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
+                        </p:selectOneMenu>
                     </f:facet>
 
                     <h:outputText value="#{bundle[invoice.status]}" />
@@ -113,9 +103,7 @@
                           filterMatchMode="contains"
                 >
                     <f:facet name="filter">
-                        <div class="gb-table-filter">
-                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
-                        </div>
+                        <p:inputText onkeyup="PF('invoicesTable').filter();" />
                     </f:facet>
 
                     <h:outputText value="#{invoice.caseWorker}" />
