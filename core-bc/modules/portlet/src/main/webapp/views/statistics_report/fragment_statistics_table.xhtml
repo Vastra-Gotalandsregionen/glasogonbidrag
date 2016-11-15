@@ -4,7 +4,6 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:pe="http://primefaces.org/ui/extensions"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge"
@@ -17,16 +16,6 @@
 
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
-
-        <ui:fragment rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
-            <div>
-                <h:form>
-                    <h:commandLink value="Exportera till PDF" target="_BLANK">
-                        <p:dataExporter type="pdf" target=":statisticsTable" fileName="glasogonbidrag_statistics_report" pageOnly="true" />
-                    </h:commandLink>
-                </h:form>
-            </div>
-        </ui:fragment>
 
         <p:dataTable id="statisticsTable" var="statisticsVO" value="#{statisticsReportViewBackingBean.statisticsVOs}" rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
             <p:column headerText="Label" sortBy="#{statisticsVO.label}">
