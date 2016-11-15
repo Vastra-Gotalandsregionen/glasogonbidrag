@@ -71,7 +71,7 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
             results = new ArrayList<>();
         }
 
-        this.setRowCount(queryService.countSuppliers() );
+        this.setRowCount(queryService.countSuppliers());
 
         return results;
     }

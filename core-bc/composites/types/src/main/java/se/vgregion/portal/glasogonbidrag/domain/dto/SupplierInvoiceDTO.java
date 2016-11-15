@@ -9,13 +9,17 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 public class SupplierInvoiceDTO {
     private final long id;
 
+    private final String verificationNumber;
     private final InvoiceStatus status;
 //    private final String owner;
 
     private final Invoice invoice;
 
-    public SupplierInvoiceDTO(long id, InvoiceStatus status, String owner) {
+    public SupplierInvoiceDTO(long id, String verificationNumber,
+                              InvoiceStatus status, String owner) {
         this.id = id;
+
+        this.verificationNumber = verificationNumber;
         this.status = status;
 //        this.owner = owner;
 
@@ -24,13 +28,19 @@ public class SupplierInvoiceDTO {
 
     public SupplierInvoiceDTO(Invoice invoice) {
         this.invoice = invoice;
+
         this.id = invoice.getId();
+        this.verificationNumber = invoice.getVerificationNumber();
         this.status = invoice.getStatus();
 //        this.owner = invoice.getOwner();
     }
 
     public long getId() {
         return id;
+    }
+
+    public String getVerificationNumber() {
+        return verificationNumber;
     }
 
     public InvoiceStatus getStatus() {

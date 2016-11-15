@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.datamodel.SupplierInvoiceLazyDataModel;
 import se.vgregion.glasogonbidrag.datamodel.SupplierLazyDataModel;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
@@ -50,6 +51,7 @@ public class ManageSuppliersViewBackingBean {
     private LowLevelDatabaseQueryService queryService;
 
     private SupplierLazyDataModel lazyDataModel;
+    private SupplierInvoiceLazyDataModel invoiceLazyDataModel;
 
     private Supplier selectedSupplier;
 
@@ -71,6 +73,10 @@ public class ManageSuppliersViewBackingBean {
         return lazyDataModel;
     }
 
+    public SupplierInvoiceLazyDataModel getInvoiceLazyDataModel() {
+        return invoiceLazyDataModel;
+    }
+
     public boolean getViewEditSupplier() {
         return viewEditSupplier;
     }
@@ -81,12 +87,17 @@ public class ManageSuppliersViewBackingBean {
 
     public void onRowSelect(SelectEvent event) {
         selectedSupplier = ((SupplierDTO) event.getObject()).getSupplier();
+        invoiceLazyDataModel = new SupplierInvoiceLazyDataModel(
+                selectedSupplier.getId(), invoiceService, queryService);
+
 //        selectedSupplierInvoices = invoiceService.findAllBySupplier(selectedSupplier);
     }
 
     public void onRowDeselect(UnselectEvent event) {
         selectedSupplier = null;
         selectedSupplierInvoices = new ArrayList<>();
+
+        invoiceLazyDataModel = null;
     }
 
     public void addNewSupplierListener() {
@@ -127,5 +138,6 @@ public class ManageSuppliersViewBackingBean {
 
         lazyDataModel = new SupplierLazyDataModel(
                 supplierService, queryService);
+        invoiceLazyDataModel = null;
     }
 }
