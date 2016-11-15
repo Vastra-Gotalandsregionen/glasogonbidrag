@@ -18,7 +18,8 @@
         <h:form>
             <h1>#{bundle['search-invoices']}</h1>
 
-            <p:dataTable var="invoice" value="#{invoices}"
+            <p:dataTable var="invoice"
+                         value="#{invoices}"
                          widgetVar="invoicesTable"
                          rows="5"
                          paginator="true"
@@ -31,6 +32,15 @@
                           filterBy="#{invoice.verificationNumber}"
                           filterMatchMode="contains"
                 >
+
+                    <ui:fragment rendered="false">
+                        <f:facet name="filter">
+                            <div class="gb-table-filter">
+                                <p:inputText onkeyup="PF('invoicesTable').filter();" />
+                            </div>
+                        </f:facet>
+                    </ui:fragment>
+
                     <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                         <h:outputText value="#{invoice.verificationNumber}" />
                     </a>
@@ -41,6 +51,13 @@
                           filterBy="#{invoice.supplier}"
                           filterMatchMode="contains"
                 >
+
+                    <f:facet name="filter">
+                        <div class="gb-table-filter">
+                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
+                        </div>
+                    </f:facet>
+
                     <h:outputText value="#{invoice.supplier}" />
                 </p:column>
 
@@ -49,16 +66,28 @@
                           filterBy="#{invoice.invoiceNumber}"
                           filterMatchMode="contains"
                 >
+                    <f:facet name="filter">
+                        <div class="gb-table-filter">
+                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
+                        </div>
+                    </f:facet>
+
                     <h:outputText value="#{invoice.invoiceNumber}"  />
                 </p:column>
 
-                <p:column headerText="#{bundle['amount']}" sortBy="#{invoice.amount}" styleClass="currency">
+                <p:column headerText="#{bundle['amount']}"
+                          sortBy="#{invoice.amount}"
+                          styleClass="currency"
+                >
                     <h:outputText value="#{invoice.amountAsKrona}">
                         <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                     </h:outputText>
                 </p:column>
 
-                <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{invoice.count}" styleClass="number">
+                <p:column headerText="#{bundle['number-of-grants']}"
+                          sortBy="#{invoice.count}"
+                          styleClass="number"
+                >
                     <h:outputText value="#{invoice.count}" />
                 </p:column>
 
@@ -67,17 +96,29 @@
                           filterBy="#{invoice.status}"
                           filterMatchMode="exact">
                     <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
-                            <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItems value="#{listInvoicesViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
-                        </p:selectOneMenu>
+                        <div class="gb-table-filter">
+                            <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
+                                <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{listInvoicesViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
+                            </p:selectOneMenu>
+                        </div>
                     </f:facet>
 
                     <h:outputText value="#{bundle[invoice.status]}" />
                 </p:column>
 
-                <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.caseOwner}">
-                    <h:outputText value="#{invoice.caseOwner}" />
+                <p:column headerText="#{bundle['case-worker']}"
+                          sortBy="#{invoice.caseWorker}"
+                          filterBy="#{invoice.caseWorker}"
+                          filterMatchMode="contains"
+                >
+                    <f:facet name="filter">
+                        <div class="gb-table-filter">
+                            <p:inputText onkeyup="PF('invoicesTable').filter()" />
+                        </div>
+                    </f:facet>
+
+                    <h:outputText value="#{invoice.caseWorker}" />
                 </p:column>
 
             </p:dataTable>

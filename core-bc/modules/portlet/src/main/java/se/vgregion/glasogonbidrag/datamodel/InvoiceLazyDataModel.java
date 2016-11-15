@@ -30,7 +30,7 @@ public class InvoiceLazyDataModel extends LazyDataModel<InvoiceDTO> {
         VALUE_MAP.put("amount", "i.amount");
         VALUE_MAP.put("count", "COUNT(g)");
         VALUE_MAP.put("status", "i.status");
-        VALUE_MAP.put("caseOwner", "i.caseOwner");
+        VALUE_MAP.put("caseWorker", "i.caseWorker");
     }
 
     private final static Map<String, String> FILTERS_MAP = new HashMap<>();
