@@ -104,6 +104,11 @@ import java.util.*;
                         "WHERE i.status = :status " +
                         "ORDER BY i.id ASC"),
         @NamedQuery(
+                name = "glasogonbidrag.invoice.findAllByCaseWorker",
+                query = "SELECT i FROM Invoice i " +
+                        "WHERE i.caseWorker = :caseWorker " +
+                        "ORDER BY i.id ASC"),
+        @NamedQuery(
                 name = "glasogonbidrag.invoice" +
                         ".findAllByStatusOrderByModificationDate",
                 query = "SELECT i FROM Invoice i " +
@@ -152,6 +157,9 @@ public class Invoice {
     private long vat;
 
     private long amount;
+
+    @Column(name = "case_worker")
+    private String caseWorker;
 
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -265,6 +273,14 @@ public class Invoice {
 
     public void setAmount(long amount) {
         this.amount = amount;
+    }
+
+    public String getCaseWorker() {
+        return caseWorker;
+    }
+
+    public void setCaseWorker(String caseWorker) {
+        this.caseWorker = caseWorker;
     }
 
     public Set<Grant> getGrants() {

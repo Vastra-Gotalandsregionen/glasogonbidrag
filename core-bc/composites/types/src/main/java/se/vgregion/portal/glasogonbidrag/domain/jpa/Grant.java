@@ -43,6 +43,12 @@ import java.util.Date;
                         "FROM Grant g " +
                         "WHERE g.userId = :user " +
                         "ORDER BY g.createDate"),
+        @NamedQuery(
+                name = "glasogonbidrag.grant.findAllByCaseWorker",
+                query = "SELECT g " +
+                        "FROM Grant g " +
+                        "WHERE g.caseWorker = :caseWorker " +
+                        "ORDER BY g.createDate"),
 
         @NamedQuery(
                 name = "glasogonbidrag.grant.findAllByDate",
@@ -102,6 +108,9 @@ public class Grant {
 
     private String county;
     private String municipality;
+
+    @Column(name = "case_worker")
+    private String caseWorker;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "beneficiary_id")
@@ -208,6 +217,14 @@ public class Grant {
 
     public void setMunicipality(String responsibilityRegion) {
         this.municipality = responsibilityRegion;
+    }
+
+    public String getCaseWorker() {
+        return caseWorker;
+    }
+
+    public void setCaseWorker(String caseWorker) {
+        this.caseWorker = caseWorker;
     }
 
     public Beneficiary getBeneficiary() {
