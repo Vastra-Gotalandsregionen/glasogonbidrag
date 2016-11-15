@@ -2,17 +2,20 @@ package se.vgregion.glasogonbidrag.backingbean;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.datamodel.BeneficiaryLazyDataModel;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
+import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
+import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -30,29 +33,35 @@ public class ManageBeneficiariesViewBackingBean {
     @Autowired
     private BeneficiaryService beneficiaryService;
 
-    private List<Beneficiary> beneficiaries;
+    @Autowired
+    private LowLevelDatabaseQueryService lowLevelDatabaseQueryService;
 
-    private Beneficiary selectedBeneficiary;
+    private LazyDataModel<BeneficiaryDTO> lazyDataModel;
+    private BeneficiaryDTO selectedBeneficiary;
 
-    public List<Beneficiary> getBeneficiaries() {
-        return beneficiaries;
+    public LazyDataModel<BeneficiaryDTO> getLazyDataModel() {
+        return lazyDataModel;
     }
 
     public Beneficiary getSelectedBeneficiary() {
-        return selectedBeneficiary;
+        if (selectedBeneficiary == null) {
+            return null;
+        }
+        return selectedBeneficiary.getBeneficiary();
     }
 
     public void onRowSelect(SelectEvent event) {
-        selectedBeneficiary = (Beneficiary) event.getObject();
+        selectedBeneficiary = (BeneficiaryDTO) event.getObject();
     }
 
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowDeselect(UnselectEvent event) {
         selectedBeneficiary = null;
     }
 
     @PostConstruct
     protected void init() {
-        beneficiaries = beneficiaryService.findAllWithParts();
+        lazyDataModel = new BeneficiaryLazyDataModel(
+                beneficiaryService, lowLevelDatabaseQueryService);
         selectedBeneficiary = null;
     }
 }

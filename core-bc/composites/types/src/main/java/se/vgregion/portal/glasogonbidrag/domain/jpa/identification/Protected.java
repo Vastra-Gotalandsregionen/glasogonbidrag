@@ -19,9 +19,6 @@ import java.util.Date;
 @Table(name = "vgr_glasogonbidrag_identification_protected")
 public class Protected extends Identification {
 
-    @Column(name = "pid_number", unique = true, nullable = false)
-    private String number;
-
     @Transient
     private final DateCalculationUtil dateUtil = new DateCalculationUtil();
 
@@ -32,18 +29,13 @@ public class Protected extends Identification {
     }
 
     public Protected(String number) {
-        this.number = number;
+        super(number);
     }
 
     @Override
     public Date getBirthDate() {
-        String date = dateUtil.extractDateFromPersonalNumbers(number);
+        String date = dateUtil.extractDateFromPersonalNumbers(getNumber());
         return dateUtil.dateFromString(date);
-    }
-
-    @Override
-    public String getString() {
-        return number;
     }
 
     @Override

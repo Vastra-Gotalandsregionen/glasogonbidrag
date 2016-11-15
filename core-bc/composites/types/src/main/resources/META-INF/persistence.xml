@@ -23,6 +23,10 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO</class>
 
         <properties>
             <property name="hibernate.format_sql" value="true" />

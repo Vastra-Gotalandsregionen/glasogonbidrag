@@ -11,7 +11,7 @@
 
     <h:body>
 
-        <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.beneficiaries}" scope="request" />
+        <c:set var="beneficiaries" value="#{manageBeneficiariesViewBackingBean.lazyDataModel}" scope="request" />
         <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
 
         <h:form id="manageBeneficiariesForm">
