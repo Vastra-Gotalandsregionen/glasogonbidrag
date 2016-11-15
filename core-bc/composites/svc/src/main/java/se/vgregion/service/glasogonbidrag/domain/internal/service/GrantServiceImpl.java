@@ -81,7 +81,7 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
-    public List<Grant> findByDate(Date date) {
+    public List<Grant> findAllByDate(Date date) {
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findAllByDate", Grant.class);
         q.setParameter("date", date, TemporalType.DATE);
@@ -90,12 +90,22 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
-    public List<Grant> findByUser(long userId) {
+    public List<Grant> findAllByUser(long userId) {
         if (userId == -1) return new ArrayList<>();
 
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findAllByUser", Grant.class);
         q.setParameter("user", userId);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Grant> findAllByCaseWorker(String caseWorker) {
+
+        TypedQuery<Grant> q = em.createNamedQuery(
+                "glasogonbidrag.grant.findAllByCaseWorker", Grant.class);
+        q.setParameter("caseWorker", caseWorker);
 
         return q.getResultList();
     }

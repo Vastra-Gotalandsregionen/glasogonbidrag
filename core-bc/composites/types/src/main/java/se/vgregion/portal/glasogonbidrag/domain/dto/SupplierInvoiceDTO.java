@@ -11,17 +11,17 @@ public class SupplierInvoiceDTO {
 
     private final String verificationNumber;
     private final InvoiceStatus status;
-//    private final String owner;
+    private final String caseWorker;
 
     private final Invoice invoice;
 
     public SupplierInvoiceDTO(long id, String verificationNumber,
-                              InvoiceStatus status, String owner) {
+                              InvoiceStatus status, String caseWorker) {
         this.id = id;
 
         this.verificationNumber = verificationNumber;
         this.status = status;
-//        this.owner = owner;
+        this.caseWorker = caseWorker;
 
         this.invoice = null;
     }
@@ -32,7 +32,7 @@ public class SupplierInvoiceDTO {
         this.id = invoice.getId();
         this.verificationNumber = invoice.getVerificationNumber();
         this.status = invoice.getStatus();
-//        this.owner = invoice.getOwner();
+        this.caseWorker = invoice.getCaseWorker();
     }
 
     public long getId() {
@@ -47,9 +47,9 @@ public class SupplierInvoiceDTO {
         return status;
     }
 
-//    public String getOwner() {
-//        return owner;
-//    }
+    public String getCaseWorker() {
+        return caseWorker;
+    }
 
     public Invoice getInvoice() {
         return invoice;
