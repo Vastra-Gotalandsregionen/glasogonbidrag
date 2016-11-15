@@ -3,16 +3,21 @@ package se.vgregion.glasogonbidrag.backingbean;
 import com.liferay.portal.theme.ThemeDisplay;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.datamodel.SupplierInvoiceLazyDataModel;
+import se.vgregion.glasogonbidrag.datamodel.SupplierLazyDataModel;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
@@ -42,11 +47,15 @@ public class ManageSuppliersViewBackingBean {
     @Autowired
     private SupplierService supplierService;
 
+    @Autowired
+    private LowLevelDatabaseQueryService queryService;
+
+    private SupplierLazyDataModel lazyDataModel;
+    private SupplierInvoiceLazyDataModel invoiceLazyDataModel;
+
     private Supplier selectedSupplier;
 
     private List<Invoice> selectedSupplierInvoices;
-
-    private List<Supplier> suppliers;
 
     private boolean viewEditSupplier;
 
@@ -60,8 +69,12 @@ public class ManageSuppliersViewBackingBean {
         return selectedSupplierInvoices;
     }
 
-    public List<Supplier> getSuppliers() {
-        return suppliers;
+    public LazyDataModel<SupplierDTO> getSuppliers() {
+        return lazyDataModel;
+    }
+
+    public SupplierInvoiceLazyDataModel getInvoiceLazyDataModel() {
+        return invoiceLazyDataModel;
     }
 
     public boolean getViewEditSupplier() {
@@ -73,13 +86,18 @@ public class ManageSuppliersViewBackingBean {
     }
 
     public void onRowSelect(SelectEvent event) {
-        selectedSupplier = (Supplier) event.getObject();
-        selectedSupplierInvoices = invoiceService.findAllBySupplier(selectedSupplier);
+        selectedSupplier = ((SupplierDTO) event.getObject()).getSupplier();
+        invoiceLazyDataModel = new SupplierInvoiceLazyDataModel(
+                selectedSupplier.getId(), invoiceService, queryService);
+
+//        selectedSupplierInvoices = invoiceService.findAllBySupplier(selectedSupplier);
     }
 
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowDeselect(UnselectEvent event) {
         selectedSupplier = null;
-        selectedSupplierInvoices = new <Invoice>ArrayList();
+        selectedSupplierInvoices = new ArrayList<>();
+
+        invoiceLazyDataModel = null;
     }
 
     public void addNewSupplierListener() {
@@ -113,10 +131,13 @@ public class ManageSuppliersViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        suppliers = supplierService.findAllWithInvoices();
         selectedSupplier = null;
-        selectedSupplierInvoices = new <Invoice>ArrayList();
+        selectedSupplierInvoices = new ArrayList<>();
         newSupplier = new Supplier();
         viewEditSupplier = facesUtil.fetchBooleanProperty("viewEditSupplier");
+
+        lazyDataModel = new SupplierLazyDataModel(
+                supplierService, queryService);
+        invoiceLazyDataModel = null;
     }
 }

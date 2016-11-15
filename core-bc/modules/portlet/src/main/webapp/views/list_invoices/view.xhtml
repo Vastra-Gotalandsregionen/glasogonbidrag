@@ -12,7 +12,7 @@
 
     <h:body>
 
-        <c:set var="invoices" value="#{listInvoicesViewBackingBean.invoices}" scope="request" />
+        <c:set var="invoices" value="#{listInvoicesViewBackingBean.lazyDataModel}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <h:form>
@@ -24,7 +24,8 @@
                          paginator="true"
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="1, 5,10,15,20, 50" >
+                         rowsPerPageTemplate="1, 5,10,15,20, 50"
+                         lazy="true">
                 <p:column headerText="#{bundle['verification-number-short']}"
                           sortBy="#{invoice.verificationNumber}"
                           filterBy="#{invoice.verificationNumber}"
@@ -41,36 +42,35 @@
                 </p:column>
 
                 <p:column headerText="#{bundle['supplier']}"
-                          sortBy="#{invoice.supplier.name}"
-                          filterBy="#{invoice.supplier.name}"
+                          sortBy="#{invoice.supplier}"
+                          filterBy="#{invoice.supplier}"
                           filterMatchMode="contains"
                 >
                     <!--
-                          filterBy="#{invoice.supplier.name}"
+                          filterBy="#{invoice.supplier}"
                           filterMatchMode="contains"
                     -->
-                    <h:outputText value="#{invoice.supplier.name}" />
+                    <h:outputText value="#{invoice.supplier}" />
                 </p:column>
 
                 <p:column headerText="#{bundle['supplier-invoice-number-short']}" sortBy="#{invoice.invoiceNumber}">
                     <h:outputText value="#{invoice.invoiceNumber}"  />
                 </p:column>
 
-                <p:column headerText="#{bundle['amount']}" sortBy="#{invoice.amountIncludingVatAsKrona}" styleClass="currency">
-                    <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
+                <p:column headerText="#{bundle['amount']}" sortBy="#{invoice.amount}" styleClass="currency">
+                    <h:outputText value="#{invoice.amountAsKrona}">
                         <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                     </h:outputText>
                 </p:column>
 
-                <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{invoice.grants.size()}" styleClass="number">
-                    <h:outputText value="#{invoice.grants.size()}" />
+                <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{invoice.count}" styleClass="number">
+                    <h:outputText value="#{invoice.count}" />
                 </p:column>
 
                 <p:column headerText="#{bundle['status']}"
                           sortBy="#{invoice.status}"
                           filterBy="#{invoice.status}"
-                          filterMatchMode="exact"
-                >
+                          filterMatchMode="exact">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('invoicesTable').filter()" >
                             <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
@@ -81,9 +81,12 @@
                     <h:outputText value="#{bundle[invoice.status]}" />
                 </p:column>
 
-                <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
-                    <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
-                </p:column>
+                <!-- Owner temporary removed -->
+                <ui:remove>
+                    <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
+                        <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
+                    </p:column>
+                </ui:remove>
 
             </p:dataTable>
         </h:form>

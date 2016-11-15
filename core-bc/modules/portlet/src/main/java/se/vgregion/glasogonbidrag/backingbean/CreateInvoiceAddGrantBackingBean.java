@@ -867,7 +867,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         // Populate beneficiaryVO (not moved yet)
         beneficiaryVO.setIdentificationNumber(
-                beneficiary.getIdentification().getString());
+                beneficiary.getIdentification().getNumber());
         deliveryDate = grant.getDeliveryDate();
 
         Prescription prescription = grant.getPrescription();

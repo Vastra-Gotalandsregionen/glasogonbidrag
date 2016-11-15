@@ -19,9 +19,6 @@ import java.util.Date;
 @Table(name = "vgr_glasogonbidrag_identification_reserve")
 public class Reserve extends Identification {
 
-    @Column(name = "reserve_number", unique = true, nullable = false)
-    private String number;
-
     @Column(name = "birth_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthDate;
@@ -33,26 +30,17 @@ public class Reserve extends Identification {
     }
 
     public Reserve(String number, Date birthDate) {
-        this.number = number;
+        super(number);
         this.birthDate = birthDate;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+    public Reserve(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override
     public Date getBirthDate() {
         return birthDate;
-    }
-
-    @Override
-    public String getString() {
-        return getNumber();
     }
 
     @Override
