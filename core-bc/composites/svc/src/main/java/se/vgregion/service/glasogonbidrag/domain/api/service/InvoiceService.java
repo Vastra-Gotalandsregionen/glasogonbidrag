@@ -16,21 +16,27 @@ import java.util.List;
  */
 public interface InvoiceService {
     void create(long userId, long groupId, long companyId,
+                String caseWorker,
                 Invoice invoice);
 
-    Invoice update(Invoice invoice);
+    Invoice update(String caseWorker, Invoice invoice);
 
     InvoiceBeneficiaryTuple updateAddGrant(
             long userId, long groupId, long companyId,
+            String caseWorker,
             Invoice invoice, Grant grant)
         throws GrantAlreadyExistException,
                GrantMissingAreaException,
                NoIdentificationException;
 
-    InvoiceGrantTuple updateGrant(Invoice invoice, Grant grant)
+    InvoiceGrantTuple updateGrant(String caseWorker,
+                                  Invoice invoice,
+                                  Grant grant)
         throws GrantMissingAreaException;
 
-    InvoiceBeneficiaryTuple updateDeleteGrant(Invoice invoice, long grantId);
+    InvoiceBeneficiaryTuple updateDeleteGrant(String caseWorker,
+                                              Invoice invoice,
+                                              long grantId);
 
     Invoice updateAddGrantAdjustment(long userId,
                                      long groupId,
@@ -41,6 +47,7 @@ public interface InvoiceService {
 
     Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
+            String caseWorker,
             Invoice invoice, AccountingDistribution distribution);
 
     void delete(Long id);
@@ -79,6 +86,8 @@ public interface InvoiceService {
                                     long userId,
                                     int firstResult,
                                     int maxResults);
+
+    List<Invoice> findAllByCaseWorker(String caseWorker);
 
     List<Invoice> findAllWithStatusOrderByModificationDate(
             InvoiceStatus status);

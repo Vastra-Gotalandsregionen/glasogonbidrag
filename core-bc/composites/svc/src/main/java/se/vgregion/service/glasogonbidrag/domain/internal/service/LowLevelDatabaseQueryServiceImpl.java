@@ -13,7 +13,6 @@ import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,7 +101,7 @@ public class LowLevelDatabaseQueryServiceImpl
                            "InvoiceDTO( " +
                                 "i.id, i.verificationNumber, s.name," +
                                 "i.invoiceNumber, i.amount, COUNT(g), " +
-                                "i.status, s.name ) " + // TODO: last s.name is wrong should be owner, when this is added...
+                                "i.status, i.caseWorker ) " +
                 "FROM Invoice i " +
                 "LEFT JOIN i.supplier s " +
                 "LEFT JOIN i.grants g ");
@@ -154,7 +153,7 @@ public class LowLevelDatabaseQueryServiceImpl
                 "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
                            "SupplierInvoiceDTO( " +
                                 "i.id, i.verificationNumber, " +
-                                "i.status, i.verificationNumber ) " + // TODO: last i.verificationNumber is wrong should be owner, when this is added...
+                                "i.status, i.caseWorker ) " +
                 "FROM Invoice i " +
                 "LEFT JOIN i.supplier s ");
         query.append(

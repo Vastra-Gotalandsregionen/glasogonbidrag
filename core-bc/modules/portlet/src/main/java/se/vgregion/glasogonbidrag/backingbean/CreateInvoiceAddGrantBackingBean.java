@@ -535,10 +535,13 @@ public class CreateInvoiceAddGrantBackingBean {
     public String doDeleteGrant() {
         LOGGER.info("doDeleteGrant");
 
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        String caseWorker = themeDisplay.getUser().getScreenName();
+
         Long grantId = grant.getId();
 
         InvoiceBeneficiaryTuple tuple = invoiceService.updateDeleteGrant(
-                invoice, grantId);
+                caseWorker, invoice, grantId);
 
         invoice = tuple.getInvoice();
         beneficiary = tuple.getBeneficiary();
@@ -772,18 +775,20 @@ public class CreateInvoiceAddGrantBackingBean {
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
+        String caseWorker = themeDisplay.getUser().getScreenName();
 
         if (grant.getId() == null) {
             InvoiceBeneficiaryTuple tuple = invoiceService
                     .updateAddGrant(
-                            userId, groupId, companyId, invoice, grant);
+                            userId, groupId, companyId,
+                            caseWorker, invoice, grant);
 
             invoice = tuple.getInvoice();
             beneficiary = tuple.getBeneficiary();
         } else {
             // TODO: Add more code here.
             InvoiceGrantTuple result =
-                    invoiceService.updateGrant(invoice, grant);
+                    invoiceService.updateGrant(caseWorker, invoice, grant);
 
             invoice = result.getInvoice();
             grant = result.getGrant();

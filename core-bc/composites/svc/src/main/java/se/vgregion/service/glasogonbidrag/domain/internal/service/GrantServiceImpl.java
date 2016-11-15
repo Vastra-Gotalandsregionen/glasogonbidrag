@@ -101,6 +101,16 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
+    public List<Grant> findAllByCaseWorker(String caseWorker) {
+
+        TypedQuery<Grant> q = em.createNamedQuery(
+                "glasogonbidrag.grant.findAllByCaseWorker", Grant.class);
+        q.setParameter("caseWorker", caseWorker);
+
+        return q.getResultList();
+    }
+
+    @Override
     public long currentProgressByDate(Date date) {
         TypedQuery<Long> q = em.createNamedQuery(
                 "glasogonbidrag.grant.currentProgressByDate",

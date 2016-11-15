@@ -48,6 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public void create(long userId, long groupId, long companyId,
+                       String caseWorker,
                        Invoice invoice) {
         LOGGER.info("Persisting invoice: {}", invoice);
 
@@ -66,6 +67,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setUserId(userId);
         invoice.setGroupId(groupId);
         invoice.setCompanyId(companyId);
+        invoice.setCaseWorker(caseWorker);
 
         // Update creation date and modification date
         invoice.setCreateDate(date);
@@ -83,7 +85,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     @Transactional
-    public Invoice update(Invoice invoice) {
+    public Invoice update(String caseWorker, Invoice invoice) {
         LOGGER.info("Updating invoice: {}", invoice);
 
         Calendar cal = Calendar.getInstance();
@@ -115,6 +117,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Update modification date of this invoice
         invoice.setModifiedDate(date);
+        invoice.setCaseWorker(caseWorker);
 
         return em.merge(invoice);
     }
@@ -123,6 +126,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public InvoiceBeneficiaryTuple updateAddGrant(
             long userId, long groupId, long companyId,
+            String caseWorker,
             Invoice invoice, Grant grant)
     throws GrantAlreadyExistException,
            GrantMissingAreaException,
@@ -144,7 +148,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new GrantAlreadyExistException("Grant is already set.");
         }
 
-        updateGrantData(grant, userId, groupId, companyId, date);
+        updateGrantData(grant, userId, groupId, companyId, caseWorker, date);
         updatePrescriptionData(prescription, userId, groupId, companyId, date);
 
         // Setup relation from the grant to the invoice and
@@ -163,7 +167,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         beneficiary.setModifiedDate(date);
 
         Beneficiary newBeneficiary = beneficiaryService.update(beneficiary);
-        Invoice newInvoice = this.update(invoice);
+        Invoice newInvoice = this.update(caseWorker, invoice);
 
         return new InvoiceBeneficiaryTuple(newInvoice, newBeneficiary);
     }
@@ -172,11 +176,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                                  long userId,
                                  long groupId,
                                  long companyId,
+                                 String caseWorker,
                                  Date date) {
         // Set user, group and company id of new grant.
         grant.setUserId(userId);
         grant.setGroupId(groupId);
         grant.setCompanyId(companyId);
+        grant.setCaseWorker(caseWorker);
 
         // Update creation date and modification date of new grant.
         grant.setCreateDate(date);
@@ -247,7 +253,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public InvoiceGrantTuple updateGrant(Invoice invoice, Grant grant)
+    public InvoiceGrantTuple updateGrant(String caseWorker,
+                                         Invoice invoice, Grant grant)
             throws GrantMissingAreaException {
 
         AccountingDistribution distribution = invoice.getDistribution();
@@ -261,6 +268,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setModifiedDate(date);
         grant.setModifiedDate(date);
+
+        invoice.setCaseWorker(caseWorker);
+        grant.setCaseWorker(caseWorker);
 
         Invoice newInvoice = em.merge(invoice);
 
@@ -281,7 +291,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     // Might be the remove function from set.
     @Override
     @Transactional
-    public InvoiceBeneficiaryTuple updateDeleteGrant(Invoice invoice,
+    public InvoiceBeneficiaryTuple updateDeleteGrant(String caseWorker,
+                                                     Invoice invoice,
                                                      long grantId) {
         Grant grant = em.find(Grant.class, grantId);
 
@@ -310,6 +321,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // We have modified the invoice, update this to reflect this.
         invoice.setModifiedDate(date);
+        invoice.setCaseWorker(caseWorker);
 
         // Remove grant and prescription.
         em.remove(prescription);
@@ -333,6 +345,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,
+            String caseWorker,
             Invoice invoice, AccountingDistribution distribution) {
         // TODO: if the invoice is any other status than IN_PROGRESS throw exception.
         LOGGER.info("Add distribution {} to invoice {}",
@@ -364,7 +377,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Persist the distribution.
         em.persist(distribution);
 
-        Invoice newInvoice = this.update(invoice);
+        Invoice newInvoice = this.update(caseWorker, invoice);
 
         // remove old distribution.
         if (old != null) {
@@ -590,6 +603,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     public List<Invoice> findAllWithStatusOrderByModificationDate(
             InvoiceStatus status) {
         return findAllWithStatusOrderByModificationDate(status, -1, -1);
+    }
+
+    @Override
+    public List<Invoice> findAllByCaseWorker(String caseWorker) {
+        TypedQuery<Invoice> q = em.createNamedQuery(
+                "glasogonbidrag.invoice" +
+                        ".findAllByCaseWorker",
+                Invoice.class);
+        q.setParameter("caseWorker", caseWorker);
+
+        return q.getResultList();
     }
 
     @Override

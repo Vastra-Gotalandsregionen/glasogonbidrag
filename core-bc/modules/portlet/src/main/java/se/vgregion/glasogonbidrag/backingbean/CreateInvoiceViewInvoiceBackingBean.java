@@ -63,18 +63,27 @@ public class CreateInvoiceViewInvoiceBackingBean {
     // Actions
 
     public void markPaid() {
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
+        String caseWorker = themeDisplay.getUser().getScreenName();
+
         invoice.setStatus(InvoiceStatus.COMPLETED);
-        invoiceService.update(invoice);
+        invoiceService.update(caseWorker, invoice);
     }
 
     public void markUnpaid() {
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
+        String caseWorker = themeDisplay.getUser().getScreenName();
+
         invoice.setStatus(InvoiceStatus.IN_PROGRESS);
-        invoiceService.update(invoice);
+        invoiceService.update(caseWorker, invoice);
     }
 
     public void markCanceled() {
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
+        String caseWorker = themeDisplay.getUser().getScreenName();
+
         invoice.setStatus(InvoiceStatus.CANCELED);
-        invoiceService.update(invoice);
+        invoiceService.update(caseWorker, invoice);
     }
 
     public void generateAccountingDistribution() {
@@ -96,12 +105,13 @@ public class CreateInvoiceViewInvoiceBackingBean {
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
+        String caseWorker = themeDisplay.getUser().getScreenName();
 
         AccountingDistribution distribution =
                 accountingService.calculateFrom(invoice);
 
         invoiceService.updateAddAccountingDistribution(
-                userId, groupId, companyId, invoice, distribution);
+                userId, groupId, companyId, caseWorker, invoice, distribution);
     }
 
     @PostConstruct
