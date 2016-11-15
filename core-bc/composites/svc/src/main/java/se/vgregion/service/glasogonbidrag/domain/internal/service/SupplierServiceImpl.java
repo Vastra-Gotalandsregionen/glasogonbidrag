@@ -57,6 +57,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional
     public Supplier findWithInvoices(long id) {
         TypedQuery<Supplier> q = em.createNamedQuery(
                 "glasogonbidrag.supplier.findWithInvoices", Supplier.class);
