@@ -39,7 +39,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         Long result = q.getSingleResult();
 
-        LOGGER.info("countSuppliers() - " +
+        LOGGER.debug("countSuppliers() - " +
                         "The query {} got the result {}",
                 query, result);
 
@@ -71,7 +71,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         List<SupplierDTO> result = q.getResultList();
 
-        LOGGER.info("listSuppliers() - The query {} found {} results",
+        LOGGER.debug("listSuppliers() - The query {} found {} results",
                 query, result.size());
 
         return result;
@@ -86,7 +86,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         Long result = q.getSingleResult();
 
-        LOGGER.info("countInvoices() - " +
+        LOGGER.debug("countInvoices() - " +
                         "The query {} got the result {}",
                 query, result);
 
@@ -121,7 +121,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         List<InvoiceDTO> result = q.getResultList();
 
-        LOGGER.info("listInvoices() - The query {} found {} results",
+        LOGGER.debug("listInvoices() - The query {} found {} results",
                 query, result.size());
 
         return result;
@@ -138,7 +138,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         Long result = q.getSingleResult();
 
-        LOGGER.info("countInvoices() - " +
+        LOGGER.debug("countInvoices() - " +
                         "The query {} got the result {}",
                 query, result);
 
@@ -173,7 +173,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         List<SupplierInvoiceDTO> result = q.getResultList();
 
-        LOGGER.info("listInvoicesForSupplier() - " +
+        LOGGER.debug("listInvoicesForSupplier() - " +
                         "The query {} found {} results",
                 query, result.size());
 
@@ -190,7 +190,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         Long result = q.getSingleResult();
 
-        LOGGER.info("countBeneficiaries() - " +
+        LOGGER.debug("countBeneficiaries() - " +
                         "The query {} got the result {}",
                 query, result);
 
@@ -219,7 +219,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         List<BeneficiaryDTO> result = q.getResultList();
 
-        LOGGER.info("listBeneficiaries() - The query {} found {} results",
+        LOGGER.debug("listBeneficiaries() - The query {} found {} results",
                 query, result.size());
 
         return result;
