@@ -1,12 +1,9 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
-import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
 
 import java.util.List;
 
@@ -16,7 +13,7 @@ import java.util.List;
 public interface BeneficiaryService {
     void create(Beneficiary beneficiary) throws NoIdentificationException;
 
-    Beneficiary update(Beneficiary beneficiary)
+    BeneficiaryIdentificationTuple update(Beneficiary beneficiary)
             throws NoIdentificationException;
 
     void delete(Long id);

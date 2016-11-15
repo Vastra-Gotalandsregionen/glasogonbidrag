@@ -1,7 +1,7 @@
 package se.vgregion.service.glasogonbidrag.integration.api;
 
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTransport;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTransport;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTuple;
+import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public interface BeneficiaryLookupService {
     BeneficiaryTransport fetchNameAndAddress(String identity, Date date);
-    BeneficiaryNameTransport fetchName(String identity);
+    BeneficiaryNameTuple fetchName(String identity);
 
     /**
      *
@@ -19,5 +19,5 @@ public interface BeneficiaryLookupService {
      * @param date
      * @return
      */
-    BeneficiaryAreaTransport fetchAddress(String identity, Date date);
+    BeneficiaryAreaTuple fetchAddress(String identity, Date date);
 }

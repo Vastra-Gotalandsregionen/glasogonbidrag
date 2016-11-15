@@ -3,14 +3,14 @@ package se.vgregion.service.glasogonbidrag.types;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class BeneficiaryNameTransport {
+public class BeneficiaryNameTuple {
     private String firstName;
     private String lastName;
 
-    public BeneficiaryNameTransport() {
+    public BeneficiaryNameTuple() {
     }
 
-    public BeneficiaryNameTransport(String firstName, String lastName) {
+    public BeneficiaryNameTuple(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -37,7 +37,7 @@ public class BeneficiaryNameTransport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BeneficiaryNameTransport that = (BeneficiaryNameTransport) o;
+        BeneficiaryNameTuple that = (BeneficiaryNameTuple) o;
 
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
             return false;

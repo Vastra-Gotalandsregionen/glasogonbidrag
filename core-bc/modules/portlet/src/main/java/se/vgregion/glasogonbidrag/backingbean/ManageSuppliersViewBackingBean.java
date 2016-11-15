@@ -120,7 +120,7 @@ public class ManageSuppliersViewBackingBean {
     }
 
     public void updateSupplierListener() {
-        supplierService.update(selectedSupplier);
+        selectedSupplier = supplierService.update(selectedSupplier);
         viewEditSupplier = false;
     }
 
