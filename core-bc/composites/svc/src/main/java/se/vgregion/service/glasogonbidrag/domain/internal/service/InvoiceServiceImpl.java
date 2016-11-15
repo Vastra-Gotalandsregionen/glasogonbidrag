@@ -292,8 +292,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         return new InvoiceGrantTuple(newInvoice, newGrant);
     }
 
-    // FIXME: Deleting one grant when two is present don't work.
-    // Might be the remove function from set.
     @Override
     @Transactional
     public InvoiceBeneficiaryTuple updateDeleteGrant(String caseWorker,
