@@ -27,6 +27,8 @@ public interface GrantService {
     // TODO: Should be renamed to findAllByDate
     List<Grant> findByDate(Date date);
 
+    List<Grant> findAllByCaseWorker(String caseWorker);
+
     long currentProgressByDate(Date date);
 
     long currentProgressByUserAndDate(long userId, Date date);
