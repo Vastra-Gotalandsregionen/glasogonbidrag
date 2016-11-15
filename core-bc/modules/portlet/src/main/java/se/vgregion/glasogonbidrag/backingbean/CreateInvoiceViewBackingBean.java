@@ -124,6 +124,7 @@ public class CreateInvoiceViewBackingBean {
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
+        String caseWorker = themeDisplay.getUser().getScreenName();
 
         Supplier s = supplierService.find(supplier);
 
@@ -136,7 +137,8 @@ public class CreateInvoiceViewBackingBean {
         invoice.setStatus(InvoiceStatus.IN_PROGRESS);
 
         try {
-            invoiceService.create(userId, groupId, companyId, invoice);
+            invoiceService.create(
+                    userId, groupId, companyId, caseWorker, invoice);
         } catch (PersistenceException e) {
             Locale locale = util.getLocale();
             String localizedMessage = messageSource
