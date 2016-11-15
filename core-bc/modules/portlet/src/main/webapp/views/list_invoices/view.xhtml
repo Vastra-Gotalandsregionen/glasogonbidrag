@@ -31,11 +31,6 @@
                           filterBy="#{invoice.verificationNumber}"
                           filterMatchMode="contains"
                 >
-                    <!--
-                    filterBy="#{invoice.verificationNumber}"
-                    filterMatchMode="contains"
-                    -->
-
                     <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                         <h:outputText value="#{invoice.verificationNumber}" />
                     </a>
@@ -46,14 +41,14 @@
                           filterBy="#{invoice.supplier}"
                           filterMatchMode="contains"
                 >
-                    <!--
-                          filterBy="#{invoice.supplier}"
-                          filterMatchMode="contains"
-                    -->
                     <h:outputText value="#{invoice.supplier}" />
                 </p:column>
 
-                <p:column headerText="#{bundle['supplier-invoice-number-short']}" sortBy="#{invoice.invoiceNumber}">
+                <p:column headerText="#{bundle['supplier-invoice-number-short']}"
+                          sortBy="#{invoice.invoiceNumber}"
+                          filterBy="#{invoice.invoiceNumber}"
+                          filterMatchMode="contains"
+                >
                     <h:outputText value="#{invoice.invoiceNumber}"  />
                 </p:column>
 
@@ -81,12 +76,9 @@
                     <h:outputText value="#{bundle[invoice.status]}" />
                 </p:column>
 
-                <!-- Owner temporary removed -->
-                <ui:remove>
-                    <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
-                        <h:outputText value="#{listInvoicesViewBackingBean.getUserNameById(invoice.userId)}" />
-                    </p:column>
-                </ui:remove>
+                <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.caseOwner}">
+                    <h:outputText value="#{invoice.caseOwner}" />
+                </p:column>
 
             </p:dataTable>
         </h:form>
