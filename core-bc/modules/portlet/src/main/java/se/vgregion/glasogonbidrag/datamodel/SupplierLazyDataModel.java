@@ -30,6 +30,12 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
         VALUE_MAP.put("active", "s.active");
     }
 
+    private final static Map<String, String> FILTER_MAP = new HashMap<>();
+    static {
+        FILTER_MAP.put("yes", "TRUE");
+        FILTER_MAP.put("no", "FALSE");
+    }
+
     private final SupplierService service;
     private final LowLevelDatabaseQueryService queryService;
 
@@ -63,7 +69,8 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
             LowLevelSortOrder sort = new LowLevelSortOrder(
                     sortField, "s.id",
                     OrderType.parse(sortOrder.toString()),
-                    VALUE_MAP);
+                    filters,
+                    VALUE_MAP, FILTER_MAP);
             results = queryService.listSuppliers(sort, first, pageSize);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());

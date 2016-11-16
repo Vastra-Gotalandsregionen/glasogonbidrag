@@ -30,6 +30,8 @@ public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
         VALUE_MAP.put("count", "COUNT(g)");
     }
 
+    private final static Map<String, String> FILTER_MAP = new HashMap<>();
+
     private final BeneficiaryService service;
     private final LowLevelDatabaseQueryService lowLevelService;
 
@@ -62,7 +64,8 @@ public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
         try {
             LowLevelSortOrder sort = new LowLevelSortOrder(
                     sortField, "b.id",
-                    OrderType.parse(sortOrder.toString()), VALUE_MAP);
+                    OrderType.parse(sortOrder.toString()), filters,
+                    VALUE_MAP, FILTER_MAP);
             results = lowLevelService.listBeneficiaries(sort, first, pageSize);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());

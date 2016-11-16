@@ -53,6 +53,9 @@ public class ManageSuppliersViewBackingBean {
     private SupplierLazyDataModel lazyDataModel;
     private SupplierInvoiceLazyDataModel invoiceLazyDataModel;
 
+    private List<String> filterActiveStatues;
+    private List<String> filterDataStatuses;
+
     private Supplier selectedSupplier;
 
     private List<Invoice> selectedSupplierInvoices;
@@ -60,6 +63,18 @@ public class ManageSuppliersViewBackingBean {
     private boolean viewEditSupplier;
 
     private Supplier newSupplier;
+
+    public ManageSuppliersViewBackingBean() {
+        filterActiveStatues = new ArrayList<>();
+        filterActiveStatues.add("yes");
+        filterActiveStatues.add("no");
+
+        filterDataStatuses = new ArrayList<String>();
+        filterDataStatuses.add("invoice-status-in-progress");
+        filterDataStatuses.add("invoice-status-completed");
+        filterDataStatuses.add("invoice-status-canceled");
+        filterDataStatuses.add("invoice-status-replaced");
+    }
 
     public Supplier getSelectedSupplier() {
         return selectedSupplier;
@@ -127,6 +142,14 @@ public class ManageSuppliersViewBackingBean {
 
     public String getUserNameById(long userId) {
         return liferayUtil.getUserNameById(userId);
+    }
+
+    public List<String> getFilterActiveStatues() {
+        return filterActiveStatues;
+    }
+
+    public List<String> getFilterDataStatuses() {
+        return filterDataStatuses;
     }
 
     @PostConstruct

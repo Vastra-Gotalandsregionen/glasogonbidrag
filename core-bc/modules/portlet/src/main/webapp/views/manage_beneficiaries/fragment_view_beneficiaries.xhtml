@@ -19,6 +19,7 @@
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="beneficiariesDataTable"
+                     widgetVar="beneficiariesTable"
                      var="beneficiary"
                      value="#{beneficiaries}"
                      rows="10"
@@ -41,15 +42,33 @@
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
             />
 
-            <p:column headerText="#{bundle['personal-number']}" sortBy="#{beneficiary.number}">
+            <p:column headerText="#{bundle['personal-number']}"
+                      sortBy="#{beneficiary.number}"
+                      filterBy="#{beneficiary.number}"
+                      filterMatchMode="contains">
+
+                <f:facet name="filter">
+                    <p:inputText onkeyup="PF('beneficiariesTable').filter();" />
+                </f:facet>
+
                 <h:outputText value="#{beneficiary.number}" />
             </p:column>
 
-            <p:column headerText="#{bundle['name']}" sortBy="#{beneficiary.fullName}">
+            <p:column headerText="#{bundle['name']}"
+                      sortBy="#{beneficiary.fullName}"
+                      filterBy="#{beneficiary.fullName}"
+                      filterMatchMode="contains">
+
+                <f:facet name="filter">
+                    <p:inputText onkeyup="PF('beneficiariesTable').filter();" />
+                </f:facet>
+
                 <h:outputText value="#{beneficiary.fullName}" />
             </p:column>
 
-            <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{beneficiary.count}">
+            <p:column headerText="#{bundle['number-of-grants']}"
+                      sortBy="#{beneficiary.count}"
+                      styleClass="number">
                 <h:outputText value="#{beneficiary.count}" />
             </p:column>
 

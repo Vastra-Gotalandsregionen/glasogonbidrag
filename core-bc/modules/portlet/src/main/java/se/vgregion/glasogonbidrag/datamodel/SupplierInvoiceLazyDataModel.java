@@ -27,7 +27,15 @@ public class SupplierInvoiceLazyDataModel
     static {
         VALUE_MAP.put("verificationNumber", "i.verificationNumber");
         VALUE_MAP.put("status", "i.status");
-//        VALUE_MAP.put("owner", "i.owner");
+        VALUE_MAP.put("caseWorker", "i.caseWorker");
+    }
+
+    private final static Map<String, String> FILTER_MAP = new HashMap<>();
+    static {
+        FILTER_MAP.put("invoice-status-in-progress", "IN_PROGRESS");
+        FILTER_MAP.put("invoice-status-completed", "COMPLETED");
+        FILTER_MAP.put("invoice-status-canceled", "CANCELED");
+        FILTER_MAP.put("invoice-status-replaced", "REPLACED");
     }
 
     private final long supplierId;
@@ -67,7 +75,8 @@ public class SupplierInvoiceLazyDataModel
             LowLevelSortOrder sort = new LowLevelSortOrder(
                     sortField, "i.id",
                     OrderType.parse(sortOrder.toString()),
-                    VALUE_MAP);
+                    filters,
+                    VALUE_MAP, FILTER_MAP);
             results = queryService.listInvoicesForSupplier(
                     supplierId, sort, first, pageSize);
         } catch (Exception e) {

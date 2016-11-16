@@ -56,10 +56,14 @@ public class LowLevelDatabaseQueryServiceImpl
                                 "s.id, s.name, s.externalServiceId," +
                                 "COUNT(i), s.active ) " +
                 "FROM Supplier s " +
-                "LEFT JOIN s.invoices i " +
-                "GROUP BY s.id " +
-                "ORDER BY ");
-        query.append(sort.toString());
+                "LEFT JOIN s.invoices i ");
+
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
+
+        query.append("GROUP BY s.id ");
+        query.append("ORDER BY ").append(sort.toString());
 
 
         TypedQuery<SupplierDTO> q =
@@ -159,9 +163,9 @@ public class LowLevelDatabaseQueryServiceImpl
         query.append(
                 "WHERE i.supplier.id = ").append(supplierId).append(" ");
 
-//        if (!sort.getFilters().isEmpty()) {
-//            query.append("WHERE ").append(sort.getFilterString()).append(" ");
-//        }
+        if (!sort.getFilters().isEmpty()) {
+            query.append("AND ").append(sort.getFilterString()).append(" ");
+        }
 
         query.append("ORDER BY ").append(sort.toString());
 
@@ -200,19 +204,25 @@ public class LowLevelDatabaseQueryServiceImpl
     public List<BeneficiaryDTO> listBeneficiaries(
             LowLevelSortOrder sort, int firstResults, int maxResult)
                 throws Exception {
-        String query =
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
                             "BeneficiaryDTO( " +
                                 "b.id, i.number, b.firstName, " +
                                 "b.lastName, COUNT(g) ) " +
                 "FROM Beneficiary b " +
                 "LEFT JOIN b.grants g " +
-                "LEFT JOIN b.identification i " +
-                "GROUP BY b.id, i.number " +
-                "ORDER BY " + sort.toString();
+                "LEFT JOIN b.identification i ");
+
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
+
+        query.append("GROUP BY b.id, i.number ");
+        query.append("ORDER BY ").append(sort.toString());
 
         TypedQuery<BeneficiaryDTO> q =
-                em.createQuery(query, BeneficiaryDTO.class);
+                em.createQuery(query.toString(), BeneficiaryDTO.class);
         q.setFirstResult(firstResults);
         q.setMaxResults(maxResult);
 
