@@ -23,7 +23,9 @@
                 <c:set var="paginatorRows" value="#{10}" scope="request" />
                 <c:set var="viewPaginator" value="#{invoices.size() gt paginatorRows ? true : false}" scope="request" />
 
-                <p:dataTable var="invoice" value="#{selectedSupplierInvoices}"
+                <p:dataTable var="invoice"
+                             widgetVar="supplierInvoiceTable"
+                             value="#{selectedSupplierInvoices}"
                              rows="#{paginatorRows}"
                              paginator="#{viewPaginator}"
                              paginatorPosition="bottom"
@@ -31,21 +33,46 @@
                              rowsPerPageTemplate="1,5,10,15,20,50"
                              lazy="true">
 
-                    <p:column headerText="#{bundle['verification-number-short']}" sortBy="#{invoice.verificationNumber}">
+                    <p:column headerText="#{bundle['verification-number-short']}"
+                              sortBy="#{invoice.verificationNumber}"
+                              filterBy="#{invoice.verificationNumber}"
+                              filterMatchMode="contains">
+
+                        <f:facet name="filter">
+                            <p:inputText onkeyup="PF('supplierInvoiceTable').filter();" />
+                        </f:facet>
+
                         <a href="#{viewInvoiceNavigation.navigate(invoice.id)}">
                             <h:outputText value="#{invoice.verificationNumber}" />
                         </a>
                     </p:column>
 
-                    <p:column headerText="#{bundle['status']}" sortBy="#{invoice.status}">
+                    <p:column headerText="#{bundle['status']}"
+                              sortBy="#{invoice.status}"
+                              filterBy="#{invoice.status}"
+                              filterMatchMode="exact">
+
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('supplierInvoiceTable').filter()" >
+                                <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{manageSuppliersViewBackingBean.filterDataStatuses}" var="status" itemLabel="#{bundle[status]}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+
                         <h:outputText value="#{bundle[invoice.status]}" />
                     </p:column>
 
-                    <ui:remove>
-                        <p:column headerText="#{bundle['case-worker']}" sortBy="#{invoice.userId}">
-                            <h:outputText value="#{manageSuppliersViewBackingBean.getUserNameById(invoice.userId)}" />
-                        </p:column>
-                    </ui:remove>
+                    <p:column headerText="#{bundle['case-worker']}"
+                              sortBy="#{invoice.caseWorker}"
+                              filterBy="#{invoice.caseWorker}"
+                              filterMatchMode="contains">
+
+                        <f:facet name="filter">
+                            <p:inputText onkeyup="PF('supplierInvoiceTable').filter();" />
+                        </f:facet>
+
+                        <h:outputText value="#{invoice.caseWorker}" />
+                    </p:column>
 
                 </p:dataTable>
             </ui:fragment>

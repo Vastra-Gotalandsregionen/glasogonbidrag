@@ -54,6 +54,7 @@ public class ManageSuppliersViewBackingBean {
     private SupplierInvoiceLazyDataModel invoiceLazyDataModel;
 
     private List<String> filterActiveStatues;
+    private List<String> filterDataStatuses;
 
     private Supplier selectedSupplier;
 
@@ -67,6 +68,12 @@ public class ManageSuppliersViewBackingBean {
         filterActiveStatues = new ArrayList<>();
         filterActiveStatues.add("yes");
         filterActiveStatues.add("no");
+
+        filterDataStatuses = new ArrayList<String>();
+        filterDataStatuses.add("invoice-status-in-progress");
+        filterDataStatuses.add("invoice-status-completed");
+        filterDataStatuses.add("invoice-status-canceled");
+        filterDataStatuses.add("invoice-status-replaced");
     }
 
     public Supplier getSelectedSupplier() {
@@ -139,6 +146,10 @@ public class ManageSuppliersViewBackingBean {
 
     public List<String> getFilterActiveStatues() {
         return filterActiveStatues;
+    }
+
+    public List<String> getFilterDataStatuses() {
+        return filterDataStatuses;
     }
 
     @PostConstruct

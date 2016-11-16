@@ -163,9 +163,9 @@ public class LowLevelDatabaseQueryServiceImpl
         query.append(
                 "WHERE i.supplier.id = ").append(supplierId).append(" ");
 
-//        if (!sort.getFilters().isEmpty()) {
-//            query.append("WHERE ").append(sort.getFilterString()).append(" ");
-//        }
+        if (!sort.getFilters().isEmpty()) {
+            query.append("AND ").append(sort.getFilterString()).append(" ");
+        }
 
         query.append("ORDER BY ").append(sort.toString());
 
