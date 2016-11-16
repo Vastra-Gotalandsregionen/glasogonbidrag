@@ -38,19 +38,10 @@
 
                 <div class="field-row field-row-3">
                     <div class="field-element">
-                        <h:outputLabel for="firstName" value="#{bundle['first-name']}:" />
-                        <h:inputText id="firstName"
+                        <h:outputLabel for="fullName" value="#{bundle['full-name']}:" />
+                        <h:inputText id="fullName"
                                      styleClass=""
-                                     value="#{beneficiaryVO.firstName}"
-                                     pt:placeholder=""
-                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
-                        />
-                    </div>
-                    <div class="field-element">
-                        <h:outputLabel for="surName" value="#{bundle['surname']}:" />
-                        <h:inputText id="surName"
-                                     styleClass=""
-                                     value="#{beneficiaryVO.surName}"
+                                     value="#{beneficiaryVO.fullName}"
                                      pt:placeholder=""
                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
                         />
@@ -89,7 +80,7 @@
                             <h:outputText value="#{grant.beneficiary.identification}" />
                         </div>
                         <div class="person-info-item">
-                            <h:outputText value="#{grant.beneficiary.firstName} #{grant.beneficiary.lastName}" />
+                            <h:outputText value="#{grant.beneficiary.fullName} #{grant.beneficiary.lastName}" />
                         </div>
                     </div>
 

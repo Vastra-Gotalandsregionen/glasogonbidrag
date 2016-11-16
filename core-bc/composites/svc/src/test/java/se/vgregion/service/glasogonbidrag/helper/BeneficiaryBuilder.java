@@ -18,8 +18,7 @@ public class BeneficiaryBuilder {
     private boolean hasParent;
     private GrantBuilder parent;
 
-    private String firstName;
-    private String lastName;
+    private String fullName;
 
     private Identification identification;
 
@@ -33,18 +32,16 @@ public class BeneficiaryBuilder {
     }
 
     BeneficiaryBuilder(String firstName, String lastName) {
+        this(String.format("%s %s", firstName, lastName));
+    }
+
+    BeneficiaryBuilder(String fullName) {
         hasParent = false;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
     }
 
-    public BeneficiaryBuilder firstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
-    public BeneficiaryBuilder lastName(String lastName) {
-        this.lastName = lastName;
+    public BeneficiaryBuilder fullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 
@@ -67,8 +64,7 @@ public class BeneficiaryBuilder {
     }
 
     private boolean validate() {
-        return firstName != null
-                && lastName != null
+        return fullName != null
                 && identification != null;
     }
 
@@ -81,8 +77,7 @@ public class BeneficiaryBuilder {
         beneficiary.setCreateDate(cur);
         beneficiary.setModifiedDate(cur);
 
-        beneficiary.setFirstName(firstName);
-        beneficiary.setLastName(lastName);
+        beneficiary.setFullName(fullName);
         beneficiary.setIdentification(identification);
 
         return beneficiary;

@@ -9,21 +9,18 @@ public class BeneficiaryDTO {
     private final long id;
 
     private final String number;
-    private final String firstName;
-    private final String lastName;
+    private final String fullName;
     private final long count;
 
     private final Beneficiary beneficiary;
 
     public BeneficiaryDTO(long id,
                           String number,
-                          String firstName,
-                          String lastName,
+                          String fullName,
                           long count) {
         this.id = id;
         this.number = number;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
         this.count = count;
 
         this.beneficiary = null;
@@ -33,8 +30,7 @@ public class BeneficiaryDTO {
         this.beneficiary = beneficiary;
         this.id = beneficiary.getId();
         this.number = beneficiary.getIdentification().getNumber();
-        this.firstName = beneficiary.getFirstName();
-        this.lastName = beneficiary.getLastName();
+        this.fullName = beneficiary.getFullName();
         this.count = beneficiary.getGrants().size();
     }
 
@@ -46,16 +42,8 @@ public class BeneficiaryDTO {
         return number;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
     public String getFullName() {
-        return String.format("%s %s", firstName, lastName);
+        return fullName;
     }
 
     public long getCount() {

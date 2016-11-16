@@ -4,32 +4,21 @@ package se.vgregion.service.glasogonbidrag.types;
  * @author Martin Lind - Monator Technologies AB
  */
 public class BeneficiaryNameTuple {
-    private String firstName;
-    private String lastName;
+    private String fullName;
 
     public BeneficiaryNameTuple() {
     }
 
-    public BeneficiaryNameTuple(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public BeneficiaryNameTuple(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getFirstName() {
-
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override
@@ -39,9 +28,7 @@ public class BeneficiaryNameTuple {
 
         BeneficiaryNameTuple that = (BeneficiaryNameTuple) o;
 
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
-            return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
+        if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null)
             return false;
 
         return true;
@@ -49,16 +36,13 @@ public class BeneficiaryNameTuple {
 
     @Override
     public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        return result;
+        return fullName != null ? fullName.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "BeneficiaryNameTransport{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+        return "BeneficiaryNameTuple{" +
+                "fullName='" + fullName + '\'' +
                 '}';
     }
 }

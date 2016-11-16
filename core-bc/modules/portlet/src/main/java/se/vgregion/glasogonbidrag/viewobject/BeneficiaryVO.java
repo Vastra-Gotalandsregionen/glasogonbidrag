@@ -1,10 +1,5 @@
 package se.vgregion.glasogonbidrag.viewobject;
 
-import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
-import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
-
-import java.util.Date;
-
 /**
  * @author Erik Andersson - Monator Technologies AB
  */
@@ -12,8 +7,7 @@ public class BeneficiaryVO {
 
     private String identificationNumber;
     private String dateOfOBirth;
-    private String firstName;
-    private String surName;
+    private String fullName;
 
     public BeneficiaryVO() {}
 
@@ -33,19 +27,11 @@ public class BeneficiaryVO {
         this.dateOfOBirth = dateOfOBirth;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSurName() {
-        return surName;
-    }
-
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

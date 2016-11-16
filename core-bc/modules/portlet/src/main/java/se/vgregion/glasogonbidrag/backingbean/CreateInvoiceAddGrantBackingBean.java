@@ -29,7 +29,6 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
-import se.vgregion.service.glasogonbidrag.types.BeneficiaryGrantTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
@@ -264,16 +263,10 @@ public class CreateInvoiceAddGrantBackingBean {
             beneficiary = new Beneficiary();
             beneficiary.setIdentification(identification);
 
-            if("".equals(beneficiaryVO.getFirstName())) {
-                beneficiary.setFirstName("-");
+            if("".equals(beneficiaryVO.getFullName())) {
+                beneficiary.setFullName("-");
             } else {
-                beneficiary.setFirstName(beneficiaryVO.getFirstName());
-            }
-
-            if("".equals(beneficiaryVO.getSurName())) {
-                beneficiary.setLastName("-");
-            } else {
-                beneficiary.setLastName(beneficiaryVO.getSurName());
+                beneficiary.setFullName(beneficiaryVO.getFullName());
             }
 
             newBeneficiary = true;
@@ -336,8 +329,7 @@ public class CreateInvoiceAddGrantBackingBean {
                 newBeneficiary = true;
             }
 
-            beneficiary.setFirstName(transport.getName().getFirstName());
-            beneficiary.setLastName(transport.getName().getLastName());
+            beneficiary.setFullName(transport.getName().getFullName());
 
             grant.setCounty(transport.getArea().getCounty());
             grant.setMunicipality(transport.getArea().getMunicipality());

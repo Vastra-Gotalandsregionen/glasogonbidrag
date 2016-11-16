@@ -177,8 +177,9 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
         NamnTYPE name = person.getNamn();
 
         return new BeneficiaryNameTuple(
-                extractName(name.getFornamn(), ""),
-                extractName(name.getEfternamn(), ""));
+                String.format("%s %s",
+                        extractName(name.getFornamn(), ""),
+                        extractName(name.getEfternamn(), "")).trim());
     }
 
     /**
@@ -203,7 +204,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return a beneficiary name transport with just crosses.
      */
     private BeneficiaryNameTuple createNameForProtected() {
-        return new BeneficiaryNameTuple("XXXXXX", "XXXXXX");
+        return new BeneficiaryNameTuple("XXXXXX XXXXXX");
     }
 
     /**

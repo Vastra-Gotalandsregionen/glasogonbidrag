@@ -26,7 +26,7 @@ public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
     private final static Map<String, String> VALUE_MAP = new HashMap<>();
     static {
         VALUE_MAP.put("number", "i.number");
-        VALUE_MAP.put("fullName", "b.lastName");
+        VALUE_MAP.put("fullName", "b.fullName");
         VALUE_MAP.put("count", "COUNT(g)");
     }
 
