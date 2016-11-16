@@ -56,10 +56,14 @@ public class LowLevelDatabaseQueryServiceImpl
                                 "s.id, s.name, s.externalServiceId," +
                                 "COUNT(i), s.active ) " +
                 "FROM Supplier s " +
-                "LEFT JOIN s.invoices i " +
-                "GROUP BY s.id " +
-                "ORDER BY ");
-        query.append(sort.toString());
+                "LEFT JOIN s.invoices i ");
+
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
+
+        query.append("GROUP BY s.id ");
+        query.append("ORDER BY ").append(sort.toString());
 
 
         TypedQuery<SupplierDTO> q =
@@ -224,7 +228,7 @@ public class LowLevelDatabaseQueryServiceImpl
 
         List<BeneficiaryDTO> result = q.getResultList();
 
-        LOGGER.info("listBeneficiaries() - The query {} found {} results",
+        LOGGER.debug("listBeneficiaries() - The query {} found {} results",
                 query, result.size());
 
         return result;

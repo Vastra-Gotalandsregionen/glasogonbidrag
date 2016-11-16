@@ -91,12 +91,17 @@ public class LowLevelSortOrder {
         String s = iterator.next();
         String value = filters.get(s).toString();
 
+        boolean fromMap = false;
+
         if (filtersMap.containsKey(value)) {
             value = filtersMap.get(value);
+            fromMap = true;
         }
 
         String key = orderMap.get(s);
-        builder.append(key)
-                .append(" LIKE '%").append(value).append("%'");
+        builder.append(key);
+
+        if (fromMap) builder.append(" = '").append(value).append("'");
+        else builder.append(" LIKE '%").append(value).append("%'");
     }
 }

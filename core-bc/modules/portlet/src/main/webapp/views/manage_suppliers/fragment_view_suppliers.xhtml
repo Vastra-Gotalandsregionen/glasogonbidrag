@@ -19,6 +19,7 @@
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="suppliersDataTable"
+                     widgetVar="supplierTable"
                      var="supplier"
                      value="#{suppliers}"
                      rows="10"
@@ -43,16 +44,27 @@
                     oncomplete="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
              />
 
-            <p:column headerText="#{bundle['supplier']}" sortBy="#{supplier.name}">
-                <!--
-                <h:link value="#{supplier.name}" outcome="view_supplier">
-                    <f:param name="supplierId" value="#{supplier.id}" />
-                </h:link>
-                -->
+            <p:column headerText="#{bundle['supplier']}"
+                      sortBy="#{supplier.name}"
+                      filterBy="#{supplier.name}"
+                      filterMatchMode="contains">
+
+                <f:facet name="filter">
+                    <p:inputText onkeyup="PF('supplierTable').filter();" />
+                </f:facet>
+
                 <h:outputText value="#{supplier.name}" />
             </p:column>
 
-            <p:column headerText="#{bundle['raindance-id']}" sortBy="#{supplier.externalServiceId}">
+            <p:column headerText="#{bundle['raindance-id']}"
+                      sortBy="#{supplier.externalServiceId}"
+                      filterBy="#{supplier.externalServiceId}"
+                      filterMatchMode="contains">
+
+                <f:facet name="filter">
+                    <p:inputText onkeyup="PF('supplierTable').filter();" />
+                </f:facet>
+
                 <h:outputText value="#{supplier.externalServiceId}" />
             </p:column>
 
@@ -60,7 +72,18 @@
                 <h:outputText value="#{supplier.count}" />
             </p:column>
 
-            <p:column headerText="#{bundle['active']}" sortBy="#{supplier.active}">
+            <p:column headerText="#{bundle['active']}"
+                      sortBy="#{supplier.active}"
+                      filterBy="#{supplier.active}"
+                      filterMatchMode="exact">
+
+                <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('supplierTable').filter()" >
+                        <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{manageSuppliersViewBackingBean.filterActiveStatues}" var="status" itemLabel="#{bundle[status]}" />
+                    </p:selectOneMenu>
+                </f:facet>
+
                 <h:outputText value="#{supplier.active ? bundle['yes'] : bundle['no']}" />
             </p:column>
 
