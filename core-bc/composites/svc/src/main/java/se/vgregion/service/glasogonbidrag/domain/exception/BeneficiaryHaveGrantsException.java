@@ -20,7 +20,10 @@ public class BeneficiaryHaveGrantsException extends Exception {
         super(cause);
     }
 
-    protected BeneficiaryHaveGrantsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected BeneficiaryHaveGrantsException(String message,
+                                             Throwable cause,
+                                             boolean enableSuppression,
+                                             boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

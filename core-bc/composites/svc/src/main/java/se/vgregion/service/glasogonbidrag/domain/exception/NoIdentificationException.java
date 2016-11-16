@@ -19,7 +19,10 @@ public class NoIdentificationException extends Exception {
         super(cause);
     }
 
-    public NoIdentificationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NoIdentificationException(String message,
+                                     Throwable cause,
+                                     boolean enableSuppression,
+                                     boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
