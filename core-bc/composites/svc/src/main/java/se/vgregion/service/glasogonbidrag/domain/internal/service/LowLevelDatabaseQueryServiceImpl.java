@@ -200,25 +200,31 @@ public class LowLevelDatabaseQueryServiceImpl
     public List<BeneficiaryDTO> listBeneficiaries(
             LowLevelSortOrder sort, int firstResults, int maxResult)
                 throws Exception {
-        String query =
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
                             "BeneficiaryDTO( " +
                                 "b.id, i.number, b.firstName, " +
                                 "b.lastName, COUNT(g) ) " +
                 "FROM Beneficiary b " +
                 "LEFT JOIN b.grants g " +
-                "LEFT JOIN b.identification i " +
-                "GROUP BY b.id, i.number " +
-                "ORDER BY " + sort.toString();
+                "LEFT JOIN b.identification i ");
+
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
+
+        query.append("GROUP BY b.id, i.number ");
+        query.append("ORDER BY ").append(sort.toString());
 
         TypedQuery<BeneficiaryDTO> q =
-                em.createQuery(query, BeneficiaryDTO.class);
+                em.createQuery(query.toString(), BeneficiaryDTO.class);
         q.setFirstResult(firstResults);
         q.setMaxResults(maxResult);
 
         List<BeneficiaryDTO> result = q.getResultList();
 
-        LOGGER.debug("listBeneficiaries() - The query {} found {} results",
+        LOGGER.info("listBeneficiaries() - The query {} found {} results",
                 query, result.size());
 
         return result;

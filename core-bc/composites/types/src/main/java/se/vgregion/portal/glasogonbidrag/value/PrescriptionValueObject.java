@@ -128,7 +128,8 @@ public class PrescriptionValueObject {
         Constructor<? extends Diagnose> constructor;
         Class<? extends Diagnose> reference = type.getDiagnoseClass();
         try {
-            constructor = reference.getConstructor(PrescriptionValueObject.class);
+            constructor =
+                    reference.getConstructor(PrescriptionValueObject.class);
         } catch (NoSuchMethodException e) {
             LOGGER.info("Diagnose of class {} don't contain a constructor" +
                             "to build from value object.",
