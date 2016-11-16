@@ -4,6 +4,7 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:bridge="http://liferay.com/faces/bridge"
         xmlns:gb="http://java.sun.com/jsf/composite/gb"
@@ -13,9 +14,82 @@
 
     <h:body>
 
-        <p>
-            Här ska det gå att exportera data till Excel / CSV.
-        </p>
+        <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
+
+        <h:panelGroup id="exportSettingsPanel">
+
+            <h:form>
+
+                <div class="statistics-filter-wrap">
+
+                    <div class="statistics-filter-row">
+                        <div class="statistics-filter-item">
+                            <p:outputLabel styleClass="filter-label" for="startDate" value="Från:" />
+                            <p:calendar id="startDate"
+                                        value="#{statisticsExportViewBackingBean.exportVO.startDate}"
+                                        maxdate="#{statisticsExportViewBackingBean.maxDate}"
+                            />
+                        </div>
+                        <div class="statistics-filter-item">
+                            <p:outputLabel styleClass="filter-label" for="endDate" value="Till:" />
+                            <p:calendar id="endDate"
+                                        value="#{statisticsExportViewBackingBean.exportVO.endDate}"
+                                        maxdate="#{statisticsExportViewBackingBean.maxDate}"
+                            />
+                        </div>
+                        <div class="statistics-filter-item">
+                            <h:outputText value="Fält för export:" />
+                            <p:selectOneButton value="#{statisticsExportViewBackingBean.exportVO.includeAllFields}">
+                                <f:ajax listener="#{statisticsExportViewBackingBean.changeSettingsListener}"
+                                        event="change"
+                                        execute="@form"
+                                        render=":exportSettingsPanel"
+                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+
+                                <f:selectItem itemLabel="Inkludera alla" itemValue="true" />
+                                <f:selectItem itemLabel="Välj fält" itemValue="false" />
+                            </p:selectOneButton>
+                        </div>
+                    </div>
+
+                    <ui:fragment rendered="#{not statisticsExportViewBackingBean.exportVO.includeAllFields}">
+                        <div class="statistics-filter-row">
+                            <h:outputText value="Välj fält:" />
+
+                            <p:selectManyCheckbox id="includedFields"
+                                                  value="#{statisticsExportViewBackingBean.exportVO.includedFields}"
+                                                  layout="responsive"
+                                                  columns="4"
+                            >
+                                <f:selectItem itemLabel="Fält 1" itemValue="field-1" />
+                                <f:selectItem itemLabel="Fält 2" itemValue="field-2" />
+                                <f:selectItem itemLabel="Fält 3" itemValue="field-3" />
+                                <f:selectItem itemLabel="Fält 4" itemValue="field-4" />
+                                <f:selectItem itemLabel="Fält 5" itemValue="field-5" />
+                                <f:selectItem itemLabel="Fält 6" itemValue="field-6" />
+
+                            </p:selectManyCheckbox>
+
+                        </div>
+                    </ui:fragment>
+
+                    <div class="statistics-filter-button-row">
+                        <h:commandLink styleClass="link-btn primary" value="Exportera statistik">
+                            <f:ajax listener="#{statisticsExportViewBackingBean.exportStatistics}"
+                                    execute="@form"
+                                    render=":exportSettingsPanel"
+                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                        </h:commandLink>
+                    </div>
+
+
+                </div>
+
+            </h:form>
+
+        </h:panelGroup>
+
 
     </h:body>
 </f:view>

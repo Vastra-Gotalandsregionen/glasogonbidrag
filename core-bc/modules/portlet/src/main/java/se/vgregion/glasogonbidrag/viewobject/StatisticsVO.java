@@ -5,11 +5,17 @@ package se.vgregion.glasogonbidrag.viewobject;
  */
 public class StatisticsVO {
 
+    // Attributes
+
     private String label;
     private int numberOfGrants;
     private long grantsSum;
 
+    // Constructors
+
     public StatisticsVO() {}
+
+    // Getters and Setters
 
     public String getLabel() {
         return label;
