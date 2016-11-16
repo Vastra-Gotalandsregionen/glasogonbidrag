@@ -99,9 +99,11 @@ public class LowLevelSortOrder {
         }
 
         String key = orderMap.get(s);
-        builder.append(key);
 
-        if (fromMap) builder.append(" = '").append(value).append("'");
-        else builder.append(" LIKE '%").append(value).append("%'");
+        if (fromMap)
+            builder.append(key).append(" = '").append(value).append("'");
+        else builder
+                .append("upper(").append(key).append(") LIKE '%")
+                .append(value.toUpperCase()).append("%'");
     }
 }
