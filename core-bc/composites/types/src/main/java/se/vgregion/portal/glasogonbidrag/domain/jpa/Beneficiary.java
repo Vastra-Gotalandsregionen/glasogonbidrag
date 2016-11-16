@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -62,6 +64,9 @@ public class Beneficiary {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @Column(name = "sex")
+    private SexType sex;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     private Set<Grant> grants;
 
@@ -111,6 +116,14 @@ public class Beneficiary {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public SexType getSex() {
+        return sex;
+    }
+
+    public void setSex(SexType sex) {
+        this.sex = sex;
     }
 
     public Set<Grant> getGrants() {

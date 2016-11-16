@@ -1,10 +1,14 @@
 package se.vgregion.service.glasogonbidrag.types;
 
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+
 /**
  * @author Martin Lind - Monator Technologies AB
  */
 public class BeneficiaryNameTuple {
     private String fullName;
+    private SexType sex;
 
     public BeneficiaryNameTuple() {
     }
@@ -13,12 +17,25 @@ public class BeneficiaryNameTuple {
         this.fullName = fullName;
     }
 
+    public BeneficiaryNameTuple(String fullName, SexType sex) {
+        this.fullName = fullName;
+        this.sex = sex;
+    }
+
     public String getFullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public SexType getSex() {
+        return sex;
+    }
+
+    public void setSex(SexType sex) {
+        this.sex = sex;
     }
 
     @Override
@@ -43,6 +60,7 @@ public class BeneficiaryNameTuple {
     public String toString() {
         return "BeneficiaryNameTuple{" +
                 "fullName='" + fullName + '\'' +
+                ",sex='" + sex.getKey() + '\'' +
                 '}';
     }
 }

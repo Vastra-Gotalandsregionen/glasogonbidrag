@@ -330,6 +330,7 @@ public class CreateInvoiceAddGrantBackingBean {
             }
 
             beneficiary.setFullName(transport.getName().getFullName());
+            beneficiary.setSex(transport.getName().getSex());
 
             grant.setCounty(transport.getArea().getCounty());
             grant.setMunicipality(transport.getArea().getMunicipality());
