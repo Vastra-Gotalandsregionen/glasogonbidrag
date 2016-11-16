@@ -2,7 +2,6 @@ package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
-import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
@@ -38,13 +37,6 @@ public interface InvoiceService {
     InvoiceBeneficiaryTuple updateDeleteGrant(String caseWorker,
                                               Invoice invoice,
                                               long grantId);
-
-    Invoice updateAddGrantAdjustment(long userId,
-                                     long groupId,
-                                     long companyId,
-                                     Invoice invoice,
-                                     GrantAdjustment adjustment)
-        throws GrantAdjustmentAlreadySetException;
 
     Invoice updateAddAccountingDistribution(
             long userId, long groupId, long companyId,

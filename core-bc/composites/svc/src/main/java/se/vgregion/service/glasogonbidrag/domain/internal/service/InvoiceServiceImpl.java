@@ -10,7 +10,6 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.domain.exception.GrantAdjustmentAlreadySetException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
@@ -56,14 +55,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
 
-        // If a grant adjustment exists,
-        //   update creation date and modification date of this.
-        GrantAdjustment adjustment = invoice.getAdjustment();
-        if (adjustment != null) {
-            adjustment.setCreateDate(date);
-            adjustment.setModifiedDate(date);
-        }
-
         // Set user, group and company id of new invoice.
         invoice.setUserId(userId);
         invoice.setGroupId(groupId);
@@ -91,30 +82,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
-
-        // If there was no grant adjustment before,
-        //   add creation date and modification date to this.
-        // If there was a grant adjustment before,
-        //   update the modification date of this.
-        GrantAdjustment adjustment = invoice.getAdjustment();
-        if (adjustment != null) {
-            GrantAdjustment exists = null;
-
-            if (adjustment.getId() != null) {
-                exists = em.find(GrantAdjustment.class, adjustment.getId());
-            }
-
-            if (exists == null) {
-                adjustment.setCreateDate(date);
-                adjustment.setModifiedDate(date);
-
-                em.persist(adjustment);
-            } else {
-                adjustment.setModifiedDate(date);
-
-                em.merge(adjustment);
-            }
-        }
 
         // Update modification date of this invoice
         invoice.setModifiedDate(date);
@@ -211,51 +178,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     }
 
-//    @Override
-//    @Transactional
-//    public BeneficiaryGrantTuple updateAddPrescription(
-//            long userId, long groupId, long companyId,
-//            Invoice invoice,
-//            Beneficiary beneficiary,
-//            Grant grant)
-//            throws GrantMissingAreaException, NoIdentificationException {
-//        Prescription prescription = grant.getPrescription();
-//
-//        LOGGER.info("Add prescription: {} to beneficiary {}.",
-//                prescription, beneficiary);
-//
-//        Calendar cal = Calendar.getInstance();
-//        Date date = cal.getTime();
-//
-//        // Check if old prescription exists for this grant.
-//        // If it exists, we want to remove this from the beneficiaries,
-//        // prescription history, and later remove it from the database.
-//
-//        // Set user, group and company id of new prescription.
-//        prescription.setUserId(userId);
-//        prescription.setGroupId(groupId);
-//        prescription.setCompanyId(companyId);
-//
-//        // Set creation date and modification date of new prescription
-//        prescription.setCreateDate(date);
-//        prescription.setModifiedDate(date);
-//
-//        // Set relation from prescription to beneficiary
-//        prescription.setBeneficiary(beneficiary);
-//        prescription.setGrant(grant);
-//
-//        // Add prescription to beneficiary history
-//
-//        // Setup relation from grant to prescription.
-//        grant.setPrescription(prescription);
-//        grant.setModifiedDate(date);
-//
-//        diagnoseService.create(prescription.getDiagnose());
-//        Grant newGrant = grantService.update(grant);
-//
-//        return new BeneficiaryGrantTuple(newBeneficiary, newGrant);
-//    }
-
     @Override
     @Transactional
     public InvoiceGrantTuple updateGrant(String caseWorker,
@@ -330,7 +252,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         em.remove(prescription);
         em.remove(grant);
 
+
         Invoice newInvoice = em.merge(invoice); // TODO: wrong number of grants.
+                                                // TODO: Understand what I meant when I wrote the above todo?
         Beneficiary newBeneficiary = em.merge(beneficiary);
 
         // remove old distribution.
@@ -390,46 +314,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         return newInvoice;
-    }
-
-    @Override
-    @Transactional
-    public Invoice updateAddGrantAdjustment(long userId,
-                                            long groupId,
-                                            long companyId,
-                                            Invoice invoice,
-                                            GrantAdjustment adjustment)
-            throws GrantAdjustmentAlreadySetException {
-        LOGGER.info("Add grant adjustment {} to invoice {}",
-                adjustment, invoice);
-
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-
-        if (invoice.getAdjustment() != null) {
-            throw new GrantAdjustmentAlreadySetException(
-                    "A grant adjustment have already been added.");
-        }
-
-        // Setup mapping between invoice and adjustment.
-        invoice.setAdjustment(adjustment);
-        adjustment.setInvoice(invoice);
-
-        // Set creation date and modification date of new adjustment.
-        adjustment.setCreateDate(date);
-        adjustment.setModifiedDate(date);
-
-        // Set user, group and company id of new adjustment.
-        adjustment.setUserId(userId);
-        adjustment.setGroupId(groupId);
-        adjustment.setCompanyId(companyId);
-
-        // Set modification date of invoice.
-        invoice.setModifiedDate(date);
-
-        em.persist(adjustment);
-
-        return em.merge(invoice);
     }
 
     @Override
