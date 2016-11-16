@@ -27,4 +27,8 @@ public class BeneficiaryFactory {
                                                     String lastName) {
         return new BeneficiaryBuilder(firstName, lastName);
     }
+
+    public static BeneficiaryBuilder newBeneficiary(String fullName) {
+        return new BeneficiaryBuilder(fullName);
+    }
 }

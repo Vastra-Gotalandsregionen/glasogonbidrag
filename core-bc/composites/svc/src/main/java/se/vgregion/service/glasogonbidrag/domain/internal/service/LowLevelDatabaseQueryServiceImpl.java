@@ -208,8 +208,7 @@ public class LowLevelDatabaseQueryServiceImpl
         query.append(
                 "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
                             "BeneficiaryDTO( " +
-                                "b.id, i.number, b.firstName, " +
-                                "b.lastName, COUNT(g) ) " +
+                                "b.id, i.number, b.fullName, COUNT(g) ) " +
                 "FROM Beneficiary b " +
                 "LEFT JOIN b.grants g " +
                 "LEFT JOIN b.identification i ");

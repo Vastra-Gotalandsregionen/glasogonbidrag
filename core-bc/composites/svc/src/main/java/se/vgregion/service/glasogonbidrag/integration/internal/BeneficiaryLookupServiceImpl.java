@@ -9,9 +9,11 @@ import se.riv.population.residentmaster.lookupresidentforextendedprofileresponde
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
 import se.riv.population.residentmaster.v1.JaNejTYPE;
+import se.riv.population.residentmaster.v1.KonTYPE;
 import se.riv.population.residentmaster.v1.NamnTYPE;
 import se.riv.population.residentmaster.v1.PersonpostTYPE;
 import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.integration.exception.IdentityFormatException;
 import se.vgregion.service.glasogonbidrag.integration.exception.NoBeneficiaryFoundException;
@@ -60,7 +62,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                         "", generateRequest(identity, date));
 
         return new BeneficiaryTransport(
-        extractNameFromResponse(response),
+        extractDataFromResponse(response),
                 extractAreaFromRequest(response));
     }
 
@@ -76,7 +78,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                 profileClient.lookupResidentForExtendedProfile(
                         "", generateRequest(identity));
 
-        return extractNameFromResponse(response);
+        return extractDataFromResponse(response);
     }
 
     @Override
@@ -155,30 +157,45 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return BeneficiaryNameTransport which contains first name and
      *         surname.
      */
-    private BeneficiaryNameTuple extractNameFromResponse(
+    private BeneficiaryNameTuple extractDataFromResponse(
             LookupResidentForExtendedProfileResponseType response) {
         ExtendedResidentType resident = getResident(response);
 
         if (resident.getSekretessmarkering() == JaNejTYPE.N) {
-            return extractNameFromResponse(resident.getPersonpost());
+            return extractDataFromResponse(resident.getPersonpost());
         } else {
             return createNameForProtected();
         }
     }
 
     /**
-     * Extract name from response.
+     * Extract name and sex from response.
      *
      * @param person PersonpostTYPE from the response.
      * @return first and last name of a person.
      */
-    private BeneficiaryNameTuple extractNameFromResponse(
+    private BeneficiaryNameTuple extractDataFromResponse(
             PersonpostTYPE person) {
         NamnTYPE name = person.getNamn();
 
         return new BeneficiaryNameTuple(
-                extractName(name.getFornamn(), ""),
-                extractName(name.getEfternamn(), ""));
+                String.format("%s %s",
+                        extractName(name.getFornamn(), ""),
+                        extractName(name.getEfternamn(), "")).trim(),
+                extractSexFromResponse(person));
+    }
+
+    /**
+     * extract sex from response.
+     *
+     * @param person person to fetch sex from.
+     * @return return sex as SexType.
+     */
+    private SexType extractSexFromResponse(PersonpostTYPE person) {
+        KonTYPE kon = person.getKon();
+        if (kon == KonTYPE.M) return SexType.MALE;
+        else if (kon == KonTYPE.K) return SexType.FEMALE;
+        else return null;
     }
 
     /**
@@ -203,7 +220,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      * @return a beneficiary name transport with just crosses.
      */
     private BeneficiaryNameTuple createNameForProtected() {
-        return new BeneficiaryNameTuple("XXXXXX", "XXXXXX");
+        return new BeneficiaryNameTuple("XXXXXX XXXXXX");
     }
 
     /**

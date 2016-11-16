@@ -45,7 +45,6 @@ import java.util.*;
                         "LEFT JOIN FETCH g.prescription p " +
                         "LEFT JOIN FETCH p.diagnose " +
                         "LEFT JOIN FETCH i.supplier " +
-                        "LEFT JOIN FETCH i.adjustment " +
                         "LEFT JOIN FETCH i.distribution " +
                         "WHERE i.id = :id"),
         @NamedQuery(
@@ -54,7 +53,6 @@ import java.util.*;
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
-                        "LEFT JOIN FETCH i.adjustment " +
                         "WHERE i.verificationNumber = :number"),
 
         @NamedQuery(
@@ -69,7 +67,6 @@ import java.util.*;
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
-                        "LEFT JOIN FETCH i.adjustment " +
                         "ORDER BY i.id ASC"),
 
         @NamedQuery(
@@ -90,7 +87,6 @@ import java.util.*;
                         "FROM Invoice i " +
                         "LEFT JOIN FETCH i.grants " +
                         "LEFT JOIN FETCH i.supplier " +
-                        "LEFT JOIN FETCH i.adjustment " +
                         "WHERE i.invoiceNumber = :number " +
                         "ORDER BY i.id ASC"),
         @NamedQuery(
@@ -169,12 +165,6 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-
-    @OneToOne(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JoinColumn(name = "adjustment")
-    private GrantAdjustment adjustment;
 
     @ManyToOne
     @JoinColumn(name = "migration")
@@ -305,14 +295,6 @@ public class Invoice {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }
-
-    public GrantAdjustment getAdjustment() {
-        return adjustment;
-    }
-
-    public void setAdjustment(GrantAdjustment adjustment) {
-        this.adjustment = adjustment;
     }
 
     public Migration getMigration() {
@@ -447,7 +429,6 @@ public class Invoice {
                     ", amount=" + amount +
                     ", grants=" + grants +
                     ", supplier=" + supplier +
-                    ", adjustment=" + adjustment +
                     '}';
         } catch (Exception e) {
             e.printStackTrace();

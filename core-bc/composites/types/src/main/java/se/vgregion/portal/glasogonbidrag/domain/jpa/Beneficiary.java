@@ -1,5 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -35,15 +37,10 @@ import java.util.*;
                         "ORDER BY b.id ASC"),
 
         @NamedQuery(
-                name = "glasogonbidrag.beneficiary.findAllOrderByFirstName",
+                name = "glasogonbidrag.beneficiary.findAllOrderByName",
                 query = "SELECT b " +
                         "FROM Beneficiary b " +
-                        "ORDER BY b.firstName, b.lastName ASC"),
-        @NamedQuery(
-                name = "glasogonbidrag.beneficiary.findAllOrderByLastName",
-                query = "SELECT b " +
-                        "FROM Beneficiary b " +
-                        "ORDER BY b.lastName, b.firstName ASC"),
+                        "ORDER BY b.fullName ASC"),
 
 })
 public class Beneficiary {
@@ -64,11 +61,11 @@ public class Beneficiary {
 
     // Beneficiary Specific
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Column(name = "sex")
+    private SexType sex;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
     private Set<Grant> grants;
@@ -113,24 +110,20 @@ public class Beneficiary {
         this.modifiedDate = modifiedDate;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getFullName() {
-        return firstName + " " + lastName;
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public SexType getSex() {
+        return sex;
+    }
+
+    public void setSex(SexType sex) {
+        this.sex = sex;
     }
 
     public Set<Grant> getGrants() {
@@ -164,19 +157,18 @@ public class Beneficiary {
 
         Beneficiary that = (Beneficiary) o;
 
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
+        if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null)
             return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
+        if (identification != null ? !identification.equals(that.identification) : that.identification != null)
             return false;
-        return identification.equals(that.identification);
 
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + identification.hashCode();
+        int result = fullName != null ? fullName.hashCode() : 0;
+        result = 31 * result + (identification != null ? identification.hashCode() : 0);
         return result;
     }
 
@@ -184,8 +176,7 @@ public class Beneficiary {
     public String toString() {
         return "Beneficiary{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", identification=" + identification.toString() +
                 '}';
     }

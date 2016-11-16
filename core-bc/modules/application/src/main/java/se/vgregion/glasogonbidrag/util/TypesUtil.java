@@ -54,10 +54,14 @@ public final class TypesUtil {
     public static Beneficiary beneficiary(Identification id,
                                           String firstName,
                                           String lastName) {
+        return beneficiary(id, String.format("%s %s", firstName, lastName));
+    }
+
+    public static Beneficiary beneficiary(Identification id,
+                                          String fullName) {
         Beneficiary beneficiary = new Beneficiary();
         beneficiary.setIdentification(id);
-        beneficiary.setFirstName(firstName);
-        beneficiary.setLastName(lastName);
+        beneficiary.setFullName(fullName);
 
         return beneficiary;
     }
