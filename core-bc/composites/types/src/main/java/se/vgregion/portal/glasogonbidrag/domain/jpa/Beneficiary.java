@@ -65,6 +65,7 @@ public class Beneficiary {
     private String fullName;
 
     @Column(name = "sex")
+    @Enumerated(EnumType.STRING)
     private SexType sex;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
