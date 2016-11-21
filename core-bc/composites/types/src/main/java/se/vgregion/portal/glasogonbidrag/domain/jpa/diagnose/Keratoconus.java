@@ -7,6 +7,8 @@ import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 @Table(name = "vgr_glasogonbidrag_diagnose_keratoconus")
 public class Keratoconus extends Diagnose {
 
+    @Enumerated(EnumType.STRING)
     private VisualLaterality laterality;
     private float visualAcuityRight;
     private float visualAcuityLeft;
