@@ -18,7 +18,7 @@
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="statisticsTable" var="statisticsVO" value="#{statisticsReportViewBackingBean.statisticsVOs}" rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
-            <p:column headerText="Label" sortBy="#{statisticsVO.label}">
+            <p:column headerText="#{statisticsReportViewBackingBean.statisticsGrouping}" sortBy="#{statisticsVO.label}">
                 <h:outputText value="#{statisticsVO.label}" />
             </p:column>
             <p:column headerText="Antal bidrag" sortBy="#{statisticsVO.numberOfGrants}" styleClass="number">
@@ -26,7 +26,7 @@
                     <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Summa" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
+            <p:column headerText="Summa bidrag" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
                 <h:outputText value="#{statisticsVO.grantsSum}">
                     <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                 </h:outputText>

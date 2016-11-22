@@ -34,7 +34,7 @@
                                         onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                                 <f:selectItem itemLabel="Välj en" itemValue="" />
                                 <f:selectItem itemLabel="Kommun" itemValue="municipality" />
-                                <f:selectItem itemLabel="Ålder" itemValue="age" />
+                                <f:selectItem itemLabel="Födelseår" itemValue="birthday" />
                                 <f:selectItem itemLabel="Kön" itemValue="gender" />
                                 <f:selectItem itemLabel="Bidragstyp" itemValue="grantType" />
                             </p:selectOneMenu>
@@ -100,7 +100,7 @@
                             </ui:fragment>
 
                             <div class="statistics-filter-item">
-                                <p:outputLabel styleClass="filter-label" for="statisticsFilterIdentification" value="Identifikationstyp: " />
+                                <p:outputLabel styleClass="filter-label" for="statisticsFilterIdentification" value="Person-ID: " />
                                 <p:selectOneMenu id="statisticsFilterIdentification" value="#{statisticsReportViewBackingBean.statisticsFilterIdentification}">
                                     <f:selectItem itemLabel="Alla" itemValue="" />
                                     <f:selectItem itemLabel="Personnumer" itemValue="personalnumber" />

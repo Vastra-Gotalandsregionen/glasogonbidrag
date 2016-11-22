@@ -37,7 +37,7 @@ public class StatisticsMockUtil {
                 statisticsVO.setNumberOfGrants(13);
                 statisticsVOs.add(statisticsVO);
             }
-        } else if(statisticsGrouping.equals("age")) {
+        } else if(statisticsGrouping.equals("birthday")) {
             Random ageRandom = new Random();
 
             for(int i = statisticsFilterBirthYearStart; i<= statisticsFilterBirthYearStop; i++) {
