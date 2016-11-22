@@ -917,6 +917,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
         amountWithVat = "800";
 
-        tabUtil = new TabUtil(Arrays.asList("personal-number", "lma-number"), 0);
+        tabUtil = new TabUtil(Arrays.asList("personal-number", "other-identification-type"), 0);
     }
 }
