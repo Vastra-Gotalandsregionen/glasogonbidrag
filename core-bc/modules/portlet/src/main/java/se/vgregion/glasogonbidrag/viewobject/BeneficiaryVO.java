@@ -1,12 +1,14 @@
 package se.vgregion.glasogonbidrag.viewobject;
 
+import java.util.Date;
+
 /**
  * @author Erik Andersson - Monator Technologies AB
  */
 public class BeneficiaryVO {
 
     private String identificationNumber;
-    private String dateOfOBirth;
+    private Date dateOfOBirth;
     private String fullName;
 
     public BeneficiaryVO() {}
@@ -19,11 +21,11 @@ public class BeneficiaryVO {
         this.identificationNumber = identificationNumber;
     }
 
-    public String getDateOfOBirth() {
+    public Date getDateOfOBirth() {
         return dateOfOBirth;
     }
 
-    public void setDateOfOBirth(String dateOfOBirth) {
+    public void setDateOfOBirth(Date dateOfOBirth) {
         this.dateOfOBirth = dateOfOBirth;
     }
 

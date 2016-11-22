@@ -53,7 +53,13 @@
                                      value="#{beneficiaryVO.dateOfOBirth}"
                                      pt:placeholder=""
                                      pt:data-triggeronenter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
-                        />
+                                     converterMessage="#{bundle['reg-grant-error-converting-date']}"
+                        >
+                            <f:converter converterId="se.vgregion.MultiDateConverter" />
+                            <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                            <f:attribute name="pattern2" value="yyyyMMdd" />
+                            <f:attribute name="pattern3" value="yyMMdd" />
+                        </h:inputText>
                     </div>
                 </div>
 
@@ -80,7 +86,7 @@
                             <h:outputText value="#{grant.beneficiary.identification}" />
                         </div>
                         <div class="person-info-item">
-                            <h:outputText value="#{grant.beneficiary.fullName} #{grant.beneficiary.lastName}" />
+                            <h:outputText value="#{grant.beneficiary.fullName}" />
                         </div>
                     </div>
 

@@ -3,8 +3,10 @@ package se.vgregion.service.glasogonbidrag.local.internal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
@@ -52,6 +54,7 @@ public class GrantRuleValidationServiceImpl
         GrantRuleResult result = new GrantRuleResult();
 
         // Fetch data we need
+        Identification identification = grant.getBeneficiary().getIdentification();
         Diagnose diagnose = grant.getPrescription().getDiagnose();
         String county = grant.getCounty();
         String municipality = grant.getMunicipality();
@@ -70,15 +73,25 @@ public class GrantRuleValidationServiceImpl
             result.add(new GrantRuleWarning("warning-more-than-one-grant"));
         }
 
-        // The beneficiary have to live in Västra Götalands Regionen
-        // to be eligible for a grant.
-        if (!testGrantInVGRegion(county, municipality)) {
-            result.add(new GrantRuleViolation("violation-not-in-vgr"));
-        }
-
         if (testRecipeDateAfterDeliveryDate(recipeDate, deliveryDate)) {
             result.add(new GrantRuleViolation(
                     "violation-recipe-date-after-delivery-date"));
+        }
+
+        // TODO: make this nicer =)
+        // If a beneficiary have an identity type of LMA, OTHER or RESERVE
+        // and the birth date is null, we cannot do any more checks, return
+        // the result.
+        if (!testPersonalIdentificationType(identification)
+                && birthDate == null) {
+            return result;
+        }
+
+        // The beneficiary have to live in Västra Götalands Regionen
+        // to be eligible for a grant.
+        if (testPersonalIdentificationType(identification)
+                && !testGrantInVGRegion(county, municipality)) {
+            result.add(new GrantRuleViolation("violation-not-in-vgr"));
         }
 
         if (diagnose.getType() == DiagnoseType.NONE) {
@@ -251,11 +264,19 @@ public class GrantRuleValidationServiceImpl
         return result;
     }
 
-
     // Tests
 
     private boolean testMoreThanOneGrant(List<Grant> grants) {
         return grants.size() > 1;
+    }
+
+    private boolean testPersonalIdentificationType(
+            Identification identification) {
+        return !(identification.getType() == IdentificationType.LMA ||
+                 identification.getType() == IdentificationType.OTHER ||
+                 identification.getType() == IdentificationType.RESERVE ||
+                 identification.getType() == IdentificationType.PROTECTED ||
+                 identification.getType() == IdentificationType.NONE);
     }
 
     private boolean testGrantInVGRegion(String county, String municipality) {

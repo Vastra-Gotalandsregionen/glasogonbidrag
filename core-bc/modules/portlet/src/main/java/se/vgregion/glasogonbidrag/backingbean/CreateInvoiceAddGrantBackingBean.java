@@ -252,9 +252,7 @@ public class CreateInvoiceAddGrantBackingBean {
         Identification identification = identificationService.findByLMANumber(identificationNumber);
 
         if (identification == null) {
-            // TODO: birthyear should not be hardcoded
-
-            identification = new Lma(identificationNumber);
+            identification = new Lma(identificationNumber, beneficiaryVO.getDateOfOBirth());
         } else {
             beneficiary = beneficiaryService.findWithPartsByIdent(identification);
         }
@@ -271,6 +269,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
             newBeneficiary = true;
         }
+
+        // TODO: Should be reviewed
+        grant.setCounty("99");
+        grant.setMunicipality("07");
 
         grant.setBeneficiary(beneficiary);
 

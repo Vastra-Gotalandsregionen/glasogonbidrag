@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "vgr_glasogonbidrag_identification_lma")
 public class Lma extends Identification {
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
@@ -33,6 +33,12 @@ public class Lma extends Identification {
     public Lma(Date birthDate) {
         this.birthDate = birthDate;
     }
+
+    public Lma(String number, Date birthDate) {
+        super(number);
+        this.birthDate = birthDate;
+    }
+
 
     @Override
     public Date getBirthDate() {

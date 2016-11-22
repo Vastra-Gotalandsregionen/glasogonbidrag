@@ -19,7 +19,7 @@ import java.util.Date;
 @Table(name = "vgr_glasogonbidrag_identification_reserve")
 public class Reserve extends Identification {
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
