@@ -81,6 +81,7 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
+    @Transactional
     public List<Grant> findAllByDate(Date date) {
         TypedQuery<Grant> q = em.createNamedQuery(
                 "glasogonbidrag.grant.findAllByDate", Grant.class);
