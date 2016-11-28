@@ -8,19 +8,19 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class BasicQuery extends Query {
+public class BasicSqlQuery extends SqlQuery {
     private final List<String> select;
 
-    public BasicQuery(List<String> select,
-                      From from,
-                      List<Join> joins,
-                      List<WhereCondition> conditions) {
+    public BasicSqlQuery(List<String> select,
+                         From from,
+                         List<Join> joins,
+                         List<WhereCondition> conditions) {
         super(from, joins, conditions);
         this.select = select;
     }
 
     @Override
-    public String toJpqlString() {
+    public String toSqlString() {
         return null;
     }
 }

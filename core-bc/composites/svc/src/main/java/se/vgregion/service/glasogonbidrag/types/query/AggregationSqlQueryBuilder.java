@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class AggregationQueryBuilder {
-    private Class<?> type;
+public class AggregationSqlQueryBuilder {
     private List<String> select;
     private From from;
     private List<String> groupBy;
@@ -19,52 +18,47 @@ public class AggregationQueryBuilder {
     private List<WhereCondition> conditions;
     private List<Join> joins;
 
-    public AggregationQueryBuilder() {
+    public AggregationSqlQueryBuilder() {
     }
 
-    public AggregationQueryBuilder type(Class<?> type) {
-        this.type = type;
-        return this;
-    }
-
-    public AggregationQueryBuilder select() {
+    public AggregationSqlQueryBuilder select() {
         this.select = new ArrayList<>();
         return this;
     }
 
-    public AggregationQueryBuilder select(String... select) {
+    public AggregationSqlQueryBuilder select(String... select) {
         this.select = Arrays.asList(select);
         return this;
     }
 
-    public AggregationQueryBuilder from(From from) {
+    public AggregationSqlQueryBuilder from(From from) {
         this.from = from;
         return this;
     }
 
-    public AggregationQueryBuilder groupBy(String... groupBy) {
+    public AggregationSqlQueryBuilder groupBy(String... groupBy) {
         this.groupBy = Arrays.asList(groupBy);
         return this;
     }
 
-    public AggregationQueryBuilder agg(String... aggregations) {
+    public AggregationSqlQueryBuilder agg(String... aggregations) {
         this.aggregations = Arrays.asList(aggregations);
         return this;
     }
 
-    public AggregationQueryBuilder where(
+    public AggregationSqlQueryBuilder where(
             WhereCondition... conditions) {
         this.conditions = Arrays.asList(conditions);
         return this;
     }
 
-    public AggregationQueryBuilder join(Join... joins) {
+    public AggregationSqlQueryBuilder join(Join... joins) {
         this.joins = Arrays.asList(joins);
         return this;
     }
 
-    public AggregationQuery build() {
-        return new AggregationQuery(
-                select, aggregations, from, joins, conditions, groupBy, type);
+    public AggregationSqlQuery build() {
+        return new AggregationSqlQuery(
+                select, aggregations, from, joins, conditions, groupBy);
     }
 }
