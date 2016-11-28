@@ -19,6 +19,7 @@ public class AggregationSqlQueryBuilder {
     private List<Join> joins;
 
     public AggregationSqlQueryBuilder() {
+        conditions = new ArrayList<>();
     }
 
     public AggregationSqlQueryBuilder select() {
@@ -46,9 +47,8 @@ public class AggregationSqlQueryBuilder {
         return this;
     }
 
-    public AggregationSqlQueryBuilder where(
-            WhereCondition... conditions) {
-        this.conditions = Arrays.asList(conditions);
+    public AggregationSqlQueryBuilder where(WhereCondition condition) {
+        this.conditions.add(condition);
         return this;
     }
 

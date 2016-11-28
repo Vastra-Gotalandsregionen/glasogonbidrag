@@ -1,11 +1,11 @@
 package se.vgregion.service.glasogonbidrag.types.query.conditions;
 
-import se.vgregion.service.glasogonbidrag.types.query.JpqlTerm;
+import se.vgregion.service.glasogonbidrag.types.query.SqlTerm;
 
 /**
  * @author Martin Lind
  */
-public class InstanceOfWhereCondition implements JpqlTerm, WhereCondition {
+public class InstanceOfWhereCondition implements SqlTerm, WhereCondition {
     private final String variable;
     private final Class<?> instance;
 
@@ -15,7 +15,7 @@ public class InstanceOfWhereCondition implements JpqlTerm, WhereCondition {
     }
 
     @Override
-    public String toJpqlString() {
-        return "TYPE(" + variable + ") = " + instance.getSimpleName();
+    public String toSqlString() {
+        return "TYPE(" + variable + ") = " + instance.getCanonicalName();
     }
 }

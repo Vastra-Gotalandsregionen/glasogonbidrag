@@ -28,7 +28,11 @@ public class AggregationSqlQuery extends SqlQuery {
 
     public String toSqlString() {
         List<String> selectList = new ArrayList<>();
-        selectList.addAll(groupBy);
+
+        String groupByString = String.format("(%s) AS group_data",
+                joinStrings(groupBy, "||"));
+
+        selectList.add(groupByString);
         selectList.addAll(aggregationFunctions);
         selectList.addAll(select);
 

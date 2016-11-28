@@ -3,7 +3,7 @@ package se.vgregion.service.glasogonbidrag.types.query;
 /**
  * @author Martin Lind
  */
-public class From implements JpqlTerm {
+public class From implements SqlTerm {
     private final String table;
     private final String variable;
 
@@ -13,7 +13,7 @@ public class From implements JpqlTerm {
     }
 
     @Override
-    public String toJpqlString() {
+    public String toSqlString() {
         return table + " " + variable;
     }
 }

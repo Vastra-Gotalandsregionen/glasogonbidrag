@@ -1,11 +1,11 @@
 package se.vgregion.service.glasogonbidrag.types.query.conditions;
 
-import se.vgregion.service.glasogonbidrag.types.query.JpqlTerm;
+import se.vgregion.service.glasogonbidrag.types.query.SqlTerm;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
-public class EqualsWhereCondition implements JpqlTerm, WhereCondition {
+public class EqualsWhereCondition implements SqlTerm, WhereCondition {
     private final String leftHandSide;
     private final String rightHandSide;
 
@@ -15,7 +15,7 @@ public class EqualsWhereCondition implements JpqlTerm, WhereCondition {
     }
 
     @Override
-    public String toJpqlString() {
+    public String toSqlString() {
         return leftHandSide + " = " + rightHandSide;
     }
 }
