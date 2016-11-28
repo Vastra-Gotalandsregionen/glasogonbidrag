@@ -4,20 +4,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticReportService;
-import se.vgregion.service.glasogonbidrag.types.query.AggregationQuery;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchDateInterval;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchRequest;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchResponse;
+import se.vgregion.service.glasogonbidrag.types.query.AggregationSqlQuery;
+import se.vgregion.service.glasogonbidrag.types.query.AggregationSqlQueryBuilder;
 import se.vgregion.service.glasogonbidrag.types.query.From;
 import se.vgregion.service.glasogonbidrag.types.query.conditions.BetweenWhereCondition;
 import se.vgregion.service.glasogonbidrag.types.query.conditions.EqualsWhereCondition;
-import se.vgregion.service.glasogonbidrag.types.query.conditions.InstanceOfWhereCondition;
 import se.vgregion.service.glasogonbidrag.types.query.join.LeftJoin;
-import se.vgregion.service.glasogonbidrag.types.query.join.LeftSqlJoin;
 
+import javax.annotation.Resource;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
+import javax.sql.DataSource;
+import java.lang.annotation.Annotation;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static se.vgregion.service.glasogonbidrag.types.query.QueryBuilderFactory.simpleQuery;
@@ -31,36 +42,126 @@ public class StatisticReportServiceImpl implements StatisticReportService {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(LowLevelDatabaseQueryServiceImpl.class);
 
-    @PersistenceContext
-    private EntityManager em;
+    // TODO: Is this a good way to get a DataSource?
+    @Resource(mappedName="jdbc/HotellDbPool")
+    private DataSource ds;
 
-    public List<StatisticReportDTO> search() {
-        AggregationQuery query = simpleQuery()
-                .type(StatisticReportDTO.class)
+//    // If the above is fine, remove this.
+//    @PersistenceContext
+//    private EntityManager em;
+
+    public StatisticSearchResponse search(StatisticSearchRequest request) {
+        AggregationSqlQuery query = buildQuery(request);
+
+        LOGGER.debug("search() - prepared the query {}.", query.toSqlString());
+
+        List<StatisticReportDTO> result = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement statement = null;
+        try {
+            conn = ds.getConnection();
+            statement = conn.prepareCall(query.toSqlString());
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                long count = rs.getLong("count");
+                long amount = rs.getLong("amount");
+                String data = rs.getString("group_data");
+
+                result.add(new StatisticReportDTO(count, amount, data));
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("Problem executing SQL statement," +
+                    "Got exception {}", e.getMessage());
+        }finally{
+            try {
+                if (statement != null) statement.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                LOGGER.warn("Problem closing statement or connection, " +
+                        "Got exception {}", e.getMessage());
+            }
+        }
+
+        LOGGER.debug("search() - the query found {} results.", result.size());
+
+        return new StatisticSearchResponse(request.getType(), result);
+    }
+
+    private AggregationSqlQuery buildQuery(StatisticSearchRequest request) {
+        AggregationSqlQueryBuilder builder = simpleQuery()
                 .select()
-                .agg("COUNT(*)", "SUM(g.amount)")
-                .from(new From("Grant", "g"))
-                .join(new LeftJoin("g.beneficiary", "b"),
-                        new LeftJoin("b.identification", "i"),
-                        new LeftJoin("g.prescription", "p"),
-                        new LeftJoin("p.diagnose", "d"))
-                .where(new BetweenWhereCondition(
-                                "g.createDate", "'2016-03-03'", "'2016-06-06'"),
-                        new EqualsWhereCondition("b.sex",
-                                "se.vgregion.portal.glasogonbidrag.domain.SexType.MALE"),
-                        new InstanceOfWhereCondition("i", Personal.class),
-                        new InstanceOfWhereCondition("d", None.class))
-                .groupBy("g.county", "g.municipality")
-                .build();
+                .agg("COUNT(*) AS count", "SUM(g.amount) AS amount")
+                .from(new From("vgr_glasogonbidrag_grant", "g"))
+                .join(new LeftJoin("vgr_glasogonbidrag_beneficiary", "b",
+                                new EqualsWhereCondition(
+                                        "g.beneficiary_id",
+                                        "b.id")),
+                        new LeftJoin("vgr_glasogonbidrag_identification", "i",
+                                new EqualsWhereCondition(
+                                        "b.identification_id",
+                                        "i.id")),
+                        new LeftJoin("vgr_glasogonbidrag_prescription", "p",
+                                new EqualsWhereCondition(
+                                        "g.prescription_id",
+                                        "p.id")),
+                        new LeftJoin("vgr_glasogonbidrag_diagnose", "d",
+                                new EqualsWhereCondition(
+                                        "p.diagnose_id",
+                                        "d.id")));
 
-        TypedQuery<StatisticReportDTO> q =
-                em.createQuery(query.toJpqlString(), StatisticReportDTO.class);
+        // Add where for the interval
+        if (request.getInterval() != null) {
+            StatisticSearchDateInterval interval = request.getInterval();
+            if (interval.isInterval()) {
+                builder.where(new BetweenWhereCondition(
+                        "g.create_date",
+                        String.format("'%s'", interval.getStart()),
+                        String.format("'%s'", interval.getEnd())));
+            } else {
+                builder.where(new EqualsWhereCondition(
+                        "to_char(g.create_date, 'YYYY-MM-DD')",
+                        String.format("'%s'", interval.getDate())));
+            }
+        }
 
-        List<StatisticReportDTO> result = q.getResultList();
+        if (request.getDiagnoseType() != null) {
+            builder.where(new EqualsWhereCondition("d.diagnose_type",
+                    String.format("'%s'",
+                            Diagnose.getDiscriminatorValueMap().get(
+                                    request.getDiagnoseType()))));
+        }
 
-        LOGGER.debug("search() - The query {} found {} results",
-                query, result.size());
+        if (request.getIdentificationType() != null) {
+            builder.where(new EqualsWhereCondition("i.identity_type",
+                    String.format("'%s'",
+                            Identification.getDiscriminatorValueMap().get(
+                                    request.getIdentificationType()))));
+        }
 
-        return result;
+        if (request.getSex() != null) {
+            builder.where(new EqualsWhereCondition("b.sex",
+                    String.format("'%s'", request.getSex())));
+        }
+
+        switch (request.getType()) {
+            case MUNICIPALITY:
+                builder.groupBy("g.county", "g.municipality");
+                break;
+            case BIRTH_YEAR:
+                // TODO: Implement BirthYear on beneficiary
+                throw new IllegalArgumentException("Not implemented yet.");
+//                builder.groupBy("b.birth_year");
+//                break;
+            case SEX:
+                builder.groupBy("b.sex");
+                break;
+            case GRANT_TYPE:
+                builder.groupBy("d.diagnose_type");
+                break;
+        }
+
+        return builder.build();
     }
 }

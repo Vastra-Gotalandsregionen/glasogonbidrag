@@ -1,12 +1,11 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
-import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
-
-import java.util.List;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchRequest;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchResponse;
 
 /**
  * @author Martin Lind - Monator Technologies AB
  */
 public interface StatisticReportService {
-    List<StatisticReportDTO> search();
+    StatisticSearchResponse search(StatisticSearchRequest request);
 }
