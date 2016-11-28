@@ -9,13 +9,12 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
+// TODO: rename NONE to CHILD
 public enum DiagnoseType {
     APHAKIA("diagnose-type-aphakia", Aphakia.class),
     KERATOCONUS("diagnose-type-keratoconus", Keratoconus.class),
     SPECIAL("diagnose-type-special", Special.class),
     NONE("diagnose-type-child", None.class);
-
-    // TODO: rename NONE to CHILD
 
     private String languageKey;
     private Class<? extends Diagnose> diagnoseClass;

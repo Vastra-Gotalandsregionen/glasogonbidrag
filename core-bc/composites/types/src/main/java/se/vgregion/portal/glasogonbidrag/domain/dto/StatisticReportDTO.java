@@ -4,24 +4,14 @@ package se.vgregion.portal.glasogonbidrag.domain.dto;
  * @author Martin Lind - Monator Technologies AB
  */
 public class StatisticReportDTO {
-    private final String county;
-    private final String municipality;
     private final long count;
     private final long amount;
+    private final String data;
 
-    public StatisticReportDTO(String county, String municipality, long count, long amount) {
-        this.county = county;
-        this.municipality = municipality;
+    public StatisticReportDTO(long count, long amount, String data) {
         this.count = count;
         this.amount = amount;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public String getMunicipality() {
-        return municipality;
+        this.data = data;
     }
 
     public long getAmount() {
@@ -30,5 +20,9 @@ public class StatisticReportDTO {
 
     public long getCount() {
         return count;
+    }
+
+    public String getData() {
+        return data;
     }
 }

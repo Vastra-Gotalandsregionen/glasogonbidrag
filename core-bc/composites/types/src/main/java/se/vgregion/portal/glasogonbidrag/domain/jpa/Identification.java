@@ -14,6 +14,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -93,5 +95,18 @@ public abstract class Identification {
     @Override
     public String toString() {
         return this.number;
+    }
+
+    private static final Map<IdentificationType, String>
+            DISCRIMINATOR_MAP = new HashMap<>();
+    static {
+        DISCRIMINATOR_MAP.put(IdentificationType.LMA, "l");
+        DISCRIMINATOR_MAP.put(IdentificationType.PERSONAL, "p");
+        DISCRIMINATOR_MAP.put(IdentificationType.PROTECTED, "h");
+        DISCRIMINATOR_MAP.put(IdentificationType.RESERVE, "r");
+    }
+
+    public static Map<IdentificationType, String> getDiscriminatorValueMap() {
+        return DISCRIMINATOR_MAP;
     }
 }
