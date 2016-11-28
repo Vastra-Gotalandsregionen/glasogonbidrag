@@ -23,7 +23,10 @@ public class StatisticsMockUtil {
         return test;
     }
 
-    public List<StatisticsVO> getStatistics(String statisticsGrouping, String statisticsFilterGender, int statisticsFilterBirthYearStart, int statisticsFilterBirthYearStop) {
+    public List<StatisticsVO> getStatistics(String statisticsGrouping,
+                                            String statisticsFilterGender,
+                                            int statisticsFilterBirthYearStart,
+                                            int statisticsFilterBirthYearStop) {
 
         LOGGER.info("getStatistics - statisticsGrouping is: " + statisticsGrouping);
 

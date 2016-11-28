@@ -13,9 +13,16 @@ import se.vgregion.glasogonbidrag.util.DateUtil;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.viewobject.StatisticsVO;
+import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
+import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticReportService;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchDateInterval;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchRequest;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchResponse;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchType;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -23,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -47,6 +55,9 @@ public class StatisticsReportViewBackingBean {
 
     @Autowired
     private StatisticsMockUtil statisticsMockUtil;
+
+    @Autowired
+    private StatisticReportService service;
 
     // Attributes
 
@@ -199,6 +210,24 @@ public class StatisticsReportViewBackingBean {
 
     public void searchStatistics() {
         LOGGER.info("searchStatistics");
+
+        Calendar cal = new GregorianCalendar();
+        cal.set(Calendar.YEAR, 2016);
+        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+        cal.set(Calendar.DAY_OF_MONTH, 23);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Date today = cal.getTime();
+
+        StatisticSearchRequest request = new StatisticSearchRequest();
+        request.setType(StatisticSearchType.MUNICIPALITY);
+        request.setInterval(new StatisticSearchDateInterval(today));
+        request.setDiagnoseType(DiagnoseType.NONE);
+
+        StatisticSearchResponse response = service.search(request);
 
         statisticsVOs = statisticsMockUtil.getStatistics(statisticsGrouping, statisticsFilterGender, statisticsFilterBirthYearStart, statisticsFilterBirthYearStop);
 
