@@ -145,6 +145,11 @@ public class StatisticReportServiceImpl implements StatisticReportService {
                     String.format("'%s'", request.getSex())));
         }
 
+        if (request.getType() == null) {
+            throw new IllegalArgumentException(
+                    "Must set a search type on the request.");
+        }
+
         switch (request.getType()) {
             case MUNICIPALITY:
                 builder.groupBy("g.county", "g.municipality");
