@@ -8,7 +8,6 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Migration</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Grant</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.GrantAdjustment</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.AccountingDistribution</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.AccountRow</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier</class>
@@ -27,11 +26,13 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO</class>
 
         <properties>
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
         </properties>
     </persistence-unit>
 

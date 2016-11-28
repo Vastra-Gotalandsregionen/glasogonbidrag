@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -42,4 +44,18 @@ public abstract class Diagnose {
 
     // Value object helper
     public abstract PrescriptionValueObject getValueObject();
+
+
+    private static final Map<DiagnoseType, String>
+            DISCRIMINATOR_MAP = new HashMap<>();
+    static {
+        DISCRIMINATOR_MAP.put(DiagnoseType.APHAKIA, "a");
+        DISCRIMINATOR_MAP.put(DiagnoseType.KERATOCONUS, "k");
+        DISCRIMINATOR_MAP.put(DiagnoseType.NONE, "n");
+        DISCRIMINATOR_MAP.put(DiagnoseType.SPECIAL, "s");
+    }
+
+    public static Map<DiagnoseType, String> getDiscriminatorValueMap() {
+        return DISCRIMINATOR_MAP;
+    }
 }
