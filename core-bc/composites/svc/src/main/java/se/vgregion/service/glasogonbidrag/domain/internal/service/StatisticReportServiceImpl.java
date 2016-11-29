@@ -43,7 +43,7 @@ public class StatisticReportServiceImpl implements StatisticReportService {
             LoggerFactory.getLogger(LowLevelDatabaseQueryServiceImpl.class);
 
     // TODO: Is this a good way to get a DataSource?
-    @Resource(mappedName="jdbc/HotellDbPool")
+    @Resource(mappedName="jdbc/GlasogonBidragDbPool")
     private DataSource ds;
 
 //    // If the above is fine, remove this.
@@ -93,20 +93,20 @@ public class StatisticReportServiceImpl implements StatisticReportService {
         AggregationSqlQueryBuilder builder = simpleQuery()
                 .select()
                 .agg("COUNT(*) AS count", "SUM(g.amount) AS amount")
-                .from(new From("vgr_glasogonbidrag_grant", "g"))
-                .join(new LeftJoin("vgr_glasogonbidrag_beneficiary", "b",
+                .from(new From("grant", "g"))
+                .join(new LeftJoin("beneficiary", "b",
                                 new EqualsWhereCondition(
                                         "g.beneficiary_id",
                                         "b.id")),
-                        new LeftJoin("vgr_glasogonbidrag_identification", "i",
+                        new LeftJoin("identification", "i",
                                 new EqualsWhereCondition(
                                         "b.identification_id",
                                         "i.id")),
-                        new LeftJoin("vgr_glasogonbidrag_prescription", "p",
+                        new LeftJoin("prescription", "p",
                                 new EqualsWhereCondition(
                                         "g.prescription_id",
                                         "p.id")),
-                        new LeftJoin("vgr_glasogonbidrag_diagnose", "d",
+                        new LeftJoin("diagnose", "d",
                                 new EqualsWhereCondition(
                                         "p.diagnose_id",
                                         "d.id")));

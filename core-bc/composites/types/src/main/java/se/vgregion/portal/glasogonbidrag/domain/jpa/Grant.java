@@ -25,7 +25,7 @@ import java.util.Date;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_grant")
+@Table(name = "grant")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.grant.findWithParts",

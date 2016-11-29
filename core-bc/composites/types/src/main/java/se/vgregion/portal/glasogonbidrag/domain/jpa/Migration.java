@@ -18,7 +18,7 @@ import java.util.Set;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_migration")
+@Table(name = "migration")
 @NamedQueries(value = {
         @NamedQuery(
                 name = "glasogonbidrag.migration.findAllWithPartsByDate",

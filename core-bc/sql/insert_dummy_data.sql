@@ -39,47 +39,47 @@ DECLARE
     id15 bigint;
 BEGIN
     -- Get invoice Ids from sequence.
-    inv01 := nextval('vgr_glasogonbidrag_invoice_id_seq'::regclass);
-    inv02 := nextval('vgr_glasogonbidrag_invoice_id_seq'::regclass);
-    inv03 := nextval('vgr_glasogonbidrag_invoice_id_seq'::regclass);
+    inv01 := nextval('invoice_id_seq'::regclass);
+    inv02 := nextval('invoice_id_seq'::regclass);
+    inv03 := nextval('invoice_id_seq'::regclass);
 
     -- Get beneficiary Ids from sequence.
-    per01 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per02 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per03 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per04 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per05 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per06 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per07 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per08 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per09 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per10 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per11 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per12 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per13 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per14 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
-    per15 := nextval('vgr_glasogonbidrag_beneficiary_id_seq'::regclass);
+    per01 := nextval('beneficiary_id_seq'::regclass);
+    per02 := nextval('beneficiary_id_seq'::regclass);
+    per03 := nextval('beneficiary_id_seq'::regclass);
+    per04 := nextval('beneficiary_id_seq'::regclass);
+    per05 := nextval('beneficiary_id_seq'::regclass);
+    per06 := nextval('beneficiary_id_seq'::regclass);
+    per07 := nextval('beneficiary_id_seq'::regclass);
+    per08 := nextval('beneficiary_id_seq'::regclass);
+    per09 := nextval('beneficiary_id_seq'::regclass);
+    per10 := nextval('beneficiary_id_seq'::regclass);
+    per11 := nextval('beneficiary_id_seq'::regclass);
+    per12 := nextval('beneficiary_id_seq'::regclass);
+    per13 := nextval('beneficiary_id_seq'::regclass);
+    per14 := nextval('beneficiary_id_seq'::regclass);
+    per15 := nextval('beneficiary_id_seq'::regclass);
 
     -- Get identification Ids from sequence.
-    id01 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id02 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id03 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id04 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id05 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id06 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id07 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id08 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id09 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id10 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id11 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id12 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id13 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id14 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
-    id15 := nextval('vgr_glasogonbidrag_identification_id_seq'::regclass);
+    id01 := nextval('identification_id_seq'::regclass);
+    id02 := nextval('identification_id_seq'::regclass);
+    id03 := nextval('identification_id_seq'::regclass);
+    id04 := nextval('identification_id_seq'::regclass);
+    id05 := nextval('identification_id_seq'::regclass);
+    id06 := nextval('identification_id_seq'::regclass);
+    id07 := nextval('identification_id_seq'::regclass);
+    id08 := nextval('identification_id_seq'::regclass);
+    id09 := nextval('identification_id_seq'::regclass);
+    id10 := nextval('identification_id_seq'::regclass);
+    id11 := nextval('identification_id_seq'::regclass);
+    id12 := nextval('identification_id_seq'::regclass);
+    id13 := nextval('identification_id_seq'::regclass);
+    id14 := nextval('identification_id_seq'::regclass);
+    id15 := nextval('identification_id_seq'::regclass);
 
 -- Temporary moved to initial data.
 --    -- Insert suppliers.
---    INSERT INTO vgr_glasogonbidrag_supplier
+--    INSERT INTO supplier
 --        (name, user_id, group_id, company_id, create_date, modified_date)
 --    VALUES
 --        ('Synsam Alfa', 20159, 20195, 20155,
@@ -106,7 +106,7 @@ BEGIN
 --         '2015-01-01 08:00:00.000', '2015-01-01 08:00:00.000');
 
     -- Insert invoices.
-    INSERT INTO vgr_glasogonbidrag_invoice
+    INSERT INTO invoice
         (id,
          user_id, group_id, company_id,
          create_date, modified_date,
@@ -127,7 +127,7 @@ BEGIN
        250000, 62500, '2016-02-17', '10003', 'E510422', 'Wasaoptik');
 
     -- Insert grant adjustment to invoice with verification number E510422
-    INSERT INTO vgr_glasogonbidrag_grant_adjustment
+    INSERT INTO grant_adjustment
         (amount,
          user_id, group_id, company_id,
          create_date, modified_date,
@@ -136,7 +136,7 @@ BEGIN
         (50000, 20159, 20195, 20155, NOW(), NOW(), inv03);
 
     -- Insert identification number ids.
-    INSERT INTO vgr_glasogonbidrag_identification
+    INSERT INTO identification
         (id, identity_type)
     VALUES
         (id01, 'p'), (id02, 'p'), (id03, 'p'), (id04, 'l'), (id05, 'p'),
@@ -144,7 +144,7 @@ BEGIN
         (id11, 'p'), (id12, 'p'), (id13, 'p'), (id14, 'p'), (id15, 'p');
 
     -- Insert swedish personal identification numbers.
-    INSERT INTO vgr_glasogonbidrag_personal_identification
+    INSERT INTO personal_identification
         (id, number)
     VALUES
         (id01, '95362648-6608'),
@@ -163,13 +163,13 @@ BEGIN
         (id15, '19551549-5904');
 
     -- Insert migrations LMA identification number.
-    INSERT INTO vgr_glasogonbidrag_lma_identification
+    INSERT INTO lma_identification
         (id, number)
     VALUES
         (id04, '50-008920/4');
 
     -- Insert beneficiaries.
-    INSERT INTO vgr_glasogonbidrag_beneficiary
+    INSERT INTO beneficiary
         (id, identification_id, create_date, modified_date, first_name, last_name)
     VALUES
         (per01, id01, '2016-01-01 08:00:00.000', '2016-01-01 08:00:00.000',
@@ -204,7 +204,7 @@ BEGIN
          'Sibylla', 'Robertsson');
 
     -- Insert grants.
-    INSERT INTO vgr_glasogonbidrag_grant
+    INSERT INTO grant
         (user_id,
          group_id,
          company_id,

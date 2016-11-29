@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("a")
-@Table(name = "vgr_glasogonbidrag_diagnose_aphakia")
+@Table(name = "diagnose_aphakia")
 public class Aphakia extends Diagnose {
 
     @Enumerated(EnumType.STRING)

@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_account_row")
+@Table(name = "account_row")
 public class AccountRow {
 
     @Id

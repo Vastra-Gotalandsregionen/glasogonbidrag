@@ -29,7 +29,7 @@ import java.util.*;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_invoice")
+@Table(name = "invoice")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findWithGrants",

@@ -1,18 +1,18 @@
 
 -- Drop tables
-DROP TABLE vgr_glasogonbidrag_migration;
+DROP TABLE migration;
 
-DROP TABLE vgr_glasogonbidrag_grant;
-DROP TABLE vgr_glasogonbidrag_invoice;
-DROP TABLE vgr_glasogonbidrag_beneficiary;
+DROP TABLE grant;
+DROP TABLE invoice;
+DROP TABLE beneficiary;
 
-DROP TABLE vgr_glasogonbidrag_personal_identification;
-DROP TABLE vgr_glasogonbidrag_reserve_identification;
-DROP TABLE vgr_glasogonbidrag_lma_identification;
-DROP TABLE vgr_glasogonbidrag_identification;
+DROP TABLE personal_identification;
+DROP TABLE reserve_identification;
+DROP TABLE lma_identification;
+DROP TABLE identification;
 
-DROP TABLE vgr_glasogonbidrag_grant_adjustment;
+DROP TABLE grant_adjustment;
 
-DROP TABLE vgr_glasogonbidrag_prescription;
+DROP TABLE prescription;
 
-DROP TABLE vgr_glasogonbidrag_supplier;
+DROP TABLE supplier;

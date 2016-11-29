@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "vgr_glasogonbidrag_beneficiary")
+@Table(name = "beneficiary")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithParts",

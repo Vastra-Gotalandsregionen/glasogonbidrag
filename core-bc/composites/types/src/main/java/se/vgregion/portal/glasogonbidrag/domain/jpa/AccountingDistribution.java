@@ -21,6 +21,7 @@ import java.util.List;
  * @author Martin Lind - Monator Technologes AB
  */
 @Entity
+@Table(name = "account_distribution")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.distribution.findAll",
@@ -40,7 +41,6 @@ import java.util.List;
                         "LEFT JOIN FETCH ad.rows " +
                         "WHERE ad.id = :id")
 })
-@Table(name = "vgr_glasogonbidrag_account_distribution")
 public class AccountingDistribution {
 
     @Id

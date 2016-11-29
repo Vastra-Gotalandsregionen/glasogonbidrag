@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @DiscriminatorValue("h")
-@Table(name = "vgr_glasogonbidrag_identification_protected")
+@Table(name = "identification_protected")
 public class Protected extends Identification {
 
     @Transient

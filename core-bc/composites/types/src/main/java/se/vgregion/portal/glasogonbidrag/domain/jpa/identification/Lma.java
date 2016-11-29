@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Entity
 @DiscriminatorValue("l")
-@Table(name = "vgr_glasogonbidrag_identification_lma")
+@Table(name = "identification_lma")
 public class Lma extends Identification {
 
     @Column(name = "birth_date")

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "vgr_glasogonbidrag_supplier")
+@Table(name = "supplier")
 @NamedQueries({
 
         @NamedQuery(

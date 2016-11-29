@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("k")
-@Table(name = "vgr_glasogonbidrag_diagnose_keratoconus")
+@Table(name = "diagnose_keratoconus")
 public class Keratoconus extends Diagnose {
 
     @Enumerated(EnumType.STRING)
