@@ -110,10 +110,7 @@
                                 </th>
 
                                 <th class="number">
-                                    <h:outputText value="#{bundle['excl-vat']}" />
-                                </th>
-                                <th class="number">
-                                    <h:outputText value="#{bundle['incl-vat']}" />
+                                    <h:outputText value="#{bundle['amount']}" />
                                 </th>
                             </tr>
                             </thead>
@@ -142,11 +139,6 @@
                                             <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                                         </h:outputText>
                                     </td>
-                                    <td class="number">
-                                        <h:outputText value="#{grant.amountIncludingVatAsKrona}">
-                                            <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                        </h:outputText>
-                                    </td>
                                 </tr>
                             </ui:repeat>
                             </tbody>
@@ -169,67 +161,48 @@
                 <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['invoice-summary']}">
                     <table class="simple-table">
                         <thead>
-                        <tr>
-                            <th>
-                                <h:outputText value="#{bundle['entry']}" />
-                            </th>
-                            <th class="number">
-                                <h:outputText value="#{bundle['excl-vat']}" />
-                            </th>
-                            <th class="number">
-                                <h:outputText value="#{bundle['incl-vat']}" />
-                            </th>
-                        </tr>
+                            <tr>
+                                <th>
+                                    <h:outputText value="#{bundle['entry']}" />
+                                </th>
+                                <th class="number">
+                                    <h:outputText value="#{bundle['amount']}" />
+                                </th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                <h:outputText value="#{bundle['invoice']}" />
-                            </td>
-                            <td class="number">
-                                <h:outputText value="#{invoice.amountAsKrona}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-                            <td class="number">
-                                <h:outputText value="#{invoice.amountIncludingVatAsKrona}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputText value="#{bundle['registered-grants']}" />
-                            </td>
-                            <td class="number">
-                                <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-                            <td class="number">
-                                <h:outputText value="#{invoice.calculateGrantsAmountIncludingVatSumAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-                        </tr>
-                        <tr class="summary-row #{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0 ? 'match' : 'no-match'}">
-                            <td>
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{bundle['invoice']}" />
+                                </td>
+                                <td class="number">
+                                    <h:outputText value="#{invoice.amountAsKrona}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{bundle['registered-grants']}" />
+                                </td>
+                                <td class="number">
+                                    <h:outputText value="#{invoice.calculateGrantsAmountSumAsKrona()}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr class="summary-row #{invoice.calculateDifferenceAsKrona().unscaledValue() eq 0 ? 'match' : 'no-match'}">
+                                <td>
                                     <span class="summary-icon">
                                         <h:outputText value="" />
                                     </span>
-                            </td>
-                            <td class="number">
-                                <h:outputText value="#{invoice.calculateDifferenceExcludingVatAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-
-                            <td class="number">
-                                <h:outputText value="#{invoice.calculateDifferenceIncludingVatAsKrona()}">
-                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
-                                </h:outputText>
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="number">
+                                    <h:outputText value="#{invoice.calculateDifferenceAsKrona()}">
+                                        <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </gb:box>
@@ -254,7 +227,7 @@
                                 <th>#{bundle['accounting-responsibility']}</th>
                                 <th>#{bundle['accounting-account']}</th>
                                 <th>#{bundle['accounting-free-code']}</th>
-                                <th>#{bundle['sum-excl-vat']}</th>
+                                <th>#{bundle['sum']}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -273,7 +246,7 @@
                                         <h:inputText value="#{row.freeCode}" />
                                     </td>
                                     <td>
-                                        <h:inputText value="#{row.amountExclVatAsKrona}" />
+                                        <h:inputText value="#{row.amountAsKrona}" />
                                     </td>
                                 </tr>
                             </ui:repeat>

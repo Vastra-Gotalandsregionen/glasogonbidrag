@@ -29,7 +29,7 @@ import java.util.*;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_invoice")
+@Table(name = "invoice")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.invoice.findWithGrants",
@@ -150,8 +150,6 @@ public class Invoice {
     @Column(name = "invoice_number")
     private String invoiceNumber;
 
-    private long vat;
-
     private long amount;
 
     @Column(name = "case_worker")
@@ -249,14 +247,6 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public long getVat() {
-        return vat;
-    }
-
-    public void setVat(long vat) {
-        this.vat = vat;
-    }
-
     public long getAmount() {
         return amount;
     }
@@ -331,26 +321,6 @@ public class Invoice {
         this.amount = currency.calculateKronaAsParts(valueAsKrona);
     }
 
-    public BigDecimal getVatAsKrona() {
-        return currency.calculatePartsAsKrona(vat);
-    }
-
-    public void setVatAsKrona(BigDecimal valueAsKrona) {
-        this.vat = currency.calculateKronaAsParts(valueAsKrona);
-    }
-
-    public BigDecimal getAmountIncludingVatAsKrona() {
-        return currency.calculatePartsAsKrona(amount + vat);
-    }
-
-    public void setAmountIncludingVatAsKrona(BigDecimal valueAsKrona) {
-        KronaCalculationUtil.ValueAndVat result =
-                currency.calculateValueAndVatAsParts(valueAsKrona);
-
-        this.amount = result.getValue();
-        this.vat = result.getVat();
-    }
-
     // Helper to calculate amount into krona.
 
     public BigDecimal calculateGrantsAmountSumAsKrona() {
@@ -363,38 +333,10 @@ public class Invoice {
         return currency.calculatePartsAsKrona(sum);
     }
 
-    public BigDecimal calculateGrantsVatSumAsKrona() {
-        if (grants == null) {
-            return new BigDecimal(0);
-        }
-
-        long sum = sumGrantsVat();
-
-        return currency.calculatePartsAsKrona(sum);
-    }
-
-    public BigDecimal calculateGrantsAmountIncludingVatSumAsKrona() {
-        if (grants == null) {
-            return new BigDecimal(0);
-        }
-
-        long sum = sumGrantsAmountIncludingVat();
-
-        return currency.calculatePartsAsKrona(sum);
-    }
-
-    public BigDecimal calculateDifferenceExcludingVatAsKrona() {
+    public BigDecimal calculateDifferenceAsKrona() {
         long result = this.amount;
 
         result = result - sumGrantsAmount();
-
-        return currency.calculatePartsAsKrona(result);
-    }
-
-    public BigDecimal calculateDifferenceIncludingVatAsKrona() {
-        long result = this.amount + vat;
-
-        result = result - sumGrantsAmountIncludingVat();
 
         return currency.calculatePartsAsKrona(result);
     }
@@ -425,7 +367,6 @@ public class Invoice {
                     ", userId=" + userId +
                     ", verificationNumber='" + verificationNumber + '\'' +
                     ", invoiceNumber='" + invoiceNumber + '\'' +
-                    ", vat=" + vat +
                     ", amount=" + amount +
                     ", grants=" + grants +
                     ", supplier=" + supplier +
@@ -443,26 +384,6 @@ public class Invoice {
 
         for (Grant grant : grants) {
             sum = sum + grant.getAmount();
-        }
-
-        return sum;
-    }
-
-    private long sumGrantsVat() {
-        long sum = 0;
-
-        for (Grant grant : grants) {
-            sum = sum + grant.getVat();
-        }
-
-        return sum;
-    }
-
-    private long sumGrantsAmountIncludingVat() {
-        long sum = 0;
-
-        for (Grant grant : grants) {
-            sum = sum + grant.getAmount() + grant.getVat();
         }
 
         return sum;

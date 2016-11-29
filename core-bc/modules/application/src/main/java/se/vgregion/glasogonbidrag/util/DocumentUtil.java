@@ -43,7 +43,7 @@ public final class DocumentUtil {
      *
      * row[1] contains date to set as prescription date.
      * row[2] contains date to set as delivery date.
-     * row[3] contains amount including vat to set as amount for date.
+     * row[3] contains amount to set as amount for date.
      * row[4] contains the invoice number, this may be blank.
      * row[5] contains the verification number.
      *
@@ -59,7 +59,7 @@ public final class DocumentUtil {
      *
      * @param prescriptionDate date to set as prescription date.
      * @param deliveryDate date to set as delivery date.
-     * @param amount amount including vat to set as amount for date
+     * @param amount amount to set as amount for date
      * @param invoiceNumber the invoice number, this may be blank
      * @param verificationNumber the verification number
      * @return an import grant that should be converted to

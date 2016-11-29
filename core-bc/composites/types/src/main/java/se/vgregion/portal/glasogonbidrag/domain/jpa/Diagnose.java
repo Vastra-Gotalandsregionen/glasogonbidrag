@@ -20,7 +20,7 @@ import java.util.Map;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "diagnose_type")
-@Table(name = "vgr_glasogonbidrag_diagnose")
+@Table(name = "diagnose")
 public abstract class Diagnose {
 
     @Id

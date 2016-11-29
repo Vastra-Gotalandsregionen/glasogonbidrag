@@ -48,7 +48,7 @@ public class InvoiceBackingBean {
         boolean mayNewGrantsBeAdded = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
-        boolean isStillAmountLeft = (curInvoice.calculateDifferenceExcludingVatAsKrona().compareTo(BigDecimal.ZERO) != 0);
+        boolean isStillAmountLeft = (curInvoice.calculateDifferenceAsKrona().compareTo(BigDecimal.ZERO) != 0);
 
         mayNewGrantsBeAdded = isStatusInProgress && isStillAmountLeft;
 
@@ -73,7 +73,7 @@ public class InvoiceBackingBean {
         boolean mayInvoiceBeMarkedCompleted = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
-        boolean isStillAmountLeft = (curInvoice.calculateDifferenceExcludingVatAsKrona().compareTo(BigDecimal.ZERO) != 0);
+        boolean isStillAmountLeft = (curInvoice.calculateDifferenceAsKrona().compareTo(BigDecimal.ZERO) != 0);
 
         mayInvoiceBeMarkedCompleted = isStatusInProgress && !isStillAmountLeft;
 

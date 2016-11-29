@@ -18,6 +18,7 @@ import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.SexType;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.domain.api.service.GrantService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticReportService;
@@ -312,7 +313,7 @@ public class StatisticsReportViewBackingBean {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
         statisticsFilterBirthYearMax = currentYear;
-        statisticsFilterBirthYearMin = currentYear - 130;
+        statisticsFilterBirthYearMin = Beneficiary.SYSTEM_INITIAL_BIRTH_YEAR;
 
         statisticsFilterBirthYearStart = statisticsFilterBirthYearMin;
         statisticsFilterBirthYearStop = statisticsFilterBirthYearMax;

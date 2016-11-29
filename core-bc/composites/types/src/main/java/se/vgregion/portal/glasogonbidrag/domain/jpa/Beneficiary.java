@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "vgr_glasogonbidrag_beneficiary")
+@Table(name = "beneficiary")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.beneficiary.findWithParts",
@@ -45,6 +45,8 @@ import java.util.*;
 })
 public class Beneficiary {
 
+    public static final int SYSTEM_INITIAL_BIRTH_YEAR = 1900;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,6 +62,9 @@ public class Beneficiary {
     private Date modifiedDate;
 
     // Beneficiary Specific
+
+    @Column(name = "birth_year")
+    private int birthYear;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
@@ -111,6 +116,14 @@ public class Beneficiary {
         this.modifiedDate = modifiedDate;
     }
 
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -140,6 +153,16 @@ public class Beneficiary {
     }
 
     public void setIdentification(Identification identification) {
+        Date birthDate = identification.getBirthDate();
+
+        if (birthDate != null) {
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(birthDate);
+            this.birthYear = cal.get(Calendar.YEAR);
+        } else {
+            this.birthYear = SYSTEM_INITIAL_BIRTH_YEAR;
+        }
+
         this.identification = identification;
     }
 

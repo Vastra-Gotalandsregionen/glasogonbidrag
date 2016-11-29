@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_account_row")
+@Table(name = "account_row")
 public class AccountRow {
 
     @Id
@@ -31,8 +31,8 @@ public class AccountRow {
     @Column(name = "free_code")
     private int freeCode;
 
-    @Column(name = "amount_excl_vat")
-    private long amountExclVat;
+    @Column(name = "amount")
+    private long amount;
 
     @ManyToOne
     @JoinColumn(name = "distribution_id")
@@ -50,27 +50,27 @@ public class AccountRow {
 
     public AccountRow(int responsibility,
                       int account, int freeCode,
-                      long amountExclVat) {
-        this(1, responsibility, account, freeCode, amountExclVat);
+                      long amount) {
+        this(1, responsibility, account, freeCode, amount);
     }
 
     public AccountRow(int count, int responsibility,
                       int account, int freeCode,
-                      long amountExclVat) {
-        this(null, count, responsibility, account, freeCode, amountExclVat);
+                      long amount) {
+        this(null, count, responsibility, account, freeCode, amount);
     }
 
     public AccountRow(AccountingDistribution distribution,
                       int count, int responsibility,
                       int account, int freeCode,
-                      long amountExclVat) {
+                      long amount) {
         this.distribution = distribution;
 
         this.count = count;
         this.responsibility = responsibility;
         this.account = account;
         this.freeCode = freeCode;
-        this.amountExclVat = amountExclVat;
+        this.amount = amount;
     }
 
     public long getId() {
@@ -113,12 +113,12 @@ public class AccountRow {
         this.freeCode = freeCode;
     }
 
-    public long getAmountExclVat() {
-        return amountExclVat;
+    public long getAmount() {
+        return amount;
     }
 
-    public void setAmountExclVat(long amountExclVat) {
-        this.amountExclVat = amountExclVat;
+    public void setAmount(long amount) {
+        this.amount = amount;
     }
 
     public AccountingDistribution getDistribution() {
@@ -132,11 +132,11 @@ public class AccountRow {
     // Public helper to add and remove amount excl. VAT on the row.
 
     public void incrementAmount(long amount) {
-        this.amountExclVat = this.amountExclVat + amount;
+        this.amount = this.amount + amount;
     }
 
     public void decrementAmount(long amount) {
-        this.amountExclVat = this.amountExclVat - amount;
+        this.amount = this.amount - amount;
     }
 
     // Public helper to manipulate count
@@ -159,12 +159,12 @@ public class AccountRow {
 
     // Public helper to transform amount as krona
 
-    public BigDecimal getAmountExclVatAsKrona() {
-        return currency.calculatePartsAsKrona(amountExclVat);
+    public BigDecimal getAmountAsKrona() {
+        return currency.calculatePartsAsKrona(amount);
     }
 
-    public void setAmountExclVatAsKrona(BigDecimal valueAsKrona) {
-        amountExclVat = currency.calculateKronaAsParts(valueAsKrona);
+    public void setAmountAsKrona(BigDecimal valueAsKrona) {
+        amount = currency.calculateKronaAsParts(valueAsKrona);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class AccountRow {
                 ", responsibility=" + responsibility +
                 ", account=" + account +
                 ", freeCode=" + freeCode +
-                ", amountExclVat=" + amountExclVat +
+                ", amount=" + amount +
                 '}';
     }
 }

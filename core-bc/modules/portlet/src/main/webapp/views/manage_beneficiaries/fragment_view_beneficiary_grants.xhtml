@@ -50,7 +50,7 @@
                     </p:column>
 
                     <p:column headerText="#{bundle['amount']}" styleClass="currency">
-                        <h:outputText value="#{grant.amountIncludingVatAsKrona}">
+                        <h:outputText value="#{grant.amountAsKrona}">
                             <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="#{locale}" />
                         </h:outputText>
                     </p:column>
@@ -60,7 +60,7 @@
 
             <ui:fragment rendered="#{empty selectedBeneficiary.grants}">
                 <div class="alert alert-info">
-                    #{bundle['there-are-no-grants-registerd-for']} #{selectedBeneficiary.fullName}
+                    #{bundle['there-are-no-grants-registered-for']} #{selectedBeneficiary.fullName}
                 </div>
             </ui:fragment>
         </gb:box>

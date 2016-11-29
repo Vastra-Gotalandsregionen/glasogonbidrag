@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Entity
 @DiscriminatorValue("p")
-@Table(name = "vgr_glasogonbidrag_identification_personal")
+@Table(name = "identification_personal")
 public class Personal extends Identification {
 
     @Transient

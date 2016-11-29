@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("n")
-@Table(name = "vgr_glasogonbidrag_diagnose_none")
+@Table(name = "diagnose_none")
 public class None extends Diagnose {
 
     public None() {

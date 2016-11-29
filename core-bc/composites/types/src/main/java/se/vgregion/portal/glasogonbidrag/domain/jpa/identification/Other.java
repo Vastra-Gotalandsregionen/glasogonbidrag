@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @DiscriminatorValue("o")
-@Table(name = "vgr_glasogonbidrag_identification_other")
+@Table(name = "identification_other")
 public class Other extends Identification {
 
     @Column(name = "birth_date")

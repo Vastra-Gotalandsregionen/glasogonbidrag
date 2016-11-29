@@ -2,7 +2,6 @@ package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +25,7 @@ import java.util.Date;
  * @author Martin Lind - Monator Technologies AB
  */
 @Entity
-@Table(name = "vgr_glasogonbidrag_grant")
+@Table(name = "grant")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.grant.findWithParts",
@@ -58,13 +57,13 @@ import java.util.Date;
 
         @NamedQuery(
                 name = "glasogonbidrag.grant.currentProgressByDate",
-                query = "SELECT SUM(g.amount + g.vat) " +
+                query = "SELECT SUM(g.amount) " +
                         "FROM Grant g " +
                         "WHERE DATE_TRUNC('day', g.createDate) = :date"),
 
         @NamedQuery(
                 name = "glasogonbidrag.grant.currentProgressByUserAndDate",
-                query = "SELECT SUM(g.amount + g.vat) " +
+                query = "SELECT SUM(g.amount) " +
                         "FROM Grant g " +
                         "WHERE g.userId = :user " +
                         "AND DATE_TRUNC('day', g.createDate) = :date")
@@ -104,7 +103,6 @@ public class Grant {
     private Date deliveryDate;
 
     private long amount;
-    private long vat;
 
     private String county;
     private String municipality;
@@ -195,14 +193,6 @@ public class Grant {
         this.amount = amount;
     }
 
-    public long getVat() {
-        return vat;
-    }
-
-    public void setVat(long vat) {
-        this.vat = vat;
-    }
-
     public String getCounty() {
         return county;
     }
@@ -262,26 +252,6 @@ public class Grant {
         this.amount = currency.calculateKronaAsParts(valueAsKrona);
     }
 
-    public BigDecimal getVatAsKrona() {
-        return currency.calculatePartsAsKrona(vat);
-    }
-
-    public void setVatAsKrona(BigDecimal valueAsKrona) {
-        this.vat = currency.calculateKronaAsParts(valueAsKrona);
-    }
-
-    public BigDecimal getAmountIncludingVatAsKrona() {
-        return currency.calculatePartsAsKrona(amount + vat);
-    }
-
-    public void setAmountIncludingVatAsKrona(BigDecimal valueAsKrona) {
-        KronaCalculationUtil.ValueAndVat result =
-                currency.calculateValueAndVatAsParts(valueAsKrona);
-
-        this.amount = result.getValue();
-        this.vat = result.getVat();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -291,7 +261,6 @@ public class Grant {
 
         Grant grant = (Grant) o;
 
-        if (vat != grant.vat) return false;
         if (amount != grant.amount) return false;
         if (deliveryDate != null ? !deliveryDate.equals(grant.deliveryDate) : grant.deliveryDate != null)
             return false;
@@ -304,7 +273,6 @@ public class Grant {
     @Override
     public int hashCode() {
         int result = deliveryDate != null ? deliveryDate.hashCode() : 0;
-        result = 31 * result + (int) (vat ^ (vat >>> 32));
         result = 31 * result + (int) (amount ^ (amount >>> 32));
         result = 31 * result + (beneficiary != null ? beneficiary.hashCode() : 0);
         result = 31 * result + (invoice != null ? invoice.hashCode() : 0);
@@ -320,7 +288,6 @@ public class Grant {
                 "id=" + id +
                 ", deliveryDate=" + deliveryDateString +
                 ", amount=" + currency.format(amount) +
-                ", vat=" + currency.format(vat) +
                 '}';
     }
 }

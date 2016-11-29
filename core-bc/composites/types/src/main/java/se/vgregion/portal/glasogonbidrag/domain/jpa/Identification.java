@@ -23,7 +23,7 @@ import java.util.Map;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "identity_type")
-@Table(name = "vgr_glasogonbidrag_identification")
+@Table(name = "identification")
 @NamedQueries({
         @NamedQuery(
                 name = "glasogonbidrag.identification.findByPersonalNumber",

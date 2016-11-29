@@ -73,7 +73,7 @@ public final class TypesUtil {
         g.setDeliveryDate(delivery);
         try {
             BigDecimal a = new BigDecimal(amount);
-            g.setAmountIncludingVatAsKrona(a);
+            g.setAmountAsKrona(a);
         } catch (NumberFormatException ignored) {
             System.out.println("TypesUtil.grant: " + amount.length());
         }

@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("s")
-@Table(name = "vgr_glasogonbidrag_diagnose_special")
+@Table(name = "diagnose_special")
 public class Special extends Diagnose {
 
     @Enumerated(EnumType.STRING)
