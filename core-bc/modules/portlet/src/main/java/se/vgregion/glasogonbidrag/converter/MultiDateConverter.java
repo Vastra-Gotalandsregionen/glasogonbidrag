@@ -1,5 +1,8 @@
 package se.vgregion.glasogonbidrag.converter;
 
+import com.liferay.faces.util.logging.Logger;
+import com.liferay.faces.util.logging.LoggerFactory;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,12 +22,23 @@ import java.util.List;
 @FacesConverter(value="se.vgregion.MultiDateConverter")
 public class MultiDateConverter implements Converter {
 
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(MultiDateConverter.class);
+
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
         List<String> patterns = getPatterns(component);
         Date date = null;
 
         for (String pattern : patterns) {
+
+            LOGGER.info("pattern: " + pattern);
+
+            // Allow empty pattern (return null value for date)
+            if("".equals(pattern)) {
+                return null;
+            }
+
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             sdf.setLenient(false); // Don't parse dates like 33-33-3333.
 

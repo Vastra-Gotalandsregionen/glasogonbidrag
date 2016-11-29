@@ -74,6 +74,13 @@
                                         <ui:fragment rendered="#{tabUtil.activeIndex == 1}">
                                             <ui:include src="add_grant_lma.xhtml" />
                                         </ui:fragment>
+                                        <ui:fragment rendered="#{tabUtil.activeIndex == 2}">
+                                            <ui:include src="add_grant_reserve_number.xhtml" />
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{tabUtil.activeIndex == 3}">
+                                            <ui:include src="add_grant_other_identification.xhtml" />
+                                        </ui:fragment>
+
                                         <ui:include src="add_grant_grant_input.xhtml" />
                                     </div>
                                 </div>

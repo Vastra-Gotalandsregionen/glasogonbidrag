@@ -1,5 +1,7 @@
 package se.vgregion.glasogonbidrag.viewobject;
 
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+
 import java.util.Date;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Date;
 public class BeneficiaryVO {
 
     private String identificationNumber;
+    private IdentificationType identificationType;
     private Date dateOfOBirth;
     private String fullName;
 
@@ -19,6 +22,14 @@ public class BeneficiaryVO {
 
     public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
+    }
+
+    public IdentificationType getIdentificationType() {
+        return identificationType;
+    }
+
+    public void setIdentificationType(IdentificationType identificationType) {
+        this.identificationType = identificationType;
     }
 
     public Date getDateOfOBirth() {

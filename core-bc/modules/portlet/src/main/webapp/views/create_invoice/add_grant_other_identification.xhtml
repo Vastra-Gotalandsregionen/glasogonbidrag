@@ -4,6 +4,7 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:gb="http://java.sun.com/jsf/composite/gb"
@@ -22,24 +23,47 @@
         <c:set var="mayInvoiceBeChanged" value="#{invoiceBackingBean.checkMayInvoiceBeChanged(invoice)}" scope="request" />
         <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
 
-        <!-- Insert beneficiary's identification number -->
         <ui:fragment rendered="#{grantFlow.showIdentificationInput and mayNewGrantsBeAdded}">
             <div class="grant-section">
 
-                <gb:grantSectionInput id="personalNumber"
-                                      label="#{bundle['identification-type-personal']}"
+                <gb:grantSectionInput id="otherNumber"
+                                      label="#{bundle['identification-type-other']}"
                                       value="#{beneficiaryVO.identificationNumber}"
-                                      valueType="personNumber"
                                       autofocus="true"
-                                      placeholder="#{bundle['personal-number-placeholder']}"
-                                      required="true"
-                                      requiredMessage="#{bundle['reg-grant-error-personal-number-is-mandatory']}"
-                                      triggerOnEnter="#{portletNamespace}:addGrantForm:personalNumberSubmit"
+                                      required="false"
+                                      triggerOnEnter="#{portletNamespace}:addGrantForm:otherIdentificationSubmit"
                 />
 
+                <div class="field-row field-row-2">
+                    <div class="field-element">
+                        <h:outputLabel for="otherNumberFullName" value="#{bundle['full-name']}:" />
+                        <h:inputText id="otherNumberFullName"
+                                     styleClass=""
+                                     value="#{beneficiaryVO.fullName}"
+                                     pt:placeholder=""
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:otherIdentificationSubmit"
+                        />
+                    </div>
+                    <div class="field-element">
+                        <h:outputLabel for="otherNumberDateOfBirth" value="#{bundle['date-of-birth']}:" />
+                        <h:inputText id="otherNumberDateOfBirth"
+                                     styleClass=""
+                                     value="#{beneficiaryVO.dateOfOBirth}"
+                                     pt:placeholder=""
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:otherIdentificationSubmit"
+                                     converterMessage="#{bundle['reg-grant-error-converting-date']}"
+                        >
+                            <f:converter converterId="se.vgregion.MultiDateConverter" />
+                            <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                            <f:attribute name="pattern2" value="yyyyMMdd" />
+                            <f:attribute name="pattern3" value="yyMMdd" />
+                        </h:inputText>
+                    </div>
+                </div>
+
                 <div class="button-row">
-                    <h:commandLink id="personalNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.identificationPIDListener}"
+                    <h:commandLink id="otherIdentificationSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.identificationOtherListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                 onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>

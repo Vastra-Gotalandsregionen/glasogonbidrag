@@ -18,9 +18,12 @@ import se.vgregion.glasogonbidrag.util.TabUtil;
 import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Other;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
 import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
@@ -243,7 +246,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     // Listeners
 
-    public void lmaNumberListener() {
+    public void identificationLMAListener() {
         // TODO: can validations be made?
         // TODO: Handle none LMA
 
@@ -280,7 +283,7 @@ public class CreateInvoiceAddGrantBackingBean {
         grantFlow = grantFlow.nextState();
     }
 
-    public void personalNumberListener() {
+    public void identificationPIDListener() {
 
         // TODO: Upgrade the PersonaNumberFormatService so that it can sanitize user input.
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
@@ -293,7 +296,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
 
         String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
-        LOGGER.info("personalNumberListener(): localFormat={}", localFormat);
+        LOGGER.info("identificationPIDListener(): localFormat={}", localFormat);
 
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -364,6 +367,59 @@ public class CreateInvoiceAddGrantBackingBean {
 
         // TODO: Handle if anything is not correct with the grant.
         // TODO: This method should be refactored, we want to lookup the beneficiary even if we already have stored it before.
+    }
+
+    public void identificationOtherListener() {
+        String identificationNumber = beneficiaryVO.getIdentificationNumber();
+
+        Identification identification = new Other(identificationNumber, beneficiaryVO.getDateOfOBirth());
+
+        beneficiary = new Beneficiary();
+        beneficiary.setIdentification(identification);
+
+        if("".equals(beneficiaryVO.getFullName())) {
+            beneficiary.setFullName("-");
+        } else {
+            beneficiary.setFullName(beneficiaryVO.getFullName());
+        }
+
+        newBeneficiary = true;
+
+        // TODO: Should be reviewed
+        grant.setCounty("99");
+        grant.setMunicipality("07");
+
+        grant.setBeneficiary(beneficiary);
+
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
+    }
+
+
+    public void identificationReserveListener() {
+        String identificationNumber = beneficiaryVO.getIdentificationNumber();
+
+        Identification identification = new Reserve(identificationNumber, beneficiaryVO.getDateOfOBirth());
+
+        beneficiary = new Beneficiary();
+        beneficiary.setIdentification(identification);
+
+        if("".equals(beneficiaryVO.getFullName())) {
+            beneficiary.setFullName("-");
+        } else {
+            beneficiary.setFullName(beneficiaryVO.getFullName());
+        }
+
+        newBeneficiary = true;
+
+        // TODO: Should be reviewed
+        grant.setCounty("99");
+        grant.setMunicipality("07");
+
+        grant.setBeneficiary(beneficiary);
+
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
     }
 
     public void deliveryDateListener() {
@@ -912,11 +968,18 @@ public class CreateInvoiceAddGrantBackingBean {
         grantTypeLabel = null;
 
         beneficiaryVO = new BeneficiaryVO();
+        beneficiaryVO.setIdentificationType(IdentificationType.PERSONAL);
 
         prescriptionValueObject = new PrescriptionValueObject();
 
         amountWithVat = "800";
 
-        tabUtil = new TabUtil(Arrays.asList("personal-number", "other-identification-type"), 0);
+        tabUtil = new TabUtil(Arrays.asList(
+                IdentificationType.PERSONAL.getLanguageKey(),
+                IdentificationType.LMA.getLanguageKey(),
+                IdentificationType.RESERVE.getLanguageKey(),
+                IdentificationType.OTHER.getLanguageKey()
+        ), 0);
+
     }
 }

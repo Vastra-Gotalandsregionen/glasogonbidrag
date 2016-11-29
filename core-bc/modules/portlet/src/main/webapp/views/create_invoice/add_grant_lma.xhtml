@@ -4,6 +4,7 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:gb="http://java.sun.com/jsf/composite/gb"
@@ -27,7 +28,7 @@
             <div class="grant-section">
 
                 <gb:grantSectionInput id="lmaNumber"
-                                      label="#{bundle['lma-number']}"
+                                      label="#{bundle['identification-type-lma']}"
                                       value="#{beneficiaryVO.identificationNumber}"
                                       autofocus="true"
                                       placeholder="#{bundle['lma-placeholder']}"
@@ -36,10 +37,10 @@
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:lmaNumberSubmit"
                 />
 
-                <div class="field-row field-row-3">
+                <div class="field-row field-row-2">
                     <div class="field-element">
-                        <h:outputLabel for="fullName" value="#{bundle['full-name']}:" />
-                        <h:inputText id="fullName"
+                        <h:outputLabel for="lmaFullName" value="#{bundle['full-name']}:" />
+                        <h:inputText id="lmaFullName"
                                      styleClass=""
                                      value="#{beneficiaryVO.fullName}"
                                      pt:placeholder=""
@@ -47,8 +48,8 @@
                         />
                     </div>
                     <div class="field-element">
-                        <h:outputLabel for="dateOfBirth" value="#{bundle['date-of-birth']}:" />
-                        <h:inputText id="dateOfBirth"
+                        <h:outputLabel for="lmaDateOfBirth" value="#{bundle['date-of-birth']}:" />
+                        <h:inputText id="lmaDateOfBirth"
                                      styleClass=""
                                      value="#{beneficiaryVO.dateOfOBirth}"
                                      pt:placeholder=""
@@ -59,13 +60,14 @@
                             <f:attribute name="pattern1" value="yyyy-MM-dd" />
                             <f:attribute name="pattern2" value="yyyyMMdd" />
                             <f:attribute name="pattern3" value="yyMMdd" />
+                            <f:attribute name="pattern4" value="" />
                         </h:inputText>
                     </div>
                 </div>
 
                 <div class="button-row">
                     <h:commandLink id="lmaNumberSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.lmaNumberListener}"
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.identificationLMAListener}"
                                 render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
                                 onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
                     </h:commandLink>
