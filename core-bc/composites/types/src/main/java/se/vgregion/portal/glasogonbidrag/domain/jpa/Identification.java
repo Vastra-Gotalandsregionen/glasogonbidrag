@@ -101,6 +101,7 @@ public abstract class Identification {
             DISCRIMINATOR_MAP = new HashMap<>();
     static {
         DISCRIMINATOR_MAP.put(IdentificationType.LMA, "l");
+        DISCRIMINATOR_MAP.put(IdentificationType.OTHER, "o");
         DISCRIMINATOR_MAP.put(IdentificationType.PERSONAL, "p");
         DISCRIMINATOR_MAP.put(IdentificationType.PROTECTED, "h");
         DISCRIMINATOR_MAP.put(IdentificationType.RESERVE, "r");

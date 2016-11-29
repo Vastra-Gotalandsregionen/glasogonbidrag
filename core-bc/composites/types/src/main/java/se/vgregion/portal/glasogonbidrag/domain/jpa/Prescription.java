@@ -1,5 +1,6 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import org.hibernate.annotations.Type;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.None;
 import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 
@@ -55,8 +56,9 @@ public class Prescription {
     private String prescriber;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Basic(fetch=FetchType.EAGER, optional=true)
-    @Column(name = "prescriber_comment")
+    @Column(name = "prescriber_comment", columnDefinition = "text")
     private String comment;
 
     @ManyToOne

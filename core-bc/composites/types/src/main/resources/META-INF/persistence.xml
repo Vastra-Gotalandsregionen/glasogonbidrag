@@ -14,8 +14,10 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Identification</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma</class>
-        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Other</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Protected</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia</class>

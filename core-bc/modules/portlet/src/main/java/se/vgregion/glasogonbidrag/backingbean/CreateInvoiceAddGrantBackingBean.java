@@ -767,6 +767,7 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     private FacesMessage handleGrantObject() {
+
         Locale locale = facesUtil.getLocale();
 
         try {

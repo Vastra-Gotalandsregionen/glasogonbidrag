@@ -42,6 +42,9 @@ public class GrantServiceImpl implements GrantService {
 
         checkGrantArea(grant);
 
+        em.merge(grant.getPrescription().getDiagnose());
+        em.merge(grant.getPrescription());
+
         return em.merge(grant);
     }
 
