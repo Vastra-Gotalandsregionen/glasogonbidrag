@@ -8,6 +8,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticReportService;
 import se.vgregion.service.glasogonbidrag.types.StatisticSearchDateInterval;
+import se.vgregion.service.glasogonbidrag.types.StatisticSearchIntegerInterval;
 import se.vgregion.service.glasogonbidrag.types.StatisticSearchRequest;
 import se.vgregion.service.glasogonbidrag.types.StatisticSearchResponse;
 import se.vgregion.service.glasogonbidrag.types.query.AggregationSqlQuery;
@@ -18,12 +19,7 @@ import se.vgregion.service.glasogonbidrag.types.query.conditions.EqualsWhereCond
 import se.vgregion.service.glasogonbidrag.types.query.join.LeftJoin;
 
 import javax.annotation.Resource;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.sql.DataSource;
-import java.lang.annotation.Annotation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -145,6 +141,16 @@ public class StatisticReportServiceImpl implements StatisticReportService {
                     String.format("'%s'", request.getSex())));
         }
 
+        if (request.getBirthYearInterval() != null) {
+            StatisticSearchIntegerInterval interval =
+                    request.getBirthYearInterval();
+
+            builder.where(new BetweenWhereCondition(
+                    "b.birth_year",
+                    String.format("%d", interval.getStart()),
+                    String.format("%d", interval.getEnd())));
+        }
+
         if (request.getType() == null) {
             throw new IllegalArgumentException(
                     "Must set a search type on the request.");
@@ -155,10 +161,8 @@ public class StatisticReportServiceImpl implements StatisticReportService {
                 builder.groupBy("g.county", "g.municipality");
                 break;
             case BIRTH_YEAR:
-                // TODO: Implement BirthYear on beneficiary
-                throw new IllegalArgumentException("Not implemented yet.");
-//                builder.groupBy("b.birth_year");
-//                break;
+                builder.groupBy("b.birth_year");
+                break;
             case SEX:
                 builder.groupBy("b.sex");
                 break;

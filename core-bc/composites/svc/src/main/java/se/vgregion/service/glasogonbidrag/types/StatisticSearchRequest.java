@@ -15,6 +15,8 @@ public class StatisticSearchRequest {
     private IdentificationType identificationType;
     private DiagnoseType diagnoseType;
 
+    private StatisticSearchIntegerInterval birthYearInterval;
+
     public StatisticSearchRequest() {}
 
     public StatisticSearchType getType() {
@@ -55,5 +57,14 @@ public class StatisticSearchRequest {
 
     public void setDiagnoseType(DiagnoseType diagnoseType) {
         this.diagnoseType = diagnoseType;
+    }
+
+    public StatisticSearchIntegerInterval getBirthYearInterval() {
+        return birthYearInterval;
+    }
+
+    public void setBirthYearInterval(
+            StatisticSearchIntegerInterval birthYearInterval) {
+        this.birthYearInterval = birthYearInterval;
     }
 }
