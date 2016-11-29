@@ -24,7 +24,12 @@
                         <h:outputText value="#{bundle['personal-number']}:" />
                     </span>
                     <span class="item-value">
-                        <h:outputText value="#{selectedBeneficiary.identification}" />
+                        <ui:fragment rendered="#{not empty beneficiary.number}">
+                            <h:outputText value="#{beneficiary.number}" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{empty beneficiary.number or beneficiary.number eq ''}">
+                            <h:outputText value="#{bundle['identification-number-missing']}" />
+                        </ui:fragment>
                     </span>
                 </li>
                 <li>

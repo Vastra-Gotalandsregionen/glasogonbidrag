@@ -51,7 +51,12 @@
                     <p:inputText onkeyup="PF('beneficiariesTable').filter();" />
                 </f:facet>
 
-                <h:outputText value="#{beneficiary.number}" />
+                <ui:fragment rendered="#{not empty beneficiary.number}">
+                    <h:outputText value="#{beneficiary.number}" />
+                </ui:fragment>
+                <ui:fragment rendered="#{empty beneficiary.number or beneficiary.number eq ''}">
+                    <h:outputText value="#{bundle['identification-number-missing']}" />
+                </ui:fragment>
             </p:column>
 
             <p:column headerText="#{bundle['name']}"
