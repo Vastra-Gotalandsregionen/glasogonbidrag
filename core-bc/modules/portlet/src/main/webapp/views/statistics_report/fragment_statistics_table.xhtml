@@ -27,7 +27,7 @@
                 </h:outputText>
             </p:column>
             <p:column headerText="Summa bidrag" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
-                <h:outputText value="#{statisticsVO.grantsSum}">
+                <h:outputText value="#{statisticsVO.grantsSumAsKrona}">
                     <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                 </h:outputText>
             </p:column>
@@ -46,7 +46,7 @@
                     </p:column>
                     <p:column styleClass="number">
                         <f:facet name="footer">
-                            <h:outputText value="#{statisticsReportViewBackingBean.grantSumTotal}">
+                            <h:outputText value="#{statisticsReportViewBackingBean.grantSumTotalAsKrona}">
                                 <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                             </h:outputText>
                         </f:facet>
