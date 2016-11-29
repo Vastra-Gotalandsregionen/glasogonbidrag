@@ -15,6 +15,12 @@ public class StatisticsVO {
 
     public StatisticsVO() {}
 
+    public StatisticsVO(String label, int numberOfGrants, long grantsSum) {
+        this.label = label;
+        this.numberOfGrants = numberOfGrants;
+        this.grantsSum = grantsSum;
+    }
+
     // Getters and Setters
 
     public String getLabel() {
