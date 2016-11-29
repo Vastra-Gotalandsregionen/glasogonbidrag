@@ -93,7 +93,7 @@ public class StatisticReportServiceImpl implements StatisticReportService {
         AggregationSqlQueryBuilder builder = simpleQuery()
                 .select()
                 .agg("COUNT(*) AS count", "SUM(g.amount) AS amount")
-                .from(new From("grant", "g"))
+                .from(new From("grant_", "g"))
                 .join(new LeftJoin("beneficiary", "b",
                                 new EqualsWhereCondition(
                                         "g.beneficiary_id",
