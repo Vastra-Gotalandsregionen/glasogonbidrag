@@ -15,6 +15,7 @@ import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.SexType;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticReportService;
 import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
@@ -25,6 +26,7 @@ import se.vgregion.service.glasogonbidrag.types.StatisticSearchResponse;
 import se.vgregion.service.glasogonbidrag.types.StatisticSearchType;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -204,10 +206,27 @@ public class StatisticsReportViewBackingBean {
         this.grantSumTotal = grantSumTotal;
     }
 
+    // Helpers
+
+    // Helpers
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
+
+    public BigDecimal getGrantSumTotalAsKrona() {
+        return currency.calculatePartsAsKrona(grantSumTotal);
+    }
+
     // Listeners
 
     public void changeStatisticsFilterListener() {
     }
+
+    public void changeStatisticsGroupByListener() {
+        LOGGER.info("changeStatisticsGroupByListener");
+        // TODO: Reset filters here.
+        resetFilters();
+    }
+
 
     public void searchStatistics() {
         LOGGER.info("searchStatistics");
@@ -303,9 +322,14 @@ public class StatisticsReportViewBackingBean {
         grantCountTotal = 0;
         grantSumTotal = 0;
 
-        statisticsFilterGender = "";
         statisticsGrouping = "";
         statisticsTimePeriod = "today";
+
+        resetFilters();
+    }
+
+    private void resetFilters() {
+        statisticsFilterGender = "";
 
         statisticsFilterBirthYearMax =
                 Calendar.getInstance().get(Calendar.YEAR);

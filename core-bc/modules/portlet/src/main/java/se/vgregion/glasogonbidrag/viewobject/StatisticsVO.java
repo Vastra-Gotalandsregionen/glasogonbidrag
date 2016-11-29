@@ -1,5 +1,9 @@
 package se.vgregion.glasogonbidrag.viewobject;
 
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
+
+import java.math.BigDecimal;
+
 /**
  * @author Erik Andersson - Monator Technologies AB
  */
@@ -10,6 +14,10 @@ public class StatisticsVO {
     private String label;
     private int numberOfGrants;
     private long grantsSum;
+
+    // Helpers
+    private final KronaCalculationUtil currency =
+            new KronaCalculationUtil();
 
     // Constructors
 
@@ -45,5 +53,10 @@ public class StatisticsVO {
 
     public void setGrantsSum(long grantsSum) {
         this.grantsSum = grantsSum;
+    }
+
+    // Helper classes
+    public BigDecimal getGrantsSumAsKrona() {
+        return currency.calculatePartsAsKrona(grantsSum);
     }
 }

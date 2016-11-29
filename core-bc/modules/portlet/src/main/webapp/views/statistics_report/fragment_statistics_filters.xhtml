@@ -27,7 +27,7 @@
                         <div class="statistics-filter-item">
                             <p:outputLabel styleClass="filter-label" for="statisticsGrouping" value="Gruppera efter: " />
                             <p:selectOneMenu id="statisticsGrouping" value="#{statisticsReportViewBackingBean.statisticsGrouping}">
-                                <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsFilterListener}"
+                                <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsGroupByListener}"
                                         event="valueChange"
                                         execute="@form"
                                         render=":statisticsFilters"
