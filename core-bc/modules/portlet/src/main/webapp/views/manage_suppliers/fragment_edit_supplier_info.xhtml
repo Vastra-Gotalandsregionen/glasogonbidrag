@@ -14,7 +14,9 @@
 
     <h:body>
 
-        <gb:box title="#{selectedSupplier.name}" collapsible="true" collapsed="false">
+        <c:set var="supplierToEdit" value="#{manageSuppliersViewBackingBean.selectedSupplier}" scope="request" />
+
+        <gb:box title="#{supplierToEdit.name}" collapsible="true" collapsed="false">
 
             <div class="msg-wrap">
                 <h:messages showSummary="true" showDetail="false" />
@@ -24,7 +26,7 @@
                 <div class="field-element">
                     <h:outputLabel for="supplierName" value="#{bundle['name']}:" />
                     <h:inputText id="supplierName"
-                                 value="#{selectedSupplier.name}"
+                                 value="#{supplierToEdit.name}"
                                  required="true"
                                  pt:autofocus="true"
                                  requiredMessage="#{bundle['edit-supplier-error-name-required']}">
@@ -33,7 +35,7 @@
                 <div class="field-element">
                     <h:outputLabel for="externalServiceId" value="#{bundle['raindance-id']}:" />
                     <h:inputText id="externalServiceId"
-                                 value="#{selectedSupplier.externalServiceId}"
+                                 value="#{supplierToEdit.externalServiceId}"
                                  required="false">
                     </h:inputText>
                 </div>
@@ -43,14 +45,14 @@
                 <div class="field-element">
                     <h:outputLabel for="supplierEmailInvoice" value="#{bundle['email-invoice-related']}:" />
                     <h:inputText id="supplierEmailInvoice"
-                                 value="#{selectedSupplier.emailInvoice}"
+                                 value="#{supplierToEdit.emailInvoice}"
                                  required="false">
                     </h:inputText>
                 </div>
                 <div class="field-element">
                     <h:outputLabel for="supplierEmailInfo" value="#{bundle['email-info-related']}:" />
                     <h:inputText id="supplierEmailInfo"
-                                 value="#{selectedSupplier.emailInfo}"
+                                 value="#{supplierToEdit.emailInfo}"
                                  required="false">
                     </h:inputText>
                 </div>
@@ -60,15 +62,28 @@
                 <div class="field-element">
                     <h:outputLabel for="supplierPhone" value="#{bundle['phone']}:" />
                     <h:inputText id="supplierPhone"
-                                 value="#{selectedSupplier.phone}"
+                                 value="#{supplierToEdit.phone}"
                                  required="false">
                     </h:inputText>
                 </div>
                 <div class="field-element field-element-checkbox inline">
-                    <h:selectBooleanCheckbox id="active" value="#{selectedSupplier.active}" />
+                    <h:selectBooleanCheckbox id="active" value="#{supplierToEdit.active}" />
                     <h:outputLabel for="active" value="#{bundle['active']}" />
                 </div>
             </div>
+
+            <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel for="supplierComment" value="#{bundle['comment']}:" />
+                    <h:inputTextarea id="supplierComment"
+                                 value="#{supplierToEdit.comment}"
+                                 required="false">
+                    </h:inputTextarea>
+                </div>
+                <div class="field-element">
+                </div>
+            </div>
+
 
             <div class="button-row">
                 <h:commandLink styleClass="link-btn primary" value="#{bundle['save']}">
