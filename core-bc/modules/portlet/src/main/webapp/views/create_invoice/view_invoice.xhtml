@@ -121,7 +121,13 @@
                                         <h:link outcome="add_grant">
                                             <f:param name="invoiceId" value="${invoice.id}" />
                                             <f:param name="grantId" value="${grant.id}" />
-                                            <h:outputText value="#{grant.beneficiary.identification}" />
+
+                                            <ui:fragment rendered="#{not empty grant.beneficiary.identification}">
+                                                <h:outputText value="#{grant.beneficiary.identification}" />
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{empty grant.beneficiary.identification or grant.beneficiary.identification eq ''}">
+                                                <h:outputText value="#{bundle['identification-number-missing']}" />
+                                            </ui:fragment>
                                         </h:link>
                                     </td>
                                     <td>

@@ -27,7 +27,12 @@
                             <div class="chip #{grant.id == createInvoiceAddGrantBackingBean.grant.id ? 'chip-selected' : ''}">
                                 <div class="chip-hd">
                                     <div class="chip-hd-item chip-hd-item-personalnumber">
-                                        <h:outputText value="#{grant.beneficiary.identification}" />
+                                        <ui:fragment rendered="#{not empty grant.beneficiary.identification}">
+                                            <h:outputText value="#{grant.beneficiary.identification}" />
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{empty grant.beneficiary.identification or grant.beneficiary.identification eq ''}">
+                                            <h:outputText value="#{bundle['identification-number-missing']}" />
+                                        </ui:fragment>
                                     </div>
                                     <div class="chip-hd-item chip-hd-item-currency">
                                         <h:outputText value="#{grant.amountAsKrona}">
