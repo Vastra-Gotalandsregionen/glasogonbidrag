@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.constants.GbConstants;
 import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
@@ -274,8 +275,8 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         // TODO: Should be reviewed
-        grant.setCounty("99");
-        grant.setMunicipality("07");
+        grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
+        grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
 
         grant.setBeneficiary(beneficiary);
 
@@ -364,9 +365,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
             context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
-
-        // TODO: Handle if anything is not correct with the grant.
-        // TODO: This method should be refactored, we want to lookup the beneficiary even if we already have stored it before.
     }
 
     public void identificationOtherListener() {
@@ -374,22 +372,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         Identification identification = new Other(identificationNumber, beneficiaryVO.getDateOfOBirth());
 
-        beneficiary = new Beneficiary();
-        beneficiary.setIdentification(identification);
-
-        if("".equals(beneficiaryVO.getFullName())) {
-            beneficiary.setFullName("-");
-        } else {
-            beneficiary.setFullName(beneficiaryVO.getFullName());
-        }
-
-        newBeneficiary = true;
-
-        // TODO: Should be reviewed
-        grant.setCounty("99");
-        grant.setMunicipality("07");
-
-        grant.setBeneficiary(beneficiary);
+        createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
 
         // Set grantFlow
         grantFlow = grantFlow.nextState();
@@ -401,22 +384,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         Identification identification = new Reserve(identificationNumber, beneficiaryVO.getDateOfOBirth());
 
-        beneficiary = new Beneficiary();
-        beneficiary.setIdentification(identification);
-
-        if("".equals(beneficiaryVO.getFullName())) {
-            beneficiary.setFullName("-");
-        } else {
-            beneficiary.setFullName(beneficiaryVO.getFullName());
-        }
-
-        newBeneficiary = true;
-
-        // TODO: Should be reviewed
-        grant.setCounty("99");
-        grant.setMunicipality("07");
-
-        grant.setBeneficiary(beneficiary);
+        createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
 
         // Set grantFlow
         grantFlow = grantFlow.nextState();
@@ -621,6 +589,25 @@ public class CreateInvoiceAddGrantBackingBean {
                         "?faces-redirect=true" +
                         "&invoiceId=%d", invoice.getId());
         return saveObjects(responseView);
+    }
+
+    private void createBeneficiaryWithoutPersonalNumber(Identification identification, BeneficiaryVO beneficiaryVO) {
+        beneficiary = new Beneficiary();
+        beneficiary.setIdentification(identification);
+
+        if("".equals(beneficiaryVO.getFullName())) {
+            beneficiary.setFullName("-");
+        } else {
+            beneficiary.setFullName(beneficiaryVO.getFullName());
+        }
+
+        newBeneficiary = true;
+
+        // TODO: Should be reviewed
+        grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
+        grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
+
+        grant.setBeneficiary(beneficiary);
     }
 
     private String saveObjects(String responseView) {

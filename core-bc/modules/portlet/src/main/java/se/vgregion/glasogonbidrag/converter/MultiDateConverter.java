@@ -32,7 +32,7 @@ public class MultiDateConverter implements Converter {
 
         for (String pattern : patterns) {
 
-            LOGGER.info("pattern: " + pattern);
+            //LOGGER.info("pattern: " + pattern);
 
             // Allow empty pattern (return null value for date)
             if("".equals(pattern)) {

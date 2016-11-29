@@ -12,4 +12,7 @@ public interface GbConstants {
 
     public static final String VIEW_INVOICE_PAGE = "/views/create_invoice/view_invoice.xhtml";
 
+    public static final String NON_IDENTIFIED_DEFAULT_COUNTY = "99";
+    public static final String NON_IDENTIFIED_DEFAULT_MUNICIPALITY = "07";
+
 }
