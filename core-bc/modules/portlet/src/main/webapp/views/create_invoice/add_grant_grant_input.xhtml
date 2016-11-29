@@ -557,9 +557,9 @@
         <ui:fragment rendered="#{grantFlow.showAmountInput}">
             <div class="grant-section">
 
-                <gb:grantSectionInput id="amountWithVat"
+                <gb:grantSectionInput id="amount"
                                       label="#{bundle['grant-sum']}"
-                                      value="#{createInvoiceAddGrantBackingBean.amountWithVat}"
+                                      value="#{createInvoiceAddGrantBackingBean.amount}"
                                       valueType="amount"
                                       autofocus="true"
                                       placeholder="#{bundle['grant-sum-placeholder']}"
@@ -588,7 +588,7 @@
 
         <gb:grantSectionOutput rendered="${grantFlow.showAmountOutput}"
                                label="#{bundle['grant-sum']}"
-                               value="#{grant.amountIncludingVatAsKrona}"
+                               value="#{grant.amountAsKrona}"
                                valueType="currency"
                                locale="#{locale}"
                                backExecute=":addGrantForm"

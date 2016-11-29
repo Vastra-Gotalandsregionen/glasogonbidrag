@@ -61,7 +61,7 @@ public class CreateInvoiceViewBackingBean {
     private String verificationNumber;
     private long supplier;
     private String invoiceNumber;
-    private BigDecimal amountWithVat;
+    private BigDecimal amount;
 
     // Getter and setters for form inputs
 
@@ -89,12 +89,12 @@ public class CreateInvoiceViewBackingBean {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public BigDecimal getAmountWithVat() {
-        return amountWithVat;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setAmountWithVat(BigDecimal amountWithVat) {
-        this.amountWithVat = amountWithVat;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     // View methods
@@ -132,7 +132,8 @@ public class CreateInvoiceViewBackingBean {
 
         invoice.setVerificationNumber(verificationNumber);
         invoice.setInvoiceNumber(invoiceNumber);
-        invoice.setAmountIncludingVatAsKrona(amountWithVat);
+
+        invoice.setAmountAsKrona(amount);
         invoice.setSupplier(s);
         invoice.setStatus(InvoiceStatus.IN_PROGRESS);
 

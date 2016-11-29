@@ -57,7 +57,7 @@
                                             <h:messages showSummary="true" showDetail="false" />
                                         </div>
 
-                                        <ui:fragment rendered="#{invoice.calculateDifferenceExcludingVatAsKrona().unscaledValue() eq 0}">
+                                        <ui:fragment rendered="#{invoice.calculateDifferenceAsKrona().unscaledValue() eq 0}">
                                             <div class="alert alert-info">
                                                 <h:outputText value="#{bundle['all-grants-for-this-invoice-seems-to-be-already-registered']}" />
                                             </div>

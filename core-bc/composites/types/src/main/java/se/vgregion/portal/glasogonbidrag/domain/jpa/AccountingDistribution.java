@@ -147,7 +147,7 @@ public class AccountingDistribution {
             addRow(row);
         } else {
             rows.get(index).incrementCount(row.getCount());
-            rows.get(index).incrementAmount(row.getAmountExclVat());
+            rows.get(index).incrementAmount(row.getAmount());
         }
     }
 }

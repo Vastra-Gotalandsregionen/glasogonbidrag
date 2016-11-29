@@ -59,12 +59,12 @@
                             </div>
 
                             <div class="field-element">
-                                <h:outputLabel for="invoiceAmountIncludingVAT" value="#{bundle['amount-incl-vat']}:" />
-                                <h:inputText id="invoiceAmountIncludingVAT"
-                                             value="#{createInvoiceViewBackingBean.amountWithVat}"
+                                <h:outputLabel for="invoiceAmount" value="#{bundle['amount']}:" />
+                                <h:inputText id="invoiceAmount"
+                                             value="#{createInvoiceViewBackingBean.amount}"
                                              required="true" requiredMessage="#{bundle['reg-invoice-error-input-amount']}"
                                              converterMessage="#{bundle['reg-invoice-error-converting-amount']}"
-                                             pt:placeholder="#{bundle['amount-incl-vat']}">
+                                             pt:placeholder="#{bundle['amount']}">
                                     <f:converter converterId="javax.faces.BigDecimal" />
                                 </h:inputText>
                             </div>

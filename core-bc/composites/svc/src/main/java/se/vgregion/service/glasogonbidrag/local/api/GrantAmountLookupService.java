@@ -13,7 +13,7 @@ import java.util.Date;
 public interface GrantAmountLookupService {
 
     /**
-     * Return the amount including VAT that is granted for a diagnose at a
+     * Return the amount that is granted for a diagnose at a
      * specific delivery date for someone at a specific with birth date.
      *
      * @param diagnose the diagnose to lookup grantable amount for.

@@ -73,7 +73,7 @@ public class GrantBuilder {
         grant.setModifiedDate(cur);
 
         grant.setDeliveryDate(deliveryDate);
-        grant.setAmountIncludingVatAsKrona(krona);
+        grant.setAmountAsKrona(krona);
         grant.setCounty(county);
         grant.setMunicipality(municipality);
 

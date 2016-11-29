@@ -142,7 +142,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     private PrescriptionValueObject prescriptionValueObject;
 
-    private String amountWithVat;
+    private String amount;
 
 
     // Getter and Setters for Helpers
@@ -229,12 +229,12 @@ public class CreateInvoiceAddGrantBackingBean {
         this.latestBeneficiaryPrescription = latestBeneficiaryPrescription;
     }
 
-    public String getAmountWithVat() {
-        return amountWithVat;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setAmountWithVat(String amountWithVat) {
-        this.amountWithVat = amountWithVat;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public PrescriptionValueObject getPrescriptionValueObject() {
@@ -499,7 +499,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
                 prescriptionValueObject = new PrescriptionValueObject();
 
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case ENTER_DELIVERY_DATE:
                 grantType = null;
@@ -507,7 +507,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
                 prescriptionValueObject = new PrescriptionValueObject();
 
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case SELECT_GRANT_TYPE:
                 grantType = null;
@@ -515,7 +515,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
                 prescriptionValueObject = new PrescriptionValueObject();
 
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case ENTER_PRESCRIPTION_DATE:
                 Date prescriptionDate = prescriptionValueObject.getDate();
@@ -524,7 +524,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
                 prescriptionValueObject.setDate(prescriptionDate);
 
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_TYPE:
 
@@ -532,10 +532,10 @@ public class CreateInvoiceAddGrantBackingBean {
                 prescriptionValueObject.setComment(null);
                 prescriptionValueObject.setPrescriber(null);
 
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case ENTER_GRANT_STATE_OTHER_DATE:
-                //amountWithVat = null;
+                //amount = null;
                 break;
             case ENTER_AMOUNT_AFTER_AGE:
                 break;
@@ -679,7 +679,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private FacesMessage assignAmount() {
         Locale locale = facesUtil.getLocale();
 
-        if (amountWithVat == null || amountWithVat.trim().isEmpty()) {
+        if (amount == null || amount.trim().isEmpty()) {
             String localizedMessage = messageSource
                     .getMessage("reg-grant-need-to-enter-amount",
                             new Object[0], locale);
@@ -691,8 +691,8 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         try {
-            BigDecimal amountWithVatDecimal = new BigDecimal(amountWithVat);
-            grant.setAmountIncludingVatAsKrona(amountWithVatDecimal);
+            BigDecimal amountDecimal = new BigDecimal(amount);
+            grant.setAmountAsKrona(amountDecimal);
         } catch (NumberFormatException e) {
             String localizedMessage = messageSource
                     .getMessage("reg-grant-amount-is-not-a-number",
@@ -931,7 +931,7 @@ public class CreateInvoiceAddGrantBackingBean {
             }
         }
 
-        amountWithVat = grant.getAmountIncludingVatAsKrona().toString();
+        amount = grant.getAmountAsKrona().toString();
 
         if(GRANT_TYPE_OTHER.equals(grantType)) {
             grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
@@ -959,7 +959,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         prescriptionValueObject = new PrescriptionValueObject();
 
-        amountWithVat = "800";
+        amount = "800";
 
         tabUtil = new TabUtil(Arrays.asList(
                 IdentificationType.PERSONAL.getLanguageKey(),
