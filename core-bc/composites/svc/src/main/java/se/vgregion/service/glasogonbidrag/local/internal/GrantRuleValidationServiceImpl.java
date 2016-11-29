@@ -395,7 +395,7 @@ public class GrantRuleValidationServiceImpl
         long sum = 0L;
 
         for (Grant grant : grants) {
-            sum = sum + grant.getAmount() + grant.getVat();
+            sum = sum + grant.getAmount();
         }
 
         return sum;
