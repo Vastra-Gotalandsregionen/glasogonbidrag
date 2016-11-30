@@ -299,6 +299,7 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
 
+        // Todo: year is currently hardcoded. Should be fetched by Calendar
         String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
         LOGGER.info("identificationPIDListener(): localFormat={}", localFormat);
 

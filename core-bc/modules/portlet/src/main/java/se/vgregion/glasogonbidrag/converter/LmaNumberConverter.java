@@ -32,7 +32,7 @@ public class LmaNumberConverter implements Converter {
 
         String number = value;
 
-        // Check length of value
+        // Check length of number
         if(number.length() == 8) {
             // Pattern candidate 00000000
             LOGGER.info("number length is 8.");
@@ -41,7 +41,7 @@ public class LmaNumberConverter implements Converter {
                 isValidLmaNumber = true;
 
                 // Format LMA-number
-                StringBuilder sb = new StringBuilder(value);
+                StringBuilder sb = new StringBuilder(number);
                 sb.insert(2, "-");
 
                 number = sb.toString();

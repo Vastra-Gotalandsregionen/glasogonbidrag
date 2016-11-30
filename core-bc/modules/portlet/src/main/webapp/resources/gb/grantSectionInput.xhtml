@@ -66,6 +66,10 @@
                     <c:when test="#{valueType eq 'lmaNumber'}">
                         <f:converter converterId="se.vgregion.LmaNumberConverter" />
                     </c:when>
+                    <c:when test="#{valueType eq 'reserveNumber'}">
+                        <f:converter converterId="se.vgregion.ReserveNumberConverter" />
+                    </c:when>
+
                 </c:choose>
 
 
