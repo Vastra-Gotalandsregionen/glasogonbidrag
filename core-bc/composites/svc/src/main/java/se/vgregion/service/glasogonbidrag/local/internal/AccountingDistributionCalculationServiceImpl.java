@@ -53,9 +53,10 @@ public class AccountingDistributionCalculationServiceImpl
         AccountingDistribution distribution = new AccountingDistribution();
 
         for (Grant grant : grants) {
-            int responsibility = lookupResponsibility(grant);
             int account = AccountingDistributionCalculationServiceImpl.ACCOUNT;
-            int freeCode = lookupFreeCode(grant);
+            
+            int responsibility = grant.getResponsibility();
+            int freeCode = grant.getFreeCode();
             long amount = grant.getAmount();
 
             if (LOGGER.isDebugEnabled()) {
