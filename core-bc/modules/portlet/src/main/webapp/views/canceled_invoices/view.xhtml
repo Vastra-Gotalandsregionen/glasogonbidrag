@@ -23,7 +23,7 @@
 
                 <h:form>
 
-                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['cancelled-invoices']}">
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['canceled-invoices']}">
                         <ui:fragment rendered="#{not empty invoices}">
 
                             <div class="chip-wrap">
@@ -49,7 +49,7 @@
                         </ui:fragment>
                         <ui:fragment rendered="#{empty invoices}">
                             <div class="alert alert-info">
-                                #{bundle['no-cancelled-invoices-message']}
+                                #{bundle['no-canceled-invoices-message']}
                             </div>
                         </ui:fragment>
                     </gb:box>

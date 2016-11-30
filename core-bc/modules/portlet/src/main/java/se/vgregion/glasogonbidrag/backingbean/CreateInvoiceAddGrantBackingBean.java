@@ -1,6 +1,8 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
 import com.liferay.portal.theme.ThemeDisplay;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -370,6 +373,14 @@ public class CreateInvoiceAddGrantBackingBean {
     public void identificationOtherListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
+        if(identificationNumber == null || identificationNumber.trim().isEmpty()) {
+            identificationNumber = identificationService.generateUniqueIdentificationNumber();
+
+            LOGGER.info("identificationOtherListener - identificationNumber was generated.");
+        }
+
+        LOGGER.info("identificationOtherListener - identificationNumber is: {}", identificationNumber);
+
         Identification identification = new Other(identificationNumber, beneficiaryVO.getDateOfOBirth());
 
         createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
@@ -377,7 +388,6 @@ public class CreateInvoiceAddGrantBackingBean {
         // Set grantFlow
         grantFlow = grantFlow.nextState();
     }
-
 
     public void identificationReserveListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();

@@ -26,6 +26,10 @@ import java.util.Map;
 @Table(name = "identification")
 @NamedQueries({
         @NamedQuery(
+                name = "glasogonbidrag.identification.findByNumber",
+                query = "SELECT i FROM Identification i " +
+                        "WHERE i.number = :number"),
+        @NamedQuery(
                 name = "glasogonbidrag.identification.findByPersonalNumber",
                 query = "SELECT i FROM Personal i " +
                         "WHERE i.number = :number"),
