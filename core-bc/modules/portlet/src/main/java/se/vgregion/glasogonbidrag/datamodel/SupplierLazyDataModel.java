@@ -65,12 +65,13 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
                                   Map<String, Object> filters) {
         List<SupplierDTO> results;
 
+        LowLevelSortOrder sort = new LowLevelSortOrder(
+                sortField, "s.id",
+                OrderType.parse(sortOrder.toString()),
+                filters,
+                VALUE_MAP, FILTER_MAP);
+
         try {
-            LowLevelSortOrder sort = new LowLevelSortOrder(
-                    sortField, "s.id",
-                    OrderType.parse(sortOrder.toString()),
-                    filters,
-                    VALUE_MAP, FILTER_MAP);
             results = queryService.listSuppliers(sort, first, pageSize);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());
@@ -78,7 +79,7 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
             results = new ArrayList<>();
         }
 
-        this.setRowCount(queryService.countSuppliers());
+        this.setRowCount(queryService.countSuppliers(sort));
 
         return results;
     }
