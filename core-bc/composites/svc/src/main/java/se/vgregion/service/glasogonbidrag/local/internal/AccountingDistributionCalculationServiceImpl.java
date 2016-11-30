@@ -53,9 +53,10 @@ public class AccountingDistributionCalculationServiceImpl
         AccountingDistribution distribution = new AccountingDistribution();
 
         for (Grant grant : grants) {
-            int responsibility = lookupResponsibility(grant);
             int account = AccountingDistributionCalculationServiceImpl.ACCOUNT;
-            int freeCode = lookupFreeCode(grant);
+            
+            int responsibility = grant.getResponsibility();
+            int freeCode = grant.getFreeCode();
             long amount = grant.getAmount();
 
             if (LOGGER.isDebugEnabled()) {
@@ -72,7 +73,7 @@ public class AccountingDistributionCalculationServiceImpl
         return distribution;
     }
 
-    private int lookupResponsibility(Grant grant) {
+    public int lookupResponsibility(Grant grant) {
         Beneficiary beneficiary = grant.getBeneficiary();
         String countyCode = grant.getCounty();
         String municipalityCode = grant.getMunicipality();
@@ -94,7 +95,7 @@ public class AccountingDistributionCalculationServiceImpl
         return regionLookupService.lookupResponsibility(municipality);
     }
 
-    private int lookupFreeCode(Grant grant) {
+    public int lookupFreeCode(Grant grant) {
         Calendar cal = new GregorianCalendar();
 
         Beneficiary beneficiary = grant.getBeneficiary();

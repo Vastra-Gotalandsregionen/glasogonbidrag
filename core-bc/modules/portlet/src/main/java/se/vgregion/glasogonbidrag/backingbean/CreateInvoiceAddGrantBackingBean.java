@@ -31,6 +31,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistExce
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
+import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
@@ -115,6 +116,10 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private PersonalNumberFormatService personalNumberFormatService;
+
+    @Autowired
+    private AccountingDistributionCalculationService
+            accountingDistributionCalculationService;
 
     @Autowired
     private MessageSource messageSource;
@@ -718,6 +723,15 @@ public class CreateInvoiceAddGrantBackingBean {
             prescriptionValueObject.patchPrescription(grant.getPrescription());
         }
 
+        // Set free code and responsibility to the grant.
+        int freeCode = accountingDistributionCalculationService
+                .lookupFreeCode(grant);
+        int responsibility = accountingDistributionCalculationService
+                .lookupResponsibility(grant);
+
+        grant.setFreeCode(freeCode);
+        grant.setResponsibility(responsibility);
+
         // TODO: Should we move code that set relation from grant to prescription here?
 
         beneficiary.getGrants().add(grant);
@@ -767,7 +781,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     private FacesMessage handleGrantObject() {
-
         Locale locale = facesUtil.getLocale();
 
         try {
