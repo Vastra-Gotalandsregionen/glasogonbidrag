@@ -31,7 +31,10 @@
                                       value="#{beneficiaryVO.identificationNumber}"
                                       autofocus="true"
                                       placeholder="#{bundle['reserve-number-placeholder']}"
-                                      required="false"
+                                      required="true"
+                                      requiredMessage="#{bundle['reg-grant-error-reserve-number-is-mandatory']}"
+                                      valueType="reserveNumber"
+                                      converterMessage="#{bundle['reserve-number-format-error']}"
                                       triggerOnEnter="#{portletNamespace}:addGrantForm:reserveNumberSubmit"
                 />
 

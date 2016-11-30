@@ -1,5 +1,6 @@
 package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -56,6 +58,20 @@ public class IdentificationServiceImpl implements IdentificationService {
     }
 
     @Override
+    public Identification findByNumber(String number) {
+        TypedQuery<Identification> q = em.createNamedQuery(
+                "glasogonbidrag.identification.findByNumber",
+                Identification.class);
+        q.setParameter("number", number);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public Identification findByPersonalNumber(String number) {
         TypedQuery<Identification> q = em.createNamedQuery(
                 "glasogonbidrag.identification.findByPersonalNumber",
@@ -82,5 +98,23 @@ public class IdentificationServiceImpl implements IdentificationService {
             return null;
         }
     }
+
+    //String generateUniqueIdentificationNumber();
+    @Override
+    public String generateUniqueIdentificationNumber() {
+        String uuid = UUID.randomUUID().toString();
+        String hash = DigestUtils.shaHex(uuid);
+        String generatedPrefix = "GEN-";
+        String number = generatedPrefix + hash.substring(0, 8);
+
+        if(findByNumber(number) != null) {
+            LOGGER.info("generateUniqueIdentificationNumber - generated number was not unique. New try.");
+            return generateUniqueIdentificationNumber();
+        } else {
+            return number;
+        }
+
+    }
+
 
 }

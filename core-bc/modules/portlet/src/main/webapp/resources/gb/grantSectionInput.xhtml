@@ -56,12 +56,23 @@
                          pt:autofocus="#{autofocus}"
                          pt:data-triggeronenter="#{triggerOnEnter}"
             >
-                <c:if test="#{valueType eq 'date'}">
-                    <f:converter converterId="se.vgregion.MultiDateConverter" />
-                    <f:attribute name="pattern1" value="yyyy-MM-dd" />
-                    <f:attribute name="pattern2" value="yyyyMMdd" />
-                    <f:attribute name="pattern3" value="yyMMdd" />
-                </c:if>
+                <c:choose>
+                    <c:when test="#{valueType eq 'date'}">
+                        <f:converter converterId="se.vgregion.MultiDateConverter" />
+                        <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                        <f:attribute name="pattern2" value="yyyyMMdd" />
+                        <f:attribute name="pattern3" value="yyMMdd" />
+                    </c:when>
+                    <c:when test="#{valueType eq 'lmaNumber'}">
+                        <f:converter converterId="se.vgregion.LmaNumberConverter" />
+                    </c:when>
+                    <c:when test="#{valueType eq 'reserveNumber'}">
+                        <f:converter converterId="se.vgregion.ReserveNumberConverter" />
+                    </c:when>
+
+                </c:choose>
+
+
             </h:inputText>
         </div>
     </div>

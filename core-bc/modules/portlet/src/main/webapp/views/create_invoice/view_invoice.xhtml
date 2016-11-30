@@ -222,10 +222,6 @@
 
                     <ui:fragment rendered="#{not empty invoice.distribution}">
 
-                        <div class="alert alert-info">
-                            Notera: Konteringsförslag kan vara felaktigt. Uppdateras inte korrekt (just nu) när ett bidrag ändras. Skall åtgärdas.
-                        </div>
-
                         <table class="accounting-table">
                             <thead>
                             <tr>
@@ -269,6 +265,25 @@
                             </h:commandButton>
                         </div>
                     </h:form>
+
+                    <ui:fragment rendered="#{invoice.status eq 'IN_PROGRESS' and not mayInvoiceBeMarkedCompleted}">
+                        <div class="alert alert-info">
+                            <h:outputText value="#{bundle['accounting-proposal-cannot-generate-invoice-not-ready']}" />
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{invoice.status eq 'CANCELED'}">
+                        <div class="alert alert-info">
+                            <h:outputText value="#{bundle['accounting-proposal-cannot-generate-invoice-canceled']}" />
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{invoice.status eq 'COMPLETED'}">
+                        <div class="alert alert-info">
+                            <h:outputText value="#{bundle['accounting-proposal-cannot-generate-invoice-completed']}" />
+                        </div>
+                    </ui:fragment>
+
                 </gb:box>
 
             </div>
