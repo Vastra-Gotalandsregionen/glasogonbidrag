@@ -70,13 +70,13 @@ public class SupplierInvoiceLazyDataModel
                                          Map<String, Object> filters) {
         List<SupplierInvoiceDTO> results;
 
+        LowLevelSortOrder sort = new LowLevelSortOrder(
+                sortField, "i.id",
+                OrderType.parse(sortOrder.toString()),
+                filters,
+                VALUE_MAP, FILTER_MAP);
 
         try {
-            LowLevelSortOrder sort = new LowLevelSortOrder(
-                    sortField, "i.id",
-                    OrderType.parse(sortOrder.toString()),
-                    filters,
-                    VALUE_MAP, FILTER_MAP);
             results = queryService.listInvoicesForSupplier(
                     supplierId, sort, first, pageSize);
         } catch (Exception e) {
@@ -85,7 +85,8 @@ public class SupplierInvoiceLazyDataModel
             results = new ArrayList<>();
         }
 
-        this.setRowCount(queryService.countInvoicesForSupplier(supplierId));
+        this.setRowCount(
+                queryService.countInvoicesForSupplier(supplierId, sort));
 
         return results;
     }

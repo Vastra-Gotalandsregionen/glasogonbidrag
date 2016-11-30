@@ -70,11 +70,12 @@ public class InvoiceLazyDataModel extends LazyDataModel<InvoiceDTO> {
                                  Map<String, Object> filters) {
         List<InvoiceDTO> results;
 
+        LowLevelSortOrder sort = new LowLevelSortOrder(
+                sortField, "i.id",
+                OrderType.parse(sortOrder.toString()), filters,
+                VALUE_MAP, FILTERS_MAP);
+
         try {
-            LowLevelSortOrder sort = new LowLevelSortOrder(
-                    sortField, "i.id",
-                    OrderType.parse(sortOrder.toString()), filters,
-                    VALUE_MAP, FILTERS_MAP);
             results = queryService.listInvoices(sort, first, pageSize);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());
@@ -82,7 +83,7 @@ public class InvoiceLazyDataModel extends LazyDataModel<InvoiceDTO> {
             results = new ArrayList<>();
         }
 
-        this.setRowCount(queryService.countInvoices());
+        this.setRowCount(queryService.countInvoices(sort));
 
         return results;
     }

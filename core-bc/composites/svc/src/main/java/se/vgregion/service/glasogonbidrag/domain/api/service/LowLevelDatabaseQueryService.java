@@ -13,26 +13,26 @@ import java.util.List;
  */
 public interface LowLevelDatabaseQueryService {
 
-    int countSuppliers();
+    int countSuppliers(LowLevelSortOrder sort);
 
     List<SupplierDTO> listSuppliers(
             LowLevelSortOrder sort, int firstResults, int maxResult)
                 throws Exception;
 
-    int countInvoices();
+    int countInvoices(LowLevelSortOrder sort);
 
     List<InvoiceDTO> listInvoices(
             LowLevelSortOrder sort, int firstResults, int maxResult)
                 throws Exception;
 
-    int countInvoicesForSupplier(long supplierId);
+    int countInvoicesForSupplier(long supplierId, LowLevelSortOrder sort);
 
     List<SupplierInvoiceDTO> listInvoicesForSupplier(
             long supplierId, LowLevelSortOrder sort,
             int firstResults, int maxResult)
                 throws Exception;
 
-    int countBeneficiaries();
+    int countBeneficiaries(LowLevelSortOrder sort);
 
     List<BeneficiaryDTO> listBeneficiaries(
             LowLevelSortOrder sort, int firstResults, int maxResult)

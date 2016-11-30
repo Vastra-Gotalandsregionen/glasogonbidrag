@@ -61,11 +61,12 @@ public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
                                      Map<String, Object> filters) {
         List<BeneficiaryDTO> results;
 
+        LowLevelSortOrder sort = new LowLevelSortOrder(
+                sortField, "b.id",
+                OrderType.parse(sortOrder.toString()), filters,
+                VALUE_MAP, FILTER_MAP);
+
         try {
-            LowLevelSortOrder sort = new LowLevelSortOrder(
-                    sortField, "b.id",
-                    OrderType.parse(sortOrder.toString()), filters,
-                    VALUE_MAP, FILTER_MAP);
             results = lowLevelService.listBeneficiaries(sort, first, pageSize);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());
@@ -73,7 +74,7 @@ public class BeneficiaryLazyDataModel extends LazyDataModel<BeneficiaryDTO> {
             results = new ArrayList<>();
         }
 
-        this.setRowCount(lowLevelService.countBeneficiaries());
+        this.setRowCount(lowLevelService.countBeneficiaries(sort));
 
         return results;
     }
