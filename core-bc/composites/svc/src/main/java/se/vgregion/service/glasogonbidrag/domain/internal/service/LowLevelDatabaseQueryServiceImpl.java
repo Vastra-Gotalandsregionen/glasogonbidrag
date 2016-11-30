@@ -11,6 +11,7 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQue
 import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -29,14 +30,24 @@ public class LowLevelDatabaseQueryServiceImpl
     private EntityManager em;
 
     @Override
-    public int countSuppliers() {
-        String query =
+    public int countSuppliers(LowLevelSortOrder sort) {
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT COUNT(*) " +
-                "FROM Supplier i";
+                "FROM Supplier s ");
 
-        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString());
+        }
 
-        Long result = q.getSingleResult();
+        TypedQuery<Long> q = em.createQuery(query.toString(), Long.class);
+
+        Long result;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            result = 0L;
+        }
 
         LOGGER.debug("countSuppliers() - " +
                         "The query {} got the result {}",
@@ -80,14 +91,26 @@ public class LowLevelDatabaseQueryServiceImpl
         return result;
     }
 
-    public int countInvoices() {
-        String query =
+    @Override
+    public int countInvoices(LowLevelSortOrder sort) {
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT COUNT(*) " +
-                "FROM Invoice i";
+                "FROM Invoice i " +
+                "LEFT JOIN i.supplier s ");
 
-        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString());
+        }
 
-        Long result = q.getSingleResult();
+        TypedQuery<Long> q = em.createQuery(query.toString(), Long.class);
+
+        Long result;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            result = 0L;
+        }
 
         LOGGER.debug("countInvoices() - " +
                         "The query {} got the result {}",
@@ -96,6 +119,7 @@ public class LowLevelDatabaseQueryServiceImpl
         return result.intValue();
     }
 
+    @Override
     public List<InvoiceDTO> listInvoices(
             LowLevelSortOrder sort, int firstResults, int maxResult)
                 throws Exception {
@@ -130,16 +154,28 @@ public class LowLevelDatabaseQueryServiceImpl
         return result;
     }
 
-    public int countInvoicesForSupplier(long supplierId) {
-        String query =
+    @Override
+    public int countInvoicesForSupplier(long supplierId,
+                                        LowLevelSortOrder sort) {
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT COUNT(*) " +
                 "FROM Invoice i " +
-                "WHERE i.supplier.id = :id";
+                "WHERE i.supplier.id = :id ");
 
-        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        if (!sort.getFilters().isEmpty()) {
+            query.append("AND ").append(sort.getFilterString());
+        }
+
+        TypedQuery<Long> q = em.createQuery(query.toString(), Long.class);
         q.setParameter("id", supplierId);
 
-        Long result = q.getSingleResult();
+        Long result;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            result = 0L;
+        }
 
         LOGGER.debug("countInvoices() - " +
                         "The query {} got the result {}",
@@ -148,6 +184,7 @@ public class LowLevelDatabaseQueryServiceImpl
         return result.intValue();
     }
 
+    @Override
     public List<SupplierInvoiceDTO> listInvoicesForSupplier(
             long supplierId, LowLevelSortOrder sort,
             int firstResults, int maxResult)
@@ -184,14 +221,27 @@ public class LowLevelDatabaseQueryServiceImpl
     }
 
     @Override
-    public int countBeneficiaries() {
-        String query =
+    public int countBeneficiaries(LowLevelSortOrder sort) {
+        StringBuilder query = new StringBuilder();
+        query.append(
                 "SELECT COUNT(*) " +
-                "FROM Beneficiary b";
+                "FROM Beneficiary b " +
+                "LEFT JOIN b.identification i ");
 
-        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        if (!sort.getFilters().isEmpty()) {
+            query.append("WHERE ").append(sort.getFilterString()).append(" ");
+        }
 
-        Long result = q.getSingleResult();
+        query.append("GROUP BY b.id, i.number ");
+
+        TypedQuery<Long> q = em.createQuery(query.toString(), Long.class);
+
+        Long result;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            result = 0L;
+        }
 
         LOGGER.debug("countBeneficiaries() - " +
                         "The query {} got the result {}",
