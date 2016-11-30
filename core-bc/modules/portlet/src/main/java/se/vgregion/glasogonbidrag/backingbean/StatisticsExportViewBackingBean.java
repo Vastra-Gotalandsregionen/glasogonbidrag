@@ -1,5 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.faces.portlet.component.resourceurl.ResourceURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,21 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.viewobject.ExportVO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticExportDTO;
+import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportService;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.portlet.PortletResponse;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Erik Andersson - Monator Technologies AB
@@ -19,10 +31,15 @@ import java.util.Date;
 @Component(value = "statisticsExportViewBackingBean")
 @Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class StatisticsExportViewBackingBean {
-
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticsExportViewBackingBean.class);
+
+    public static final String EXCEL_MIME_TYPE =
+            "application/vnd.openxmlformats-officedocument" +
+                    ".spreadsheetml.sheet";
+
+    @Autowired
+    private StatisticExportService service;
 
     @Autowired
     private FacesUtil facesUtil;
@@ -68,8 +85,29 @@ public class StatisticsExportViewBackingBean {
     }
 
     // Actions
-    public void exportStatistics() {
-        LOGGER.info("exportStatistics");
+    public void exportStatistics() throws IOException {
+        LOGGER.trace("exportStatistics");
+
+        // This don't work...
+        // Need to do some JSF + Liferay magic.
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        ByteArrayOutputStream output = service.export(minDate, maxDate);
+
+        ec.responseReset();
+        ec.setResponseContentType(EXCEL_MIME_TYPE);
+        ec.setResponseContentLength(output.size());
+        ec.setResponseHeader("Content-Disposition",
+                "attachment; filename=\"Export.xlsx\"");
+
+        OutputStream browserDownload = ec.getResponseOutputStream();
+
+        output.writeTo(browserDownload);
+
+        output.close();
+
+        fc.responseComplete();
     }
 
 
