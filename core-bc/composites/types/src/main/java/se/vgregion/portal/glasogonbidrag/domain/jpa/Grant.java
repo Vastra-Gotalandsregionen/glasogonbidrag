@@ -107,6 +107,10 @@ public class Grant {
     private String county;
     private String municipality;
 
+    private int responsibility;
+    @Column(name = "free_code")
+    private int freeCode;
+
     @Column(name = "case_worker")
     private String caseWorker;
 
@@ -207,6 +211,22 @@ public class Grant {
 
     public void setMunicipality(String responsibilityRegion) {
         this.municipality = responsibilityRegion;
+    }
+
+    public int getResponsibility() {
+        return responsibility;
+    }
+
+    public void setResponsibility(int responsibility) {
+        this.responsibility = responsibility;
+    }
+
+    public int getFreeCode() {
+        return freeCode;
+    }
+
+    public void setFreeCode(int freeCode) {
+        this.freeCode = freeCode;
     }
 
     public String getCaseWorker() {
