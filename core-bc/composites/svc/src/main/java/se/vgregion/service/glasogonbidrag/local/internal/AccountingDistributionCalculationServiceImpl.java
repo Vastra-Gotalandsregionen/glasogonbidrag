@@ -13,6 +13,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
 import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.RegionResponsibilityLookupService;
@@ -26,6 +27,7 @@ import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
+ * @author Erik Andersson - Monator Technologies AB
  */
 @Service
 public class AccountingDistributionCalculationServiceImpl
@@ -56,8 +58,11 @@ public class AccountingDistributionCalculationServiceImpl
             int freeCode = lookupFreeCode(grant);
             long amount = grant.getAmount();
 
-            LOGGER.info("Adding grant for {}, {} {} and {}",
-                    responsibility, account, freeCode, amount);
+            if (LOGGER.isDebugEnabled()) {
+                String idNumber = grant.getBeneficiary().getIdentification().getNumber();
+                LOGGER.debug("Adding grant for {}, {} {} and {} with idNumber {}",
+                        responsibility, account, freeCode, amount, idNumber);
+            }
 
             distribution.appendRow(
                     new AccountRow(responsibility,
@@ -95,6 +100,7 @@ public class AccountingDistributionCalculationServiceImpl
         Beneficiary beneficiary = grant.getBeneficiary();
         Prescription prescription = grant.getPrescription();
 
+
         Diagnose diagnose;
         if (prescription != null) {
             diagnose = prescription.getDiagnose();
@@ -104,9 +110,11 @@ public class AccountingDistributionCalculationServiceImpl
 
         Date birthDate;
         Date deliveryDate;
+        IdentificationType identificationType;
         if (beneficiary != null && beneficiary.getIdentification() != null) {
             birthDate = beneficiary.getIdentification().getBirthDate();
             deliveryDate = grant.getDeliveryDate();
+            identificationType = beneficiary.getIdentification().getType();
         } else {
             throw new IllegalStateException(
                     "Beneficiary and it's Identification may not be null!");
@@ -128,7 +136,7 @@ public class AccountingDistributionCalculationServiceImpl
                 break;
 
             case NONE:
-                freeCode = lookupNoneDiagnoseFreeCode(birthDate, deliveryDate);
+                freeCode = lookupNoneDiagnoseFreeCode(birthDate, deliveryDate, identificationType);
                 break;
 
             default:
@@ -141,19 +149,25 @@ public class AccountingDistributionCalculationServiceImpl
         return freeCode;
     }
 
-    private int lookupNoneDiagnoseFreeCode(Date birthday, Date deliveryDate) {
+    private int lookupNoneDiagnoseFreeCode(Date birthDate, Date deliveryDate,
+                                           IdentificationType type) {
+
+        if (type != IdentificationType.PERSONAL && birthDate == null) {
+            return 9999; // TODO: Determine the correct free code for this case.
+        }
+
         Calendar cal = new GregorianCalendar();
 
-        cal.setTime(birthday);
+        cal.setTime(birthDate);
         cal.add(Calendar.YEAR, 8);
         Date birthday8 = cal.getTime();
 
-        cal.setTime(birthday);
+        cal.setTime(birthDate);
         cal.add(Calendar.YEAR, 20);
         cal.add(Calendar.MONTH, 6);
         Date birthday20 = cal.getTime();
 
-        if (!deliveryDate.before(birthday) && deliveryDate.before(birthday8)) {
+        if (!deliveryDate.before(birthDate) && deliveryDate.before(birthday8)) {
             return 9589;
         } else if (!deliveryDate.before(birthday8)
                 && deliveryDate.before(birthday20)) {
