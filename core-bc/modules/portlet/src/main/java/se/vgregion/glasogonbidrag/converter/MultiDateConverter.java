@@ -1,7 +1,7 @@
 package se.vgregion.glasogonbidrag.converter;
 
-import com.liferay.faces.util.logging.Logger;
-import com.liferay.faces.util.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -32,21 +32,18 @@ public class MultiDateConverter implements Converter {
 
         for (String pattern : patterns) {
 
-            //LOGGER.info("pattern: " + pattern);
-
             // Allow empty pattern (return null value for date)
-            if("".equals(pattern)) {
+            if("".equals(pattern) && value.isEmpty()) {
                 return null;
-            }
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                sdf.setLenient(false); // Don't parse dates like 33-33-3333.
 
-            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-            sdf.setLenient(false); // Don't parse dates like 33-33-3333.
-
-            try {
-                date = sdf.parse(value);
-                break;
-            } catch (ParseException ignore) {
-                //
+                try {
+                    date = sdf.parse(value);
+                    break;
+                } catch (ParseException ignore) {
+                }
             }
         }
 
