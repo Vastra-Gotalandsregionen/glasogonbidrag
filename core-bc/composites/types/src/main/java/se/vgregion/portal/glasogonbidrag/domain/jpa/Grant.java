@@ -66,7 +66,22 @@ import java.util.Date;
                 query = "SELECT SUM(g.amount) " +
                         "FROM Grant g " +
                         "WHERE g.userId = :user " +
-                        "AND DATE_TRUNC('day', g.createDate) = :date")
+                        "AND DATE_TRUNC('day', g.createDate) = :date"),
+
+        @NamedQuery(
+                name = "glasogonbidrag.grant.findAllGrantForExport",
+                query = "SELECT " +
+                        "new se.vgregion.portal.glasogonbidrag.domain.dto." +
+                        "   StatisticExportDTO(" +
+                        "       g.amount, b.sex, d, i, " +
+                        "       p.date, g.deliveryDate, g.createDate, " +
+                        "       g.county, g.municipality, 0, 0)" +
+                        "FROM Grant g " +
+                        "LEFT JOIN g.beneficiary b " +
+                        "LEFT JOIN b.identification i " +
+                        "LEFT JOIN g.prescription p " +
+                        "LEFT JOIN p.diagnose d " +
+                        "WHERE g.createDate BETWEEN :startDate AND :endDate")
 })
 public class Grant {
 
