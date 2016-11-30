@@ -48,6 +48,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -397,6 +399,15 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void identificationReserveListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
+
+        String birthDateStr = identificationNumber.substring(0, 8);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+        try {
+            Date date = sdf.parse(birthDateStr);
+            beneficiaryVO.setDateOfOBirth(date);
+        } catch (ParseException ignore) {
+        }
 
         Identification identification = new Reserve(identificationNumber, beneficiaryVO.getDateOfOBirth());
 

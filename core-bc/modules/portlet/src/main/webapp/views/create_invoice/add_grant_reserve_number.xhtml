@@ -49,20 +49,6 @@
                         />
                     </div>
                     <div class="field-element">
-                        <h:outputLabel for="reserveNumberDateOfBirth" value="#{bundle['date-of-birth']}:" />
-                        <h:inputText id="reserveNumberDateOfBirth"
-                                     styleClass=""
-                                     value="#{beneficiaryVO.dateOfOBirth}"
-                                     pt:placeholder=""
-                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:reserveNumberSubmit"
-                                     converterMessage="#{bundle['reg-grant-error-converting-date']}"
-                        >
-                            <f:converter converterId="se.vgregion.MultiDateConverter" />
-                            <f:attribute name="pattern1" value="yyyy-MM-dd" />
-                            <f:attribute name="pattern2" value="yyyyMMdd" />
-                            <f:attribute name="pattern3" value="yyMMdd" />
-                            <f:attribute name="pattern4" value="" />
-                        </h:inputText>
                     </div>
                 </div>
 

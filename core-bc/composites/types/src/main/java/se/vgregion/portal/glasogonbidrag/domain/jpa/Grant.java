@@ -107,7 +107,9 @@ public class Grant {
     private String county;
     private String municipality;
 
+    @Column(name = "responsibility_")
     private int responsibility;
+
     @Column(name = "free_code")
     private int freeCode;
 
