@@ -54,9 +54,14 @@
                 </p:row>
             </p:columnGroup>
 
-
-
         </p:dataTable>
+
+        <ui:fragment rendered="#{statisticsReportViewBackingBean.searchHasBeenMade and empty statisticsReportViewBackingBean.statisticsVOs}">
+            <div class="alert alert-info">
+                <h:outputText value="#{bundle['statistics-report-empty-search-results']}" />
+            </div>
+        </ui:fragment>
+
 
 
     </h:body>
