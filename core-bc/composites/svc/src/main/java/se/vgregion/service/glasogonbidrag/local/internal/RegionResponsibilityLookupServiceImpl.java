@@ -57,7 +57,7 @@ public class RegionResponsibilityLookupServiceImpl
         String region = lookupRegion(municipality);
 
         if (region != null) {
-            return responsibility.get(region);
+            return responsibility.get(region.toLowerCase());
         } else {
             return 0;
         }
@@ -73,7 +73,7 @@ public class RegionResponsibilityLookupServiceImpl
 
             List<String> municipalities = regionLists.get(region);
 
-            if (municipalities.contains(municipality)) {
+            if (municipalities.contains(municipality.toLowerCase())) {
                 result = region;
             }
         }
