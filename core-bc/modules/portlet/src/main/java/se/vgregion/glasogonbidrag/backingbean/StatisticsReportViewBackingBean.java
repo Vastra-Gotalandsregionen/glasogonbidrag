@@ -467,7 +467,7 @@ public class StatisticsReportViewBackingBean {
             String code = lookupService
                     .lookupMunicipalityFromCode(dto.getData());
             if (code == null) {
-                code = "Unknown"; // TODO: Fix language key for this.
+                code = "Okänd"; // TODO: Fix language key for this.
             }
 
             return new StatisticsVO(
