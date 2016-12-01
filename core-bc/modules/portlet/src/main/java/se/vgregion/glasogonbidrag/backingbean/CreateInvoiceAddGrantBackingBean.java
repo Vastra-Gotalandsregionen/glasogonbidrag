@@ -379,15 +379,9 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void identificationOtherListener() {
-        String identificationNumber = beneficiaryVO.getIdentificationNumber();
+        String identificationNumber =identificationService.generateUniqueIdentificationNumber();
 
-        if(identificationNumber == null || identificationNumber.trim().isEmpty()) {
-            identificationNumber = identificationService.generateUniqueIdentificationNumber();
-
-            LOGGER.info("identificationOtherListener - identificationNumber was generated.");
-        }
-
-        LOGGER.info("identificationOtherListener - identificationNumber is: {}", identificationNumber);
+        beneficiaryVO.setIdentificationNumber(identificationNumber);
 
         Identification identification = new Other(identificationNumber, beneficiaryVO.getDateOfOBirth());
 

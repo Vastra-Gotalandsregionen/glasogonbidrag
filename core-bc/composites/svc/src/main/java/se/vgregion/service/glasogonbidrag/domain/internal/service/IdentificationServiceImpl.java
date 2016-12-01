@@ -105,7 +105,7 @@ public class IdentificationServiceImpl implements IdentificationService {
         String uuid = UUID.randomUUID().toString();
         String hash = DigestUtils.shaHex(uuid);
         String generatedPrefix = "GEN-";
-        String number = generatedPrefix + hash.substring(0, 8);
+        String number = generatedPrefix + hash.substring(0, 8).toUpperCase();
 
         if(findByNumber(number) != null) {
             LOGGER.info("generateUniqueIdentificationNumber - generated number was not unique. New try.");
