@@ -64,6 +64,8 @@ public class StatisticsReportViewBackingBean {
 
     // Attributes
 
+    private boolean searchHasBeenMade;
+
     private int statisticsFilterBirthYearMin;
 
     private int statisticsFilterBirthYearMax;
@@ -93,6 +95,15 @@ public class StatisticsReportViewBackingBean {
     private int grantSumTotal;
 
     // Getters and Setters
+
+
+    public boolean isSearchHasBeenMade() {
+        return searchHasBeenMade;
+    }
+
+    public void setSearchHasBeenMade(boolean searchHasBeenMade) {
+        this.searchHasBeenMade = searchHasBeenMade;
+    }
 
     public int getStatisticsFilterBirthYearMin() {
         return statisticsFilterBirthYearMin;
@@ -311,11 +322,15 @@ public class StatisticsReportViewBackingBean {
             grantCountTotal += statisticsVO.getNumberOfGrants();
             grantSumTotal += statisticsVO.getGrantsSum();
         }
+
+        searchHasBeenMade = true;
     }
 
     @PostConstruct
     protected void init() {
         LOGGER.info("init");
+
+        searchHasBeenMade = false;
 
         // Dummy data for statistics
         statisticsVOs = new ArrayList<StatisticsVO>();
