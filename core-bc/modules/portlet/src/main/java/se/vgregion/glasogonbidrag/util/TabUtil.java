@@ -18,6 +18,10 @@ public class TabUtil {
         return activeIndex;
     }
 
+    public void setActiveIndex(Integer activeIndex) {
+        this.activeIndex = activeIndex;
+    }
+
     public List<Map.Entry<Integer, String>> getTabs() {
         List<Map.Entry<Integer, String>> tabEntries = new ArrayList<>();
 

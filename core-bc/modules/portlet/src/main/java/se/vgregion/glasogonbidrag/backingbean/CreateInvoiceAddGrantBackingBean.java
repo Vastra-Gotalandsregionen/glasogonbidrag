@@ -975,6 +975,9 @@ public class CreateInvoiceAddGrantBackingBean {
         else if(GRANT_TYPE_AGE_0_TO_19.equals(grantType) || GRANT_TYPE_AGE_0_TO_15.equals(grantType)) {
             grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_AGE.getState();
         }
+
+        // Setup Tab
+        setupActiveTab(grant);
     }
 
     private void setupDefaults() {
@@ -1005,4 +1008,27 @@ public class CreateInvoiceAddGrantBackingBean {
         ), 0);
 
     }
+
+    private void setupActiveTab(Grant grant) {
+        IdentificationType identificationType = grant.getBeneficiary().getIdentification().getType();
+
+        switch (identificationType) {
+            case PERSONAL:
+                tabUtil.setActiveIndex(0);
+                break;
+            case LMA:
+                tabUtil.setActiveIndex(1);
+                break;
+            case RESERVE:
+                tabUtil.setActiveIndex(2);
+                break;
+            case OTHER:
+                tabUtil.setActiveIndex(3);
+                break;
+            default:
+                tabUtil.setActiveIndex(0);
+                break;
+        }
+    }
+
 }
