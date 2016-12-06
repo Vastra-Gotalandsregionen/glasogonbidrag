@@ -159,8 +159,7 @@ public class ManageSuppliersViewBackingBean {
         newSupplier = new Supplier();
         viewEditSupplier = facesUtil.fetchBooleanProperty("viewEditSupplier");
 
-        lazyDataModel = new SupplierLazyDataModel(
-                supplierService, queryService);
+        lazyDataModel = new SupplierLazyDataModel(supplierService);
         invoiceLazyDataModel = null;
     }
 }
