@@ -20,14 +20,11 @@
         <gb:box title="#{bundle['invoices-for']} #{selectedSupplier.name}" collapsible="true" collapsed="false">
 
             <ui:fragment rendered="#{not empty selectedSupplierInvoices}">
-                <c:set var="paginatorRows" value="#{10}" scope="request" />
-                <c:set var="viewPaginator" value="#{invoices.size() gt paginatorRows ? true : false}" scope="request" />
-
                 <p:dataTable var="invoice"
                              widgetVar="supplierInvoiceTable"
                              value="#{selectedSupplierInvoices}"
-                             rows="#{paginatorRows}"
-                             paginator="#{viewPaginator}"
+                             rows="10"
+                             paginator="true"
                              paginatorPosition="bottom"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="1,5,10,15,20,50"
