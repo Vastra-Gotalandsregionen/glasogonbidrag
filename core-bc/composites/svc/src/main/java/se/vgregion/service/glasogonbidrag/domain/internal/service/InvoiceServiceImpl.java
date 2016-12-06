@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
@@ -623,6 +624,108 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (filters.hasFilters()) {
             setQueryParameters(q, filters);
         }
+
+        Long result;
+        try {
+            result = q.getSingleResult();
+        } catch (NoResultException e) {
+            result = 0L;
+        }
+
+        LOGGER.debug("countInvoices() - " +
+                        "The query {} got the result {}",
+                query, result);
+
+        return result.intValue();
+    }
+
+    @Override
+    public List<SupplierInvoiceDTO> findAllBySupplierFiltered(
+            long supplierId,
+            int firstResults,
+            int maxResult,
+            InvoiceFilter filters,
+            InvoiceOrder order) {
+        String query =
+                "SELECT new se.vgregion.portal.glasogonbidrag.domain.dto." +
+                           "SupplierInvoiceDTO( " +
+                                "i.id, i.verificationNumber, " +
+                                "i.status, i.caseWorker ) " +
+                "FROM Invoice i " +
+                "LEFT JOIN i.supplier s ";
+
+        if (filters.hasFilters()) {
+            query += buildWhereCondition(filters);
+            query += "AND i.supplier.id = :supplierId ";
+        } else {
+            query += "WHERE i.supplier.id = :supplierId ";
+        }
+
+        query += "GROUP BY i.id, s.name ";
+
+        if (order.hasOrderBy()) {
+            List<String> orderBy = new ArrayList<>();
+
+            if (order.isOrderByVerificationNumber()) {
+                orderBy.add("i.verificationNumber");
+            }
+
+            if (order.isOrderByStatus()) {
+                orderBy.add("i.status ");
+            }
+
+            if (order.isOrderByCaseWorker()) {
+                orderBy.add("i.caseWorker ");
+            }
+
+            query += "ORDER BY ";
+            query += join(orderBy, ", ").concat(" ");
+            query += order.getOrderType().toString();
+        } else {
+            query += "ORDER BY i.id ASC";
+        }
+
+        TypedQuery<SupplierInvoiceDTO> q = em.createQuery(query, SupplierInvoiceDTO.class);
+
+        q.setFirstResult(firstResults);
+        q.setMaxResults(maxResult);
+
+        if (filters.hasFilters()) {
+            setQueryParameters(q, filters);
+        }
+
+        q.setParameter("supplierId", supplierId);
+
+        List<SupplierInvoiceDTO> result = q.getResultList();
+
+        LOGGER.debug("listInvoices() - The query {} found {} results",
+                query, result.size());
+
+        return result;
+    }
+
+    @Override
+    public int countBySupplierFiltered(long supplierId,
+                                       InvoiceFilter filters) {
+        String query =
+                "SELECT COUNT(*) " +
+                "FROM Invoice i " +
+                "LEFT JOIN i.supplier s ";
+
+        if (filters.hasFilters()) {
+            query += buildWhereCondition(filters);
+            query += "AND i.supplier.id = :supplierId ";
+        } else {
+            query += "WHERE i.supplier.id = :supplierId ";
+        }
+
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+
+        if (filters.hasFilters()) {
+            setQueryParameters(q, filters);
+        }
+
+        q.setParameter("supplierId", supplierId);
 
         Long result;
         try {

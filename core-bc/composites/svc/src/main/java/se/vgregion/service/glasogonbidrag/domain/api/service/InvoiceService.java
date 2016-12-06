@@ -2,6 +2,7 @@ package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
@@ -99,4 +100,12 @@ public interface InvoiceService {
                                      InvoiceOrder order);
 
     int countFiltered(InvoiceFilter filters);
+
+    List<SupplierInvoiceDTO> findAllBySupplierFiltered(long supplierId,
+                                                       int firstResults,
+                                                       int maxResult,
+                                                       InvoiceFilter filters,
+                                                       InvoiceOrder order);
+
+    int countBySupplierFiltered(long supplierId, InvoiceFilter filters);
 }
