@@ -706,6 +706,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
+    // TODO: This method is copied to many places consolidate in single file.
     private String join(List<String> join, String separator) {
         StringBuilder builder = new StringBuilder();
 
