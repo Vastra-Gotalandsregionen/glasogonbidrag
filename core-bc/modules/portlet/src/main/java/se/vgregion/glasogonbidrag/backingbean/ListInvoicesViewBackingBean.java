@@ -10,7 +10,6 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -34,9 +33,6 @@ public class ListInvoicesViewBackingBean {
 
     @Autowired
     private InvoiceService invoiceService;
-
-    @Autowired
-    private LowLevelDatabaseQueryService queryService;
 
     private List<String> filterDataStatuses;
 
@@ -70,7 +66,6 @@ public class ListInvoicesViewBackingBean {
     }
 
     private void initFilterData() {
-
         // TODO: refactor this nicer when more work with filters has been done
         filterDataStatuses = new ArrayList<String>();
         filterDataStatuses.add("invoice-status-in-progress");
@@ -81,8 +76,9 @@ public class ListInvoicesViewBackingBean {
     }
 
     private void fetchInvoices() {
+        // TODO: Do we use the invoices field? Have the lazy data model replaced this everywhere?
         invoices = invoiceService.findAllWithParts();
-        lazyDataModel = new InvoiceLazyDataModel(invoiceService, queryService);
+        lazyDataModel = new InvoiceLazyDataModel(invoiceService);
     }
 
 }
