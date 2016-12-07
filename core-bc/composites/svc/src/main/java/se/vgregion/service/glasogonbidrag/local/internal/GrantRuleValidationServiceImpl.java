@@ -374,16 +374,33 @@ public class GrantRuleValidationServiceImpl
         Prescription prescription = grant.getPrescription();
 
         Calendar cal = new GregorianCalendar();
-        cal.setTime(grant.getDeliveryDate());
 
+        cal.setTime(prescription.getDate());
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date prescriptionDate = cal.getTime();
+
+        cal.setTime(grant.getDeliveryDate());
         int suppliedYear = cal.get(Calendar.YEAR);
 
         List<Grant> calendarGrants = new ArrayList<>();
         for (Grant g : historicalGrants) {
             cal.setTime(g.getDeliveryDate());
+            int historicalYear = cal.get(Calendar.YEAR);
 
-            if (g.getPrescription().equals(prescription) &&
-                    cal.get(Calendar.YEAR) == suppliedYear) {
+            cal.setTime(g.getPrescription().getDate());
+            cal.set(Calendar.HOUR, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            Date historicalPrescriptionDate = cal.getTime();
+
+            if (historicalPrescriptionDate.equals(prescriptionDate) &&
+                    g.getPrescription().getDiagnose().equals(prescription.getDiagnose()) &&
+                    historicalYear == suppliedYear) {
                 calendarGrants.add(g);
             }
         }
