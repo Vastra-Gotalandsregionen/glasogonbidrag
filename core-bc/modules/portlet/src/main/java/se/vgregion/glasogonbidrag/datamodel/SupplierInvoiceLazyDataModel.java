@@ -6,13 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.types.OrderType;
 import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceFilter;
 import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceOrder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
