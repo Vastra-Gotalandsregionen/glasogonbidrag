@@ -555,7 +555,13 @@
 
         <!-- Input amount -->
         <ui:fragment rendered="#{grantFlow.showAmountInput}">
+
             <div class="grant-section">
+
+                <c:set var="submitAmountButtonId" value="amountWithVatSubmit" scope="request" />
+                <c:if test="#{createInvoiceAddGrantBackingBean.hasWarnings}">
+                    <c:set var="submitAmountButtonId" value="amountWithVatIgnoreWarningSubmit" scope="request" />
+                </c:if>
 
                 <gb:grantSectionInput id="amount"
                                       label="#{bundle['grant-sum']}"
@@ -565,13 +571,20 @@
                                       placeholder="#{bundle['grant-sum-placeholder']}"
                                       required="true"
                                       requiredMessage="#{bundle['reg-grant-error-grant-sum-is-mandatory']}"
-                                      triggerOnEnter="#{portletNamespace}:addGrantForm:amountWithVatSubmit"
+                                      triggerOnEnter="#{portletNamespace}:addGrantForm:#{submitAmountButtonId}"
                 />
 
                 <div class="button-row">
 
-                    <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="#{bundle['save']}"
-                                   action="#{createInvoiceAddGrantBackingBean.doSave}" />
+                    <ui:fragment rendered="#{not createInvoiceAddGrantBackingBean.hasWarnings}">
+                        <h:commandLink id="amountWithVatSubmit" styleClass="link-btn primary" value="#{bundle['save']}"
+                                       action="#{createInvoiceAddGrantBackingBean.doSave}" />
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{createInvoiceAddGrantBackingBean.hasWarnings}">
+                        <h:commandLink id="amountWithVatIgnoreWarningSubmit" styleClass="link-btn primary" value="#{bundle['save-ignore-warnings']}"
+                                       action="#{createInvoiceAddGrantBackingBean.doSaveIgnoreWarnings}" />
+                    </ui:fragment>
 
                     <h:commandLink styleClass="link-btn" value="#{bundle['delete']}"
                                    rendered="#{not empty grant.id and mayInvoiceBeChanged}"

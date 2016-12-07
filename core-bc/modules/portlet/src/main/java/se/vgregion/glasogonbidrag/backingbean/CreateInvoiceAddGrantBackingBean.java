@@ -1,8 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
 import com.liferay.portal.theme.ThemeDisplay;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -158,8 +155,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     private BigDecimal amount;
 
+    private boolean hasErrors;
+    private boolean hasWarnings;
     private boolean ignoreWarnings;
-
 
     // Getter and Setters for Helpers
 
@@ -259,6 +257,22 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void setPrescriptionValueObject(PrescriptionValueObject prescriptionValueObject) {
         this.prescriptionValueObject = prescriptionValueObject;
+    }
+
+    public boolean isHasErrors() {
+        return hasErrors;
+    }
+
+    public void setHasErrors(boolean hasErrors) {
+        this.hasErrors = hasErrors;
+    }
+
+    public boolean isHasWarnings() {
+        return hasWarnings;
+    }
+
+    public void setHasWarnings(boolean hasWarnings) {
+        this.hasWarnings = hasWarnings;
     }
 
     public boolean isIgnoreWarnings() {
@@ -642,6 +656,12 @@ public class CreateInvoiceAddGrantBackingBean {
         return saveObjects(responseView);
     }
 
+    public String doSaveIgnoreWarnings() {
+        ignoreWarnings = true;
+
+        return doSave();
+    }
+
     public String doSaveAndReturn() {
         String responseView = String.format(
                 "view_invoice" +
@@ -768,6 +788,8 @@ public class CreateInvoiceAddGrantBackingBean {
     // TODO: Verify that this method actually setup all relations
     private List<FacesMessage> setupAndValidateObjects() {
 
+        List<FacesMessage> messages = new ArrayList<>();
+
         if (grant.getPrescription() == null) {
             Prescription prescription =
                     prescriptionValueObject.getPrescription();
@@ -795,8 +817,6 @@ public class CreateInvoiceAddGrantBackingBean {
         if(result.hasViolations()) {
             Locale locale = facesUtil.getLocale();
 
-            List<FacesMessage> messages = new ArrayList<>();
-
             for (String violation : result.getViolationStrings()) {
                 String localizedMessage = messageSource
                         .getMessage(violation,
@@ -805,7 +825,25 @@ public class CreateInvoiceAddGrantBackingBean {
                 messages.add(new FacesMessage(
                         FacesMessage.SEVERITY_ERROR, localizedMessage, ""));
             }
+        } else {}
 
+        if(!ignoreWarnings && result.hasWarnings()) {
+            hasWarnings = true;
+            Locale locale = facesUtil.getLocale();
+
+            for (String violation : result.getWarningStrings()) {
+                String localizedMessage = messageSource
+                        .getMessage(violation,
+                                new Object[0], locale);
+
+                messages.add(new FacesMessage(
+                        FacesMessage.SEVERITY_WARN, localizedMessage, ""));
+            }
+        } else {
+            hasWarnings = false;
+        }
+
+        if(messages.size() > 0) {
             return messages;
         } else {
             return null;
@@ -1031,6 +1069,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
         amount = new BigDecimal(800);
 
+        hasErrors = false;
+        hasWarnings = false;
         ignoreWarnings = false;
 
         tabUtil = new TabUtil(Arrays.asList(
