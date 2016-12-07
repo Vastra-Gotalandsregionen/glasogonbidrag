@@ -21,13 +21,13 @@
             <ul class="labeled-list">
                 <li>
                     <span class="item-label">
-                        <h:outputText value="#{bundle['personal-number']}:" />
+                        <h:outputText value="#{bundle['identification-number']}:" />
                     </span>
                     <span class="item-value">
-                        <ui:fragment rendered="#{not empty beneficiary.number}">
-                            <h:outputText value="#{beneficiary.number}" />
+                        <ui:fragment rendered="#{not empty selectedBeneficiary.identification.number}">
+                            <h:outputText value="#{selectedBeneficiary.identification.number}" />
                         </ui:fragment>
-                        <ui:fragment rendered="#{empty beneficiary.number or beneficiary.number eq ''}">
+                        <ui:fragment rendered="#{empty selectedBeneficiary.identification.number or selectedBeneficiary.identification.number eq ''}">
                             <h:outputText value="#{bundle['identification-number-missing']}" />
                         </ui:fragment>
                     </span>
