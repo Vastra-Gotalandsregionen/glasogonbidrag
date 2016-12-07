@@ -19,7 +19,7 @@
                 data: {
                     labels: #{statisticsDashboardViewBackingBean.daysOfWeekJSONString},
                     datasets: [{
-                        label: '<h:outputText value="Antal bidrag per dag denna vecka" />',
+                        label: '#{bundle["statistics-grant-count-per-day-this-week"]}',
                         data: #{statisticsDashboardViewBackingBean.grantsCountOfWeekDaysJSONString},
                         borderWidth: 1
                     }]

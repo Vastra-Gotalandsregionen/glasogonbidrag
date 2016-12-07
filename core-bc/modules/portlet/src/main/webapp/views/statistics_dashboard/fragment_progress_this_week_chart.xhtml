@@ -19,7 +19,7 @@
                 data: {
                     labels: #{statisticsDashboardViewBackingBean.daysOfWeekJSONString},
                     datasets: [{
-                        label: '<h:outputText value="Progress denna vecka" />',
+                        label: '#{bundle["statistics-progress-this-week"]}',
                         data: #{statisticsDashboardViewBackingBean.progressOfWeekJSONString},
                         borderWidth: 1
                     }]
