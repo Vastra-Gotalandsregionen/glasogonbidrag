@@ -12,6 +12,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryFilter;
 import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryOrder;
+import se.vgregion.service.glasogonbidrag.util.SharedStringMethod;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -187,7 +188,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
             }
 
             query += "ORDER BY ";
-            query += join(orderBy, ", ").concat(" ");
+            query += SharedStringMethod.join(orderBy, ", ").concat(" ");
             query += order.getOrderType().toString();
         } else {
             query += "ORDER BY b.id";
@@ -259,7 +260,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
                     "CONCAT(UPPER(:fullNameFilter), '%'))");
         }
 
-        return "WHERE ".concat(join(whereCases, " AND ")).concat(" ");
+        return "WHERE ".concat(
+                SharedStringMethod.join(whereCases, " AND ")).concat(" ");
     }
 
     private <T> void setQueryParameters(TypedQuery<T> q,
@@ -275,17 +277,5 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
                     "fullNameFilter",
                     filters.getFullName());
         }
-    }
-
-    // TODO: This method is copied to many places consolidate in single file.
-    private String join(List<String> join, String separator) {
-        StringBuilder builder = new StringBuilder();
-
-        Iterator<String> iterator = join.iterator();
-        if (iterator.hasNext()) builder.append(iterator.next());
-        while (iterator.hasNext())
-            builder.append(separator).append(iterator.next());
-
-        return builder.toString();
     }
 }
