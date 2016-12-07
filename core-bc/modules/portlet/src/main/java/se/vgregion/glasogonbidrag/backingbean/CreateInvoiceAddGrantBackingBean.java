@@ -34,6 +34,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaExcep
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
+import se.vgregion.service.glasogonbidrag.local.api.GrantAmountLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
@@ -89,6 +90,9 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @Autowired
     private DiagnoseService diagnoseService;
+
+    @Autowired
+    private GrantAmountLookupService grantAmountLookupService;
 
     @Autowired
     private GrantService grantService;
@@ -152,7 +156,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     private PrescriptionValueObject prescriptionValueObject;
 
-    private String amount;
+    private BigDecimal amount;
 
 
     // Getter and Setters for Helpers
@@ -239,11 +243,11 @@ public class CreateInvoiceAddGrantBackingBean {
         this.latestBeneficiaryPrescription = latestBeneficiaryPrescription;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -480,14 +484,13 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void prescriptionDateListener() {
-        LOGGER.info("prescriptionDateListener(): add {} to grant {}",
-                prescriptionValueObject.getDate(), grant);
 
-        if (GRANT_TYPE_AGE_0_TO_15.equals(grantType) ||
-                GRANT_TYPE_AGE_0_TO_19.equals(grantType)) {
-            // TODO: make address check against prescriptionDate
-            LOGGER.info("prescriptionDateListener(): addressCheck=");
-        }
+        // Todo: grantableAmount should return default amount (or max amount this beneficiary may get if less than default amount). This, however, does not work.
+//        amount = grantAmountLookupService.grantableAmount(
+//                prescriptionValueObject.getDiagnose(),
+//                grant.getDeliveryDate(),
+//                prescriptionValueObject.getDate()
+//        );
 
         // Set grantFlow
         grantFlow = grantFlow.nextState();
@@ -508,6 +511,13 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void otherPrescriptionDateListener() {
         //TODO: Set values in beneficiary
+
+        amount = grantAmountLookupService.grantableAmount(
+                grant.getPrescription().getDiagnose(),
+                grant.getDeliveryDate(),
+                grant.getPrescription().getDate()
+        );
+
         grantFlow = grantFlow.nextState();
     }
 
@@ -711,7 +721,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private FacesMessage assignAmount() {
         Locale locale = facesUtil.getLocale();
 
-        if (amount == null || amount.trim().isEmpty()) {
+        if (amount == null) {
             String localizedMessage = messageSource
                     .getMessage("reg-grant-need-to-enter-amount",
                             new Object[0], locale);
@@ -723,8 +733,7 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         try {
-            BigDecimal amountDecimal = new BigDecimal(amount);
-            grant.setAmountAsKrona(amountDecimal);
+            grant.setAmountAsKrona(amount);
         } catch (NumberFormatException e) {
             String localizedMessage = messageSource
                     .getMessage("reg-grant-amount-is-not-a-number",
@@ -972,7 +981,7 @@ public class CreateInvoiceAddGrantBackingBean {
             }
         }
 
-        amount = grant.getAmountAsKrona().toString();
+        amount = grant.getAmountAsKrona();
 
         if(GRANT_TYPE_OTHER.equals(grantType)) {
             grantFlow = AddGrantFlowState.ENTER_ALL_DATA_AFTER_OTHER.getState();
@@ -1003,7 +1012,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         prescriptionValueObject = new PrescriptionValueObject();
 
-        amount = "800";
+        amount = new BigDecimal(800);
 
         tabUtil = new TabUtil(Arrays.asList(
                 IdentificationType.PERSONAL.getLanguageKey(),

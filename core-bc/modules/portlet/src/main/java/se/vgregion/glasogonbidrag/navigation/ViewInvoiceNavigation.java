@@ -40,8 +40,6 @@ public class ViewInvoiceNavigation {
         renderUrl.setParameter("_facesViewIdRender", GbConstants.VIEW_INVOICE_PAGE);
         renderUrl.setParameter("invoiceId", Long.toString(id));
 
-        LOGGER.info("navigate: {}", renderUrl.toString());
-
         return renderUrl.toString();
     }
 
