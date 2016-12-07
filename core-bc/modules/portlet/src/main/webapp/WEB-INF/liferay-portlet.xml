@@ -6,14 +6,14 @@
 <liferay-portlet-app>
 
     <portlet>
-        <portlet-name>glasogonbidrag-canceled-invoices</portlet-name>
+        <portlet-name>glasogonbidrag-create-invoice</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
     </portlet>
 
     <portlet>
-        <portlet-name>glasogonbidrag-create-invoice</portlet-name>
+        <portlet-name>glasogonbidrag-invoices-in-progress</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
