@@ -158,6 +158,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
     private BigDecimal amount;
 
+    private boolean ignoreWarnings;
+
 
     // Getter and Setters for Helpers
 
@@ -259,6 +261,14 @@ public class CreateInvoiceAddGrantBackingBean {
         this.prescriptionValueObject = prescriptionValueObject;
     }
 
+    public boolean isIgnoreWarnings() {
+        return ignoreWarnings;
+    }
+
+    public void setIgnoreWarnings(boolean ignoreWarnings) {
+        this.ignoreWarnings = ignoreWarnings;
+    }
+
     // Listeners
 
     public void identificationLMAListener() {
@@ -315,6 +325,7 @@ public class CreateInvoiceAddGrantBackingBean {
         LOGGER.info("identificationPIDListener(): localFormat={}", localFormat);
 
         FacesContext context = FacesContext.getCurrentInstance();
+        Locale locale = facesUtil.getLocale();
 
         boolean isNumberValid = personalNumberValidator.validatePersonalNumber(identificationNumber);
         System.out.println("isNumberValid: " + isNumberValid);
@@ -367,7 +378,10 @@ public class CreateInvoiceAddGrantBackingBean {
                     || grant.getMunicipality().trim().isEmpty()) {
 
                 FacesMessage message = new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR, "reg-grant-error-could-not-fetch-area", "");
+                        FacesMessage.SEVERITY_ERROR,
+                        messageSource.getMessage("reg-grant-error-could-not-fetch-area",new Object[0], locale),
+                        ""
+                );
 
                 context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
             } else {
@@ -376,7 +390,10 @@ public class CreateInvoiceAddGrantBackingBean {
             }
         } else {
             FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "reg-grant-error-not-a-valid-personal-number", "");
+                    FacesMessage.SEVERITY_ERROR,
+                    messageSource.getMessage("reg-grant-error-not-a-valid-personal-number",new Object[0], locale),
+                    ""
+            );
 
             context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
         }
@@ -1013,6 +1030,8 @@ public class CreateInvoiceAddGrantBackingBean {
         prescriptionValueObject = new PrescriptionValueObject();
 
         amount = new BigDecimal(800);
+
+        ignoreWarnings = false;
 
         tabUtil = new TabUtil(Arrays.asList(
                 IdentificationType.PERSONAL.getLanguageKey(),
