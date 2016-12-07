@@ -7,13 +7,13 @@
                 http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
     <portlet>
-        <portlet-name>glasogonbidrag-canceled-invoices</portlet-name>
-        <display-name>glasogonbidrag-canceled-invoices</display-name>
+        <portlet-name>glasogonbidrag-invoices-in-progress</portlet-name>
+        <display-name>glasogonbidrag-invoices-in-progress</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
-            <value>/views/canceled_invoices/view.xhtml</value>
+            <value>/views/invoices_in_progress/view.xhtml</value>
         </init-param>
 
         <supports>
@@ -22,9 +22,9 @@
         </supports>
 
         <portlet-info>
-            <title>glasogonbidrag-canceled-invoices</title>
-            <short-title>glasogonbidrag-canceled-invoices</short-title>
-            <keywords>glasogonbidrag-canceled-invoices</keywords>
+            <title>glasogonbidrag-invoices-in-progress</title>
+            <short-title>glasogonbidrag-invoices-in-progress</short-title>
+            <keywords>glasogonbidrag-invoices-in-progress</keywords>
         </portlet-info>
     </portlet>
 

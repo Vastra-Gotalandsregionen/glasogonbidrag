@@ -15,12 +15,12 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Component(value = "canceledInvoicesViewBackingBean")
+@Component(value = "invoicesInProgressViewBackingBean")
 @Scope(value = "request")
-public class CanceledInvoicesViewBackingBean {
+public class InvoicesInProgressViewBackingBean {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(CanceledInvoicesViewBackingBean.class);
+            LoggerFactory.getLogger(InvoicesInProgressViewBackingBean.class);
 
     @Autowired
     private InvoiceService invoiceService;
@@ -43,10 +43,13 @@ public class CanceledInvoicesViewBackingBean {
     }
 
     private void fetchInvoices(long userId) {
-        int first = 0;
-        int results = 10;
         invoices = invoiceService
                 .findAllWithStatusOrderByModificationDate(
-                        InvoiceStatus.CANCELED, first, results);
+                        InvoiceStatus.IN_PROGRESS);
+//        int first = 0;
+//        int results = 10;
+//        invoices = invoiceService
+//                .findAllWithStatusOrderByModificationDate(
+//                        InvoiceStatus.IN_PROGRESS, first, results);
     }
 }

@@ -15,7 +15,7 @@
 
     <h:body>
 
-        <c:set var="invoices" value="#{canceledInvoicesViewBackingBean.invoices}" scope="request" />
+        <c:set var="invoices" value="#{invoicesInProgressViewBackingBean.invoices}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
 
         <div class="row-fluid">
@@ -23,7 +23,7 @@
 
                 <h:form>
 
-                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['canceled-invoices']}">
+                    <gb:box collapsible="true" collapsed="false" styleClass="box-sidebar" title="#{bundle['invoices-in-progress']}">
                         <ui:fragment rendered="#{not empty invoices}">
 
                             <div class="chip-wrap">
@@ -49,7 +49,7 @@
                         </ui:fragment>
                         <ui:fragment rendered="#{empty invoices}">
                             <div class="alert alert-info">
-                                #{bundle['no-canceled-invoices-message']}
+                                #{bundle['no-invoices-in-progress-message']}
                             </div>
                         </ui:fragment>
                     </gb:box>
