@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "identification_lma")
 public class Lma extends Identification {
 
-    @Column(name = "birth_date")
+    @Column(name = "birth_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 

@@ -63,7 +63,7 @@ public class Beneficiary {
 
     // Beneficiary Specific
 
-    @Column(name = "birth_year")
+    @Column(name = "birth_year", nullable = false)
     private int birthYear;
 
     @Column(name = "full_name", nullable = false)
