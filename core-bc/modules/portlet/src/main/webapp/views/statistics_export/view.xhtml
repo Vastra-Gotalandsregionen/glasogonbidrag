@@ -25,61 +25,23 @@
 
                     <div class="statistics-filter-row">
                         <div class="statistics-filter-item">
-                            <p:outputLabel styleClass="filter-label" for="startDate" value="Från:" />
+                            <p:outputLabel styleClass="filter-label" for="startDate" value="#{bundle['from']}:" />
                             <p:calendar id="startDate"
                                         value="#{statisticsExportViewBackingBean.exportVO.startDate}"
                                         maxdate="#{statisticsExportViewBackingBean.maxDate}"
                             />
                         </div>
                         <div class="statistics-filter-item">
-                            <p:outputLabel styleClass="filter-label" for="endDate" value="Till:" />
+                            <p:outputLabel styleClass="filter-label" for="endDate" value="#{bundle['to']}:" />
                             <p:calendar id="endDate"
                                         value="#{statisticsExportViewBackingBean.exportVO.endDate}"
                                         maxdate="#{statisticsExportViewBackingBean.maxDate}"
                             />
                         </div>
-                        <ui:fragment rendered="false">
-                            <div class="statistics-filter-item">
-                                <h:outputText value="Fält för export:" />
-                                <p:selectOneButton value="#{statisticsExportViewBackingBean.exportVO.includeAllFields}">
-                                    <f:ajax listener="#{statisticsExportViewBackingBean.changeSettingsListener}"
-                                            event="change"
-                                            execute="@form"
-                                            render=":exportSettingsPanel"
-                                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-
-                                    <f:selectItem itemLabel="Inkludera alla" itemValue="true" />
-                                    <f:selectItem itemLabel="Välj fält" itemValue="false" />
-                                </p:selectOneButton>
-                            </div>
-                        </ui:fragment>
                     </div>
 
-                    <ui:fragment rendered="false">
-                        <ui:fragment rendered="#{not statisticsExportViewBackingBean.exportVO.includeAllFields}">
-                            <div class="statistics-filter-row">
-                                <h:outputText value="Välj fält:" />
-
-                                <p:selectManyCheckbox id="includedFields"
-                                                      value="#{statisticsExportViewBackingBean.exportVO.includedFields}"
-                                                      layout="responsive"
-                                                      columns="4"
-                                >
-                                    <f:selectItem itemLabel="Fält 1" itemValue="field-1" />
-                                    <f:selectItem itemLabel="Fält 2" itemValue="field-2" />
-                                    <f:selectItem itemLabel="Fält 3" itemValue="field-3" />
-                                    <f:selectItem itemLabel="Fält 4" itemValue="field-4" />
-                                    <f:selectItem itemLabel="Fält 5" itemValue="field-5" />
-                                    <f:selectItem itemLabel="Fält 6" itemValue="field-6" />
-
-                                </p:selectManyCheckbox>
-
-                            </div>
-                        </ui:fragment>
-                    </ui:fragment>
-
                     <div class="statistics-filter-button-row">
-                        <h:commandLink styleClass="link-btn primary" value="Exportera statistik">
+                        <h:commandLink styleClass="link-btn primary" value="#{bundle['export-statistics']}">
                             <f:ajax listener="#{statisticsExportViewBackingBean.exportStatistics}"
                                     execute="@form"
                                     render=":exportSettingsPanel"
