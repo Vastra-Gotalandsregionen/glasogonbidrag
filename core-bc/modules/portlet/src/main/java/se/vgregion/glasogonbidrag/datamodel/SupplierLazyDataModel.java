@@ -5,13 +5,12 @@ import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
-import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 import se.vgregion.service.glasogonbidrag.types.OrderType;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierOrder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,28 +21,10 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
     private final static Logger LOGGER =
             LoggerFactory.getLogger(SupplierLazyDataModel.class);
 
-    private final static Map<String, String> VALUE_MAP = new HashMap<>();
-    static {
-        VALUE_MAP.put("name", "s.name");
-        VALUE_MAP.put("externalServiceId", "s.externalServiceId");
-        VALUE_MAP.put("count", "COUNT(i)");
-        VALUE_MAP.put("active", "s.active");
-    }
-
-    private final static Map<String, String> FILTER_MAP = new HashMap<>();
-    static {
-        FILTER_MAP.put("yes", "TRUE");
-        FILTER_MAP.put("no", "FALSE");
-    }
-
     private final SupplierService service;
-    private final LowLevelDatabaseQueryService queryService;
 
-    public SupplierLazyDataModel(
-            SupplierService service,
-            LowLevelDatabaseQueryService queryService) {
+    public SupplierLazyDataModel(SupplierService service) {
         this.service = service;
-        this.queryService = queryService;
     }
 
     @Override
@@ -63,23 +44,22 @@ public class SupplierLazyDataModel extends LazyDataModel<SupplierDTO> {
                                   String sortField,
                                   SortOrder sortOrder,
                                   Map<String, Object> filters) {
+        SupplierFilter supplierFilter = new SupplierFilter(filters);
+        SupplierOrder supplierOrder = new SupplierOrder(
+                sortField,
+                OrderType.parse(sortOrder.toString()));
+
         List<SupplierDTO> results;
-
-        LowLevelSortOrder sort = new LowLevelSortOrder(
-                sortField, "s.id",
-                OrderType.parse(sortOrder.toString()),
-                filters,
-                VALUE_MAP, FILTER_MAP);
-
         try {
-            results = queryService.listSuppliers(sort, first, pageSize);
+            results = service.findAllFiltered(
+                    first, pageSize, supplierFilter, supplierOrder);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());
 
             results = new ArrayList<>();
         }
 
-        this.setRowCount(queryService.countSuppliers(sort));
+        this.setRowCount(service.countFiltered(supplierFilter));
 
         return results;
     }

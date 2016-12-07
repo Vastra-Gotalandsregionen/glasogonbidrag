@@ -15,8 +15,22 @@ public enum InvoiceStatus {
         this.languageKey = languageKey;
     }
 
+    public String getLanguageKey() {
+        return languageKey;
+    }
+
     @Override
     public String toString() {
         return languageKey;
+    }
+
+    public static InvoiceStatus parse(String string) {
+        for (InvoiceStatus invoiceStatus : values()) {
+            if (invoiceStatus.getLanguageKey().equals(string)) {
+                return invoiceStatus;
+            }
+        }
+
+        throw new IllegalArgumentException("Couldn't parse string " + string);
     }
 }

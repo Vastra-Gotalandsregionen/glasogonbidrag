@@ -13,7 +13,6 @@ import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 
 import javax.annotation.PostConstruct;
 
@@ -32,9 +31,6 @@ public class ManageBeneficiariesViewBackingBean {
 
     @Autowired
     private BeneficiaryService beneficiaryService;
-
-    @Autowired
-    private LowLevelDatabaseQueryService lowLevelDatabaseQueryService;
 
     private LazyDataModel<BeneficiaryDTO> lazyDataModel;
     private BeneficiaryDTO selectedBeneficiary;
@@ -60,8 +56,7 @@ public class ManageBeneficiariesViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        lazyDataModel = new BeneficiaryLazyDataModel(
-                beneficiaryService, lowLevelDatabaseQueryService);
+        lazyDataModel = new BeneficiaryLazyDataModel(beneficiaryService);
         selectedBeneficiary = null;
     }
 }

@@ -6,12 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
-import se.vgregion.service.glasogonbidrag.types.LowLevelSortOrder;
 import se.vgregion.service.glasogonbidrag.types.OrderType;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceOrder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,38 +22,19 @@ public class SupplierInvoiceLazyDataModel
     private final static Logger LOGGER =
             LoggerFactory.getLogger(SupplierInvoiceLazyDataModel.class);
 
-    private final static Map<String, String> VALUE_MAP = new HashMap<>();
-    static {
-        VALUE_MAP.put("verificationNumber", "i.verificationNumber");
-        VALUE_MAP.put("status", "i.status");
-        VALUE_MAP.put("caseWorker", "i.caseWorker");
-    }
-
-    private final static Map<String, String> FILTER_MAP = new HashMap<>();
-    static {
-        FILTER_MAP.put("invoice-status-in-progress", "IN_PROGRESS");
-        FILTER_MAP.put("invoice-status-completed", "COMPLETED");
-        FILTER_MAP.put("invoice-status-canceled", "CANCELED");
-        FILTER_MAP.put("invoice-status-replaced", "REPLACED");
-    }
-
     private final long supplierId;
-    private final InvoiceService invoiceService;
-    private final LowLevelDatabaseQueryService queryService;
+    private final InvoiceService service;
 
-    public SupplierInvoiceLazyDataModel(
-            long supplierId,
-            InvoiceService invoiceService,
-            LowLevelDatabaseQueryService queryService) {
-        this.queryService = queryService;
-        this.invoiceService = invoiceService;
+    public SupplierInvoiceLazyDataModel(long supplierId,
+                                        InvoiceService service) {
+        this.service = service;
         this.supplierId = supplierId;
     }
 
     @Override
     public SupplierInvoiceDTO getRowData(String rowKey) {
         long id = Long.parseLong(rowKey);
-        return new SupplierInvoiceDTO(invoiceService.findWithParts(id));
+        return new SupplierInvoiceDTO(service.findWithParts(id));
     }
 
     @Override
@@ -68,17 +48,15 @@ public class SupplierInvoiceLazyDataModel
                                          String sortField,
                                          SortOrder sortOrder,
                                          Map<String, Object> filters) {
+        InvoiceFilter invoiceFilter = new InvoiceFilter(filters);
+        InvoiceOrder invoiceOrder = new InvoiceOrder(
+                sortField,
+                OrderType.parse(sortOrder.toString()));
+
         List<SupplierInvoiceDTO> results;
-
-        LowLevelSortOrder sort = new LowLevelSortOrder(
-                sortField, "i.id",
-                OrderType.parse(sortOrder.toString()),
-                filters,
-                VALUE_MAP, FILTER_MAP);
-
         try {
-            results = queryService.listInvoicesForSupplier(
-                    supplierId, sort, first, pageSize);
+            results = service.findAllBySupplierFiltered(
+                    supplierId, first, pageSize, invoiceFilter, invoiceOrder);
         } catch (Exception e) {
             LOGGER.warn("Threw exception! {}", e.getMessage());
 
@@ -86,7 +64,7 @@ public class SupplierInvoiceLazyDataModel
         }
 
         this.setRowCount(
-                queryService.countInvoicesForSupplier(supplierId, sort));
+                service.countBySupplierFiltered(supplierId, invoiceFilter));
 
         return results;
     }

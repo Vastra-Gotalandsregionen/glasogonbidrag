@@ -36,7 +36,7 @@ import static se.vgregion.service.glasogonbidrag.types.query.QueryBuilderFactory
 public class StatisticReportServiceImpl implements StatisticReportService {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(LowLevelDatabaseQueryServiceImpl.class);
+            LoggerFactory.getLogger(StatisticReportServiceImpl.class);
 
     // TODO: Is this a good way to get a DataSource?
     @Resource(mappedName="jdbc/GlasogonBidragDbPool")

@@ -1,9 +1,12 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
+import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
+import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryOrder;
 
 import java.util.List;
 
@@ -27,4 +30,14 @@ public interface BeneficiaryService {
     List<Beneficiary> findAll();
 
     List<Beneficiary> findAllWithParts();
+
+    // Methods with filters
+
+    List<BeneficiaryDTO> findAllFiltered(int firstResults,
+                                         int maxResult,
+                                         BeneficiaryFilter filters,
+                                         BeneficiaryOrder order);
+
+    int countFiltered(BeneficiaryFilter filters);
+
 }

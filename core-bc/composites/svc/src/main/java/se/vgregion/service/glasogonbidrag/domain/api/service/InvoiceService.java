@@ -1,6 +1,8 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
+import se.vgregion.portal.glasogonbidrag.domain.dto.InvoiceDTO;
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
@@ -8,6 +10,8 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceOrder;
 
 import java.util.List;
 
@@ -87,4 +91,21 @@ public interface InvoiceService {
 
     List<Invoice> findAllWithStatusOrderByModificationDate(
             InvoiceStatus status, int firstResult, int maxResults);
+
+    // Methods with filters
+
+    List<InvoiceDTO> findAllFiltered(int firstResults,
+                                     int maxResult,
+                                     InvoiceFilter filters,
+                                     InvoiceOrder order);
+
+    int countFiltered(InvoiceFilter filters);
+
+    List<SupplierInvoiceDTO> findAllBySupplierFiltered(long supplierId,
+                                                       int firstResults,
+                                                       int maxResult,
+                                                       InvoiceFilter filters,
+                                                       InvoiceOrder order);
+
+    int countBySupplierFiltered(long supplierId, InvoiceFilter filters);
 }

@@ -17,7 +17,6 @@ import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
-import se.vgregion.service.glasogonbidrag.domain.api.service.LowLevelDatabaseQueryService;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 
 import javax.annotation.PostConstruct;
@@ -46,9 +45,6 @@ public class ManageSuppliersViewBackingBean {
 
     @Autowired
     private SupplierService supplierService;
-
-    @Autowired
-    private LowLevelDatabaseQueryService queryService;
 
     private SupplierLazyDataModel lazyDataModel;
     private SupplierInvoiceLazyDataModel invoiceLazyDataModel;
@@ -103,9 +99,7 @@ public class ManageSuppliersViewBackingBean {
     public void onRowSelect(SelectEvent event) {
         selectedSupplier = ((SupplierDTO) event.getObject()).getSupplier();
         invoiceLazyDataModel = new SupplierInvoiceLazyDataModel(
-                selectedSupplier.getId(), invoiceService, queryService);
-
-//        selectedSupplierInvoices = invoiceService.findAllBySupplier(selectedSupplier);
+                selectedSupplier.getId(), invoiceService);
     }
 
     public void onRowDeselect(UnselectEvent event) {
@@ -159,8 +153,7 @@ public class ManageSuppliersViewBackingBean {
         newSupplier = new Supplier();
         viewEditSupplier = facesUtil.fetchBooleanProperty("viewEditSupplier");
 
-        lazyDataModel = new SupplierLazyDataModel(
-                supplierService, queryService);
+        lazyDataModel = new SupplierLazyDataModel(supplierService);
         invoiceLazyDataModel = null;
     }
 }

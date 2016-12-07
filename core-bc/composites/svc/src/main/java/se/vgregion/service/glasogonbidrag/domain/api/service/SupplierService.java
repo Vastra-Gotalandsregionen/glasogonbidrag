@@ -1,6 +1,9 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
+import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierOrder;
 
 import java.util.List;
 
@@ -23,4 +26,11 @@ public interface SupplierService {
     List<Supplier> findAllInactive();
     List<Supplier> findAllByName(String name);
 
+    // Methods with filters
+
+    List<SupplierDTO> findAllFiltered(int firstResults,
+                                      int maxResult,
+                                      SupplierFilter filters,
+                                      SupplierOrder order);
+    int countFiltered(SupplierFilter filters);
 }
