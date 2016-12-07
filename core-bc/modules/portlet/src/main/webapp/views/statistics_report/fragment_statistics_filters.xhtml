@@ -25,46 +25,46 @@
 
                     <div class="statistics-filter-row">
                         <div class="statistics-filter-item">
-                            <p:outputLabel styleClass="filter-label" for="statisticsGrouping" value="Gruppera efter: " />
+                            <p:outputLabel styleClass="filter-label" for="statisticsGrouping" value="#{bundle['group-by']}: " />
                             <p:selectOneMenu id="statisticsGrouping" value="#{statisticsReportViewBackingBean.statisticsGrouping}">
                                 <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsGroupByListener}"
                                         event="valueChange"
                                         execute="@form"
                                         render=":statisticsFilters"
                                         onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-                                <f:selectItem itemLabel="Välj en" itemValue="" />
-                                <f:selectItem itemLabel="Kommun" itemValue="municipality" />
-                                <f:selectItem itemLabel="Födelseår" itemValue="birthday" />
-                                <f:selectItem itemLabel="Kön" itemValue="gender" />
-                                <f:selectItem itemLabel="Bidragstyp" itemValue="grantType" />
+                                <f:selectItem itemLabel="#{bundle['select']}" itemValue="" />
+                                <f:selectItem itemLabel="#{bundle['municipality']}" itemValue="municipality" />
+                                <f:selectItem itemLabel="#{bundle['birth-year']}" itemValue="birthday" />
+                                <f:selectItem itemLabel="#{bundle['gender']}" itemValue="gender" />
+                                <f:selectItem itemLabel="#{bundle['grant-type']}" itemValue="grantType" />
                             </p:selectOneMenu>
                         </div>
                         <div class="statistics-filter-item">
-                            <p:outputLabel styleClass="filter-label" for="statisticsTimePeriod" value="Tidsperiod: " />
+                            <p:outputLabel styleClass="filter-label" for="statisticsTimePeriod" value="#{bundle['time-period']}: " />
                             <p:selectOneMenu id="statisticsTimePeriod" value="#{statisticsReportViewBackingBean.statisticsTimePeriod}">
                                 <f:ajax listener="#{statisticsReportViewBackingBean.changeStatisticsFilterListener}"
                                         event="valueChange"
                                         execute="@form"
                                         render=":statisticsFilters"
                                         onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-                                <f:selectItem itemLabel="Idag" itemValue="today" />
-                                <f:selectItem itemLabel="Igår" itemValue="yesterday" />
-                                <f:selectItem itemLabel="Denna vecka" itemValue="thisWeek" />
-                                <f:selectItem itemLabel="Föregående vecka" itemValue="previousWeek" />
-                                <f:selectItem itemLabel="Denna månad" itemValue="thisMonth" />
-                                <f:selectItem itemLabel="Föregående månad" itemValue="previousMonth" />
-                                <f:selectItem itemLabel="Detta år" itemValue="thisYear" />
-                                <f:selectItem itemLabel="Föregående år" itemValue="previousYear" />
-                                <f:selectItem itemLabel="Eget intervall" itemValue="customPeriod" />
+                                <f:selectItem itemLabel="#{bundle['today']}" itemValue="today" />
+                                <f:selectItem itemLabel="#{bundle['yesterday']}" itemValue="yesterday" />
+                                <f:selectItem itemLabel="#{bundle['this-week']}" itemValue="thisWeek" />
+                                <f:selectItem itemLabel="#{bundle['previous-week']}" itemValue="previousWeek" />
+                                <f:selectItem itemLabel="#{bundle['this-month']}" itemValue="thisMonth" />
+                                <f:selectItem itemLabel="#{bundle['previous-month']}" itemValue="previousMonth" />
+                                <f:selectItem itemLabel="#{bundle['this-year']}" itemValue="thisYear" />
+                                <f:selectItem itemLabel="#{bundle['previous-year']}" itemValue="previousYear" />
+                                <f:selectItem itemLabel="#{bundle['custom-interval']}" itemValue="customPeriod" />
                             </p:selectOneMenu>
                         </div>
                         <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsTimePeriod eq 'customPeriod'}">
                             <div class="statistics-filter-item">
-                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodStartDate" value="Från:" />
+                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodStartDate" value="#{bundle['from']}:" />
                                 <p:calendar id="statisticsTimePeriodStartDate" value="#{statisticsReportViewBackingBean.statisticsTimePeriodStartDate}" />
                             </div>
                             <div class="statistics-filter-item">
-                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodEndDate" value="Till:" />
+                                <p:outputLabel styleClass="filter-label" for="statisticsTimePeriodEndDate" value="#{bundle['to']}:" />
                                 <p:calendar id="statisticsTimePeriodEndDate" value="#{statisticsReportViewBackingBean.statisticsTimePeriodEndDate}" />
                             </div>
                         </ui:fragment>
@@ -76,40 +76,49 @@
 
                             <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsGrouping ne 'gender'}">
                                 <div class="statistics-filter-item">
-                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGender" value="Kön: " />
+                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGender" value="#{bundle['gender']}: " />
                                     <p:selectOneMenu id="statisticsFilterGender" value="#{statisticsReportViewBackingBean.statisticsFilterGender}">
-                                        <f:selectItem itemLabel="Alla" itemValue="" />
-                                        <f:selectItem itemLabel="Man" itemValue="man" />
-                                        <f:selectItem itemLabel="Kvinna" itemValue="woman" />
-                                        <f:selectItem itemLabel="Uppgift saknas" itemValue="not-available" />
+                                        <f:selectItem itemLabel="#{bundle['all']}" itemValue="" />
+                                        <f:selectItem itemLabel="#{bundle['male']}" itemValue="man" />
+                                        <f:selectItem itemLabel="#{bundle['female']}" itemValue="woman" />
+                                        <f:selectItem itemLabel="#{bundle['not-available']}" itemValue="not-available" />
                                     </p:selectOneMenu>
                                 </div>
                             </ui:fragment>
 
                             <ui:fragment rendered="#{statisticsReportViewBackingBean.statisticsGrouping ne 'grantType'}">
                                 <div class="statistics-filter-item">
-                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGrantType" value="Bidragstyp: " />
+                                    <p:outputLabel styleClass="filter-label" for="statisticsFilterGrantType" value="#{bundle['grant-type']}: " />
                                     <p:selectOneMenu id="statisticsFilterGrantType" value="#{statisticsReportViewBackingBean.statisticsFilterGrantType}">
-                                        <f:selectItem itemLabel="Alla" itemValue="" />
-                                        <f:selectItem itemLabel="Barn" itemValue="children" />
-                                        <f:selectItem itemLabel="Special - Afaki" itemValue="aphakia" />
-                                        <f:selectItem itemLabel="Special - Keratokonus" itemValue="keratoconus" />
-                                        <f:selectItem itemLabel="Special - Synsvag" itemValue="special" />
+                                        <f:selectItem itemLabel="#{bundle['all']}" itemValue="" />
+                                        <f:selectItem itemLabel="#{bundle['diagnose-type-child']}" itemValue="children" />
+                                        <f:selectItem itemLabel="#{bundle['diagnose-type-aphakia']}" itemValue="aphakia" />
+                                        <f:selectItem itemLabel="#{bundle['diagnose-type-keratoconus']}" itemValue="keratoconus" />
+                                        <f:selectItem itemLabel="#{bundle['diagnose-type-special']}" itemValue="special" />
                                     </p:selectOneMenu>
                                 </div>
                             </ui:fragment>
 
                             <div class="statistics-filter-item">
-                                <p:outputLabel styleClass="filter-label" for="statisticsFilterIdentification" value="Person-ID: " />
+                                <p:outputLabel styleClass="filter-label" for="statisticsFilterIdentification" value="#{bundle['identification-type']}: " />
                                 <p:selectOneMenu id="statisticsFilterIdentification" value="#{statisticsReportViewBackingBean.statisticsFilterIdentification}">
-                                    <f:selectItem itemLabel="Alla" itemValue="" />
-                                    <f:selectItem itemLabel="Personnumer" itemValue="personalnumber" />
-                                    <f:selectItem itemLabel="Skyddad identitet" itemValue="protected" />
-                                    <f:selectItem itemLabel="Ej personnummer (LMA)" itemValue="lma" />
+                                    <f:selectItem itemLabel="#{bundle['all']}" itemValue="" />
+                                    <f:selectItem itemLabel="#{bundle['identification-type-personal']}" itemValue="personalnumber" />
+                                    <f:selectItem itemLabel="#{bundle['identification-type-protected']}" itemValue="protected" />
+                                    <f:selectItem itemLabel="#{bundle['identification-type-lma']}" itemValue="lma" />
                                 </p:selectOneMenu>
                             </div>
 
                             <div class="statistics-filter-item">
+                                <ui:remove>
+                                    <!--
+                                    Below phrases are not handled by language keys.
+                                    Reason behind this is that the current implementation used for language keys is
+                                    very basic and does not support compound phrases. Project budget does not allow
+                                    for extending the implementation at this point.
+                                    -->
+                                </ui:remove>
+
                                 <h:outputText
                                         id="statisticsFilterAgeToBirthYear"
                                         value="Födelseår från #{statisticsReportViewBackingBean.statisticsFilterBirthYearStart} till #{statisticsReportViewBackingBean.statisticsFilterBirthYearStop}" />
@@ -132,7 +141,7 @@
                     </ui:fragment>
 
                     <div class="statistics-filter-button-row">
-                        <c:set var="searchLabel" scope="request" value="#{empty statisticsReportViewBackingBean.statisticsVOs ? 'Sök' : 'Uppdatera sökning'}" />
+                        <c:set var="searchLabel" scope="request" value="#{empty statisticsReportViewBackingBean.statisticsVOs ? bundle['search'] : bundle['update-search']}" />
 
 
                         <h:commandLink styleClass="link-btn primary" value="#{searchLabel}">
