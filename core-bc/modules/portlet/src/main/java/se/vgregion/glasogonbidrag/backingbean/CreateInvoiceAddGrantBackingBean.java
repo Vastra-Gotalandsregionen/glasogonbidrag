@@ -394,18 +394,29 @@ public class CreateInvoiceAddGrantBackingBean {
     public void identificationReserveListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        String birthDateStr = identificationNumber.substring(0, 8);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Identification identification = identificationService.findByReserveumber(identificationNumber);
 
-        try {
-            Date date = sdf.parse(birthDateStr);
-            beneficiaryVO.setDateOfOBirth(date);
-        } catch (ParseException ignore) {
+        if (identification == null) {
+
+            String birthDateStr = identificationNumber.substring(0, 8);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+            try {
+                Date date = sdf.parse(birthDateStr);
+                beneficiaryVO.setDateOfOBirth(date);
+            } catch (ParseException ignore) {
+            }
+
+            identification = new Reserve(identificationNumber, beneficiaryVO.getDateOfOBirth());
+            createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
+        } else {
+            beneficiary = beneficiaryService.findWithPartsByIdent(identification);
         }
 
-        Identification identification = new Reserve(identificationNumber, beneficiaryVO.getDateOfOBirth());
+        grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
+        grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
 
-        createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
+        grant.setBeneficiary(beneficiary);
 
         // Set grantFlow
         grantFlow = grantFlow.nextState();
