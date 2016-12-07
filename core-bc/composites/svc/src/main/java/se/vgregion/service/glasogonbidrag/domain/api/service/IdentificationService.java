@@ -25,6 +25,8 @@ public interface IdentificationService {
 
     Identification findByLMANumber(String number);
 
+    Identification findByReserveumber(String number);
+
     // Utils
 
     String generateUniqueIdentificationNumber();

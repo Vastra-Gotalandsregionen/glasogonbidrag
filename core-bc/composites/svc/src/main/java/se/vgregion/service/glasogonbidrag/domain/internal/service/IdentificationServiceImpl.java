@@ -99,6 +99,20 @@ public class IdentificationServiceImpl implements IdentificationService {
         }
     }
 
+    @Override
+    public Identification findByReserveumber(String number) {
+        TypedQuery<Identification> q = em.createNamedQuery(
+                "glasogonbidrag.identification.findByReserveNumber",
+                Identification.class);
+        q.setParameter("number", number);
+
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     //String generateUniqueIdentificationNumber();
     @Override
     public String generateUniqueIdentificationNumber() {
