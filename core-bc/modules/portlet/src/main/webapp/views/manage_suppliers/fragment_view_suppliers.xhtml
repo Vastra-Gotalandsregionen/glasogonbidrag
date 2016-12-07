@@ -79,7 +79,7 @@
 
                 <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('supplierTable').filter()" >
-                        <f:selectItem itemLabel="Select status" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItem itemLabel="#{bundle['select-status']}" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{manageSuppliersViewBackingBean.filterActiveStatues}" var="status" itemLabel="#{bundle[status]}" />
                     </p:selectOneMenu>
                 </f:facet>
