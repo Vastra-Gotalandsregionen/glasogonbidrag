@@ -5,8 +5,8 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.BeneficiaryFilter;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.BeneficiaryOrder;
+import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.BeneficiaryOrder;
 
 import java.util.List;
 

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Supplier;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.SupplierFilter;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.SupplierOrder;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierOrder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

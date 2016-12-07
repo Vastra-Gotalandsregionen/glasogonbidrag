@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO;
 import se.vgregion.service.glasogonbidrag.domain.api.service.SupplierService;
 import se.vgregion.service.glasogonbidrag.types.OrderType;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.SupplierFilter;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.SupplierOrder;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.SupplierOrder;
 
 import java.util.ArrayList;
 import java.util.List;

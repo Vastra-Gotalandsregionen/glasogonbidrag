@@ -20,8 +20,8 @@ import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceFilter;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceOrder;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceOrder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

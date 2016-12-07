@@ -1,4 +1,4 @@
-package se.vgregion.service.glasogonbidrag.types.lowlevel;
+package se.vgregion.service.glasogonbidrag.types.filter;
 
 import java.util.Map;
 

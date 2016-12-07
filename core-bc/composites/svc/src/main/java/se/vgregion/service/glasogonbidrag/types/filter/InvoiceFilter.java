@@ -1,7 +1,6 @@
-package se.vgregion.service.glasogonbidrag.types.lowlevel;
+package se.vgregion.service.glasogonbidrag.types.filter;
 
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
-import se.vgregion.service.glasogonbidrag.types.OrderType;
 
 import java.util.Map;
 

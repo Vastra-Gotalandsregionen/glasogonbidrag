@@ -10,8 +10,8 @@ import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationExcep
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryIdentificationTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceBeneficiaryTuple;
 import se.vgregion.service.glasogonbidrag.types.InvoiceGrantTuple;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceFilter;
-import se.vgregion.service.glasogonbidrag.types.lowlevel.InvoiceOrder;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceFilter;
+import se.vgregion.service.glasogonbidrag.types.filter.InvoiceOrder;
 
 import java.util.List;
 
