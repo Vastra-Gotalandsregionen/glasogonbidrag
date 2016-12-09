@@ -23,12 +23,12 @@
 
     <jaxws:client id="extendedProfileClient"
                   serviceClass="se.riv.population.residentmaster.lookupresidentforextendedprofile.v1.rivtabp21.LookupResidentForExtendedProfileResponderInterface"
-                  address="https://esbtest.vgregion.se:40131/population/services/lookupResidentForExtendedProfile/v1">
+                  address="${population.service.profile.extended.address}">
     </jaxws:client>
 
     <jaxws:client id="fullProfileClient"
                   serviceClass="se.riv.population.residentmaster.lookupresidentforfullprofile.v1.rivtabp21.LookupResidentForFullProfileResponderInterface"
-                  address="https://esbtest.vgregion.se:40131/population/services/lookupResidentForFullProfile/v1">
+                  address="${population.service.profile.full.address}">
     </jaxws:client>
 
     <cxf:bus>
@@ -49,6 +49,7 @@
 
     <!-- The name of each <http:conduit> configuration is matched to the url used by CXF RS. -->
     <!-- The name value containing the URL pattern can NOT be loaded from a property file -->
+    <!-- Test -->
     <http:conduit name="https://esbtest.vgregion.se:40131/.*">
         <http:tlsClientParameters disableCNCheck="true" >
             <sec:keyManagers keyPassword="${population.service.keystore.password}">
@@ -61,6 +62,27 @@
                 <sec:keyStore file="${population.service.truststore}" password="${population.service.truststore.pasword}" type="jks" />
             </sec:trustManagers>
         </http:tlsClientParameters>
+    </http:conduit>
+
+    <!-- The name of each <http:conduit> configuration is matched to the url used by CXF RS. -->
+    <!-- The name value containing the URL pattern can NOT be loaded from a property file -->
+    <!-- Prod -->
+    <http:conduit name="https://esb.vgregion.se:40131/.*">
+        <http:tlsClientParameters disableCNCheck="true" >
+            <sec:keyManagers keyPassword="${population.service.keystore.password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${population.service.keystore.password}"
+                        file="${population.service.keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore file="${population.service.truststore}" password="${population.service.truststore.pasword}" type="jks" />
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
+
+    <http:conduit name="*">
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"/>
     </http:conduit>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
