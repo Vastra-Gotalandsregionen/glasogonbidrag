@@ -9,7 +9,6 @@ import se.riv.population.residentmaster.lookupresidentforextendedprofileresponde
 import se.riv.population.residentmaster.lookupresidentforextendedprofileresponder.v1.LookupResidentForExtendedProfileType;
 import se.riv.population.residentmaster.lookupresidentforfullprofileresponder.v1.LookUpSpecificationType;
 import se.riv.population.residentmaster.v1.JaNejTYPE;
-import se.riv.population.residentmaster.v1.KonTYPE;
 import se.riv.population.residentmaster.v1.NamnTYPE;
 import se.riv.population.residentmaster.v1.PersonpostTYPE;
 import se.riv.population.residentmaster.v1.SvenskAdressTYPE;
@@ -22,6 +21,7 @@ import se.vgregion.service.glasogonbidrag.types.BeneficiaryAreaTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryNameTuple;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryTransport;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -34,9 +34,12 @@ import java.util.regex.Pattern;
 @Service
 public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
-    private SimpleDateFormat dateFormat;
+    private static final DateFormat FORMAT =
+            new SimpleDateFormat("yyyyMMddhhmmss");
+    private static final String PROTECTED_NAME = "XXXXXX XXXXXX";
 
-    private Pattern IDENTITY_FORMAT_PATTERN = Pattern.compile("[0-9]{12}");
+    private static final Pattern IDENTITY_FORMAT_PATTERN =
+            Pattern.compile("[0-9]{12}");
 
     @Autowired
     private PersonalNumberService personalNumberService;
@@ -45,7 +48,6 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     private LookupResidentForExtendedProfileResponderInterface profileClient;
 
     public BeneficiaryLookupServiceImpl() {
-        dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
     }
 
     @Override
@@ -59,10 +61,10 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
         LookupResidentForExtendedProfileResponseType response =
                 profileClient.lookupResidentForExtendedProfile(
-                        "", generateRequest(identity, date));
+                        "", createRequest(identity, date));
 
         return new BeneficiaryTransport(
-        extractDataFromResponse(response),
+                extractDataFromResponse(response),
                 extractAreaFromRequest(response));
     }
 
@@ -76,14 +78,14 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
         LookupResidentForExtendedProfileResponseType response =
                 profileClient.lookupResidentForExtendedProfile(
-                        "", generateRequest(identity));
+                        "", createRequest(identity, null));
 
         return extractDataFromResponse(response);
     }
 
     @Override
     public BeneficiaryAreaTuple fetchAddress(String identity,
-                                                 Date date) {
+                                             Date date) {
         if (!validateIdentity(identity)) {
             throw new IdentityFormatException(
                     "The format of the identity must be twelve numbers " +
@@ -92,7 +94,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
         LookupResidentForExtendedProfileResponseType response =
                 profileClient.lookupResidentForExtendedProfile(
-                        "", generateRequest(identity, date));
+                        "", createRequest(identity, date));
 
         return extractAreaFromRequest(response);
     }
@@ -113,25 +115,15 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
     }
 
     /**
-     * Fetches data from beneficiary with specified identity.
-     *
-     * @param identity to fetch data for.
-     * @return Request for the specified identity.
-     */
-    public LookupResidentForExtendedProfileType generateRequest(
-            String identity) {
-        return generateRequest(identity, null);
-    }
-
-    /**
      * Fetches data from beneficiary with specified identity, at a historical
      * time.
      *
      * @param identity to fetch data for.
      * @param date request data from this historic time, must be in the past.
+     *             to request current information send null.
      * @return Request for the specified identity at specified date.
      */
-    public LookupResidentForExtendedProfileType generateRequest(
+    public LookupResidentForExtendedProfileType createRequest(
             String identity, Date date) {
         LookupResidentForExtendedProfileType request =
                 new LookupResidentForExtendedProfileType();
@@ -140,7 +132,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
         if (date != null) {
             LookUpSpecificationType spec = new LookUpSpecificationType();
 
-            spec.setHistoriskTidpunkt(dateFormat.format(date));
+            spec.setHistoriskTidpunkt(FORMAT.format(date));
 
             request.setLookUpSpecification(spec);
         }
@@ -159,68 +151,58 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      */
     private BeneficiaryNameTuple extractDataFromResponse(
             LookupResidentForExtendedProfileResponseType response) {
-        ExtendedResidentType resident = getResident(response);
+        List<ExtendedResidentType> residentTypes = response.getResident();
 
-        if (resident.getSekretessmarkering() == JaNejTYPE.N) {
-            return extractDataFromResponse(resident.getPersonpost());
-        } else {
-            return createNameForProtected();
+        if (residentTypes.size() < 1) {
+            throw new NoBeneficiaryFoundException(
+                    "No resident with supplied id.");
+        } else if (residentTypes.size() > 1) {
+            throw new NoBeneficiaryFoundException(
+                    "Found more than one resident.");
         }
-    }
 
-    /**
-     * Extract name and sex from response.
-     *
-     * @param person PersonpostTYPE from the response.
-     * @return first and last name of a person.
-     */
-    private BeneficiaryNameTuple extractDataFromResponse(
-            PersonpostTYPE person) {
+        ExtendedResidentType resident = residentTypes.get(0);
+
+        if (resident.getSekretessmarkering() == JaNejTYPE.J) {
+            // A Beneficiary have only a name of Xs
+            return new BeneficiaryNameTuple(PROTECTED_NAME);
+        }
+
+        PersonpostTYPE person = resident.getPersonpost();
+
         NamnTYPE name = person.getNamn();
 
-        return new BeneficiaryNameTuple(
-                String.format("%s %s",
-                        extractName(name.getFornamn(), ""),
-                        extractName(name.getEfternamn(), "")).trim(),
-                extractSexFromResponse(person));
-    }
+        String nameString = "";
+        if (name != null) {
+            String firstName = name.getFornamn();
+            String lastName = name.getEfternamn();
+            if (firstName == null) {
+                firstName = "";
+            }
 
-    /**
-     * extract sex from response.
-     *
-     * @param person person to fetch sex from.
-     * @return return sex as SexType.
-     */
-    private SexType extractSexFromResponse(PersonpostTYPE person) {
-        KonTYPE kon = person.getKon();
-        if (kon == KonTYPE.M) return SexType.MALE;
-        else if (kon == KonTYPE.K) return SexType.FEMALE;
-        else return null;
-    }
+            if (lastName == null) {
+                lastName = "";
+            }
 
-    /**
-     * Will return default string if value is null.
-     *
-     * @param name name to use, if this is null use defaultNameValue
-     * @param defaultNameValue default value.
-     * @return A string that isn't null
-     */
-    private String extractName(String name, String defaultNameValue) {
-        if(name == null) {
-            return defaultNameValue;
-        } else {
-            return name;
+            nameString = String.format("%s %s", firstName, lastName).trim();
         }
-    }
 
-    /**
-     * If the beneficiary have protected status, we cannot get a name
-     * from the response, create a crossed out name for this user.
-     *
-     * @return a beneficiary name transport with just crosses.
-     */
-    private BeneficiaryNameTuple createNameForProtected() {
-        return new BeneficiaryNameTuple("XXXXXX XXXXXX");
+        SexType sex;
+        if (person.getKon() == null) {
+            sex = SexType.UNKNOWN;
+        } else switch (person.getKon()) {
+            case M:
+                sex = SexType.MALE;
+                break;
+            case K:
+                sex = SexType.FEMALE;
+                break;
+            default:
+                sex = SexType.UNKNOWN;
+                break;
+        }
+
+        return new BeneficiaryNameTuple(nameString, sex);
     }
 
     /**
@@ -236,66 +218,8 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
      */
     private BeneficiaryAreaTuple extractAreaFromRequest(
             LookupResidentForExtendedProfileResponseType response) {
-        ExtendedResidentType resident = getResident(response);
-        AdministrativIndelningType registeredAddress =
-                resident.getFolkbokforingsaddressIndelning();
-
-
-        if (registeredAddress.getDebiteringsgruppKod() == null) {
-            return extractAreaFromRequest(resident);
-        } else {
-            return createAreaFromAccountCode(
-                    registeredAddress.getDebiteringsgruppKod());
-        }
-    }
-
-    /**
-     * The registered address contains the county and municipality
-     * codes used, this method extract these from the resident object.
-     *
-     * @param resident resident object from the response.
-     * @return Area transport with the beneficiary's county code
-     *         and municipality code.
-     */
-    private BeneficiaryAreaTuple extractAreaFromRequest(
-            ExtendedResidentType resident) {
-        SvenskAdressTYPE address = resident
-                .getPersonpost().getFolkbokforingsadress();
-
-        return new BeneficiaryAreaTuple(
-                address.getKommunKod(), address.getLanKod());
-    }
-
-    /**
-     * If the beneficiary have a account code we should use this instead
-     * of the registered address.
-     *
-     * @return the account code split in two.
-     */
-    private BeneficiaryAreaTuple createAreaFromAccountCode(
-            String accountCode) {
-        return new BeneficiaryAreaTuple(
-                accountCode.substring(2),
-                accountCode.substring(0, 2));
-    }
-
-    /**
-     * Make sure we only have one resident from the response.
-     * One can ask for more than one resident via the LookupResidentFor*
-     * service, in our service we just want to ask for single residents.
-     *
-     * To simplify the interfaces this methods will make sure that we only
-     * use this service in this way.
-     *
-     * @param response A response from the lookupResident service with
-     *                 Extended Profile support.
-     * @return ExtendedResidentType if there is only one.
-     * @throws NoBeneficiaryFoundException
-     *         Will be thrown if we have more than one ResidentType.
-     */
-    private ExtendedResidentType getResident(
-            LookupResidentForExtendedProfileResponseType response) {
         List<ExtendedResidentType> residentTypes = response.getResident();
+
         if (residentTypes.size() < 1) {
             throw new NoBeneficiaryFoundException(
                     "No resident with supplied id.");
@@ -304,6 +228,26 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                     "Found more than one resident.");
         }
 
-        return residentTypes.get(0);
+        ExtendedResidentType resident = residentTypes.get(0);
+
+        String municipalityCode;
+        String countyCode;
+        if (resident.getFolkbokforingsaddressIndelning() != null &&
+                resident.getFolkbokforingsaddressIndelning()
+                        .getDebiteringsgruppKod() != null) {
+            String accountCode = resident.getFolkbokforingsaddressIndelning()
+                    .getDebiteringsgruppKod();
+
+            municipalityCode = accountCode.substring(2);
+            countyCode = accountCode.substring(0, 2);
+        } else {
+            SvenskAdressTYPE address = resident
+                    .getPersonpost().getFolkbokforingsadress();
+
+            municipalityCode = address.getLanKod();
+            countyCode = address.getKommunKod();
+        }
+
+        return new BeneficiaryAreaTuple(municipalityCode, countyCode);
     }
 }

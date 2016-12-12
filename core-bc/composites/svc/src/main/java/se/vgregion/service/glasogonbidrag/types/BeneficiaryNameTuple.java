@@ -11,10 +11,11 @@ public class BeneficiaryNameTuple {
     private SexType sex;
 
     public BeneficiaryNameTuple() {
+        this("", SexType.UNKNOWN);
     }
 
     public BeneficiaryNameTuple(String fullName) {
-        this.fullName = fullName;
+        this(fullName, SexType.UNKNOWN);
     }
 
     public BeneficiaryNameTuple(String fullName, SexType sex) {
