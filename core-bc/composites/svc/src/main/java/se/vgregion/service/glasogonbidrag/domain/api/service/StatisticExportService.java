@@ -22,5 +22,5 @@ import java.util.Date;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface StatisticExportService {
-    ByteArrayOutputStream export(Date start, Date end) throws IOException;
+    byte[] export(Date start, Date end) throws IOException;
 }
