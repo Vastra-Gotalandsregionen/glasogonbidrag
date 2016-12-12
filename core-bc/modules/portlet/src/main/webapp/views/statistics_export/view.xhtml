@@ -79,12 +79,13 @@
                     </ui:fragment>
 
                     <div class="statistics-filter-button-row">
-                        <h:commandLink styleClass="link-btn primary" value="Exportera statistik">
-                            <f:ajax listener="#{statisticsExportViewBackingBean.exportStatistics}"
-                                    execute="@form"
-                                    render=":exportSettingsPanel"
-                                    onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-                        </h:commandLink>
+                        <h:outputLink styleClass="link-btn primary" value="#{statisticsExportViewBackingBean.exportStatisticsUrl()}">
+                            <ui:remove>
+                                <!--<f:param name="endDate" value="#{statisticsExportViewBackingBean.exportVO.endDate}" />-->
+                                <!--<f:param name="startDate" value="#{statisticsExportViewBackingBean.exportVO.startDate}" />-->
+                            </ui:remove>
+                            Exportera statistik
+                        </h:outputLink>
                     </div>
 
 
