@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @author Martin Lind
+ * @author Martin Lind - Monator Technologies AB
  */
 public class StatisticReportResource extends Resource {
     private static final Logger LOGGER =

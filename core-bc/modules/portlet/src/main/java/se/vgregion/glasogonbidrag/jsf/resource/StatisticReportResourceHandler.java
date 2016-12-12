@@ -1,17 +1,13 @@
 package se.vgregion.glasogonbidrag.jsf.resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportService;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ResourceHandlerWrapper;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
- * @author Martin Lind
+ * @author Martin Lind - Monator Technologies AB
  */
 @Component
 public class StatisticReportResourceHandler extends ResourceHandlerWrapper {
