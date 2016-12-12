@@ -5,7 +5,8 @@ package se.vgregion.portal.glasogonbidrag.domain;
  */
 public enum SexType {
     MALE("sex-male"),
-    FEMALE("sex-female");
+    FEMALE("sex-female"),
+    UNKNOWN("sex-unknown");
 
     private final String key;
 
