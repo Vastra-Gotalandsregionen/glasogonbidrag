@@ -16,6 +16,9 @@
             <default-locale>en_US</default-locale>
             <supported-locale>sv_SE</supported-locale>
         </locale-config>
+        <resource-handler>se.vgregion.glasogonbidrag.jsf.resource.StatisticReportResourceHandler</resource-handler>
     </application>
+
+
 
 </faces-config>
