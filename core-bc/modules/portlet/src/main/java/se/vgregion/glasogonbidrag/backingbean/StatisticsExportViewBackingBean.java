@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.jsf.resource.StatisticReportResource;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.viewobject.ExportVO;
+import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportService;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,13 +22,8 @@ import java.util.Date;
 @Component(value = "statisticsExportViewBackingBean")
 @Scope(value = "view", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class StatisticsExportViewBackingBean {
-
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticsExportViewBackingBean.class);
-
-    @Autowired
-    private FacesUtil facesUtil;
 
     // Attributes
 
@@ -35,8 +33,8 @@ public class StatisticsExportViewBackingBean {
 
     private ExportVO exportVO;
 
-    // Getters and setters
 
+    // Getters and setters
 
     public Date getMaxDate() {
         return maxDate;
@@ -62,14 +60,26 @@ public class StatisticsExportViewBackingBean {
         this.exportVO = exportVO;
     }
 
+
     // Listeners
 
     public void changeSettingsListener() {
     }
 
+
     // Actions
+
     public void exportStatistics() {
-        LOGGER.info("exportStatistics");
+        LOGGER.trace("exportStatistics - Do nothing.");
+    }
+
+    public String exportStatisticsUrl() throws IOException {
+        LOGGER.trace("exportStatistics - URL");
+
+        StatisticReportResource resource =
+                new StatisticReportResource(minDate, maxDate);
+
+        return resource.getRequestPath();
     }
 
 

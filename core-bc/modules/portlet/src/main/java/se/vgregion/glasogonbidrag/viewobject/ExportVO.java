@@ -1,12 +1,14 @@
 package se.vgregion.glasogonbidrag.viewobject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Erik Andersson - Monator Technologies AB
  */
 public class ExportVO {
+    private static final SimpleDateFormat FORMAT =
+            new SimpleDateFormat("yyyyMMdd");
 
     // Attributes
 
@@ -39,6 +41,22 @@ public class ExportVO {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public String getStartDateString() {
+        if (startDate != null) {
+            return FORMAT.format(startDate);
+        }
+
+        return null;
+    }
+
+    public String getEndDateString() {
+        if (endDate != null) {
+            return FORMAT.format(endDate);
+        }
+
+        return null;
     }
 
     public boolean isIncludeAllFields() {

@@ -29,6 +29,7 @@
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierDTO</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.SupplierInvoiceDTO</class>
         <class>se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO</class>
+        <class>se.vgregion.portal.glasogonbidrag.domain.dto.StatisticExportDTO</class>
 
         <properties>
             <property name="hibernate.format_sql" value="true" />
