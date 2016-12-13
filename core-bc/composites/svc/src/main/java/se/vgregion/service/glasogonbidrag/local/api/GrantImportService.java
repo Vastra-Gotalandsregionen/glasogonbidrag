@@ -1,4 +1,4 @@
-package se.vgregion.service.glasogonbidrag.domain.api.service;
+package se.vgregion.service.glasogonbidrag.local.api;
 
 /**
  * @author Martin Lind - Monator Technologies AB

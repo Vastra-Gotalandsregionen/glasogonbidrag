@@ -1,7 +1,7 @@
-package se.vgregion.service.glasogonbidrag.domain.internal.service;
+package se.vgregion.service.glasogonbidrag.local.internal;
 
 import org.springframework.stereotype.Service;
-import se.vgregion.service.glasogonbidrag.domain.api.service.GrantImportService;
+import se.vgregion.service.glasogonbidrag.local.api.GrantImportService;
 
 /**
  * @author Martin Lind - Monator Technologies AB
