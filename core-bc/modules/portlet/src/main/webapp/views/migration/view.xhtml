@@ -13,6 +13,11 @@
     <h:head />
 
     <h:body>
-        <h1>Migration!</h1>
+        <h1>Upload Excel file to migrate</h1>
+        <h:form enctype="multipart/form-data">
+            <h:inputFile value="#{migrationViewBackingBean.file}">
+                <f:ajax listener="#{migrationViewBackingBean.save}" />
+            </h:inputFile>
+        </h:form>
     </h:body>
 </f:view>
