@@ -543,11 +543,11 @@ public class CreateInvoiceAddGrantBackingBean {
     public void otherPrescriptionDateListener() {
         //TODO: Set values in beneficiary
 
-        amount = grantAmountLookupService.grantableAmount(
-                grant.getPrescription().getDiagnose(),
-                grant.getDeliveryDate(),
-                grant.getPrescription().getDate()
-        );
+//        amount = grantAmountLookupService.grantableAmount(
+//                grant.getPrescription().getDiagnose(),
+//                grant.getDeliveryDate(),
+//                grant.getPrescription().getDate()
+//        );
 
         grantFlow = grantFlow.nextState();
     }
