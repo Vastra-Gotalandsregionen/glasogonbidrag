@@ -48,6 +48,13 @@
     </portlet>
 
     <portlet>
+        <portlet-name>glasogonbidrag-migration</portlet-name>
+        <instanceable>false</instanceable>
+        <requires-namespaced-parameters>false</requires-namespaced-parameters>
+        <css-class-wrapper>glasogonbidrag-portlet</css-class-wrapper>
+    </portlet>
+
+    <portlet>
         <portlet-name>glasogonbidrag-statistics-dashboard</portlet-name>
         <instanceable>false</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
