@@ -20,6 +20,7 @@ import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Other;
@@ -528,7 +529,14 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void changePrescriptionTypeListener() {
-        // Don't do anything.
+        LOGGER.info("changePrescriptionTypeListener");
+
+        // If no laterality is set. Set to bilateral
+        VisualLaterality laterality = prescriptionValueObject.getLaterality();
+
+        if(laterality.equals(null) || laterality.equals(VisualLaterality.NONE)) {
+            prescriptionValueObject.setLaterality(VisualLaterality.BILATERAL);
+        }
     }
 
     public void changeVisualLateralityListener() {
