@@ -238,16 +238,16 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
             String accountCode = resident.getFolkbokforingsaddressIndelning()
                     .getDebiteringsgruppKod();
 
-            municipalityCode = accountCode.substring(2);
             countyCode = accountCode.substring(0, 2);
+            municipalityCode = accountCode.substring(2);
         } else {
             SvenskAdressTYPE address = resident
                     .getPersonpost().getFolkbokforingsadress();
 
-            municipalityCode = address.getLanKod();
-            countyCode = address.getKommunKod();
+            countyCode = address.getLanKod();
+            municipalityCode = address.getKommunKod();
         }
 
-        return new BeneficiaryAreaTuple(municipalityCode, countyCode);
+        return new BeneficiaryAreaTuple(countyCode, municipalityCode);
     }
 }
