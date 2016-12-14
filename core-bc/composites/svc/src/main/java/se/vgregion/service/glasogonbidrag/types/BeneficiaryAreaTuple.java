@@ -10,9 +10,9 @@ public class BeneficiaryAreaTuple {
     public BeneficiaryAreaTuple() {
     }
 
-    public BeneficiaryAreaTuple(String municipality, String county) {
-        this.municipality = municipality;
+    public BeneficiaryAreaTuple(String county, String municipality) {
         this.county = county;
+        this.municipality = municipality;
     }
 
     public String getCounty() {
