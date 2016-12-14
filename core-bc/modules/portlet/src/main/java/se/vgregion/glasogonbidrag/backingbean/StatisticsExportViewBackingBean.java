@@ -13,6 +13,7 @@ import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportServ
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -76,8 +77,15 @@ public class StatisticsExportViewBackingBean {
     public String exportStatisticsUrl() throws IOException {
         LOGGER.trace("exportStatistics - URL");
 
+        Date startDate = exportVO.getStartDate();
+        Date endDate = exportVO.getEndDate();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateStr = sdf.format(startDate);
+        String endDateStr = sdf.format(endDate);
+
         StatisticReportResource resource =
-                new StatisticReportResource(minDate, maxDate);
+                new StatisticReportResource(startDate, endDate);
 
         return resource.getRequestPath();
     }

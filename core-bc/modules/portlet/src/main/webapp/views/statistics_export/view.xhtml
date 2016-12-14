@@ -29,14 +29,26 @@
                             <p:calendar id="startDate"
                                         value="#{statisticsExportViewBackingBean.exportVO.startDate}"
                                         maxdate="#{statisticsExportViewBackingBean.maxDate}"
-                            />
+                            >
+                                <f:ajax listener="#{statisticsExportViewBackingBean.changeSettingsListener}"
+                                        event="dateSelect"
+                                        execute="@form"
+                                        render=":exportSettingsPanel"
+                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                            </p:calendar>
                         </div>
                         <div class="statistics-filter-item">
                             <p:outputLabel styleClass="filter-label" for="endDate" value="#{bundle['to']}:" />
                             <p:calendar id="endDate"
                                         value="#{statisticsExportViewBackingBean.exportVO.endDate}"
                                         maxdate="#{statisticsExportViewBackingBean.maxDate}"
-                            />
+                            >
+                                <f:ajax listener="#{statisticsExportViewBackingBean.changeSettingsListener}"
+                                        event="dateSelect"
+                                        execute="@form"
+                                        render=":exportSettingsPanel"
+                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                            </p:calendar>
                         </div>
                     </div>
 
@@ -52,7 +64,7 @@
                         </ui:remove>
 
                         <h:outputLink styleClass="link-btn primary" value="#{statisticsExportViewBackingBean.exportStatisticsUrl()}">
-                            bundle['export-statistics']
+                            <h:outputText value="${bundle['export-statistics']}" />
                         </h:outputLink>
                     </div>
 
