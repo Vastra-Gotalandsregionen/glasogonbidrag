@@ -1,20 +1,28 @@
 package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticExportDTO;
+import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportService;
+import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +35,16 @@ public class StatisticExportServiceImpl implements StatisticExportService {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticExportServiceImpl.class);
 
+    private static final SimpleDateFormat FORMAT_DATE =
+            new SimpleDateFormat("yyyyMMdd");
+
+    @Autowired
+    private AreaCodeLookupService areaCodeLookupService;
+
+    private final KronaCalculationUtil kronaCalculationUtil =
+            new KronaCalculationUtil();
+
+
     @PersistenceContext
     private EntityManager em;
 
@@ -34,7 +52,8 @@ public class StatisticExportServiceImpl implements StatisticExportService {
     public byte[] export(Date start, Date end)
             throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Export");
+        String sheetName = FORMAT_DATE.format(start) + "-" + FORMAT_DATE.format(end);
+        XSSFSheet sheet = workbook.createSheet(sheetName);
 
         List<StatisticExportDTO> exportData = getData(start, end);
 
@@ -46,45 +65,56 @@ public class StatisticExportServiceImpl implements StatisticExportService {
             Row row = sheet.createRow(rowIndex);
             int cellIndex = 0;
 
+
             Cell cell = row.createCell(cellIndex);
-            cell.setCellValue("belopp");
+            cell.setCellValue("Belopp");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("kön");
+            cell.setCellValue("Kön");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("diagnose type");
+            cell.setCellValue("Diagnostyp");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("födelse datum");
+            cell.setCellValue("Födelsedatum");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("kvitterings datum");
+            cell.setCellValue("Kvitteringsdatum");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("skapades");
+            cell.setCellValue("Skapades");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("län");
+            cell.setCellValue("Län");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("kommun");
+            cell.setCellValue("Kommun");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("ansvars kod");
+            cell.setCellValue("Ansvarskod");
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("fri kod");
+            cell.setCellValue("Frikod");
         }
+
+        CreationHelper creationHelper = workbook.getCreationHelper();
+
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        short dateDataFormat = creationHelper.createDataFormat().getFormat("yyyy-MM-dd");
+        dateCellStyle.setDataFormat(dateDataFormat);
+
+        CellStyle numberCellStyle = workbook.createCellStyle();
+        short numberDataFormat = creationHelper.createDataFormat().getFormat("0");
+        numberCellStyle.setDataFormat(numberDataFormat);
 
         for (StatisticExportDTO exportRow : exportData) {
             rowIndex = rowIndex + 1;
@@ -94,15 +124,20 @@ public class StatisticExportServiceImpl implements StatisticExportService {
 
             Cell cell;
 
+            long amount = exportRow.getAmount();
+            BigDecimal amountAsKrona = kronaCalculationUtil.calculatePartsAsKrona(amount);
+            long amountRounded = amountAsKrona.setScale(0, RoundingMode.HALF_UP).longValue();
+
             cell = row.createCell(cellIndex);
-            cell.setCellValue(exportRow.getAmount());
+            cell.setCellValue(amountRounded);
+            cell.setCellStyle(numberCellStyle);
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
             if (exportRow.getSex() != null) {
                 cell.setCellValue(exportRow.getSex().toString());
             } else {
-                cell.setCellValue("okänt");
+                cell.setCellValue("n/a");
             }
             cellIndex = cellIndex + 1;
 
@@ -112,22 +147,40 @@ public class StatisticExportServiceImpl implements StatisticExportService {
 
             cell = row.createCell(cellIndex);
             cell.setCellValue(exportRow.getBirthDate());
+            cell.setCellStyle(dateCellStyle);
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
             cell.setCellValue(exportRow.getDeliveryDate());
+            cell.setCellStyle(dateCellStyle);
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
             cell.setCellValue(exportRow.getCreateDate());
+            cell.setCellStyle(dateCellStyle);
             cellIndex = cellIndex + 1;
 
-            cell = row.createCell(cellIndex);
-            cell.setCellValue(exportRow.getCounty());
-            cellIndex = cellIndex + 1;
+
+            String countyCode = exportRow.getCounty();
+            String countyFriendlyName = areaCodeLookupService.lookupCountyFromCode(countyCode);
+            if(countyFriendlyName == null || countyFriendlyName.isEmpty()) {
+                countyFriendlyName = "n/a";
+            }
+            //String countyFriendlyName = countyCode;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue(exportRow.getMunicipality());
+            cell.setCellValue(countyFriendlyName);
+            cellIndex = cellIndex + 1;
+
+            String municipalityCode = exportRow.getCounty() + exportRow.getMunicipality();
+            String municipalityFriendlyName = areaCodeLookupService.lookupMunicipalityFromCode(municipalityCode);
+            if(municipalityFriendlyName == null || municipalityFriendlyName.isEmpty()) {
+                municipalityFriendlyName = "n/a";
+            }
+            //String municipalityFriendlyName = municipalityCode;
+
+            cell = row.createCell(cellIndex);
+            cell.setCellValue(municipalityFriendlyName);
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
