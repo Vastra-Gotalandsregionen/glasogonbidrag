@@ -3,6 +3,7 @@ package se.vgregion.glasogonbidrag.backingbean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ import java.util.Date;
 public class StatisticsExportViewBackingBean {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticsExportViewBackingBean.class);
+
+    @Autowired
+    private MessageSource messageSource;
 
     // Attributes
 

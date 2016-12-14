@@ -2,6 +2,7 @@ package se.vgregion.glasogonbidrag.jsf.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import se.vgregion.service.glasogonbidrag.domain.api.service.StatisticExportService;
 import se.vgregion.service.glasogonbidrag.local.internal.StaticApplicationContext;
 
@@ -18,10 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -42,6 +40,8 @@ public class StatisticReportResource extends Resource {
 
     private String requestPath = null;
 
+    private MessageSource messageSource;
+
     private StatisticExportService service;
 
     private Date startDate = null;
@@ -55,16 +55,19 @@ public class StatisticReportResource extends Resource {
 
         service = StaticApplicationContext
                 .getContext().getBean(StatisticExportService.class);
+
+        messageSource = StaticApplicationContext
+                .getContext().getBean(MessageSource.class);
     }
 
     public StatisticReportResource(Date start, Date end) {
+        this.startDate = start;
+        this.endDate = end;
+
         setResourceName(generateFileName());
         setLibraryName(StatisticReportResourceHandler.LIBRARY_NAME);
 
         setContentType(EXCEL_MIME_TYPE);
-
-        this.startDate = start;
-        this.endDate = end;
     }
 
     /**
@@ -170,7 +173,12 @@ public class StatisticReportResource extends Resource {
     }
 
     private String generateFileName() {
-        return "export-" + generateHash() + ".xlsx";
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+        Calendar cal = new GregorianCalendar();
+        Date now = cal.getTime();
+
+        return "gb_export_" + dateTimeFormat.format(now) + ".xlsx";
     }
 
     private String generateHash() {
@@ -194,7 +202,7 @@ public class StatisticReportResource extends Resource {
 
         String digest = byteArrayToHexString(md.digest(uuidBytes));
 
-        return digest.substring(0, 10).toLowerCase();
+        return digest.substring(0, 5).toLowerCase();
     }
 
     private static String byteArrayToHexString(byte[] b) {

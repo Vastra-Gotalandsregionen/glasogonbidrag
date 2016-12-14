@@ -298,6 +298,9 @@ public class CreateInvoiceAddGrantBackingBean {
             identification = new Lma(identificationNumber, beneficiaryVO.getDateOfOBirth());
         } else {
             beneficiary = beneficiaryService.findWithPartsByIdent(identification);
+
+            latestBeneficiaryPrescription = prescriptionService
+                    .findLatest(beneficiary);
         }
 
         if (beneficiary == null) {
@@ -447,6 +450,9 @@ public class CreateInvoiceAddGrantBackingBean {
             createBeneficiaryWithoutPersonalNumber(identification, beneficiaryVO);
         } else {
             beneficiary = beneficiaryService.findWithPartsByIdent(identification);
+
+            latestBeneficiaryPrescription = prescriptionService
+                    .findLatest(beneficiary);
         }
 
         grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
@@ -806,15 +812,6 @@ public class CreateInvoiceAddGrantBackingBean {
             prescriptionValueObject.patchPrescription(grant.getPrescription());
         }
 
-        // Set free code and responsibility to the grant.
-        int freeCode = accountingDistributionCalculationService
-                .lookupFreeCode(grant);
-        int responsibility = accountingDistributionCalculationService
-                .lookupResponsibility(grant);
-
-        grant.setFreeCode(freeCode);
-        grant.setResponsibility(responsibility);
-
         // TODO: Should we move code that set relation from grant to prescription here?
 
         beneficiary.getGrants().add(grant);
@@ -833,7 +830,16 @@ public class CreateInvoiceAddGrantBackingBean {
                 messages.add(new FacesMessage(
                         FacesMessage.SEVERITY_ERROR, localizedMessage, ""));
             }
-        } else {}
+        } else {
+            // Set free code and responsibility to the grant.
+            int freeCode = accountingDistributionCalculationService
+                    .lookupFreeCode(grant);
+            int responsibility = accountingDistributionCalculationService
+                    .lookupResponsibility(grant);
+
+            grant.setFreeCode(freeCode);
+            grant.setResponsibility(responsibility);
+        }
 
         if(!ignoreWarnings && result.hasWarnings()) {
             hasWarnings = true;

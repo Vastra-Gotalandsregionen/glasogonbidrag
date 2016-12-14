@@ -75,7 +75,7 @@ import java.util.Date;
                         "   StatisticExportDTO(" +
                         "       g.amount, b.sex, d, i, " +
                         "       p.date, g.deliveryDate, g.createDate, " +
-                        "       g.county, g.municipality, 0, 0)" +
+                        "       g.county, g.municipality, g.responsibility, g.freeCode)" +
                         "FROM Grant g " +
                         "LEFT JOIN g.beneficiary b " +
                         "LEFT JOIN b.identification i " +
