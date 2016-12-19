@@ -3,7 +3,7 @@ package se.vgregion.service.glasogonbidrag.local.internal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
-import se.vgregion.service.glasogonbidrag.local.api.IdentificationService;
+import se.vgregion.service.glasogonbidrag.local.api.IdentificationTypeService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberService;
 
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author Martin Lind - Monator Technologies AB
  */
 @Service
-public class IdentificationServiceImpl implements IdentificationService {
+public class IdentificationTypeServiceImpl implements IdentificationTypeService {
     private static final Pattern personalNumberRegex;
     private static final Pattern reserveNumberRegex;
     private static final Pattern lmaNumberRegex;

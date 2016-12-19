@@ -26,7 +26,7 @@ import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Protected;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
 import se.vgregion.service.glasogonbidrag.local.api.GrantImportService;
-import se.vgregion.service.glasogonbidrag.local.api.IdentificationService;
+import se.vgregion.service.glasogonbidrag.local.api.IdentificationTypeService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberService;
 import se.vgregion.service.glasogonbidrag.types.migration.IdentificationStore;
@@ -67,7 +67,7 @@ public class GrantImportServiceImpl implements GrantImportService {
     private static final int VERIFICATION_NUMBER_CELL_POSITION = 14;
 
     @Autowired
-    private IdentificationService identificationService;
+    private IdentificationTypeService identificationTypeService;
 
     @Autowired
     private PersonalNumberService personalNumberService;
@@ -172,7 +172,7 @@ public class GrantImportServiceImpl implements GrantImportService {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        switch (identificationService.detect(number, currentYear)) {
+        switch (identificationTypeService.detect(number, currentYear)) {
             case PERSONAL: {
                 String format = personalNumberFormatService.to(
                         number, currentYear);
