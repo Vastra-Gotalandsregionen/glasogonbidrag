@@ -19,7 +19,7 @@ public class PersonalNumberServiceImpl implements PersonalNumberService {
      * {@inheritDoc}
      */
     @Override
-    public int calculateAge(String number, Date currentDate) {
+    public Date parseBirthYear(String number) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
         Date birthDate;
@@ -29,6 +29,16 @@ public class PersonalNumberServiceImpl implements PersonalNumberService {
             throw new IllegalArgumentException(
                     "Number is in the wrong format.", e);
         }
+
+        return birthDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int calculateAge(String number, Date currentDate) {
+        Date birthDate = parseBirthYear(number);
 
         Calendar now = new GregorianCalendar();
         Calendar dob = new GregorianCalendar();
