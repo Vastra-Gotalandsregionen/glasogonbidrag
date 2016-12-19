@@ -12,6 +12,9 @@ import javax.servlet.http.Part;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -51,6 +54,11 @@ public class MigrationViewBackingBean {
             return;
         }
 
-        service.importData(data);
+        String currentYear = Integer.toString(
+                new GregorianCalendar().get(Calendar.YEAR));
+
+        Locale locale = Locale.forLanguageTag("sv-se");
+
+        service.importData(data, currentYear, locale);
     }
 }
