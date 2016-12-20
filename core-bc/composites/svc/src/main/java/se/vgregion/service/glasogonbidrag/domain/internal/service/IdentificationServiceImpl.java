@@ -100,7 +100,7 @@ public class IdentificationServiceImpl implements IdentificationService {
     }
 
     @Override
-    public Identification findByReserveumber(String number) {
+    public Identification findByReserveNumber(String number) {
         TypedQuery<Identification> q = em.createNamedQuery(
                 "glasogonbidrag.identification.findByReserveNumber",
                 Identification.class);

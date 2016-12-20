@@ -20,12 +20,10 @@ import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Other;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.*;
 import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
@@ -292,7 +290,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        Identification identification = identificationService.findByLMANumber(identificationNumber);
+        Identification identification = identificationService.findByNumber(identificationNumber);
 
         if (identification == null) {
             identification = new Lma(identificationNumber, beneficiaryVO.getDateOfOBirth());
@@ -306,6 +304,7 @@ public class CreateInvoiceAddGrantBackingBean {
         if (beneficiary == null) {
             beneficiary = new Beneficiary();
             beneficiary.setIdentification(identification);
+            beneficiary.setSex(SexType.UNKNOWN);
 
             if("".equals(beneficiaryVO.getFullName())) {
                 beneficiary.setFullName("-");
@@ -351,10 +350,23 @@ public class CreateInvoiceAddGrantBackingBean {
         //isNumberValid = true;
 
         if(isNumberValid) {
-            Identification identification =
-                    identificationService.findByPersonalNumber(localFormat);
+            Calendar cal = new GregorianCalendar();
+            Date currentDate = cal.getTime();
+
+            BeneficiaryTransport transport =
+                    beneficiaryLookupService
+                            .fetchNameAndAddress(localFormat, currentDate);
+
+            boolean protectedNumber = transport.getName().isProtectedNumber();
+
+            Identification identification = identificationService.findByNumber(localFormat);
+
             if (identification == null) {
-                identification = new Personal(localFormat);
+                if(protectedNumber) {
+                    identification = new Protected(localFormat);
+                } else {
+                    identification = new Personal(localFormat);
+                }
             } else {
                 beneficiary = beneficiaryService
                         .findWithPartsByIdent(identification);
@@ -362,14 +374,6 @@ public class CreateInvoiceAddGrantBackingBean {
                 latestBeneficiaryPrescription = prescriptionService
                         .findLatest(beneficiary);
             }
-
-            // TODO: Temp code
-            Calendar cal = new GregorianCalendar();
-            Date currentDate = cal.getTime();
-
-            BeneficiaryTransport transport =
-                    beneficiaryLookupService
-                            .fetchNameAndAddress(localFormat, currentDate);
 
             if (beneficiary == null) {
                 // TODO: Handle the integration better.
@@ -433,7 +437,7 @@ public class CreateInvoiceAddGrantBackingBean {
     public void identificationReserveListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        Identification identification = identificationService.findByReserveumber(identificationNumber);
+        Identification identification = identificationService.findByNumber(identificationNumber);
 
         if (identification == null) {
 
@@ -702,6 +706,8 @@ public class CreateInvoiceAddGrantBackingBean {
     private void createBeneficiaryWithoutPersonalNumber(Identification identification, BeneficiaryVO beneficiaryVO) {
         beneficiary = new Beneficiary();
         beneficiary.setIdentification(identification);
+
+        beneficiary.setSex(SexType.UNKNOWN);
 
         if("".equals(beneficiaryVO.getFullName())) {
             beneficiary.setFullName("-");
