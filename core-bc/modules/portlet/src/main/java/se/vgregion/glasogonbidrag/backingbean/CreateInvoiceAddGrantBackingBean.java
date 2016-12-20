@@ -22,10 +22,7 @@ import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Lma;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Other;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Reserve;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.*;
 import se.vgregion.portal.glasogonbidrag.value.PrescriptionValueObject;
 import se.vgregion.service.glasogonbidrag.domain.api.service.*;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistException;
@@ -292,7 +289,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        Identification identification = identificationService.findByLMANumber(identificationNumber);
+        Identification identification = identificationService.findByNumber(identificationNumber);
 
         if (identification == null) {
             identification = new Lma(identificationNumber, beneficiaryVO.getDateOfOBirth());
@@ -351,10 +348,23 @@ public class CreateInvoiceAddGrantBackingBean {
         //isNumberValid = true;
 
         if(isNumberValid) {
-            Identification identification =
-                    identificationService.findByPersonalNumber(localFormat);
+            Calendar cal = new GregorianCalendar();
+            Date currentDate = cal.getTime();
+
+            BeneficiaryTransport transport =
+                    beneficiaryLookupService
+                            .fetchNameAndAddress(localFormat, currentDate);
+
+            boolean protectedNumber = transport.getName().isProtectedNumber();
+
+            Identification identification = identificationService.findByNumber(localFormat);
+
             if (identification == null) {
-                identification = new Personal(localFormat);
+                if(protectedNumber) {
+                    identification = new Protected(localFormat);
+                } else {
+                    identification = new Personal(localFormat);
+                }
             } else {
                 beneficiary = beneficiaryService
                         .findWithPartsByIdent(identification);
@@ -362,14 +372,6 @@ public class CreateInvoiceAddGrantBackingBean {
                 latestBeneficiaryPrescription = prescriptionService
                         .findLatest(beneficiary);
             }
-
-            // TODO: Temp code
-            Calendar cal = new GregorianCalendar();
-            Date currentDate = cal.getTime();
-
-            BeneficiaryTransport transport =
-                    beneficiaryLookupService
-                            .fetchNameAndAddress(localFormat, currentDate);
 
             if (beneficiary == null) {
                 // TODO: Handle the integration better.
@@ -433,7 +435,7 @@ public class CreateInvoiceAddGrantBackingBean {
     public void identificationReserveListener() {
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
-        Identification identification = identificationService.findByReserveumber(identificationNumber);
+        Identification identification = identificationService.findByNumber(identificationNumber);
 
         if (identification == null) {
 
@@ -664,24 +666,24 @@ public class CreateInvoiceAddGrantBackingBean {
     public String doSave() {
 
         // TODO: Remove this try/catch and remove commented code below.
-//        try {
-//            String responseView = String.format(
-//                    "add_grant" +
-//                            "?faces-redirect=true" +
-//                            "&includeViewParams=true" +
-//                            "&invoiceId=%d", invoice.getId());
-//            return saveObjects(responseView);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
+        try {
+            String responseView = String.format(
+                    "add_grant" +
+                            "?faces-redirect=true" +
+                            "&includeViewParams=true" +
+                            "&invoiceId=%d", invoice.getId());
+            return saveObjects(responseView);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
-        String responseView = String.format(
-                "add_grant" +
-                        "?faces-redirect=true" +
-                        "&includeViewParams=true" +
-                        "&invoiceId=%d", invoice.getId());
-        return saveObjects(responseView);
+//        String responseView = String.format(
+//                "add_grant" +
+//                        "?faces-redirect=true" +
+//                        "&includeViewParams=true" +
+//                        "&invoiceId=%d", invoice.getId());
+//        return saveObjects(responseView);
 
     }
 

@@ -165,7 +165,7 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 
         if (resident.getSekretessmarkering() == JaNejTYPE.J) {
             // A Beneficiary have only a name of Xs
-            return new BeneficiaryNameTuple(PROTECTED_NAME);
+            return new BeneficiaryNameTuple(PROTECTED_NAME, true);
         }
 
         PersonpostTYPE person = resident.getPersonpost();
