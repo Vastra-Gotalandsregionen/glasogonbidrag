@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class StatisticSearchDateInterval {
     private static final DateFormat FORMAT =
-            new SimpleDateFormat("yyyy-MM-dd");
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final boolean singleDate;
     private final Date[] dates;

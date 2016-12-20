@@ -3,6 +3,7 @@ package se.vgregion.glasogonbidrag.backingbean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,7 @@ import se.vgregion.service.glasogonbidrag.types.StatisticSearchType;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Erik Andersson - Monator Technologies AB
@@ -52,6 +49,9 @@ public class StatisticsReportViewBackingBean {
 
     @Autowired
     private LiferayUtil liferayUtil;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private StatisticsMockUtil statisticsMockUtil;
@@ -242,6 +242,8 @@ public class StatisticsReportViewBackingBean {
     public void searchStatistics() {
         LOGGER.info("searchStatistics");
 
+        Locale locale = facesUtil.getLocale();
+
         StatisticSearchRequest request = new StatisticSearchRequest();
         request.setType(findSearchType());
         request.setInterval(findInterval());
@@ -253,6 +255,9 @@ public class StatisticsReportViewBackingBean {
                     break;
                 case "woman":
                     request.setSex(SexType.FEMALE);
+                    break;
+                case "not-available":
+                    request.setSex(SexType.UNKNOWN);
                     break;
                 default:
                     // TODO: Set to unknown.
@@ -309,6 +314,8 @@ public class StatisticsReportViewBackingBean {
         Converter converter = new NullConverter();
         if (response.getSearchType() == StatisticSearchType.MUNICIPALITY) {
             converter = new MunicipalityConverter(areaCodeLookupService);
+        } else if(response.getSearchType() == StatisticSearchType.GRANT_TYPE) {
+            converter = new DiagnoseTypeConverter(messageSource, locale);
         }
 
         statisticsVOs = new ArrayList<>();
@@ -371,88 +378,112 @@ public class StatisticsReportViewBackingBean {
     }
 
     private StatisticSearchDateInterval findInterval() {
-        Calendar cal = new GregorianCalendar();
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        Calendar calStart = new GregorianCalendar();
+        calStart.set(Calendar.HOUR_OF_DAY, 0);
+        calStart.set(Calendar.MINUTE, 0);
+        calStart.set(Calendar.SECOND, 0);
+        calStart.set(Calendar.MILLISECOND, 0);
+
+        Calendar calStop = new GregorianCalendar();
+        calStop.set(Calendar.HOUR_OF_DAY, 23);
+        calStop.set(Calendar.MINUTE, 59);
+        calStop.set(Calendar.SECOND, 59);
+        calStop.set(Calendar.MILLISECOND, 99);
 
         switch (statisticsTimePeriod) {
             case "today":
-                return new StatisticSearchDateInterval(cal.getTime());
+                return new StatisticSearchDateInterval(calStart.getTime());
             case "yesterday":
-                cal.add(Calendar.DAY_OF_MONTH, -1);
-                return new StatisticSearchDateInterval(cal.getTime());
+                calStart.add(Calendar.DAY_OF_MONTH, -1);
+                return new StatisticSearchDateInterval(calStart.getTime());
             case "thisWeek": {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                Date start = cal.getTime();
+                calStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                Date stop = cal.getTime();
+                calStop.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                calStop.add(Calendar.DAY_OF_WEEK, +1);
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "previousWeek": {
-                cal.add(Calendar.WEEK_OF_YEAR, -1);
+                calStart.add(Calendar.WEEK_OF_YEAR, -1);
+                calStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                Date start = cal.getTime();
-
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                Date stop = cal.getTime();
+                calStop.add(Calendar.WEEK_OF_YEAR, -1);
+                calStop.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                calStop.add(Calendar.DAY_OF_WEEK, +1);
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "thisMonth": {
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                Date start = cal.getTime();
+                calStart.set(Calendar.DAY_OF_MONTH, 1);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.DAY_OF_MONTH,
-                        cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                Date stop = cal.getTime();
+                calStop.set(Calendar.DAY_OF_MONTH,
+                        calStop.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "previousMonth": {
-                cal.add(Calendar.MONTH, -1);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                Date start = cal.getTime();
+                calStart.add(Calendar.MONTH, -1);
+                calStart.set(Calendar.DAY_OF_MONTH, 1);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.DAY_OF_MONTH,
-                        cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                Date stop = cal.getTime();
+                calStop.add(Calendar.MONTH, -1);
+                calStop.set(Calendar.DAY_OF_MONTH,
+                        calStop.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "thisYear": {
-                cal.set(Calendar.MONTH, Calendar.JANUARY);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                Date start = cal.getTime();
+                calStart.set(Calendar.MONTH, Calendar.JANUARY);
+                calStart.set(Calendar.DAY_OF_MONTH, 1);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.MONTH, Calendar.DECEMBER);
-                cal.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_WEEK_IN_MONTH);
-                Date stop = cal.getTime();
+                calStop.set(Calendar.MONTH, Calendar.DECEMBER);
+                calStop.set(Calendar.DAY_OF_MONTH,
+                        calStop.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "previousYear": {
-                cal.add(Calendar.YEAR, -1);
+                calStart.add(Calendar.YEAR, -1);
+                calStart.set(Calendar.MONTH, Calendar.JANUARY);
+                calStart.set(Calendar.DAY_OF_MONTH, 1);
+                Date start = calStart.getTime();
 
-                cal.set(Calendar.MONTH, Calendar.JANUARY);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                Date start = cal.getTime();
-
-                cal.set(Calendar.MONTH, Calendar.DECEMBER);
-                cal.set(Calendar.DAY_OF_MONTH,
-                        cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                Date stop = cal.getTime();
+                calStop.add(Calendar.YEAR, -1);
+                calStop.set(Calendar.MONTH, Calendar.DECEMBER);
+                calStop.set(Calendar.DAY_OF_MONTH,
+                        calStop.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date stop = calStop.getTime();
 
                 return new StatisticSearchDateInterval(start, stop);
             }
             case "customPeriod":
+                Calendar calStartUserInput = new GregorianCalendar();
+                calStartUserInput.setTime(statisticsTimePeriodStartDate);
+                calStartUserInput.set(Calendar.HOUR_OF_DAY, 0);
+                calStartUserInput.set(Calendar.MINUTE, 0);
+                calStartUserInput.set(Calendar.SECOND, 0);
+                calStartUserInput.set(Calendar.MILLISECOND, 0);
+
+                Calendar calStopUserInput = new GregorianCalendar();
+                calStopUserInput.setTime(statisticsTimePeriodEndDate);
+                calStopUserInput.set(Calendar.HOUR_OF_DAY, 23);
+                calStopUserInput.set(Calendar.MINUTE, 59);
+                calStopUserInput.set(Calendar.SECOND, 59);
+                calStopUserInput.set(Calendar.MILLISECOND, 99);
+
                 return new StatisticSearchDateInterval(
-                        statisticsTimePeriodStartDate,
-                        statisticsTimePeriodEndDate);
+                        calStartUserInput.getTime(),
+                        calStopUserInput.getTime());
             default:
                 return null;
         }
@@ -491,4 +522,43 @@ public class StatisticsReportViewBackingBean {
                     dto.getAmount());
         }
     }
+
+
+    private static class DiagnoseTypeConverter implements Converter {
+        private final MessageSource messageSource;
+        private final Locale locale;
+
+        public DiagnoseTypeConverter(MessageSource messageSource, Locale locale) {
+            this.messageSource = messageSource;
+            this.locale = locale;
+        }
+
+        public StatisticsVO apply(StatisticReportDTO dto) {
+            String label = "";
+            String dtoData = dto.getData();
+
+            switch(dtoData) {
+                case "a" :
+                    label = messageSource.getMessage(DiagnoseType.APHAKIA.getLanguageKey(),new Object[0], locale);
+                    break;
+                case "k" :
+                    label = messageSource.getMessage(DiagnoseType.KERATOCONUS.getLanguageKey(),new Object[0], locale);
+                    break;
+                case "s" :
+                    label = messageSource.getMessage(DiagnoseType.SPECIAL.getLanguageKey(),new Object[0], locale);
+                    break;
+                case "n" :
+                    label = messageSource.getMessage(DiagnoseType.NONE.getLanguageKey(),new Object[0], locale);
+                    break;
+            }
+
+            return new StatisticsVO(
+                    label,
+                    new Long(dto.getCount()).intValue(),
+                    dto.getAmount());
+        }
+    }
+
+
+
 }
