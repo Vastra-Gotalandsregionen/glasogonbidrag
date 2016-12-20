@@ -13,12 +13,19 @@ import java.util.Set;
  */
 public interface GrantRuleValidationService {
 
-    // TODO: document method
+    /**
+     *
+     * Method that checks if total grant sum including the
+     * new grant is not larger than invoice amount
+     *
+     * @param grant the new grant that is shall be added
+     * @param invoice the invoice
+     */
     GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice);
 
     /**
      *
-     * Service that checks data to se if a grant is valid or not.
+     * Method that checks data to se if a grant is valid or not.
      *
      * We check:
      * <ul>
@@ -38,7 +45,6 @@ public interface GrantRuleValidationService {
      * </ul>
      *
      * @param grant the grant that should be validated
-     * @return
      */
     GrantRuleResult test(final Grant grant,
                          final Set<Grant> historicalGrants);
