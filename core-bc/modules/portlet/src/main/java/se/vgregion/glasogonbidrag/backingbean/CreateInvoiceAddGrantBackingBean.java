@@ -662,12 +662,27 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public String doSave() {
+
+        // TODO: Remove this try/catch and remove commented code below.
+//        try {
+//            String responseView = String.format(
+//                    "add_grant" +
+//                            "?faces-redirect=true" +
+//                            "&includeViewParams=true" +
+//                            "&invoiceId=%d", invoice.getId());
+//            return saveObjects(responseView);
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+
         String responseView = String.format(
                 "add_grant" +
                         "?faces-redirect=true" +
                         "&includeViewParams=true" +
                         "&invoiceId=%d", invoice.getId());
         return saveObjects(responseView);
+
     }
 
     public String doSaveIgnoreWarnings() {
