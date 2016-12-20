@@ -16,6 +16,8 @@
         <h1>#{bundle['upload-file-to-import']}</h1>
         <ui:fragment rendered="#{migrationViewBackingBean.canMigrate}">
             <h:form enctype="multipart/form-data">
+                <h:messages />
+
                 <h:inputFile value="#{migrationViewBackingBean.file}" />
                 <h:commandButton value="#{bundle['import-file']}" action="#{migrationViewBackingBean.importFile}" />
             </h:form>
