@@ -840,6 +840,12 @@ public class CreateInvoiceAddGrantBackingBean {
         GrantRuleResult result = grantRuleValidationService.test(
                 grant, beneficiary.getGrants());
 
+        GrantRuleResult invoiceResult = grantRuleValidationService.mayAddToInvoice(
+                grant, invoice);
+
+        result.addAllViolations(invoiceResult.getViolations());
+        result.addAllWarnings(invoiceResult.getWarnings());
+
         if(result.hasViolations()) {
             Locale locale = facesUtil.getLocale();
 

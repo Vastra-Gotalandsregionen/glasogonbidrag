@@ -2,6 +2,7 @@ package se.vgregion.service.glasogonbidrag.local.api;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
 
 import java.util.Date;
@@ -11,6 +12,9 @@ import java.util.Set;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface GrantRuleValidationService {
+
+    // TODO: document method
+    GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice);
 
     /**
      *
@@ -38,4 +42,5 @@ public interface GrantRuleValidationService {
      */
     GrantRuleResult test(final Grant grant,
                          final Set<Grant> historicalGrants);
+
 }
