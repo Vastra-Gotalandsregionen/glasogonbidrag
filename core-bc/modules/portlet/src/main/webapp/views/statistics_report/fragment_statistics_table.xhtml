@@ -18,15 +18,15 @@
         <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <p:dataTable id="statisticsTable" var="statisticsVO" value="#{statisticsReportViewBackingBean.statisticsVOs}" rendered="#{not empty statisticsReportViewBackingBean.statisticsVOs}">
-            <p:column headerText="#{statisticsReportViewBackingBean.statisticsGrouping}" sortBy="#{statisticsVO.label}">
+            <p:column headerText="#{bundle['entries']}" sortBy="#{statisticsVO.label}">
                 <h:outputText value="#{statisticsVO.label}" />
             </p:column>
-            <p:column headerText="Antal bidrag" sortBy="#{statisticsVO.numberOfGrants}" styleClass="number">
+            <p:column headerText="#{bundle['number-of-grants']}" sortBy="#{statisticsVO.numberOfGrants}" styleClass="number">
                 <h:outputText value="#{statisticsVO.numberOfGrants}">
                     <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Summa bidrag" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
+            <p:column headerText="#{bundle['sum-grants']}" sortBy="#{statisticsVO.grantsSum}" styleClass="number">
                 <h:outputText value="#{statisticsVO.grantsSumAsKrona}">
                     <f:convertNumber groupingUsed="true" minFractionDigits="0" locale="#{locale}" />
                 </h:outputText>
@@ -36,7 +36,7 @@
 
             <p:columnGroup type="footer">
                 <p:row styleClass="total-row">
-                    <p:column colspan="1" footerText="Totalt:" />
+                    <p:column colspan="1" footerText="#{bundle['total']}:" />
                     <p:column styleClass="number">
                         <f:facet name="footer">
                             <h:outputText value="#{statisticsReportViewBackingBean.grantCountTotal}">
