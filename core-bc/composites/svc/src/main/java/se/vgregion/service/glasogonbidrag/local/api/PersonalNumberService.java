@@ -8,6 +8,16 @@ import java.util.Date;
 public interface PersonalNumberService {
 
     /**
+     * Parse an personal number in the internal format and extract the
+     * date one where born.
+     *
+     * @param number of the format yyyyMMddxxxx (this works on both
+     *               personal numbers and reserve numbers)
+     * @return A date from the number
+     */
+    Date parseBirthYear(String number);
+
+    /**
      * A personal identification number contains the year a person was born.
      * We can use this information with the current year to calculate the
      * age of a the person with this identification number.

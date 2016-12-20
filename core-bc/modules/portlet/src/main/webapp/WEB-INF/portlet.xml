@@ -142,6 +142,28 @@
     </portlet>
 
     <portlet>
+        <portlet-name>glasogonbidrag-migration</portlet-name>
+        <display-name>glasogonbidrag-migration</display-name>
+        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+
+        <init-param>
+            <name>javax.portlet.faces.defaultViewId.view</name>
+            <value>/views/migration/view.xhtml</value>
+        </init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>glasogonbidrag-migration</title>
+            <short-title>glasogonbidrag-migration</short-title>
+            <keywords>glasogonbidrag-migration</keywords>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
         <portlet-name>glasogonbidrag-statistics-dashboard</portlet-name>
         <display-name>glasogonbidrag-statistics-dashboard</display-name>
         <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>

@@ -24,4 +24,15 @@ public enum VisualLaterality {
 //        return languageKey;
 //    }
 
+    public static VisualLaterality parse(String string) {
+        for (VisualLaterality visualLaterality : values()) {
+            if (visualLaterality.getLanguageKey().equals(string)) {
+                return visualLaterality;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Didn't find visual laterality for language key " + string);
+    }
+
 }

@@ -31,4 +31,15 @@ public enum DiagnoseType {
     public Class<? extends Diagnose> getDiagnoseClass() {
         return diagnoseClass;
     }
+
+    public static DiagnoseType parse(String string) {
+        for (DiagnoseType diagnoseType : values()) {
+            if (diagnoseType.getLanguageKey().equals(string)) {
+                return diagnoseType;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Didn't find diagnose for language key " + string);
+    }
 }

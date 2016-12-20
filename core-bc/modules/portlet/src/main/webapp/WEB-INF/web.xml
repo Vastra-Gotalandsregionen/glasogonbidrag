@@ -40,4 +40,9 @@
         <param-value>true</param-value>
     </context-param>
 
+    <!-- Workaround to enable file upload in liferay with PrimeFaces -->
+    <context-param>
+        <param-name>com.liferay.faces.bridge.primeFileUploadForceResourceURL</param-name>
+        <param-value>true</param-value>
+    </context-param>
 </web-app>

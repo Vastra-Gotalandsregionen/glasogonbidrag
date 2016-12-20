@@ -12,6 +12,7 @@
         <portlet id="glasogonbidrag-list-invoices"/>
         <portlet id="glasogonbidrag-manage-beneficiaries"/>
         <portlet id="glasogonbidrag-manage-suppliers"/>
+        <portlet id="glasogonbidrag-migration"/>
         <portlet id="glasogonbidrag-statistics-dashboard"/>
         <portlet id="glasogonbidrag-statistics-export"/>
         <portlet id="glasogonbidrag-statistics-report"/>
