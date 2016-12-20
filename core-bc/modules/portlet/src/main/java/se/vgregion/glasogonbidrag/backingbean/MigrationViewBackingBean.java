@@ -4,6 +4,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,9 @@ public class MigrationViewBackingBean {
     private MigrationService migrationService;
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     private FacesUtil util;
 
     public Part getFile() {
@@ -70,8 +74,16 @@ public class MigrationViewBackingBean {
             stream.readFully(data);
             stream.close();
         } catch (IOException e) {
-            FacesMessage message = new FacesMessage();
-            FacesContext.getCurrentInstance().addMessage("", message);
+            Locale facesLocale = util.getLocale();
+            String localizedMessage = messageSource
+                    .getMessage("import-error-supplied-file-reading",
+                            new Object[0], facesLocale);
+
+            FacesMessage message =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            localizedMessage, localizedMessage);
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, message);
 
             LOGGER.warn("Error reading file from request!");
 
@@ -89,8 +101,16 @@ public class MigrationViewBackingBean {
         try {
             excelData = service.importData(data, currentYear, locale);
         } catch (Exception e) {
-            FacesMessage message = new FacesMessage();
-            FacesContext.getCurrentInstance().addMessage("", message);
+            Locale facesLocale = util.getLocale();
+            String localizedMessage = messageSource
+                    .getMessage("import-error-supplied-file-format",
+                            new Object[0], facesLocale);
+
+            FacesMessage message =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            localizedMessage, localizedMessage);
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, message);
 
             LOGGER.warn("Error parsing data in supplied excel file!");
 
@@ -107,10 +127,18 @@ public class MigrationViewBackingBean {
         try {
             migrationService.importData(userId, groupId, companyId, excelData);
         } catch (Exception e) {
-            FacesMessage message = new FacesMessage();
-            FacesContext.getCurrentInstance().addMessage("", message);
+            Locale facesLocale = util.getLocale();
+            String localizedMessage = messageSource
+                    .getMessage("import-error-database-write",
+                            new Object[0], facesLocale);
 
-            LOGGER.warn("Exception importing data!");
+            FacesMessage message =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            localizedMessage, localizedMessage);
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, message);
+
+            LOGGER.warn("Exception importing data into database!");
         }
     }
 }
