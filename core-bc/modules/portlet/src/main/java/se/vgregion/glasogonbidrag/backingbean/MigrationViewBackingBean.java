@@ -1,9 +1,15 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.theme.ThemeDisplay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.vgregion.glasogonbidrag.util.FacesUtil;
+import se.vgregion.portal.glasogonbidrag.domain.dto.ImportDTO;
+import se.vgregion.service.glasogonbidrag.domain.api.service.MigrationService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantImportService;
 
 import javax.faces.application.FacesMessage;
@@ -22,10 +28,22 @@ import java.util.Locale;
 @Component(value = "migrationViewBackingBean")
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MigrationViewBackingBean {
-    private Part file; // +getter+setter
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(MigrationViewBackingBean.class);
+
+    private Part file;
+
+    private Boolean canMigrate = null;
 
     @Autowired
     private GrantImportService service;
+
+    @Autowired
+    private MigrationService migrationService;
+
+    @Autowired
+    private FacesUtil util;
 
     public Part getFile() {
         return file;
@@ -35,21 +53,27 @@ public class MigrationViewBackingBean {
         this.file = file;
     }
 
-    public void save() throws IOException {
-        byte[] data;
+    public Boolean getCanMigrate() {
+        if (canMigrate == null) {
+            canMigrate = !migrationService.hasMigrations();
+        }
 
+        return canMigrate;
+    }
+
+    public void importFile() throws IOException {
+        // Read data into the byte-array.
+        byte[] data;
         try (InputStream input = file.getInputStream()) {
             data = new byte[(int)file.getSize()];
-
             DataInputStream stream = new DataInputStream(input);
-
             stream.readFully(data);
-
             stream.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             FacesMessage message = new FacesMessage();
             FacesContext.getCurrentInstance().addMessage("", message);
+
+            LOGGER.warn("Error reading file from request!");
 
             return;
         }
@@ -57,8 +81,36 @@ public class MigrationViewBackingBean {
         String currentYear = Integer.toString(
                 new GregorianCalendar().get(Calendar.YEAR));
 
+        // We should fetch this from the request? We only support swedish
+        // so this is not really that prioritized.
         Locale locale = Locale.forLanguageTag("sv-se");
 
-        service.importData(data, currentYear, locale);
+        ImportDTO excelData;
+        try {
+            excelData = service.importData(data, currentYear, locale);
+        } catch (Exception e) {
+            FacesMessage message = new FacesMessage();
+            FacesContext.getCurrentInstance().addMessage("", message);
+
+            LOGGER.warn("Error parsing data in supplied excel file!");
+
+            return;
+        }
+
+        // Fetch data from the request to set correct
+        // user, group and company id.
+        ThemeDisplay themeDisplay = util.getThemeDisplay();
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+        long companyId = themeDisplay.getCompanyId();
+
+        try {
+            migrationService.importData(userId, groupId, companyId, excelData);
+        } catch (Exception e) {
+            FacesMessage message = new FacesMessage();
+            FacesContext.getCurrentInstance().addMessage("", message);
+
+            LOGGER.warn("Exception importing data!");
+        }
     }
 }

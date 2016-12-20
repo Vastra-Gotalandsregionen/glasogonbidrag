@@ -13,11 +13,17 @@
     <h:head />
 
     <h:body>
-        <h1>Upload Excel file to migrate</h1>
-        <h:form enctype="multipart/form-data">
-            <h:inputFile value="#{migrationViewBackingBean.file}">
-                <f:ajax listener="#{migrationViewBackingBean.save}" />
-            </h:inputFile>
-        </h:form>
+        <h1>#{bundle['upload-file-to-import']}</h1>
+        <ui:fragment rendered="#{migrationViewBackingBean.canMigrate}">
+            <h:form enctype="multipart/form-data">
+                <h:inputFile value="#{migrationViewBackingBean.file}" />
+                <h:commandButton value="#{bundle['import-file']}" action="#{migrationViewBackingBean.importFile}" />
+            </h:form>
+        </ui:fragment>
+        <ui:fragment rendered="#{not migrationViewBackingBean.canMigrate}">
+            <div>
+                <h2>#{bundle['already-imported']}</h2>
+            </div>
+        </ui:fragment>
     </h:body>
 </f:view>
