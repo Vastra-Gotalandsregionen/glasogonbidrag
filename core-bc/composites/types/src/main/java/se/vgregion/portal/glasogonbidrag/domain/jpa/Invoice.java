@@ -341,6 +341,10 @@ public class Invoice {
         return currency.calculatePartsAsKrona(result);
     }
 
+    public BigDecimal calculateInvoiceAmountAsKrona() {
+        return currency.calculatePartsAsKrona(this.amount);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

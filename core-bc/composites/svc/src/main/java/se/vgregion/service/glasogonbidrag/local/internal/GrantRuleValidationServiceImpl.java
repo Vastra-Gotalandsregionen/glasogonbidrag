@@ -46,6 +46,31 @@ public class GrantRuleValidationServiceImpl
      * {@inheritDoc}
      */
     @Override
+    public GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice) {
+        GrantRuleResult result = new GrantRuleResult();
+
+        Set<Grant> grants = invoice.getGrants();
+
+        long invoiceAmountSum = invoice.getAmount();
+
+        long grantAmountSum = grant.getAmount();
+        for (Grant curGrant : grants) {
+            grantAmountSum += curGrant.getAmount();
+        }
+
+        if(invoiceAmountSum < grantAmountSum) {
+            result.add(new GrantRuleViolation(
+                    "violation-grants-sum-amount-more-than-invoice-amount"));
+        }
+
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GrantRuleResult test(final Grant grant,
                                 final Set<Grant> historicalGrants) {
         GrantRuleResult result = new GrantRuleResult();

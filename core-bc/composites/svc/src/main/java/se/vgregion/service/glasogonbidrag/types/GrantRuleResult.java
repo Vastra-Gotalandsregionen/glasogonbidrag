@@ -24,6 +24,18 @@ public class GrantRuleResult {
         }
     }
 
+    public void addAllViolations(List<GrantRuleViolation> violations) {
+        for (GrantRuleViolation violation : violations) {
+            add(violation);
+        }
+    }
+
+    public void addAllWarnings(List<GrantRuleWarning> warnings) {
+        for (GrantRuleWarning warning : warnings) {
+            add(warning);
+        }
+    }
+
     public List<GrantRuleViolation> getViolations() {
         return violations;
     }

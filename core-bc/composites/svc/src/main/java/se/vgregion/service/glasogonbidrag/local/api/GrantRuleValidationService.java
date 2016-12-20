@@ -2,6 +2,7 @@ package se.vgregion.service.glasogonbidrag.local.api;
 
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleResult;
 
 import java.util.Date;
@@ -14,7 +15,17 @@ public interface GrantRuleValidationService {
 
     /**
      *
-     * Service that checks data to se if a grant is valid or not.
+     * Method that checks if total grant sum including the
+     * new grant is not larger than invoice amount
+     *
+     * @param grant the new grant that is shall be added
+     * @param invoice the invoice
+     */
+    GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice);
+
+    /**
+     *
+     * Method that checks data to se if a grant is valid or not.
      *
      * We check:
      * <ul>
@@ -34,8 +45,8 @@ public interface GrantRuleValidationService {
      * </ul>
      *
      * @param grant the grant that should be validated
-     * @return
      */
     GrantRuleResult test(final Grant grant,
                          final Set<Grant> historicalGrants);
+
 }
