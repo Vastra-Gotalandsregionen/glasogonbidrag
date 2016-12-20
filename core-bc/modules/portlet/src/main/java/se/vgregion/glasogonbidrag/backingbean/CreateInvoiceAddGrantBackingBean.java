@@ -20,6 +20,7 @@ import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.SexType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.*;
@@ -303,6 +304,7 @@ public class CreateInvoiceAddGrantBackingBean {
         if (beneficiary == null) {
             beneficiary = new Beneficiary();
             beneficiary.setIdentification(identification);
+            beneficiary.setSex(SexType.UNKNOWN);
 
             if("".equals(beneficiaryVO.getFullName())) {
                 beneficiary.setFullName("-");
@@ -704,6 +706,8 @@ public class CreateInvoiceAddGrantBackingBean {
     private void createBeneficiaryWithoutPersonalNumber(Identification identification, BeneficiaryVO beneficiaryVO) {
         beneficiary = new Beneficiary();
         beneficiary.setIdentification(identification);
+
+        beneficiary.setSex(SexType.UNKNOWN);
 
         if("".equals(beneficiaryVO.getFullName())) {
             beneficiary.setFullName("-");
