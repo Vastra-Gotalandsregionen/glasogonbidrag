@@ -1007,6 +1007,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         // TODO: if existing (already persited) grant - load from DB (if not already loaded)
         if (grant == null) {
+            invoiceGrants = new HashSet<>(invoice.getGrants());
             grant = new Grant();
             return;
         }
