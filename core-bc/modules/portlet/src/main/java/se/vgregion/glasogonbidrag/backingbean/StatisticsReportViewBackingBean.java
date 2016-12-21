@@ -260,7 +260,6 @@ public class StatisticsReportViewBackingBean {
                     request.setSex(SexType.UNKNOWN);
                     break;
                 default:
-                    // TODO: Set to unknown.
                     request.setSex(null);
                     break;
             }
