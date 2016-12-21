@@ -1,5 +1,6 @@
 package se.vgregion.glasogonbidrag.converter;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
@@ -49,28 +50,19 @@ public class ReserveNumberConverter implements Converter {
 
         if(number.length() == 13) {
             // Pattern candidate yyyyMMdd-XXXX
-            LOGGER.info("formatReserveNumber - number length is 13.");
-
         } else if(number.length() == 12) {
             // Pattern candidate yyyyMMddXXXX
-            LOGGER.info("formatReserveNumber - number length is 12.");
-
             formattedNumber = addDashToNumber(number, 8);
         } else if(number.length() == 11) {
             // Pattern candidate yyMMdd-XXXX
-            LOGGER.info("formatReserveNumber - number length is 11.");
-
             if(textHasOnlyNumbers(number.substring(0, 2))) {
                 formattedNumber = addCenturyToNumber(number, currentYear);
             }
         } else if(number.length() == 10) {
             // Pattern candidate yyMMddXXXX
-            LOGGER.info("formatReserveNumber - number length is 10.");
-
             if(textHasOnlyNumbers(number.substring(0, 2))) {
                 number = addCenturyToNumber(number, currentYear);
             }
-
             formattedNumber = addDashToNumber(number, 8);
         }
 
@@ -82,6 +74,21 @@ public class ReserveNumberConverter implements Converter {
 
         if(number.length() == 13) {
             Date date = parseDate(number.substring(0, 8), "yyyyMMdd");
+
+            String separator = number.substring(8, 9);
+            String lastNumbers = number.substring(9, 13);
+
+            // If separator is not a dash
+            if(!"-".equals(separator)) {
+                isValid = false;
+                return isValid;
+            }
+
+            // If lastNumbers are not alphaNumeric
+            if(!StringUtils.isAlphanumeric(lastNumbers)) {
+                isValid = false;
+                return isValid;
+            }
 
             if(date != null) {
                 Calendar cal = new GregorianCalendar();
