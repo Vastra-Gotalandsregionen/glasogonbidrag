@@ -832,10 +832,6 @@ public class CreateInvoiceAddGrantBackingBean {
             prescriptionValueObject.patchPrescription(grant.getPrescription());
         }
 
-        // TODO: Should we move code that set relation from grant to prescription here?
-
-        beneficiary.getGrants().add(grant);
-
         GrantRuleResult result = grantRuleValidationService.test(
                 grant, beneficiary.getGrants());
 
@@ -1051,6 +1047,13 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         beneficiary = grant.getBeneficiary();
+
+        // We are editing a grant on this beneficiary, we want to remove
+        // this from the historical grants list.
+        // This also ensures that the grant rule validation service don't
+        // include this grant twice.
+        beneficiary.getGrants().remove(grant);
+
         latestBeneficiaryPrescription =
                 prescriptionService.findLatest(beneficiary);
 

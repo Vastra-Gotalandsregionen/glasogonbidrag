@@ -87,10 +87,10 @@ public class GrantRuleValidationServiceTest {
                 .prescription(p)
                 .build();
 
-        historicalGrants.add(firstGrant);
 
         GrantRuleResult result1 = validationService.test(
                 firstGrant, historicalGrants);
+        historicalGrants.add(firstGrant);
 
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertFalse(result1.hasViolations());
@@ -102,8 +102,6 @@ public class GrantRuleValidationServiceTest {
                 .beneficiary(b)
                 .prescription(p)
                 .build();
-
-        historicalGrants.add(secondGrant);
 
         GrantRuleResult result2 = validationService.test(
                 secondGrant, historicalGrants);
@@ -142,7 +140,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result = validationService.test(
-                grant, new HashSet<>(Arrays.asList(grant)));
+                grant, new HashSet<Grant>());
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -174,7 +172,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result = validationService.test(
-                grant, new HashSet<>(Arrays.asList(grant)));
+                grant, new HashSet<Grant>());
 
         Assert.assertFalse(result.hasWarnings());
         Assert.assertTrue(result.hasViolations());
@@ -224,12 +222,10 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult resultPre20160301 = validationService.test(
-                grantOver16Pre20160301,
-                new HashSet<>(Arrays.asList(grantOver16Pre20160301)));
+                grantOver16Pre20160301, new HashSet<Grant>());
 
         GrantRuleResult resultPost20160301 = validationService.test(
-                grantOver16Post20160301,
-                new HashSet<>(Arrays.asList(grantOver16Post20160301)));
+                grantOver16Post20160301, new HashSet<Grant>());
 
         Assert.assertFalse(resultPre20160301.hasWarnings());
         Assert.assertTrue(resultPre20160301.hasViolations());
@@ -282,12 +278,10 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult resultUnder20Year = validationService.test(
-                grantUnder20Year,
-                new HashSet<>(Arrays.asList(grantUnder20Year)));
+                grantUnder20Year, new HashSet<Grant>());
 
         GrantRuleResult resultOver20Year = validationService.test(
-                grantOver20Year,
-                new HashSet<>(Arrays.asList(grantOver20Year)));
+                grantOver20Year, new HashSet<Grant>());
 
         Assert.assertFalse(resultUnder20Year.hasViolations());
         Assert.assertFalse(resultUnder20Year.hasWarnings());
@@ -322,8 +316,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult past6MonthResult = validationService.test(
-                over16deliveryDatePast6Month,
-                new HashSet<>(Arrays.asList(over16deliveryDatePast6Month)));
+                over16deliveryDatePast6Month, new HashSet<Grant>());
 
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
@@ -356,8 +349,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult past6MonthResult = validationService.test(
-                over20deliveryDatePast6Month,
-                new HashSet<>(Arrays.asList(over20deliveryDatePast6Month)));
+                over20deliveryDatePast6Month, new HashSet<Grant>());
 
         Assert.assertFalse(past6MonthResult.hasWarnings());
         Assert.assertTrue(past6MonthResult.hasViolations());
@@ -394,8 +386,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result1 = validationService.test(
-                child13AboveAmount,
-                new HashSet<>(Arrays.asList(child13AboveAmount)));
+                child13AboveAmount, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -441,8 +432,7 @@ public class GrantRuleValidationServiceTest {
         GrantRuleResult result2 = validationService.test(
                 child13AboveAmountMultipleSecond,
                 new HashSet<>(Arrays.asList(
-                        child13AboveAmountMultipleFirst,
-                        child13AboveAmountMultipleSecond)));
+                        child13AboveAmountMultipleFirst)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -472,8 +462,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result3 = validationService.test(
-                child13ExactAmount,
-                new HashSet<>(Arrays.asList(child13ExactAmount)));
+                child13ExactAmount, new HashSet<Grant>());
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -498,8 +487,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result4 = validationService.test(
-                child13UnderAmount,
-                new HashSet<>(Arrays.asList(child13UnderAmount)));
+                child13UnderAmount, new HashSet<Grant>());
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -531,8 +519,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result1 = validationService.test(
-                child18AboveAmount,
-                new HashSet<>(Arrays.asList(child18AboveAmount)));
+                child18AboveAmount, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -578,8 +565,7 @@ public class GrantRuleValidationServiceTest {
         GrantRuleResult result2 = validationService.test(
                 child18AboveAmountMultipleSecond,
                 new HashSet<>(Arrays.asList(
-                        child18AboveAmountMultipleFirst,
-                        child18AboveAmountMultipleSecond)));
+                        child18AboveAmountMultipleFirst)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -609,8 +595,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result3 = validationService.test(
-                child18ExactAmount,
-                new HashSet<>(Arrays.asList(child18ExactAmount)));
+                child18ExactAmount, new HashSet<Grant>());
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -635,8 +620,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result4 = validationService.test(
-                child18UnderAmount,
-                new HashSet<>(Arrays.asList(child18UnderAmount)));
+                child18UnderAmount, new HashSet<Grant>());
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -668,8 +652,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result1 = validationService.test(
-                child16AboveAmount,
-                new HashSet<>(Arrays.asList(child16AboveAmount)));
+                child16AboveAmount, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -715,8 +698,7 @@ public class GrantRuleValidationServiceTest {
         GrantRuleResult result2 = validationService.test(
                 child16AboveAmountMultipleSecond,
                 new HashSet<>(Arrays.asList(
-                        child16AboveAmountMultipleFirst,
-                        child16AboveAmountMultipleSecond)));
+                        child16AboveAmountMultipleFirst)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -746,8 +728,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result3 = validationService.test(
-                child16ExactAmount,
-                new HashSet<>(Arrays.asList(child16ExactAmount)));
+                child16ExactAmount, new HashSet<Grant>());
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -772,8 +753,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result4 = validationService.test(
-                child16UnderAmount,
-                new HashSet<>(Arrays.asList(child16UnderAmount)));
+                child16UnderAmount, new HashSet<Grant>());
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
@@ -882,7 +862,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result1 = validationService.test(
-                grant1, new HashSet<>(Arrays.asList(grant1)));
+                grant1, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
         Assert.assertTrue(result1.hasViolations());
         Assert.assertEquals(1, result1.violations());
@@ -920,7 +900,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result2 = validationService.test(
-                grant2_2, new HashSet<>(Arrays.asList(grant2_1, grant2_2)));
+                grant2_2, new HashSet<>(Arrays.asList(grant2_1)));
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertEquals(1, result2.violations());
@@ -945,7 +925,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result3 = validationService.test(
-                grant3, new HashSet<>(Arrays.asList(grant3)));
+                grant3, new HashSet<Grant>());
         Assert.assertFalse(result3.hasWarnings());
         Assert.assertFalse(result3.hasViolations());
 
@@ -967,7 +947,7 @@ public class GrantRuleValidationServiceTest {
                 .build();
 
         GrantRuleResult result4 = validationService.test(
-                grant4, new HashSet<>(Arrays.asList(grant4)));
+                grant4, new HashSet<Grant>());
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
     }
