@@ -371,8 +371,8 @@ public class StatisticsReportViewBackingBean {
             case "grantType":
                 return StatisticSearchType.GRANT_TYPE;
             default:
-                //TODO: Throw faces exception
-                return null;
+                statisticsGrouping = "municipality";
+                return StatisticSearchType.MUNICIPALITY;
         }
     }
 
