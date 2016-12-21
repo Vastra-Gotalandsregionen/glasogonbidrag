@@ -148,6 +148,8 @@ public class CreateInvoiceAddGrantBackingBean {
     private boolean hasWarnings;
     private boolean ignoreWarnings;
 
+    private Set<Grant> invoiceGrants;
+
     // Getter and Setters for Helpers
 
     public TabUtil getTabUtil() {
@@ -795,15 +797,11 @@ public class CreateInvoiceAddGrantBackingBean {
             prescriptionValueObject.patchPrescription(grant.getPrescription());
         }
 
-        // TODO: Should we move code that set relation from grant to prescription here?
-
-        beneficiary.getGrants().add(grant);
-
         GrantRuleResult result = grantRuleValidationService.test(
                 grant, beneficiary.getGrants());
 
-        GrantRuleResult invoiceResult = grantRuleValidationService.mayAddToInvoice(
-                grant, invoice);
+        GrantRuleResult invoiceResult = grantRuleValidationService
+                .mayAddToInvoice(grant, invoiceGrants, invoice);
 
         result.addAllViolations(invoiceResult.getViolations());
         result.addAllWarnings(invoiceResult.getWarnings());
@@ -1014,6 +1012,17 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         beneficiary = grant.getBeneficiary();
+
+        // We are editing a grant on this beneficiary, we want to remove
+        // this from the historical grants list.
+        // This also ensures that the grant rule validation service don't
+        // include this grant twice.
+        beneficiary.getGrants().remove(grant);
+
+        // Invoice grants,
+        invoiceGrants = new HashSet<>(invoice.getGrants());
+        invoiceGrants.remove(grant);
+
         latestBeneficiaryPrescription =
                 prescriptionService.findLatest(beneficiary);
 

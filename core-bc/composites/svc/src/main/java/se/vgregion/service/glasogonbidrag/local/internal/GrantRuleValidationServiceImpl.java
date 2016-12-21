@@ -13,6 +13,7 @@ import se.vgregion.service.glasogonbidrag.types.GrantRuleViolation;
 import se.vgregion.service.glasogonbidrag.types.GrantRuleWarning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -46,10 +47,9 @@ public class GrantRuleValidationServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice) {
+    public GrantRuleResult mayAddToInvoice(Grant grant, Set<Grant> grants,
+                                           Invoice invoice) {
         GrantRuleResult result = new GrantRuleResult();
-
-        Set<Grant> grants = invoice.getGrants();
 
         long invoiceAmountSum = invoice.getAmount();
 
@@ -407,7 +407,7 @@ public class GrantRuleValidationServiceImpl
         cal.setTime(grant.getDeliveryDate());
         int suppliedYear = cal.get(Calendar.YEAR);
 
-        List<Grant> calendarGrants = new ArrayList<>();
+        List<Grant> calendarGrants = new ArrayList<>(Arrays.asList(grant));
         for (Grant g : historicalGrants) {
             cal.setTime(g.getDeliveryDate());
             int historicalYear = cal.get(Calendar.YEAR);
@@ -421,7 +421,8 @@ public class GrantRuleValidationServiceImpl
             Date historicalPrescriptionDate = cal.getTime();
 
             if (historicalPrescriptionDate.equals(prescriptionDate) &&
-                    g.getPrescription().getDiagnose().equals(prescription.getDiagnose()) &&
+                    g.getPrescription().getDiagnose().equals(
+                            prescription.getDiagnose()) &&
                     historicalYear == suppliedYear) {
                 calendarGrants.add(g);
             }
