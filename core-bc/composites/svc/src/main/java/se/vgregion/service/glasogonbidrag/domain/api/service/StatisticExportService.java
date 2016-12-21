@@ -3,6 +3,7 @@ package se.vgregion.service.glasogonbidrag.domain.api.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 
 /**
  *
@@ -22,5 +23,6 @@ import java.util.Date;
  * @author Martin Lind - Monator Technologies AB
  */
 public interface StatisticExportService {
-    byte[] export(Date start, Date end) throws IOException;
+    byte[] export(Date start, Date end, Map<String, String> localization)
+            throws IOException;
 }

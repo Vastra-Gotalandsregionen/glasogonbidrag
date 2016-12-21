@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -48,11 +49,13 @@ public class StatisticExportServiceImpl implements StatisticExportService {
     @PersistenceContext
     private EntityManager em;
 
-    @Override
-    public byte[] export(Date start, Date end)
+    public byte[] export(Date start, Date end,
+                         Map<String, String> localization)
             throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        String sheetName = FORMAT_DATE.format(start) + "-" + FORMAT_DATE.format(end);
+
+        String sheetName =
+                FORMAT_DATE.format(start) + "-" + FORMAT_DATE.format(end);
         XSSFSheet sheet = workbook.createSheet(sheetName);
 
         List<StatisticExportDTO> exportData = getData(start, end);
@@ -65,45 +68,44 @@ public class StatisticExportServiceImpl implements StatisticExportService {
             Row row = sheet.createRow(rowIndex);
             int cellIndex = 0;
 
-
             Cell cell = row.createCell(cellIndex);
-            cell.setCellValue("Belopp");
+            cell.setCellValue(localization.get("excel-file-amount-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Kön");
+            cell.setCellValue(localization.get("excel-file-sex-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Diagnostyp");
+            cell.setCellValue(localization.get("excel-file-diagnose-type-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Födelsedatum");
+            cell.setCellValue(localization.get("excel-file-birth-date-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Kvitteringsdatum");
+            cell.setCellValue(localization.get("excel-file-delivery-date-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Skapades");
+            cell.setCellValue(localization.get("excel-file-create-date-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Län");
+            cell.setCellValue(localization.get("excel-file-county-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Kommun");
+            cell.setCellValue(localization.get("excel-file-municipality-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Ansvarskod");
+            cell.setCellValue(localization.get("excel-file-responsibility-code-header"));
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue("Frikod");
+            cell.setCellValue(localization.get("excel-file-free-code-header"));
         }
 
         CreationHelper creationHelper = workbook.getCreationHelper();
@@ -135,14 +137,18 @@ public class StatisticExportServiceImpl implements StatisticExportService {
 
             cell = row.createCell(cellIndex);
             if (exportRow.getSex() != null) {
-                cell.setCellValue(exportRow.getSex().toString());
+                String sexLanguageKey = exportRow.getSex().getKey();
+                String sexString = localization.get(sexLanguageKey);
+                cell.setCellValue(sexString);
             } else {
                 cell.setCellValue("n/a");
             }
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
-            cell.setCellValue(exportRow.getDiagnoseType().toString());
+            String languageKey = exportRow.getDiagnoseType().getLanguageKey();
+            String label = localization.get(languageKey);
+            cell.setCellValue(label);
             cellIndex = cellIndex + 1;
 
             cell = row.createCell(cellIndex);
