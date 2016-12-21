@@ -28,6 +28,7 @@ import se.vgregion.service.glasogonbidrag.domain.exception.GrantAlreadyExistExce
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.integration.api.BeneficiaryLookupService;
+import se.vgregion.service.glasogonbidrag.integration.exception.NoBeneficiaryFoundException;
 import se.vgregion.service.glasogonbidrag.local.api.AccountingDistributionCalculationService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantAmountLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
@@ -326,9 +327,24 @@ public class CreateInvoiceAddGrantBackingBean {
         Calendar cal = new GregorianCalendar();
         Date currentDate = cal.getTime();
 
-        BeneficiaryTransport transport =
-                beneficiaryLookupService
-                        .fetchNameAndAddress(identificationNumber, currentDate);
+        BeneficiaryTransport transport;
+        try {
+            transport = beneficiaryLookupService
+                    .fetchNameAndAddress(identificationNumber, currentDate);
+        } catch (NoBeneficiaryFoundException e) {
+            String localizedMessage = messageSource.getMessage(
+                    "identification-entered-not-found",
+                    new Object[0],
+                    locale);
+
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, localizedMessage, "");
+
+            FacesContext.getCurrentInstance()
+                    .addMessage("personalNumber", message);
+
+            return;
+        }
 
         boolean protectedNumber = transport.getName().isProtectedNumber();
 
