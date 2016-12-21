@@ -1,5 +1,7 @@
 package se.vgregion.service.glasogonbidrag.local.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.vgregion.service.glasogonbidrag.local.api.PersonalNumberFormatService;
 import se.vgregion.service.glasogonbidrag.local.exception.YearOutOfBoundException;
@@ -10,6 +12,9 @@ import se.vgregion.service.glasogonbidrag.local.exception.YearOutOfBoundExceptio
 @Service
 public class PersonalNumberFormatServiceImpl
         implements PersonalNumberFormatService {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PersonalNumberFormatServiceImpl.class);
 
     /**
      * {@inheritDoc}
@@ -38,6 +43,7 @@ public class PersonalNumberFormatServiceImpl
      */
     @Override
     public String to(String number, String currentYear) {
+
         checkYear(currentYear);
 
         int century = Integer.parseInt(currentYear.substring(0, 2));

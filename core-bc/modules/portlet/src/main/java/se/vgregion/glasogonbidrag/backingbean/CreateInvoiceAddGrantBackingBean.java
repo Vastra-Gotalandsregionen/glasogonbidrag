@@ -13,10 +13,8 @@ import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 import se.vgregion.glasogonbidrag.flow.action.AddGrantAction;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
-import se.vgregion.glasogonbidrag.util.GrantUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
 import se.vgregion.glasogonbidrag.util.TabUtil;
-import se.vgregion.glasogonbidrag.validator.PersonalNumberValidator;
 import se.vgregion.glasogonbidrag.viewobject.BeneficiaryVO;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
@@ -110,14 +108,7 @@ public class CreateInvoiceAddGrantBackingBean {
     private FacesUtil facesUtil;
 
     @Autowired
-    private GrantUtil grantUtil;
-
-    @Autowired
     private LiferayUtil liferayUtil;
-
-
-    @Autowired
-    private PersonalNumberValidator personalNumberValidator;
 
     @Autowired
     private PersonalNumberFormatService personalNumberFormatService;
@@ -325,98 +316,70 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void identificationPIDListener() {
-
-        // TODO: Upgrade the PersonaNumberFormatService so that it can sanitize user input.
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
-
-        // TODO: This is temp fixes. Should be moved to a service. First we remove century digits, then add them again =).
-        // Strip away century digits
-        if(identificationNumber.length() == 13) {
-            identificationNumber = identificationNumber.substring(2, identificationNumber.length());
-        }
-
-
-        // Todo: year is currently hardcoded. Should be fetched by Calendar
-        String localFormat = personalNumberFormatService.to(identificationNumber, "2016");
-        LOGGER.info("identificationPIDListener(): localFormat={}", localFormat);
 
         FacesContext context = FacesContext.getCurrentInstance();
         Locale locale = facesUtil.getLocale();
 
-        boolean isNumberValid = personalNumberValidator.validatePersonalNumber(identificationNumber);
-        System.out.println("isNumberValid: " + isNumberValid);
-        // Temp
-        //isNumberValid = true;
+        Calendar cal = new GregorianCalendar();
+        Date currentDate = cal.getTime();
 
-        if(isNumberValid) {
-            Calendar cal = new GregorianCalendar();
-            Date currentDate = cal.getTime();
+        BeneficiaryTransport transport =
+                beneficiaryLookupService
+                        .fetchNameAndAddress(identificationNumber, currentDate);
 
-            BeneficiaryTransport transport =
-                    beneficiaryLookupService
-                            .fetchNameAndAddress(localFormat, currentDate);
+        boolean protectedNumber = transport.getName().isProtectedNumber();
 
-            boolean protectedNumber = transport.getName().isProtectedNumber();
+        Identification identification = identificationService.findByNumber(identificationNumber);
 
-            Identification identification = identificationService.findByNumber(localFormat);
-
-            if (identification == null) {
-                if(protectedNumber) {
-                    identification = new Protected(localFormat);
-                } else {
-                    identification = new Personal(localFormat);
-                }
+        if (identification == null) {
+            if(protectedNumber) {
+                identification = new Protected(identificationNumber);
             } else {
-                beneficiary = beneficiaryService
-                        .findWithPartsByIdent(identification);
-
-                latestBeneficiaryPrescription = prescriptionService
-                        .findLatest(beneficiary);
-            }
-
-            if (beneficiary == null) {
-                // TODO: Handle the integration better.
-                beneficiary = new Beneficiary();
-                beneficiary.setIdentification(identification);
-
-                newBeneficiary = true;
-            }
-
-            beneficiary.setFullName(transport.getName().getFullName());
-            beneficiary.setSex(transport.getName().getSex());
-
-            grant.setCounty(transport.getArea().getCounty());
-            grant.setMunicipality(transport.getArea().getMunicipality());
-
-            LOGGER.info("createInvoiceAddGrantBackingBean - " +
-                    "personNumberListener(): {}", beneficiary);
-
-            grant.setBeneficiary(beneficiary);
-
-            if (grant.getCounty() == null
-                    || grant.getMunicipality() == null
-                    || grant.getCounty().trim().isEmpty()
-                    || grant.getMunicipality().trim().isEmpty()) {
-
-                FacesMessage message = new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR,
-                        messageSource.getMessage("reg-grant-error-could-not-fetch-area",new Object[0], locale),
-                        ""
-                );
-
-                context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
-            } else {
-                // Set grantFlow
-                grantFlow = grantFlow.nextState();
+                identification = new Personal(identificationNumber);
             }
         } else {
+            beneficiary = beneficiaryService
+                    .findWithPartsByIdent(identification);
+
+            latestBeneficiaryPrescription = prescriptionService
+                    .findLatest(beneficiary);
+        }
+
+        if (beneficiary == null) {
+            // TODO: Handle the integration better.
+            beneficiary = new Beneficiary();
+            beneficiary.setIdentification(identification);
+
+            newBeneficiary = true;
+        }
+
+        beneficiary.setFullName(transport.getName().getFullName());
+        beneficiary.setSex(transport.getName().getSex());
+
+        grant.setCounty(transport.getArea().getCounty());
+        grant.setMunicipality(transport.getArea().getMunicipality());
+
+        LOGGER.info("createInvoiceAddGrantBackingBean - " +
+                "personNumberListener(): {}", beneficiary);
+
+        grant.setBeneficiary(beneficiary);
+
+        if (grant.getCounty() == null
+                || grant.getMunicipality() == null
+                || grant.getCounty().trim().isEmpty()
+                || grant.getMunicipality().trim().isEmpty()) {
+
             FacesMessage message = new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
-                    messageSource.getMessage("reg-grant-error-not-a-valid-personal-number",new Object[0], locale),
+                    messageSource.getMessage("reg-grant-error-could-not-fetch-area",new Object[0], locale),
                     ""
             );
 
             context.addMessage(liferayUtil.getPortletNamespace() + ":addGrantForm:personalNumber", message);
+        } else {
+            // Set grantFlow
+            grantFlow = grantFlow.nextState();
         }
     }
 

@@ -47,7 +47,7 @@
         <div class="field-element">
             <h:outputLabel for="#{id}" value="#{label}" />
             <h:inputText id="#{id}"
-                         styleClass="#{valueType eq 'personNumber' ? 'js-input-mask js-input-mask-personnumber' : ''} #{valueType eq 'date' ? 'js-input-mask_ js-input-mask-date_' : ''} #{inputStyleClass}"
+                         styleClass="#{inputStyleClass}"
                          value="#{value}"
                          required="#{required}"
                          requiredMessage="#{requiredMessage}"
@@ -65,6 +65,9 @@
                     </c:when>
                     <c:when test="#{valueType eq 'lmaNumber'}">
                         <f:converter converterId="se.vgregion.LmaNumberConverter" />
+                    </c:when>
+                    <c:when test="#{valueType eq 'personNumber'}">
+                        <f:converter converterId="se.vgregion.PersonNumberConverter" />
                     </c:when>
                     <c:when test="#{valueType eq 'reserveNumber'}">
                         <f:converter converterId="se.vgregion.ReserveNumberConverter" />
