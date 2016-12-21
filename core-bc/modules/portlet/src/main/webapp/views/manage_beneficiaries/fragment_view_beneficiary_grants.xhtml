@@ -29,7 +29,9 @@
                              paginator="#{viewPaginator}"
                              paginatorPosition="bottom"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="1,5,10,15,20,50" >
+                             rowsPerPageTemplate="1,5,10,15,20,50"
+                             emptyMessage="#{bundle['table-empty-message']}"
+                >
 
                     <p:column headerText="#{bundle['verification-number-short']}">
                         <a href="#{viewInvoiceNavigation.navigate(grant.invoice.id)}">

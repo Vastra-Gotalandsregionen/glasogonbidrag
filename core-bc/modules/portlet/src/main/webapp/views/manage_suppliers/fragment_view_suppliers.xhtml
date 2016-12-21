@@ -30,6 +30,7 @@
                      selectionMode="single"
                      selection="#{selectedSupplier}"
                      rowKey="#{supplier.id}"
+                     emptyMessage="#{bundle['table-empty-message']}"
                      lazy="true">
 
             <p:ajax event="rowSelect"
