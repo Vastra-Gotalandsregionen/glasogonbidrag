@@ -8,7 +8,9 @@ import java.util.Date;
  * @author Martin Lind - Monator Technologies AB
  */
 public class StatisticSearchDateInterval {
-    private static final DateFormat FORMAT =
+    private static final DateFormat FORMAT_SINGLE_DATE =
+            new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateFormat FORMAT_INTERVAL =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final boolean singleDate;
@@ -35,7 +37,7 @@ public class StatisticSearchDateInterval {
 
     public String getDate() {
         if (singleDate) {
-            return FORMAT.format(dates[0]);
+            return FORMAT_SINGLE_DATE.format(dates[0]);
         } else {
             throw new IllegalStateException(
                     "May not call getDate() on interval object");
@@ -44,7 +46,7 @@ public class StatisticSearchDateInterval {
 
     public String getStart() {
         if (!singleDate) {
-            return FORMAT.format(dates[0]);
+            return FORMAT_INTERVAL.format(dates[0]);
         } else {
             throw new IllegalStateException(
                     "May not call getStart() on single date object");
@@ -53,7 +55,7 @@ public class StatisticSearchDateInterval {
 
     public String getEnd() {
         if (!singleDate) {
-            return FORMAT.format(dates[1]);
+            return FORMAT_INTERVAL.format(dates[1]);
         } else {
             throw new IllegalStateException(
                     "May not call getEnd() on single date object");
