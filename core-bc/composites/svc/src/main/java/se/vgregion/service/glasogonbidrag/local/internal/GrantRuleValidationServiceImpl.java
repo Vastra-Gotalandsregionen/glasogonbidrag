@@ -47,10 +47,9 @@ public class GrantRuleValidationServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice) {
+    public GrantRuleResult mayAddToInvoice(Grant grant, Set<Grant> grants,
+                                           Invoice invoice) {
         GrantRuleResult result = new GrantRuleResult();
-
-        Set<Grant> grants = invoice.getGrants();
 
         long invoiceAmountSum = invoice.getAmount();
 

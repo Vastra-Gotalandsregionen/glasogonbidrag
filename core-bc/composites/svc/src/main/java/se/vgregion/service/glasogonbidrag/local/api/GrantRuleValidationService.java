@@ -19,9 +19,11 @@ public interface GrantRuleValidationService {
      * new grant is not larger than invoice amount
      *
      * @param grant the new grant that is shall be added
+     * @param grants grants on the invoice
      * @param invoice the invoice
      */
-    GrantRuleResult mayAddToInvoice(Grant grant, Invoice invoice);
+    GrantRuleResult mayAddToInvoice(Grant grant, Set<Grant> grants,
+                                    Invoice invoice);
 
     /**
      *

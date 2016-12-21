@@ -157,6 +157,8 @@ public class CreateInvoiceAddGrantBackingBean {
     private boolean hasWarnings;
     private boolean ignoreWarnings;
 
+    private Set<Grant> invoiceGrants;
+
     // Getter and Setters for Helpers
 
     public TabUtil getTabUtil() {
@@ -835,8 +837,8 @@ public class CreateInvoiceAddGrantBackingBean {
         GrantRuleResult result = grantRuleValidationService.test(
                 grant, beneficiary.getGrants());
 
-        GrantRuleResult invoiceResult = grantRuleValidationService.mayAddToInvoice(
-                grant, invoice);
+        GrantRuleResult invoiceResult = grantRuleValidationService
+                .mayAddToInvoice(grant, invoiceGrants, invoice);
 
         result.addAllViolations(invoiceResult.getViolations());
         result.addAllWarnings(invoiceResult.getWarnings());
@@ -1053,6 +1055,10 @@ public class CreateInvoiceAddGrantBackingBean {
         // This also ensures that the grant rule validation service don't
         // include this grant twice.
         beneficiary.getGrants().remove(grant);
+
+        // Invoice grants,
+        invoiceGrants = new HashSet<>(invoice.getGrants());
+        invoiceGrants.remove(grant);
 
         latestBeneficiaryPrescription =
                 prescriptionService.findLatest(beneficiary);
