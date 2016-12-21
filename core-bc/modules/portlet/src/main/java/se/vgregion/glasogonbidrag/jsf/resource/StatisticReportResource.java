@@ -34,6 +34,26 @@ public class StatisticReportResource extends Resource {
     private static final String PARAM_NAME_START_DATE = "startDate";
     private static final String PARAM_NAME_END_DATE = "endDate";
 
+    private static final String[] KEYS_TO_LOCALIZE = new String[] {
+            "excel-file-amount-header",
+            "excel-file-sex-header",
+            "excel-file-diagnose-type-header",
+            "excel-file-birth-date-header",
+            "excel-file-delivery-date-header",
+            "excel-file-create-date-header",
+            "excel-file-county-header",
+            "excel-file-municipality-header",
+            "excel-file-responsibility-code-header",
+            "excel-file-free-code-header",
+            "sex-male",
+            "sex-unknown",
+            "sex-female",
+            "diagnose-type-aphakia",
+            "diagnose-type-keratoconus",
+            "diagnose-type-special",
+            "diagnose-type-child"
+    };
+
 
     private static final SimpleDateFormat FORMAT =
             new SimpleDateFormat("yyyyMMdd");
@@ -136,6 +156,9 @@ public class StatisticReportResource extends Resource {
         Map<String, String> requestMap = facesContext
                 .getExternalContext().getRequestParameterMap();
 
+        Locale locale = FacesContext.getCurrentInstance()
+                .getExternalContext().getRequestLocale();
+
         String startString = requestMap.get(PARAM_NAME_START_DATE);
         String endString = requestMap.get(PARAM_NAME_END_DATE);
 
@@ -148,7 +171,29 @@ public class StatisticReportResource extends Resource {
             throw new FacesException("Failed to parse supplied date.", e);
         }
 
-        byte[] data = service.export(start, end);
+        Calendar startCalendar = new GregorianCalendar();
+        startCalendar.setTime(start);
+        startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        startCalendar.set(Calendar.MINUTE, 0);
+        startCalendar.set(Calendar.SECOND, 0);
+        startCalendar.set(Calendar.MILLISECOND, 0);
+
+        Calendar endCalendar = new GregorianCalendar();
+        endCalendar.setTime(end);
+        endCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endCalendar.set(Calendar.MINUTE, 59);
+        endCalendar.set(Calendar.SECOND, 59);
+        endCalendar.set(Calendar.MILLISECOND, 99);
+
+        Map<String, String> localizedKeys = new HashMap<>();
+        for (String key : KEYS_TO_LOCALIZE) {
+            String localizedValue =
+                    messageSource.getMessage(key, new Object[0], locale);
+            localizedKeys.put(key, localizedValue);
+        }
+
+        byte[] data = service.export(
+                startCalendar.getTime(), endCalendar.getTime(), localizedKeys);
 
         return new ByteArrayInputStream(data);
     }
