@@ -2,6 +2,7 @@ package se.vgregion.service.glasogonbidrag.domain.internal.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
@@ -38,8 +39,7 @@ public class StatisticReportServiceImpl implements StatisticReportService {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticReportServiceImpl.class);
 
-    // TODO: Is this a good way to get a DataSource?
-    @Resource(mappedName="jdbc/GlasogonBidragDbPool")
+    @Autowired
     private DataSource ds;
 
 //    // If the above is fine, remove this.
