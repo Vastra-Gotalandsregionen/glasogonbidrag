@@ -45,7 +45,7 @@ public final class TypesUtil {
         if (type == IdentificationType.VALID) {
             id = new Personal(number);
         } else {
-            id = new Reserve(number, null); // TODO: Handle birthday
+            id = new Reserve(number, null);
         }
 
         return id;

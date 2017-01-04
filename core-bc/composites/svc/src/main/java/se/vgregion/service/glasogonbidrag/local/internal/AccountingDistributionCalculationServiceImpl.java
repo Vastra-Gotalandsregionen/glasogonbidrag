@@ -154,7 +154,7 @@ public class AccountingDistributionCalculationServiceImpl
                                            IdentificationType type) {
 
         if (type != IdentificationType.PERSONAL && birthDate == null) {
-            return 9999; // TODO: Determine the correct free code for this case.
+            return 9999; // TODO: Determine the correct free code for this case. Currently, this case will never happen.
         }
 
         Calendar cal = new GregorianCalendar();

@@ -37,7 +37,7 @@ public class LatestInvoicesViewBackingBean {
     private LiferayUtil liferayUtil;
 
     private List<Invoice> invoices;
-    private PrettyTime prettyTime; //TODO: Do we need getter and setter?
+    private PrettyTime prettyTime;
 
     public List<Invoice> getInvoices() {
         return invoices;

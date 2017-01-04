@@ -208,10 +208,12 @@ public class StatisticsDashboardViewBackingBean {
     }
 
     public void searchStatistics() {
+        statisticsVOs = statisticsMockUtil.getStatistics(statisticsGrouping, statisticsFilterGender, statisticsFilterBirthYearStart, statisticsFilterBirthYearStop);
+
+        // TODO: Code below is not used. Should be removed. This requires that functionality is tested again.
         String labelPrefix = "Kommun";
         int numberOfHits = 20;
 
-        // TODO: Ugly code
         if(statisticsGrouping.equals("age")) {
             labelPrefix = "Alder";
             numberOfHits = 60;
@@ -224,7 +226,6 @@ public class StatisticsDashboardViewBackingBean {
         }
 
         //statisticsVOs = getDummyStatisticsVO(labelPrefix, numberOfHits);
-        statisticsVOs = statisticsMockUtil.getStatistics(statisticsGrouping, statisticsFilterGender, statisticsFilterBirthYearStart, statisticsFilterBirthYearStop);
     }
 
     @PostConstruct

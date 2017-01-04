@@ -261,8 +261,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         em.remove(grant);
 
 
-        Invoice newInvoice = em.merge(invoice); // TODO: wrong number of grants.
-                                                // TODO: Understand what I meant when I wrote the above todo?
+        Invoice newInvoice = em.merge(invoice);
         Beneficiary newBeneficiary = em.merge(beneficiary);
 
         // remove old distribution.

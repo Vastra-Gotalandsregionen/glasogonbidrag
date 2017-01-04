@@ -35,7 +35,7 @@ public class Personal extends Identification {
         return dateUtil.dateFromString(date);
     }
 
-    // TODO: Move this from here to the personal number service.
+    // FIXME: Might be code duplication / unused code section.
     public boolean isValid() {
         boolean isValid = false;
 
