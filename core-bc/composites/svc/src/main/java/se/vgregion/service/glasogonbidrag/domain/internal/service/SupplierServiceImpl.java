@@ -34,7 +34,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public void create(Supplier supplier) {
-        LOGGER.info("Persisting supplier: {}", supplier);
+        LOGGER.debug("Persisting supplier: {}", supplier);
 
         em.persist(supplier);
     }
@@ -42,7 +42,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public Supplier update(Supplier supplier) {
-        LOGGER.info("Updating supplier: {}", supplier);
+        LOGGER.debug("Updating supplier: {}", supplier);
 
         return em.merge(supplier);
     }
@@ -52,7 +52,7 @@ public class SupplierServiceImpl implements SupplierService {
     public void delete(Long id) {
         Supplier supplier = em.find(Supplier.class, id);
 
-        LOGGER.info("Deleting supplier: {}", supplier);
+        LOGGER.debug("Deleting supplier: {}", supplier);
 
         em.remove(supplier);
     }

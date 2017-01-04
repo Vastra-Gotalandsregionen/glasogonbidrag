@@ -58,7 +58,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void create(long userId, long groupId, long companyId,
                        String caseWorker,
                        Invoice invoice) {
-        LOGGER.info("Persisting invoice: {}", invoice);
+        LOGGER.debug("Persisting invoice: {}", invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -86,7 +86,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public Invoice update(String caseWorker, Invoice invoice) {
-        LOGGER.info("Updating invoice: {}", invoice);
+        LOGGER.debug("Updating invoice: {}", invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -107,7 +107,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     throws GrantAlreadyExistException,
            GrantMissingAreaException,
            NoIdentificationException {
-        LOGGER.info("Add grant {} to invoice {}", grant, invoice);
+        LOGGER.debug("Add grant {} to invoice {}", grant, invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -196,7 +196,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setDistribution(null);
 
-        LOGGER.info("Updating grant: {} on invoice: {}", grant, invoice);
+        LOGGER.debug("Updating grant: {} on invoice: {}", grant, invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -247,7 +247,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         beneficiary.getPrescriptionHistory().remove(prescription);
         beneficiary.getGrants().remove(grant);
 
-        LOGGER.info("Deleting grant: {} from invoice: {}", grant, invoice);
+        LOGGER.debug("Deleting grant: {} from invoice: {}", grant, invoice);
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -261,8 +261,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         em.remove(grant);
 
 
-        Invoice newInvoice = em.merge(invoice); // TODO: wrong number of grants.
-                                                // TODO: Understand what I meant when I wrote the above todo?
+        Invoice newInvoice = em.merge(invoice);
         Beneficiary newBeneficiary = em.merge(beneficiary);
 
         // remove old distribution.
@@ -283,7 +282,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             String caseWorker,
             Invoice invoice, AccountingDistribution distribution) {
         // TODO: if the invoice is any other status than IN_PROGRESS throw exception.
-        LOGGER.info("Add distribution {} to invoice {}",
+        LOGGER.debug("Add distribution {} to invoice {}",
                 distribution, invoice);
 
         Calendar cal = Calendar.getInstance();
@@ -329,7 +328,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void delete(Long id) {
         Invoice invoice = em.find(Invoice.class, id);
 
-        LOGGER.info("Deleting invoice: {}", invoice);
+        LOGGER.debug("Deleting invoice: {}", invoice);
 
         em.remove(invoice);
     }

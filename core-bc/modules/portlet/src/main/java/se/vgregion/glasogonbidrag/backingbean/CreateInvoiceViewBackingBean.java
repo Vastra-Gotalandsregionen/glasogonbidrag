@@ -118,8 +118,6 @@ public class CreateInvoiceViewBackingBean {
     }
 
     public String register() {
-        LOGGER.info("CreateInvoiceViewBackingBean - register()");
-
         ThemeDisplay themeDisplay = util.getThemeDisplay();
         long userId = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
@@ -155,8 +153,6 @@ public class CreateInvoiceViewBackingBean {
             return null;
         }
 
-        LOGGER.info("Persisted invoice, got id: {}", invoice.getId());
-
         return String.format(
                 "add_grant?invoiceId=%d" +
                         "&faces-redirect=true" +
@@ -165,10 +161,6 @@ public class CreateInvoiceViewBackingBean {
     }
 
     public String cancel() {
-        LOGGER.info("CreateInvoiceViewBackingBean - cancel()");
-
-        //TODO: Should redirect to start page?
-
         return "view?faces-redirect=true";
     }
 
@@ -176,8 +168,6 @@ public class CreateInvoiceViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("CreateInvoiceViewBackingBean - init()");
-
         suppliers = supplierService.findAllActive();
     }
 

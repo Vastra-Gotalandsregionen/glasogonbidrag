@@ -131,7 +131,7 @@ public class PrescriptionValueObject {
             constructor =
                     reference.getConstructor(PrescriptionValueObject.class);
         } catch (NoSuchMethodException e) {
-            LOGGER.info("Diagnose of class {} don't contain a constructor" +
+            LOGGER.warn("Diagnose of class {} don't contain a constructor" +
                             "to build from value object.",
                     reference.getCanonicalName());
 
@@ -139,7 +139,7 @@ public class PrescriptionValueObject {
         }
 
         if (constructor.isAccessible()) {
-            LOGGER.info("Class {}'s constructor that takes a diagnose value " +
+            LOGGER.warn("Class {}'s constructor that takes a diagnose value " +
                             "object is not accessible.",
                     reference.getCanonicalName());
 
@@ -151,7 +151,7 @@ public class PrescriptionValueObject {
         } catch (InstantiationException
                 |IllegalAccessException
                 |InvocationTargetException e) {
-            LOGGER.info("Class {}'s constructor that takes a diagnose value " +
+            LOGGER.warn("Class {}'s constructor that takes a diagnose value " +
                             "threw exception, got  {}.",
                     reference.getCanonicalName(),
                     e.getMessage());

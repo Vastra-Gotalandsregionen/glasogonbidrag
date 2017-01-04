@@ -62,7 +62,6 @@ public class StatisticExportServiceImpl implements StatisticExportService {
 
         int rowIndex = 0;
 
-        // TODO: Fix language keys.
         // Headers
         {
             Row row = sheet.createRow(rowIndex);

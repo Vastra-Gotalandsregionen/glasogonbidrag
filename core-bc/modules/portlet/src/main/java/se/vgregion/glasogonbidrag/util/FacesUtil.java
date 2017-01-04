@@ -60,8 +60,6 @@ public class FacesUtil {
 
         String value = parameterMap.get(parameterName);
 
-        LOGGER.info("FacesUtil - fetchProperty(): {}", value);
-
         return value;
     }
 
@@ -70,8 +68,6 @@ public class FacesUtil {
         String value = fetchProperty(parameterName);
 
         boolean valueBoolean = Boolean.parseBoolean(value);
-
-        LOGGER.info("FacesUtil - fetchBooleanProperty(): {}", valueBoolean);
 
         return valueBoolean;
     }
@@ -86,10 +82,6 @@ public class FacesUtil {
     public Locale getLocale() {
         Locale locale = FacesContext.getCurrentInstance()
                 .getExternalContext().getRequestLocale();
-
-        LOGGER.info(
-                "Locale from LocaleContextHolder: {} in FacesUtil",
-                locale.toString());
 
         return locale;
     }

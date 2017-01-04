@@ -100,7 +100,6 @@ public class GrantRuleValidationServiceImpl
                     "violation-recipe-date-after-delivery-date"));
         }
 
-        // TODO: make this nicer =)
         // If a beneficiary have an identity type of LMA, OTHER or RESERVE
         // and the birth date is null, we cannot do any more checks, return
         // the result.

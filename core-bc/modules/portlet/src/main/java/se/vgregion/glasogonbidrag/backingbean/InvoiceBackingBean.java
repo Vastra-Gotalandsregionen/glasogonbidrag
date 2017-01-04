@@ -43,8 +43,6 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayNewGrantsBeAdded(Invoice curInvoice) {
-        //LOGGER.info("InvoiceBackingBean - checkMayNewGrantsBeAdded()");
-
         boolean mayNewGrantsBeAdded = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
@@ -56,8 +54,6 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayInvoiceBeChanged(Invoice curInvoice) {
-        //LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeChanged()");
-
         boolean mayInvoiceBeChanged = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
@@ -68,8 +64,6 @@ public class InvoiceBackingBean {
     }
 
     public boolean checkMayInvoiceBeMarkedCompleted(Invoice curInvoice) {
-        //LOGGER.info("InvoiceBackingBean - checkMayInvoiceBeMarkedCompleted()");
-
         boolean mayInvoiceBeMarkedCompleted = false;
 
         boolean isStatusInProgress = (curInvoice.getStatus() == InvoiceStatus.IN_PROGRESS);
@@ -85,8 +79,6 @@ public class InvoiceBackingBean {
 
     @PostConstruct
     public void init() {
-        LOGGER.info("InvoiceBackingBean - init()");
-
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceService.findWithParts(invoiceId);
     }

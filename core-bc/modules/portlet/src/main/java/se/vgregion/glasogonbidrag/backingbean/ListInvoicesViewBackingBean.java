@@ -66,8 +66,7 @@ public class ListInvoicesViewBackingBean {
     }
 
     private void initFilterData() {
-        // TODO: refactor this nicer when more work with filters has been done
-        filterDataStatuses = new ArrayList<String>();
+        filterDataStatuses = new ArrayList<>();
         filterDataStatuses.add("invoice-status-in-progress");
         filterDataStatuses.add("invoice-status-completed");
         filterDataStatuses.add("invoice-status-canceled");
@@ -76,7 +75,6 @@ public class ListInvoicesViewBackingBean {
     }
 
     private void fetchInvoices() {
-        // TODO: Do we use the invoices field? Have the lazy data model replaced this everywhere?
         invoices = invoiceService.findAllWithParts();
         lazyDataModel = new InvoiceLazyDataModel(invoiceService);
     }

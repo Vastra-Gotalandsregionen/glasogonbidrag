@@ -28,8 +28,6 @@ public class StatisticsMockUtil {
                                             int statisticsFilterBirthYearStart,
                                             int statisticsFilterBirthYearStop) {
 
-        LOGGER.info("getStatistics - statisticsGrouping is: " + statisticsGrouping);
-
         ArrayList<StatisticsVO> statisticsVOs = new ArrayList<StatisticsVO>();
 
         if(statisticsGrouping.equals("municipality")) {

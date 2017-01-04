@@ -278,9 +278,6 @@ public class CreateInvoiceAddGrantBackingBean {
     // Listeners
 
     public void identificationLMAListener() {
-        // TODO: can validations be made?
-        // TODO: Handle none LMA
-
         String identificationNumber = beneficiaryVO.getIdentificationNumber();
 
         Identification identification = identificationService.findByNumber(identificationNumber);
@@ -308,7 +305,7 @@ public class CreateInvoiceAddGrantBackingBean {
             newBeneficiary = true;
         }
 
-        // TODO: Should be reviewed
+        // TODO: Verify that the constant values below are correct. Rename constants so that they are specific to LMA grants.
         grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
         grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
 
@@ -365,10 +362,8 @@ public class CreateInvoiceAddGrantBackingBean {
         }
 
         if (beneficiary == null) {
-            // TODO: Handle the integration better.
             beneficiary = new Beneficiary();
             beneficiary.setIdentification(identification);
-
             newBeneficiary = true;
         }
 
@@ -377,9 +372,6 @@ public class CreateInvoiceAddGrantBackingBean {
 
         grant.setCounty(transport.getArea().getCounty());
         grant.setMunicipality(transport.getArea().getMunicipality());
-
-        LOGGER.info("createInvoiceAddGrantBackingBean - " +
-                "personNumberListener(): {}", beneficiary);
 
         grant.setBeneficiary(beneficiary);
 
@@ -439,6 +431,7 @@ public class CreateInvoiceAddGrantBackingBean {
                     .findLatest(beneficiary);
         }
 
+        // TODO: Verify that the constant values below are correct. Rename constants so that they are specific to Reserve Number grants.
         grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
         grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
 
@@ -449,9 +442,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void deliveryDateListener() {
-        LOGGER.info("deliveryDateListener(): add {} to grant {}",
-                deliveryDate, grant);
-
         grant.setDeliveryDate(deliveryDate);
 
         // Set grantFlow
@@ -481,13 +471,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void grantTypeListener() {
-        LOGGER.info("grantTypeListener()");
-
-        if (GRANT_TYPE_OTHER.equals(grantType)) {
-            // TODO: make address check against deliveryDate
-            LOGGER.info("grantTypeListener(): addressCheck=");
-        }
-
         // Set grantFlow
         switch (grantType) {
             case GRANT_TYPE_AGE_0_TO_15:
@@ -507,7 +490,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
     public void prescriptionDateListener() {
 
-        // Todo: grantableAmount should return default amount (or max amount this beneficiary may get if less than default amount). This, however, does not work.
+        // TODO: grantableAmount should return default amount (or max amount this beneficiary may get if less than default amount). Code below, however, does not work.
 //        amount = grantAmountLookupService.grantableAmount(
 //                prescriptionValueObject.getDiagnose(),
 //                grant.getDeliveryDate(),
@@ -519,8 +502,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void changePrescriptionTypeListener() {
-        LOGGER.info("changePrescriptionTypeListener");
-
         // If no laterality is set. Set to bilateral
         VisualLaterality laterality = prescriptionValueObject.getLaterality();
 
@@ -534,13 +515,11 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void otherPrescriptionTypeListener() {
-        //TODO: Set values in beneficiary
         grantFlow = grantFlow.nextState();
     }
 
     public void otherPrescriptionDateListener() {
-        //TODO: Set values in beneficiary
-
+        // TODO: grantableAmount should return default amount (or max amount this beneficiary may get if less than default amount). Code below, however, does not work.
 //        amount = grantAmountLookupService.grantableAmount(
 //                grant.getPrescription().getDiagnose(),
 //                grant.getDeliveryDate(),
@@ -551,15 +530,10 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void stepBackListener() {
-
-        LOGGER.info("stepBackListener()");
-
         String showSection = facesUtil.fetchProperty("showSection");
-        LOGGER.info("stepBackListener(): showSection: {}", showSection);
 
         AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
-        //TODO: When step back to ENTER_PRESCRIPTION_DATE values for prescription date is lost. When step back to SELECT_GRANT_TYPE value for grant type is lost. However, when step back to ENTER_DELIVERY_DATE, value for deliveryDate is still there.
         switch (state) {
             case ENTER_IDENTIFICATION:
                 beneficiary = null; // This should be fetched again
@@ -624,8 +598,6 @@ public class CreateInvoiceAddGrantBackingBean {
     // Actions
 
     public String doDeleteGrant() {
-        LOGGER.info("doDeleteGrant");
-
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         String caseWorker = themeDisplay.getUser().getScreenName();
 
@@ -646,27 +618,12 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public String doSave() {
-
-        // TODO: Remove this try/catch and remove commented code below.
-//        try {
-//            String responseView = String.format(
-//                    "add_grant" +
-//                            "?faces-redirect=true" +
-//                            "&includeViewParams=true" +
-//                            "&invoiceId=%d", invoice.getId());
-//            return saveObjects(responseView);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-
         String responseView = String.format(
                 "add_grant" +
                         "?faces-redirect=true" +
                         "&includeViewParams=true" +
                         "&invoiceId=%d", invoice.getId());
         return saveObjects(responseView);
-
     }
 
     public String doSaveIgnoreWarnings() {
@@ -697,7 +654,7 @@ public class CreateInvoiceAddGrantBackingBean {
 
         newBeneficiary = true;
 
-        // TODO: Should be reviewed
+        // TODO: Verify that the constant values below are correct. Rename constants so that they are specific to no-person-id grants.
         grant.setCounty(GbConstants.NON_IDENTIFIED_DEFAULT_COUNTY);
         grant.setMunicipality(GbConstants.NON_IDENTIFIED_DEFAULT_MUNICIPALITY);
 
@@ -749,7 +706,7 @@ public class CreateInvoiceAddGrantBackingBean {
             return messages;
         }
 
-        // TODO: I think this parts below should be run in an transaction.
+        // TODO: Handle beneficiary and Handle grant should probably be run in a transaction
 
         // Handle beneficiary
         message = handleBeneficiaryObject();
@@ -800,7 +757,6 @@ public class CreateInvoiceAddGrantBackingBean {
         return null;
     }
 
-    // TODO: Verify that this method actually setup all relations
     private List<FacesMessage> setupAndValidateObjects() {
 
         List<FacesMessage> messages = new ArrayList<>();
@@ -947,7 +903,6 @@ public class CreateInvoiceAddGrantBackingBean {
             invoice = tuple.getInvoice();
             beneficiary = tuple.getBeneficiary();
         } else {
-            // TODO: Add more code here.
             InvoiceGrantTuple result =
                     invoiceService.updateGrant(caseWorker, invoice, grant);
 
@@ -988,8 +943,6 @@ public class CreateInvoiceAddGrantBackingBean {
         Long invoiceId = facesUtil.fetchId("invoiceId");
         Long grantId = facesUtil.fetchId("grantId");
 
-        LOGGER.info("editGrant - invoiceId is: " + invoiceId);
-
         String returnView = String.format(
                 "add_grant" +
                 "?invoiceId=%d" +
@@ -1007,12 +960,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @PostConstruct
     public void init() {
-        LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
-
         // Initialize with start states.
         setupDefaults();
-
-        LOGGER.info("Current state: {}.", grantFlow);
 
         // Fetch properties from user navigation.
         long invoiceId = facesUtil.fetchId("invoiceId");
@@ -1021,7 +970,6 @@ public class CreateInvoiceAddGrantBackingBean {
         invoice = invoiceService.findWithParts(invoiceId);
         grant = grantService.findWithParts(grantId);
 
-        // TODO: if existing (already persited) grant - load from DB (if not already loaded)
         if (grant == null) {
             invoiceGrants = new HashSet<>(invoice.getGrants());
             grant = new Grant();
@@ -1055,7 +1003,6 @@ public class CreateInvoiceAddGrantBackingBean {
             grantType = GRANT_TYPE_OTHER;
             grantTypeLabel = "grant-type-other";
         } else {
-            //TODO: code below (grantType) should be in a separate method. Code duplication (similar code elsewhere in this backing bean)
             if(grant.getDeliveryDate().before((NEW_RULESET_CHANGE_DATE))) {
                 grantType = GRANT_TYPE_AGE_0_TO_15;
                 grantTypeLabel = "grant-type-0-15";
