@@ -208,8 +208,6 @@ public class StatisticsDashboardViewBackingBean {
     }
 
     public void searchStatistics() {
-        LOGGER.info("searchStatistics");
-
         String labelPrefix = "Kommun";
         int numberOfHits = 20;
 
@@ -231,8 +229,6 @@ public class StatisticsDashboardViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("init");
-
         currency = new KronaCalculationUtil();
 
         Date today = new Date();

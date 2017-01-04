@@ -29,7 +29,7 @@ public class IdentificationServiceImpl implements IdentificationService {
     @Override
     @Transactional
     public void create(Identification identification) {
-        LOGGER.info("Persisting identification: {}", identification);
+        LOGGER.debug("Persisting identification: {}", identification);
 
         em.persist(identification);
     }
@@ -37,7 +37,7 @@ public class IdentificationServiceImpl implements IdentificationService {
     @Override
     @Transactional
     public Identification update(Identification identification) {
-        LOGGER.info("Updating identification: {}", identification);
+        LOGGER.debug("Updating identification: {}", identification);
 
         return em.merge(identification);
     }
@@ -47,7 +47,7 @@ public class IdentificationServiceImpl implements IdentificationService {
     public void delete(Long id) {
         Identification identification = em.find(Identification.class, id);
 
-        LOGGER.info("Deleting identification: {}", identification);
+        LOGGER.debug("Deleting identification: {}", identification);
 
         em.remove(identification);
     }
@@ -122,7 +122,7 @@ public class IdentificationServiceImpl implements IdentificationService {
         String number = generatedPrefix + hash.substring(0, 8).toUpperCase();
 
         if(findByNumber(number) != null) {
-            LOGGER.info("generateUniqueIdentificationNumber - generated number was not unique. New try.");
+            LOGGER.debug("generateUniqueIdentificationNumber - generated number was not unique. New try.");
             return generateUniqueIdentificationNumber();
         } else {
             return number;

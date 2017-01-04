@@ -46,7 +46,7 @@ public class AccountingDistributionCalculationServiceImpl
 
     @Override
     public AccountingDistribution calculateFrom(Invoice invoice) {
-        LOGGER.info("Generating distribution for {}", invoice);
+        LOGGER.debug("Generating distribution for {}", invoice);
 
         Set<Grant> grants = invoice.getGrants();
 

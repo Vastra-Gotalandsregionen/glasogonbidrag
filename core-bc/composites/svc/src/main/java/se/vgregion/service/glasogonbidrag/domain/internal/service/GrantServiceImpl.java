@@ -28,7 +28,7 @@ public class GrantServiceImpl implements GrantService {
     @Override
     @Transactional
     public void create(Grant grant) throws GrantMissingAreaException {
-        LOGGER.info("Persisting grant: {}", grant);
+        LOGGER.debug("Persisting grant: {}", grant);
 
         checkGrantArea(grant);
 
@@ -38,7 +38,7 @@ public class GrantServiceImpl implements GrantService {
     @Override
     @Transactional
     public Grant update(Grant grant) throws GrantMissingAreaException {
-        LOGGER.info("Updating grant: {}", grant);
+        LOGGER.debug("Updating grant: {}", grant);
 
         checkGrantArea(grant);
 
@@ -53,7 +53,7 @@ public class GrantServiceImpl implements GrantService {
     public void delete(long id) {
         Grant grant = find(id);
 
-        LOGGER.info("Deleting grant: {}", grant);
+        LOGGER.debug("Deleting grant: {}", grant);
 
         em.remove(grant);
     }

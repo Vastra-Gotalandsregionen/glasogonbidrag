@@ -378,9 +378,6 @@ public class CreateInvoiceAddGrantBackingBean {
         grant.setCounty(transport.getArea().getCounty());
         grant.setMunicipality(transport.getArea().getMunicipality());
 
-        LOGGER.info("createInvoiceAddGrantBackingBean - " +
-                "personNumberListener(): {}", beneficiary);
-
         grant.setBeneficiary(beneficiary);
 
         if (grant.getCounty() == null
@@ -449,9 +446,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void deliveryDateListener() {
-        LOGGER.info("deliveryDateListener(): add {} to grant {}",
-                deliveryDate, grant);
-
         grant.setDeliveryDate(deliveryDate);
 
         // Set grantFlow
@@ -481,13 +475,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void grantTypeListener() {
-        LOGGER.info("grantTypeListener()");
-
-        if (GRANT_TYPE_OTHER.equals(grantType)) {
-            // TODO: make address check against deliveryDate
-            LOGGER.info("grantTypeListener(): addressCheck=");
-        }
-
         // Set grantFlow
         switch (grantType) {
             case GRANT_TYPE_AGE_0_TO_15:
@@ -519,8 +506,6 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void changePrescriptionTypeListener() {
-        LOGGER.info("changePrescriptionTypeListener");
-
         // If no laterality is set. Set to bilateral
         VisualLaterality laterality = prescriptionValueObject.getLaterality();
 
@@ -551,11 +536,7 @@ public class CreateInvoiceAddGrantBackingBean {
     }
 
     public void stepBackListener() {
-
-        LOGGER.info("stepBackListener()");
-
         String showSection = facesUtil.fetchProperty("showSection");
-        LOGGER.info("stepBackListener(): showSection: {}", showSection);
 
         AddGrantFlowState state = AddGrantFlowState.valueOf(showSection);
 
@@ -624,8 +605,6 @@ public class CreateInvoiceAddGrantBackingBean {
     // Actions
 
     public String doDeleteGrant() {
-        LOGGER.info("doDeleteGrant");
-
         ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
         String caseWorker = themeDisplay.getUser().getScreenName();
 
@@ -988,8 +967,6 @@ public class CreateInvoiceAddGrantBackingBean {
         Long invoiceId = facesUtil.fetchId("invoiceId");
         Long grantId = facesUtil.fetchId("grantId");
 
-        LOGGER.info("editGrant - invoiceId is: " + invoiceId);
-
         String returnView = String.format(
                 "add_grant" +
                 "?invoiceId=%d" +
@@ -1007,12 +984,8 @@ public class CreateInvoiceAddGrantBackingBean {
 
     @PostConstruct
     public void init() {
-        LOGGER.info("CreateInvoiceAddGrantBackingBean - init()");
-
         // Initialize with start states.
         setupDefaults();
-
-        LOGGER.info("Current state: {}.", grantFlow);
 
         // Fetch properties from user navigation.
         long invoiceId = facesUtil.fetchId("invoiceId");

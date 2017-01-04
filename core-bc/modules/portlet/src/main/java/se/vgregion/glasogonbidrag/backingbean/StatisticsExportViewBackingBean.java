@@ -97,8 +97,6 @@ public class StatisticsExportViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("init");
-
         exportVO = new ExportVO();
 
         Calendar calendar = Calendar.getInstance();

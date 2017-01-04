@@ -30,7 +30,7 @@ public class InvoiceValidationServiceImpl implements InvoiceValidationService {
             grantAmountSum += grant.getAmount();
         }
 
-        LOGGER.info("Grant amount {} and amount {}", grantAmountSum, amountSum);
+        LOGGER.debug("Grant amount {} and amount {}", grantAmountSum, amountSum);
 
         return grantAmountSum == amountSum;
     }

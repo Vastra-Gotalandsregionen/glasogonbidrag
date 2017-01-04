@@ -47,7 +47,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
             throw new NoIdentificationException("Identification is not set.");
         }
 
-        LOGGER.info("Persisting identification: {}", identification);
+        LOGGER.debug("Persisting identification: {}", identification);
         em.persist(identification);
 
         // Update creation date and modification date
@@ -57,7 +57,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         beneficiary.setCreateDate(date);
         beneficiary.setModifiedDate(date);
 
-        LOGGER.info("Persisting beneficiary: {}", beneficiary);
+        LOGGER.debug("Persisting beneficiary: {}", beneficiary);
         em.persist(beneficiary);
     }
 
@@ -71,7 +71,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
             throw new NoIdentificationException("Identification is not set.");
         }
 
-        LOGGER.info("Updating identification: {}", identification);
+        LOGGER.debug("Updating identification: {}", identification);
         Identification newIdentification = em.merge(identification);
 
         // Update modification date
@@ -80,7 +80,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
         beneficiary.setModifiedDate(date);
 
-        LOGGER.info("Updating beneficiary: {}", beneficiary);
+        LOGGER.debug("Updating beneficiary: {}", beneficiary);
         Beneficiary newBeneficiary = em.merge(beneficiary);
 
         return new BeneficiaryIdentificationTuple(
@@ -93,10 +93,10 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
         Identification identification = beneficiary.getIdentification();
 
-        LOGGER.info("Deleting beneficiary: {}", beneficiary);
+        LOGGER.debug("Deleting beneficiary: {}", beneficiary);
         em.remove(beneficiary);
 
-        LOGGER.info("Deleting identification: {}", identification);
+        LOGGER.debug("Deleting identification: {}", identification);
         em.remove(identification);
     }
 

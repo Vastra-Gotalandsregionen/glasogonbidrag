@@ -124,7 +124,6 @@ public class ManageSuppliersViewBackingBean {
 
 
     public void changeViewEditSupplierListener(boolean viewEditSupplier) {
-        System.out.println("changeViewEditSupplierListener viewEditSupplier is: " + viewEditSupplier);
         this.viewEditSupplier = viewEditSupplier;
     }
 

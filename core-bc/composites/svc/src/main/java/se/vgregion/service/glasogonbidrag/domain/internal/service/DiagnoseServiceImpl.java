@@ -25,7 +25,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     @Override
     @Transactional
     public void create(Diagnose diagnose) {
-        LOGGER.info("Persisting diagnose: {}", diagnose);
+        LOGGER.debug("Persisting diagnose: {}", diagnose);
 
         em.persist(diagnose);
     }
@@ -33,7 +33,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     @Override
     @Transactional
     public Diagnose update(Diagnose diagnose) {
-        LOGGER.info("Updating diagnose: {}", diagnose);
+        LOGGER.debug("Updating diagnose: {}", diagnose);
 
         return em.merge(diagnose);
     }
@@ -43,7 +43,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     public void delete(Long id) {
         Diagnose diagnose = em.find(Diagnose.class, id);
 
-        LOGGER.info("Deleting diagnose: {}", diagnose);
+        LOGGER.debug("Deleting diagnose: {}", diagnose);
 
         em.remove(diagnose);
     }

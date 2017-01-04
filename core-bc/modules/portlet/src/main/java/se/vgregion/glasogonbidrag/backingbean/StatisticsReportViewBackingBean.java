@@ -233,15 +233,11 @@ public class StatisticsReportViewBackingBean {
     }
 
     public void changeStatisticsGroupByListener() {
-        LOGGER.info("changeStatisticsGroupByListener");
-        // TODO: Reset filters here.
         resetFilters();
     }
 
 
     public void searchStatistics() {
-        LOGGER.info("searchStatistics");
-
         Locale locale = facesUtil.getLocale();
 
         StatisticSearchRequest request = new StatisticSearchRequest();
@@ -334,8 +330,6 @@ public class StatisticsReportViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("init");
-
         searchHasBeenMade = false;
 
         // Dummy data for statistics

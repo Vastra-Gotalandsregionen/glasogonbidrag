@@ -35,8 +35,6 @@ public class LmaNumberConverter implements Converter {
         // Check length of number
         if(number.length() == 8) {
             // Pattern candidate 00000000
-            LOGGER.info("number length is 8.");
-
             if(textHasOnlyNumbers(number)) {
                 isValidLmaNumber = true;
 
@@ -48,8 +46,6 @@ public class LmaNumberConverter implements Converter {
             }
         } else if(number.length() == 9) {
             // Pattern candidate 00-000000
-            LOGGER.info("number length is 9.");
-
             String thirdChar = Character.toString(number.charAt(2));
 
             // Third character must be "-" when length is 9
