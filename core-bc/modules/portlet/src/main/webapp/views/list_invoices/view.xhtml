@@ -110,6 +110,15 @@
                     <h:outputText value="#{invoice.caseWorker}" />
                 </p:column>
 
+                <ui:remove>
+                    <p:column headerText="#{bundle['created']}"
+                              sortyBy="#{invoice.createDate}">
+                        <h:outputText value="#{invoice.createDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
+                        </h:outputText>
+                    </p:column>
+                </ui:remove>
+
             </p:dataTable>
         </h:form>
 
