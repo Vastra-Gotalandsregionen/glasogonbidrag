@@ -5,6 +5,7 @@ import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -19,6 +20,7 @@ public class InvoiceDTO {
     private final long count;
     private final InvoiceStatus status;
     private final String caseWorker;
+    private final Date createDate;
 
     private final Invoice invoice;
 
@@ -28,7 +30,7 @@ public class InvoiceDTO {
     public InvoiceDTO(long id, String verificationNumber,
                       String supplier, String invoiceNumber,
                       long amount, long count, InvoiceStatus status,
-                      String caseWorker) {
+                      String caseWorker, Date createDate) {
         this.id = id;
         this.verificationNumber = verificationNumber;
         this.supplier = supplier;
@@ -37,6 +39,7 @@ public class InvoiceDTO {
         this.count = count;
         this.status = status;
         this.caseWorker = caseWorker;
+        this.createDate = createDate;
 
         this.invoice = null;
     }
@@ -52,6 +55,9 @@ public class InvoiceDTO {
         this.count = invoice.getGrants().size();
         this.status = invoice.getStatus();
         this.caseWorker = invoice.getCaseWorker();
+        this.createDate = invoice.getCreateDate();
+
+        //invoice.getCreateDate()
     }
 
     public long getId() {
@@ -92,5 +98,9 @@ public class InvoiceDTO {
 
     public Invoice getInvoice() {
         return invoice;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 }

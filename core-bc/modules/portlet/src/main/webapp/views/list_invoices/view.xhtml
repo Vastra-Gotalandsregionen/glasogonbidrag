@@ -21,7 +21,7 @@
             <p:dataTable var="invoice"
                          value="#{invoices}"
                          widgetVar="invoicesTable"
-                         rows="5"
+                         rows="20"
                          paginator="true"
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -109,6 +109,15 @@
 
                     <h:outputText value="#{invoice.caseWorker}" />
                 </p:column>
+
+                <ui:remove>
+                    <p:column headerText="#{bundle['created']}"
+                              sortyBy="#{invoice.createDate}">
+                        <h:outputText value="#{invoice.createDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm" />
+                        </h:outputText>
+                    </p:column>
+                </ui:remove>
 
             </p:dataTable>
         </h:form>

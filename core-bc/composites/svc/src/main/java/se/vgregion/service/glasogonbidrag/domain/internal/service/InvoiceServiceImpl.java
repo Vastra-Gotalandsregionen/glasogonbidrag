@@ -541,7 +541,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                            "InvoiceDTO( " +
                                 "i.id, i.verificationNumber, s.name," +
                                 "i.invoiceNumber, i.amount, COUNT(g), " +
-                                "i.status, i.caseWorker ) " +
+                                "i.status, i.caseWorker, i.createDate ) " +
                 "FROM Invoice i " +
                 "LEFT JOIN i.supplier s " +
                 "LEFT JOIN i.grants g ";
