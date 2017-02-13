@@ -811,7 +811,7 @@ public class GrantRuleValidationServiceTest {
     }
 
     @Test
-    public void keratoconusMax3400kr() {
+    public void keratoconusMax2400kr() {
         testCustomDiagnoseAndAmount(
                 new Keratoconus(VisualLaterality.LEFT, 0.0f, 0.3f, false),
                 "193912207143",
