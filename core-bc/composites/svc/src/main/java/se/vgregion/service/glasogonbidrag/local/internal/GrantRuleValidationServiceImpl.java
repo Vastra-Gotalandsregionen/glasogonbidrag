@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
 import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.RegionResponsibilityLookupService;
@@ -76,7 +78,8 @@ public class GrantRuleValidationServiceImpl
         GrantRuleResult result = new GrantRuleResult();
 
         // Fetch data we need
-        Identification identification = grant.getBeneficiary().getIdentification();
+        Identification identification =
+                grant.getBeneficiary().getIdentification();
         Diagnose diagnose = grant.getPrescription().getDiagnose();
         String county = grant.getCounty();
         String municipality = grant.getMunicipality();
@@ -263,23 +266,63 @@ public class GrantRuleValidationServiceImpl
                 }
             }
         } else if (diagnose.getType() == DiagnoseType.KERATOCONUS) {
-            // Beneficiaries with Keratoconus may be granted 2400kr maximum
-            // or for the new new system 3000kr.
-            if (deliveryDate.before(PRE_20160620)) {
-                if (!testAmountLessThanOrEqual2400(totalAmount)) {
-                    result.add(new GrantRuleViolation(
-                            "violation-amount-greater-than-2400-" +
-                                    "for-keratoconus-" +
-                                    "pre-20160620"));
+            // Beneficiaries with Keratoconus may be granted 1200kr per eye.
+            // After 2016-06-20 the new grantable amount per eye is 1500kr.
+            VisualLaterality laterality =
+                    ((Keratoconus) diagnose).getLaterality();
+
+            if (laterality == VisualLaterality.RIGHT) {
+                // Right eye test.
+                if (deliveryDate.before(PRE_20160620)) {
+                    if (!testAmountLessThanOrEqual1200(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1200-" +
+                                        "for-keratoconus-right-eye-" +
+                                        "pre-20160620"));
+                    }
+                } else {
+                    if (!testAmountLessThanOrEqual1500(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1500-" +
+                                        "for-keratoconus-right-eye-" +
+                                        "post-20160620"));
+                    }
                 }
-            } else {
-                if (!testAmountLessThanOrEqual3000(totalAmount)) {
-                    result.add(new GrantRuleViolation(
-                            "violation-amount-greater-than-3000-" +
-                                    "for-keratoconus-" +
-                                    "post-20160620"));
+            } else if (laterality == VisualLaterality.LEFT) {
+                // Left eye test
+                if (deliveryDate.before(PRE_20160620)) {
+                    if (!testAmountLessThanOrEqual1200(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1200-" +
+                                        "for-keratoconus-left-eye" +
+                                        "-pre-20160620"));
+                    }
+                } else {
+                    if (!testAmountLessThanOrEqual1500(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1500-" +
+                                        "for-keratoconus-left-eye-" +
+                                        "post-20160620"));
+                    }
                 }
-            }
+            } else if (laterality == VisualLaterality.BILATERAL) {
+                // Both eyes
+                if (deliveryDate.before(PRE_20160620)) {
+                    if (!testAmountLessThanOrEqual2400(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-2400-" +
+                                        "for-keratoconus-both-eyes-" +
+                                        "pre-20160620"));
+                    }
+                } else {
+                    if (!testAmountLessThanOrEqual3000(totalAmount)) {
+                            result.add(new GrantRuleViolation(
+                                    "violation-amount-greater-than-3000-" +
+                                            "for-keratoconus-both-eyes-" +
+                                            "post-20160620"));
+                    }
+                }
+             }
         }
 
         return result;
@@ -369,6 +412,14 @@ public class GrantRuleValidationServiceImpl
 
     public boolean testAmountLessThanOrEqual1000(long totalAmount) {
         return totalAmount <= amountAsKrona(1000L);
+    }
+
+    public boolean testAmountLessThanOrEqual1200(long totalAmount) {
+        return totalAmount <= amountAsKrona(1200L);
+    }
+
+    public boolean testAmountLessThanOrEqual1500(long totalAmount) {
+        return totalAmount <= amountAsKrona(1500L);
     }
 
     public boolean testAmountLessThanOrEqual1600(long totalAmount) {
