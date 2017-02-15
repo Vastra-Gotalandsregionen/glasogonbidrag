@@ -42,7 +42,7 @@ public class RegionResponsibilityLookupServiceImpl
                 "borås",
                 Arrays.asList(
                         "alingsås", "bollebygd", "borås", "herrljunga",
-                        "lerum", "lillaedet", "mark", "svenljunga", "tranemo",
+                        "lerum", "lilla edet", "mark", "svenljunga", "tranemo",
                         "ulricehamn", "vårgårda"));
         regionLists.put(
                 "vänersborg",
