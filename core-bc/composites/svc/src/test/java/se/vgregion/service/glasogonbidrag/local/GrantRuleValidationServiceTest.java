@@ -123,7 +123,7 @@ public class GrantRuleValidationServiceTest {
      */
     @Test
     public void violationIfNotInVGR() {
-        Grant grant = GrantFactory.newGrant()
+        Grant grant1 = GrantFactory.newGrant()
                 .delivery(2016, MAY, 4)
                 .amount(new BigDecimal("1000"))
                 .area("17", "30")
@@ -139,14 +139,38 @@ public class GrantRuleValidationServiceTest {
                 .end()
                 .build();
 
-        GrantRuleResult result = validationService.test(
-                grant, new HashSet<Grant>());
+        GrantRuleResult result1 = validationService.test(
+                grant1, new HashSet<Grant>());
 
-        Assert.assertFalse(result.hasWarnings());
-        Assert.assertTrue(result.hasViolations());
-        Assert.assertEquals(1, result.violations());
-        Assert.assertTrue(result.getViolations().contains(
+        Assert.assertFalse(result1.hasWarnings());
+        Assert.assertTrue(result1.hasViolations());
+        Assert.assertEquals(1, result1.violations());
+        Assert.assertTrue(result1.getViolations().contains(
                 new GrantRuleViolation("violation-not-in-vgr")));
+
+        // Problem when a beneficiary does live in "Lilla Edet".
+        // This will test to validate that lilla edet works.
+        Grant grant2 = GrantFactory.newGrant()
+                .delivery(2016, MAY, 4)
+                .amount(new BigDecimal("1000"))
+                .area("14", "62")
+                .beneficiary()
+                    .fullName("Teodore Qvist")
+                    .identification("200204304570")
+                .end()
+                .prescription()
+                    .comment("")
+                    .date(2016, JANUARY, 3)
+                    .diagnose(new None())
+                    .prescriber("")
+                .end()
+                .build();
+
+        GrantRuleResult result2 = validationService.test(
+                grant2, new HashSet<Grant>());
+
+        Assert.assertFalse(result2.hasWarnings());
+        Assert.assertFalse(result2.hasViolations());
     }
 
     /**
