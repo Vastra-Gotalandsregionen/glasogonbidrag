@@ -13,6 +13,7 @@ public class PrescriptionFactory {
         return new PrescriptionBuilder();
     }
 
+    @SuppressWarnings("unused")
     public static PrescriptionBuilder newPrescription(GrantBuilder parent) {
         return new PrescriptionBuilder(parent);
     }
