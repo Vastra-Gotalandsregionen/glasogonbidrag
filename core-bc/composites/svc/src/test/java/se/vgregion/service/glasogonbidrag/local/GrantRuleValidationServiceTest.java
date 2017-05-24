@@ -1103,31 +1103,31 @@ public class GrantRuleValidationServiceTest {
                                 "for-keratoconus-both-eyes-post-20160620")));
     }
 
-    @Test
-    public void aphakiaMax2000kr() {
-        testCustomDiagnoseAndAmount(
-                new Aphakia(VisualLaterality.BILATERAL),
-                "196803012340",
-                new BigDecimal("2000"),
-                new GregorianCalendar(2010, MARCH, 10).getTime(),
-                new GregorianCalendar(2016, JANUARY, 9).getTime(),
-                new GregorianCalendar(2016, JANUARY, 14).getTime(),
-                "violation-amount-greater-than-2000-" +
-                        "for-aphakia-and-special-pre-20160620");
-    }
-
-    @Test
-    public void aphakiaMax2400krPost20160620() {
-        testCustomDiagnoseAndAmount(
-                new Aphakia(VisualLaterality.BILATERAL),
-                "196803012340",
-                new BigDecimal("2400"),
-                new GregorianCalendar(2010, MARCH, 10).getTime(),
-                new GregorianCalendar(2016, JULY, 9).getTime(),
-                new GregorianCalendar(2016, JULY, 14).getTime(),
-                "violation-amount-greater-than-2400-" +
-                        "for-aphakia-and-special-post-20160620");
-    }
+//    @Test
+//    public void aphakiaMax2000kr() {
+//        testCustomDiagnoseAndAmount(
+//                new Aphakia(VisualLaterality.BILATERAL),
+//                "196803012340",
+//                new BigDecimal("2000"),
+//                new GregorianCalendar(2010, MARCH, 10).getTime(),
+//                new GregorianCalendar(2016, JANUARY, 9).getTime(),
+//                new GregorianCalendar(2016, JANUARY, 14).getTime(),
+//                "violation-amount-greater-than-2000-" +
+//                        "for-aphakia-and-special-pre-20160620");
+//    }
+//
+//    @Test
+//    public void aphakiaMax2400krPost20160620() {
+//        testCustomDiagnoseAndAmount(
+//                new Aphakia(VisualLaterality.BILATERAL),
+//                "196803012340",
+//                new BigDecimal("2400"),
+//                new GregorianCalendar(2010, MARCH, 10).getTime(),
+//                new GregorianCalendar(2016, JULY, 9).getTime(),
+//                new GregorianCalendar(2016, JULY, 14).getTime(),
+//                "violation-amount-greater-than-2400-" +
+//                        "for-aphakia-and-special-post-20160620");
+//    }
 
     @Test
     public void specialMax2000kr() {
