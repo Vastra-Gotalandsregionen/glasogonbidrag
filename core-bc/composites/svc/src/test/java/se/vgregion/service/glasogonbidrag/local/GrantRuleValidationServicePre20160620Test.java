@@ -47,7 +47,7 @@ import static java.util.Calendar.SEPTEMBER;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:localTestContext.xml")
-public class GrantRuleValidationServiceTest {
+public class GrantRuleValidationServicePre20160620Test {
 
     @Autowired
     private GrantRuleValidationService validationService;
@@ -651,145 +651,12 @@ public class GrantRuleValidationServiceTest {
     }
 
     /**
-     * Children 0 to 19 may at most receive 1600 SEK for one prescription in
-     * one calendar, after 2016-06-20.
-     */
-    @Test
-    public void children0To19Max1600krPost20160620() {
-        // Testing when a beneficiary of age 16 receives more than 1600 SEK.
-        // This should produce no warnings, and one violation since the amount
-        // exceeds 1600 SEK.
-
-        Grant child16AboveAmount = GrantFactory.newGrant()
-                .delivery(2016, AUGUST, 3)
-                .amount(new BigDecimal("2000"))
-                .area("14", "96")
-                .beneficiary()
-                    .fullName("Sven Larsson")
-                    .identification("200001013431")
-                .end()
-                .prescription()
-                    .comment("")
-                    .date(2016, JULY, 18)
-                    .diagnose(new None())
-                    .prescriber("")
-                .end()
-                .build();
-
-        GrantRuleResult result1 = validationService.test(
-                child16AboveAmount, new HashSet<Grant>());
-        Assert.assertFalse(result1.hasWarnings());
-        Assert.assertTrue(result1.hasViolations());
-        Assert.assertEquals(1, result1.violations());
-        Assert.assertTrue(result1.getViolations().contains(
-                new GrantRuleViolation("violation-" +
-                        "amount-greater-than-1600-for-children-0-to-19-" +
-                        "post-20160620")));
-
-
-        // Testing when a beneficiary of age 16 receives more than 1600 SEK
-        // one two separate grants.
-        // This should produce one warning because the beneficiary have
-        // multiple grants for one prescription and calendar, and one
-        // violation since the amount exceeds 1600 SEK.
-
-        Beneficiary beneficiary = BeneficiaryFactory.newBeneficiary()
-                .fullName("Sven Larsson")
-                .identification("200001013431")
-                .build();
-
-        Prescription prescription = PrescriptionFactory.newPrescription()
-                .comment("")
-                .date(2016, JULY, 18)
-                .diagnose(new None())
-                .prescriber("")
-                .build();
-
-        Grant child16AboveAmountMultipleFirst = GrantFactory.newGrant()
-                .delivery(2016, AUGUST, 3)
-                .amount(new BigDecimal("800"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(prescription)
-                .build();
-        Grant child16AboveAmountMultipleSecond = GrantFactory.newGrant()
-                .delivery(2016, AUGUST, 13)
-                .amount(new BigDecimal("900"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(prescription)
-                .build();
-
-        GrantRuleResult result2 = validationService.test(
-                child16AboveAmountMultipleSecond,
-                new HashSet<>(Arrays.asList(
-                        child16AboveAmountMultipleFirst)));
-        Assert.assertTrue(result2.hasWarnings());
-        Assert.assertTrue(result2.hasViolations());
-        Assert.assertEquals(1, result2.violations());
-        Assert.assertTrue(result1.getViolations().contains(
-                new GrantRuleViolation("violation-" +
-                        "amount-greater-than-1600-for-children-0-to-19-" +
-                        "post-20160620")));
-
-
-        // Testing when a beneficiary of age 18 receives exactly 800 SEK.
-        // This should produce no warnings and no violations.
-
-        Grant child16ExactAmount = GrantFactory.newGrant()
-                .delivery(2016, AUGUST, 3)
-                .amount(new BigDecimal("1600"))
-                .area("14", "96")
-                .beneficiary()
-                    .fullName("Sven Larsson")
-                    .identification("200001013431")
-                .end()
-                .prescription()
-                    .comment("")
-                    .date(2016, JULY, 18)
-                    .diagnose(new None())
-                    .prescriber("")
-                .end()
-                .build();
-
-        GrantRuleResult result3 = validationService.test(
-                child16ExactAmount, new HashSet<Grant>());
-        Assert.assertFalse(result3.hasWarnings());
-        Assert.assertFalse(result3.hasViolations());
-
-
-        // Testing when a beneficiary of age 18 receives under 800 SEK.
-        // This should produce no warnings and no violations.
-
-        Grant child16UnderAmount = GrantFactory.newGrant()
-                .delivery(2016, AUGUST, 3)
-                .amount(new BigDecimal("1200"))
-                .area("14", "96")
-                .beneficiary()
-                    .fullName("Sven Larsson")
-                    .identification("200001013431")
-                .end()
-                .prescription()
-                    .comment("")
-                    .date(2016, JULY, 18)
-                    .diagnose(new None())
-                    .prescriber("")
-                .end()
-                .build();
-
-        GrantRuleResult result4 = validationService.test(
-                child16UnderAmount, new HashSet<Grant>());
-        Assert.assertFalse(result4.hasWarnings());
-        Assert.assertFalse(result4.hasViolations());
-    }
-
-    /**
      * Test so that the amounts grantable for keratoconus before
      * 2016-06-20 works.
      * Tests diagnose for left eye, right eye and both eyes.
      */
     @Test
-    public void keratoconusPre20160620() {
+    public void keratoconus() {
 
         // A beneficiary to test with -----------------------------------------
 
@@ -945,176 +812,18 @@ public class GrantRuleValidationServiceTest {
                                 "for-keratoconus-both-eyes-pre-20160620")));
     }
 
-    /**
-     * Test so that the changed amounts for keratoconus works after 2016-06-20
-     * Tests diagnose for left eye, right eye and both eyes.
-     */
     @Test
-    public void keratoconusPost20160620() {
-
-        // A Beneficiary to test with -----------------------------------------
-
-        Beneficiary beneficiary = BeneficiaryFactory.newBeneficiary()
-                .fullName("Test1 Test1")
-                .identification("193912207143")
-                .build();
-
-        // One eye will max give 1500kr per grant -----------------------------
-
-        Prescription leftEye = PrescriptionFactory.newPrescription()
-                .comment("")
-                .date(new GregorianCalendar(2016, AUGUST, 26).getTime())
-                .diagnose(new Keratoconus(
-                        VisualLaterality.LEFT, 0.0f, 0.2f, false))
-                .prescriber("")
-                .build();
-
-        Set<Grant> historyLeftEye = new HashSet<>();
-
-        // Grant of 1500 post 2016-06-20, which should work
-        Grant grant1LeftEyeOk = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 10).getTime())
-                .amount(new BigDecimal("1500"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(leftEye)
-                .build();
-
-        GrantRuleResult result1LeftEyeOk =
-                validationService.test(grant1LeftEyeOk, historyLeftEye);
-        Assert.assertFalse(result1LeftEyeOk.hasWarnings());
-        Assert.assertFalse(result1LeftEyeOk.hasViolations());
-
-        // Add grant to history
-        historyLeftEye.add(grant1LeftEyeOk);
-
-        // Previous grant of 1500 and this 300 is 1800, which is above 1500
-        Grant grant2LeftEyeAbove = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 12).getTime())
-                .amount(new BigDecimal("300"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(leftEye)
-                .build();
-
-        GrantRuleResult result2LeftEyeAbove =
-                validationService.test(grant2LeftEyeAbove, historyLeftEye);
-        Assert.assertTrue(result2LeftEyeAbove.hasWarnings());
-        Assert.assertTrue(result2LeftEyeAbove.hasViolations());
-        Assert.assertTrue(result2LeftEyeAbove.getViolations().contains(
-                new GrantRuleViolation(
-                        "violation-amount-greater-than-1500-" +
-                                "for-keratoconus-left-eye-post-20160620")));
-
-        // Same for the right eye 1500kr --------------------------------------
-
-        Prescription rightEye = PrescriptionFactory.newPrescription()
-                .comment("")
-                .date(new GregorianCalendar(2016, AUGUST, 26).getTime())
-                .diagnose(new Keratoconus(
-                        VisualLaterality.RIGHT, 0.1f, 0.0f, false))
-                .prescriber("")
-                .build();
-
-        Set<Grant> historyRightEye = new HashSet<>();
-
-        // Grant of 1500 post 2016-06-20, which should work
-        Grant grant1RightEyeOk = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 10).getTime())
-                .amount(new BigDecimal("1500"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(rightEye)
-                .build();
-
-        GrantRuleResult result1RightEyeOk =
-                validationService.test(grant1RightEyeOk, historyRightEye);
-        Assert.assertFalse(result1RightEyeOk.hasWarnings());
-        Assert.assertFalse(result1RightEyeOk.hasViolations());
-
-        // Add grant to history
-        historyRightEye.add(grant1RightEyeOk);
-
-        // Previous grant of 1500 and this of 600 is 2100, which is above 1500
-        Grant grant2RightEyeAbove = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 12).getTime())
-                .amount(new BigDecimal("600"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(rightEye)
-                .build();
-
-        GrantRuleResult result2RightEyeAbove =
-                validationService.test(grant2RightEyeAbove, historyRightEye);
-        Assert.assertTrue(result2RightEyeAbove.hasWarnings());
-        Assert.assertTrue(result2RightEyeAbove.hasViolations());
-        Assert.assertTrue(result2RightEyeAbove.getViolations().contains(
-                new GrantRuleViolation(
-                        "violation-amount-greater-than-1500-" +
-                                "for-keratoconus-right-eye-post-20160620")));
-
-
-        // Grantable 1500kr per eye post 2016-06-20 ---------------------------
-
-        Prescription bothEyes = PrescriptionFactory.newPrescription()
-                .comment("")
-                .date(new GregorianCalendar(2016, AUGUST, 26).getTime())
-                .diagnose(new Keratoconus(
-                        VisualLaterality.BILATERAL, 0.1f, 0.2f, false))
-                .prescriber("")
-                .build();
-
-        // Empty history set to keep track of previous grants.
-        Set<Grant> historyBothEyes = new HashSet<>();
-
-        // Grant of 3000, which is okay (1500 for each eye)
-        Grant grant1BothEyesOk = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 10).getTime())
-                .amount(new BigDecimal("3000"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(bothEyes)
-                .build();
-
-        GrantRuleResult result1BothEyesOk =
-                validationService.test(grant1BothEyesOk, historyBothEyes);
-        Assert.assertFalse(result1BothEyesOk.hasWarnings());
-        Assert.assertFalse(result1BothEyesOk.hasViolations());
-
-        // Add grant to history
-        historyBothEyes.add(grant1BothEyesOk);
-
-        // Previous grant of 3000 and this of 1000, which is above 3000
-        Grant grant2BothEyesAbove = GrantFactory.newGrant()
-                .delivery(new GregorianCalendar(2016, SEPTEMBER, 12).getTime())
-                .amount(new BigDecimal("1000"))
-                .area("14", "96")
-                .beneficiary(beneficiary)
-                .prescription(bothEyes)
-                .build();
-
-        GrantRuleResult result2BothEyesAbove =
-                validationService.test(grant2BothEyesAbove, historyBothEyes);
-        Assert.assertTrue(result2BothEyesAbove.hasWarnings());
-        Assert.assertTrue(result2BothEyesAbove.hasViolations());
-        Assert.assertTrue(result2BothEyesAbove.getViolations().contains(
-                new GrantRuleViolation(
-                        "violation-amount-greater-than-3000-" +
-                                "for-keratoconus-both-eyes-post-20160620")));
+    public void aphakiaMax2000kr() {
+        testCustomDiagnoseAndAmount(
+                new Aphakia(VisualLaterality.BILATERAL),
+                "196803012340",
+                new BigDecimal("2000"),
+                new GregorianCalendar(2010, MARCH, 10).getTime(),
+                new GregorianCalendar(2016, JANUARY, 9).getTime(),
+                new GregorianCalendar(2016, JANUARY, 14).getTime(),
+                "violation-amount-greater-than-2000-" +
+                        "for-aphakia-and-special-pre-20160620");
     }
-
-//    @Test
-//    public void aphakiaMax2000kr() {
-//        testCustomDiagnoseAndAmount(
-//                new Aphakia(VisualLaterality.BILATERAL),
-//                "196803012340",
-//                new BigDecimal("2000"),
-//                new GregorianCalendar(2010, MARCH, 10).getTime(),
-//                new GregorianCalendar(2016, JANUARY, 9).getTime(),
-//                new GregorianCalendar(2016, JANUARY, 14).getTime(),
-//                "violation-amount-greater-than-2000-" +
-//                        "for-aphakia-and-special-pre-20160620");
-//    }
 //
 //    @Test
 //    public void aphakiaMax2400krPost20160620() {
@@ -1142,18 +851,18 @@ public class GrantRuleValidationServiceTest {
                         "for-aphakia-and-special-pre-20160620");
     }
 
-    @Test
-    public void specialMax2400krPost20160620() {
-        testCustomDiagnoseAndAmount(
-                new Special(VisualLaterality.BILATERAL, false),
-                "197304194579",
-                new BigDecimal("2400"),
-                new GregorianCalendar(2010, MARCH, 10).getTime(),
-                new GregorianCalendar(2016, JULY, 9).getTime(),
-                new GregorianCalendar(2016, JULY, 14).getTime(),
-                "violation-amount-greater-than-2400-" +
-                        "for-aphakia-and-special-post-20160620");
-    }
+//    @Test
+//    public void specialMax2400krPost20160620() {
+//        testCustomDiagnoseAndAmount(
+//                new Special(VisualLaterality.BILATERAL, false),
+//                "197304194579",
+//                new BigDecimal("2400"),
+//                new GregorianCalendar(2010, MARCH, 10).getTime(),
+//                new GregorianCalendar(2016, JULY, 9).getTime(),
+//                new GregorianCalendar(2016, JULY, 14).getTime(),
+//                "violation-amount-greater-than-2400-" +
+//                        "for-aphakia-and-special-post-20160620");
+//    }
 
 //    @Test
 //    public void keratoconusMax2400kr() {
