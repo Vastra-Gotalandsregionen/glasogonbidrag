@@ -35,19 +35,11 @@ import static java.util.Calendar.JULY;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:localTestContext.xml")
-public class GrantRuleValidationServicePost20160620Test {
+public class GrantRuleValidationServiceTestPost20160620 {
 
     @Autowired
     private GrantRuleValidationService validationService;
 
-    /**
-     * The service should be handled by spring, this should ensures that
-     * the service is auto wired by spring or other IoC framework.
-     */
-    @Test
-    public void serviceShouldExists() {
-        Assert.assertNotNull(validationService);
-    }
     // Tests for Children -----------------------------------------------------
 
     /**
@@ -470,7 +462,7 @@ public class GrantRuleValidationServicePost20160620Test {
         GrantRuleResult result1 = validationService.test(
                 grant1OkBothEyes, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
-        Assert.assertTrue(result1.hasViolations());
+        Assert.assertFalse(result1.hasViolations());
 
         Grant grant1OverBothEyes = GrantFactory.newGrant()
                 .delivery(new GregorianCalendar(2017, MARCH, 2).getTime())
@@ -549,13 +541,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -566,7 +557,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
@@ -626,13 +617,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -643,7 +633,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
@@ -703,13 +693,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -720,7 +709,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
@@ -856,7 +845,7 @@ public class GrantRuleValidationServicePost20160620Test {
         GrantRuleResult result1 = validationService.test(
                 grant1OkBothEyes, new HashSet<Grant>());
         Assert.assertFalse(result1.hasWarnings());
-        Assert.assertTrue(result1.hasViolations());
+        Assert.assertFalse(result1.hasViolations());
 
         Grant grant1OverBothEyes = GrantFactory.newGrant()
                 .delivery(new GregorianCalendar(2017, MARCH, 2).getTime())
@@ -935,13 +924,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -952,7 +940,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
@@ -1012,13 +1000,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1029,7 +1016,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
@@ -1089,13 +1076,12 @@ public class GrantRuleValidationServicePost20160620Test {
 
         grantHistory.add(grant2);
 
-        GrantRuleResult result2 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result2 = validationService.test(grant3, grantHistory);
         Assert.assertTrue(result2.hasWarnings());
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-" +
-                        "for-aphakia-or-special-post-20160620")));
+                        "violation-too-many-grants-for-aphakia-or-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1106,7 +1092,7 @@ public class GrantRuleValidationServicePost20160620Test {
                 .prescription(prescription)
                 .build();
 
-        GrantRuleResult result3 = validationService.test(grant2, grantHistory);
+        GrantRuleResult result3 = validationService.test(grant4, grantHistory);
         Assert.assertTrue(result3.hasWarnings());
         Assert.assertTrue(result3.hasViolations());
 //        Assert.assertTrue(result3.getViolations().contains(
