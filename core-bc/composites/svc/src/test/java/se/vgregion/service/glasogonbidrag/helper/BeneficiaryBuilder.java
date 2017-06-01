@@ -1,9 +1,6 @@
 package se.vgregion.service.glasogonbidrag.helper;
 
-import org.slf4j.Logger;
-import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.identification.Personal;
 
