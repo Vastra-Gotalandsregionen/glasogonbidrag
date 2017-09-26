@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import se.vgregion.glasogonbidrag.datamodel.InvoiceLazyDataModel;
 import se.vgregion.glasogonbidrag.util.FacesUtil;
 import se.vgregion.glasogonbidrag.util.LiferayUtil;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.Invoice;
 import se.vgregion.service.glasogonbidrag.domain.api.service.InvoiceService;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +20,6 @@ import java.util.List;
 @Component(value = "listInvoicesViewBackingBean")
 @Scope(value = "view")
 public class ListInvoicesViewBackingBean {
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ListInvoicesViewBackingBean.class);
 
@@ -37,7 +35,6 @@ public class ListInvoicesViewBackingBean {
     private List<String> filterDataStatuses;
 
     private InvoiceLazyDataModel lazyDataModel;
-    private List<Invoice> invoices;
 
     public List<String> getFilterDataStatuses() {
         return filterDataStatuses;
@@ -51,32 +48,17 @@ public class ListInvoicesViewBackingBean {
         return lazyDataModel;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-
     public String getUserNameById(long userId) {
         return liferayUtil.getUserNameById(userId);
     }
 
     @PostConstruct
     protected void init() {
-        fetchInvoices();
-        initFilterData();
-    }
-
-    private void initFilterData() {
         filterDataStatuses = new ArrayList<>();
         filterDataStatuses.add("invoice-status-in-progress");
         filterDataStatuses.add("invoice-status-completed");
         filterDataStatuses.add("invoice-status-canceled");
         filterDataStatuses.add("invoice-status-replaced");
-
-    }
-
-    private void fetchInvoices() {
-        invoices = invoiceService.findAllWithParts();
         lazyDataModel = new InvoiceLazyDataModel(invoiceService);
     }
-
 }
