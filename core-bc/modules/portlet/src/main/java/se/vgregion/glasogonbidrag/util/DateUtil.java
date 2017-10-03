@@ -22,11 +22,12 @@ public class DateUtil {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DateUtil.class);
 
-    public List<Date> getDatesOfThisWeek() {
+    public List<Date> getDatesOfThisWeek(Date today) {
 
         ArrayList<Date> datesOfWeek = new ArrayList<Date>();
 
         Calendar now = Calendar.getInstance();
+        now.setTime(today);
 
         int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 if your week start on monday
 
