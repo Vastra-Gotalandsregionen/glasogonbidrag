@@ -52,8 +52,6 @@ public class StatisticsDashboardViewBackingBean {
     @Autowired
     private GrantService grantService;
 
-    KronaCalculationUtil currency;
-
     private String daysOfWeekJSONString;
 
     private int grantCountToday;
@@ -230,55 +228,43 @@ public class StatisticsDashboardViewBackingBean {
 
     @PostConstruct
     protected void init() {
-        currency = new KronaCalculationUtil();
+        KronaCalculationUtil currency = new KronaCalculationUtil();
 
-        Date today = new Date();
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
 
         // Progress today
         long progressTodayRaw = grantService.currentProgressByDate(today);
         progressToday = currency.calculatePartsAsKrona(progressTodayRaw);
 
         // Grants today
-        List<Grant> todaysGrants = grantService.findAllByDate(today);
-        grantCountToday = todaysGrants.size();
+        grantCountToday = (int)grantService.countByDate(today);
 
-        // Days of week
-        List<Date> datesOfThisWeek = dateUtil.getDatesOfThisWeek();
+        List<Date> datesOfThisWeek = dateUtil.getDatesOfThisWeek(today);
 
         JSONArray daysOfWeekJSON = JSONFactoryUtil.createJSONArray();
-        for(Date date : datesOfThisWeek) {
-            SimpleDateFormat format = new SimpleDateFormat("EEE", liferayUtil.getLocale());
-            String dateString = format.format(date);
-            daysOfWeekJSON.put(dateString);
-        }
-
-        daysOfWeekJSONString = daysOfWeekJSON.toString();
-
-        // Grants counts of week days
-        //getGrantsCountOfWeekDaysJSONString
         JSONArray getGrantsCountOfWeekDaysJSON = JSONFactoryUtil.createJSONArray();
-        for(Date curDate : datesOfThisWeek) {
-            List<Grant> grantsOfDate = grantService.findAllByDate(curDate);
-            getGrantsCountOfWeekDaysJSON.put(grantsOfDate.size());
-        }
-        grantsCountOfWeekDaysJSONString = getGrantsCountOfWeekDaysJSON.toString();
-
-        // Progress of week
         JSONArray progressOfWeekJSON = JSONFactoryUtil.createJSONArray();
 
-        for(Date curDate : datesOfThisWeek) {
-            long dateProgressRaw;
+        SimpleDateFormat format =
+                new SimpleDateFormat("EEE", liferayUtil.getLocale());
+        for(Date date : datesOfThisWeek) {
+            // Days of week
+            String dateString = format.format(date);
+            daysOfWeekJSON.put(dateString);
 
-            try {
-                dateProgressRaw = grantService.currentProgressByDate(curDate);
-            } catch(NullPointerException e) {
-                dateProgressRaw = new Long(0);
-            }
+            // Grants counts of week days
+            int count = (int)grantService.countByDate(date);
+            getGrantsCountOfWeekDaysJSON.put(count);
 
+            // Progress of week
+            long dateProgressRaw = grantService.currentProgressByDate(date);
             BigDecimal dateProgress = currency.calculatePartsAsKrona(dateProgressRaw);
             progressOfWeekJSON.put(dateProgress.intValueExact());
         }
 
+        daysOfWeekJSONString = daysOfWeekJSON.toString();
+        grantsCountOfWeekDaysJSONString = getGrantsCountOfWeekDaysJSON.toString();
         progressOfWeekJSONString = progressOfWeekJSON.toString();
 
         // Dummy data for statistics
