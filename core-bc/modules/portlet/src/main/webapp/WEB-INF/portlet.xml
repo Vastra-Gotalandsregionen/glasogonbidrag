@@ -9,7 +9,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-invoices-in-progress</portlet-name>
         <display-name>glasogonbidrag-invoices-in-progress</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -32,7 +32,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-create-invoice</portlet-name>
         <display-name>glasogonbidrag-create-invoice</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -55,7 +55,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-latest-invoices</portlet-name>
         <display-name>glasogonbidrag-latest-invoices</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -78,7 +78,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-list-invoices</portlet-name>
         <display-name>glasogonbidrag-list-invoices</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -100,7 +100,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-manage-beneficiaries</portlet-name>
         <display-name>glasogonbidrag-manage-beneficiaries</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -122,7 +122,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-manage-suppliers</portlet-name>
         <display-name>glasogonbidrag-manage-suppliers</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -144,7 +144,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-migration</portlet-name>
         <display-name>glasogonbidrag-migration</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -166,7 +166,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-statistics-dashboard</portlet-name>
         <display-name>glasogonbidrag-statistics-dashboard</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -188,7 +188,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-statistics-export</portlet-name>
         <display-name>glasogonbidrag-statistics-export</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>
@@ -210,7 +210,7 @@
     <portlet>
         <portlet-name>glasogonbidrag-statistics-report</portlet-name>
         <display-name>glasogonbidrag-statistics-report</display-name>
-        <portlet-class>com.liferay.faces.bridge.GenericLiferayFacesPortlet</portlet-class>
+        <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
         <init-param>
             <name>javax.portlet.faces.defaultViewId.view</name>

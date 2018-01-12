@@ -56,12 +56,6 @@ import java.util.Date;
                         "WHERE DATE_TRUNC('day', g.createDate) = :date"),
 
         @NamedQuery(
-                name = "glasogonbidrag.grant.countByDate",
-                query = "SELECT COUNT(g) " +
-                        "FROM Grant g " +
-                        "WHERE DATE_TRUNC('day', g.createDate) = :date"),
-
-        @NamedQuery(
                 name = "glasogonbidrag.grant.currentProgressByDate",
                 query = "SELECT SUM(g.amount) " +
                         "FROM Grant g " +

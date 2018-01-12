@@ -6,9 +6,7 @@ import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Keratoconus;
-import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Special;
 import se.vgregion.service.glasogonbidrag.local.api.AreaCodeLookupService;
 import se.vgregion.service.glasogonbidrag.local.api.GrantRuleValidationService;
 import se.vgregion.service.glasogonbidrag.local.api.RegionResponsibilityLookupService;
@@ -249,66 +247,22 @@ public class GrantRuleValidationServiceImpl
             }
         } else if (diagnose.getType() == DiagnoseType.APHAKIA
                 || diagnose.getType() == DiagnoseType.SPECIAL) {
-
-            if (grants.size() > 2) {
-                result.add(new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special"));
-            }
-
-            VisualLaterality laterality;
-            if (diagnose.getType() == DiagnoseType.APHAKIA) {
-                Aphakia aphakia = (Aphakia)diagnose;
-                laterality = aphakia.getLaterality();
-            } else if (diagnose.getType() == DiagnoseType.SPECIAL){
-                Special special = (Special) diagnose;
-                laterality = special.getLaterality();
-            } else {
-                throw new IllegalStateException(
-                        "Illegal state, diagnose is set to wrong type!");
-            }
-
             // Beneficiaries with Aphakia or Special glasses or lens needs
             // may be granted 2000kr maximum or for the new new system
-            // 2400kr per eye (this is split over two grants).
+            // 2400kr.
             if (deliveryDate.before(PRE_20160620)) {
-                if (VisualLaterality.LEFT.equals(laterality) ||
-                        VisualLaterality.RIGHT.equals(laterality)) {
-                    if (!testAmountLessThanOrEqual2000(totalAmount)) {
-                        result.add(new GrantRuleViolation(
-                                "violation-amount-greater-than-2000-" +
-                                        "for-aphakia-or-special-" +
-                                        "one-eye-pre-20160620"));
-                    }
-                } else if (VisualLaterality.BILATERAL.equals(laterality)) {
-                    if (!testAmountLessThanOrEqual4000(totalAmount)) {
-                        result.add(new GrantRuleViolation(
-                                "violation-amount-greater-than-4000-" +
-                                        "for-aphakia-or-special-" +
-                                        "both-eyes-pre-20160620"));
-                    }
+                if (!testAmountLessThanOrEqual2000(totalAmount)) {
+                    result.add(new GrantRuleViolation(
+                            "violation-amount-greater-than-2000-" +
+                                    "for-aphakia-and-special-" +
+                                    "pre-20160620"));
                 }
-//                if (!testAmountLessThanOrEqual2000(totalAmount)) {
-//                    result.add(new GrantRuleViolation(
-//                            "violation-amount-greater-than-2000-" +
-//                                    "for-aphakia-and-special-" +
-//                                    "pre-20160620"));
-//                }
             } else {
-                if (VisualLaterality.LEFT.equals(laterality) ||
-                        VisualLaterality.RIGHT.equals(laterality)) {
-                    if (!testAmountLessThanOrEqual2400(totalAmount)) {
-                        result.add(new GrantRuleViolation(
-                                "violation-amount-greater-than-2400-" +
-                                        "for-aphakia-or-special-" +
-                                        "one-eye-post-20160620"));
-                    }
-                } else if (VisualLaterality.BILATERAL.equals(laterality)) {
-                    if (!testAmountLessThanOrEqual4800(totalAmount)) {
-                        result.add(new GrantRuleViolation(
-                                "violation-amount-greater-than-4800-" +
-                                        "for-aphakia-or-special-" +
-                                        "both-eyes-post-20160620"));
-                    }
+                if (!testAmountLessThanOrEqual2400(totalAmount)) {
+                    result.add(new GrantRuleViolation(
+                            "violation-amount-greater-than-2400-" +
+                                    "for-aphakia-and-special-" +
+                                    "post-20160620"));
                 }
             }
         } else if (diagnose.getType() == DiagnoseType.KERATOCONUS) {
@@ -482,14 +436,6 @@ public class GrantRuleValidationServiceImpl
 
     public boolean testAmountLessThanOrEqual3000(long totalAmount) {
         return totalAmount <= amountAsKrona(3000L);
-    }
-
-    public boolean testAmountLessThanOrEqual4000(long totalAmount) {
-        return totalAmount <= amountAsKrona(4000L);
-    }
-
-    public boolean testAmountLessThanOrEqual4800(long totalAmount) {
-        return totalAmount <= amountAsKrona(4800L);
     }
 
 

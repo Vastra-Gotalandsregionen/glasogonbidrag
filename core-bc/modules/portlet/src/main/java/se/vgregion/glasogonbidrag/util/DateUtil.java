@@ -1,7 +1,7 @@
 package se.vgregion.glasogonbidrag.util;
 
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import org.primefaces.component.datatable.DataTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +22,11 @@ public class DateUtil {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DateUtil.class);
 
-    public List<Date> getDatesOfThisWeek(Date today) {
+    public List<Date> getDatesOfThisWeek() {
 
         ArrayList<Date> datesOfWeek = new ArrayList<Date>();
 
         Calendar now = Calendar.getInstance();
-        now.setTime(today);
 
         int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 if your week start on monday
 

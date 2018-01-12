@@ -115,26 +115,6 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
-    public long countByDate(Date date) {
-        TypedQuery<Long> q = em.createNamedQuery(
-                "glasogonbidrag.grant.countByDate", Long.class);
-        q.setParameter("date", date, TemporalType.DATE);
-
-        Long result = null;
-        try {
-            result = q.getSingleResult();
-        } catch (NoResultException e) {
-            // Ignore exception
-        }
-
-        if (result != null) {
-            return result;
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
     public long currentProgressByDate(Date date) {
         TypedQuery<Long> q = em.createNamedQuery(
                 "glasogonbidrag.grant.currentProgressByDate",

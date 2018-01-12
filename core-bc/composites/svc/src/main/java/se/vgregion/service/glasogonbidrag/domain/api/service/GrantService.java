@@ -1,5 +1,6 @@
 package se.vgregion.service.glasogonbidrag.domain.api.service;
 
+
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Grant;
 import se.vgregion.service.glasogonbidrag.domain.exception.GrantMissingAreaException;
 
@@ -25,8 +26,6 @@ public interface GrantService {
     List<Grant> findAllByDate(Date date);
 
     List<Grant> findAllByCaseWorker(String caseWorker);
-
-    long countByDate(Date date);
 
     long currentProgressByDate(Date date);
 

@@ -1,5 +1,11 @@
 package se.vgregion.service.glasogonbidrag.helper;
 
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * @author Martin Lind - Monator Technologies AB
  */
@@ -9,7 +15,6 @@ public class BeneficiaryFactory {
      */
     private BeneficiaryFactory() {}
 
-    @SuppressWarnings("WeakerAccess")
     public static BeneficiaryBuilder newBeneficiary(GrantBuilder parent) {
         return new BeneficiaryBuilder(parent);
     }
@@ -18,13 +23,11 @@ public class BeneficiaryFactory {
         return new BeneficiaryBuilder();
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static BeneficiaryBuilder newBeneficiary(String firstName,
                                                     String lastName) {
         return new BeneficiaryBuilder(firstName, lastName);
     }
 
-    @SuppressWarnings("unused")
     public static BeneficiaryBuilder newBeneficiary(String fullName) {
         return new BeneficiaryBuilder(fullName);
     }

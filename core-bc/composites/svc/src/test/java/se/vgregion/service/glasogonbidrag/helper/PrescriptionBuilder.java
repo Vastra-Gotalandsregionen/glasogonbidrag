@@ -19,12 +19,10 @@ public class PrescriptionBuilder {
     private String prescriber;
     private String comment;
 
-    @SuppressWarnings("WeakerAccess")
     public PrescriptionBuilder() {
         hasParent = false;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public PrescriptionBuilder(GrantBuilder parent) {
         hasParent = true;
         this.parent = parent;

@@ -59,10 +59,21 @@ public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
                             "without a hyphen.");
         }
 
+        LookupResidentForExtendedProfileResponseType response = null;
+
+        try {
+
+          response = profileClient.lookupResidentForExtendedProfile("", createRequest(identity, date));
+
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+
+        /*
         LookupResidentForExtendedProfileResponseType response =
                 profileClient.lookupResidentForExtendedProfile(
                         "", createRequest(identity, date));
-
+        */
         return new BeneficiaryTransport(
                 extractDataFromResponse(response),
                 extractAreaFromRequest(response));
