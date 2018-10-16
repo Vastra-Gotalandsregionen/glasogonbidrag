@@ -46,7 +46,7 @@ Template version: 1.5
             <groupId>com.liferay.portal</groupId>
             <artifactId>com.liferay.portal.kernel</artifactId>
             <scope>provided</scope>
-            <version>2.46.0</version>
+            <version>3.26.0</version>
         </dependency>
 
         <!-- Spring and Servlet dependencies -->
@@ -143,7 +143,7 @@ Template version: 1.5
         <dependency>
           <groupId>com.liferay.faces</groupId>
           <artifactId>com.liferay.faces.bridge.ext</artifactId>
-          <version>5.0.1</version>
+          <version>5.0.3</version>
         </dependency>
 
         <dependency>
@@ -152,7 +152,7 @@ Template version: 1.5
             <artifactId>liferay-faces-bridge-impl</artifactId>
             -->
             <artifactId>com.liferay.faces.bridge.impl</artifactId>
-            <version>4.1.0</version>
+            <version>4.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.liferay.faces</groupId>
@@ -160,7 +160,7 @@ Template version: 1.5
             <artifactId>liferay-faces-portal</artifactId>
             -->
             <artifactId>com.liferay.faces.portal</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.3</version>
         </dependency>
 
         <!-- Prime Faces -->
