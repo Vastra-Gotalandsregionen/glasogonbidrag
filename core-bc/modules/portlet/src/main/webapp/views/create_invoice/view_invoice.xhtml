@@ -59,6 +59,7 @@
                                                rendered="#{mayInvoiceBeMarkedCompleted}" >
                                     <f:param name="invoiceId" value="${invoice.id}" />
                                 </h:commandLink>
+
                                 <h:commandLink value="#{bundle['mark-canceled']}"
                                                styleClass="link-btn"
                                                action="#{createInvoiceViewInvoiceBackingBean.markCanceled}"
@@ -78,6 +79,14 @@
                                         outcome="view"
                                         rendered="#{invoice.status eq 'COMPLETED' or invoice.status eq 'CANCELED'}"
                                 />
+
+                                <h:link value="#{bundle['edit']}"
+                                        styleClass="link-btn"
+                                        outcome="edit_invoice"
+                                        rendered="#{invoice.status eq 'IN_PROGRESS'}">
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:link>
+
 
                             </div>
                         </h:form>
