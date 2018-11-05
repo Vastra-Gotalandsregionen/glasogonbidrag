@@ -1,8 +1,9 @@
 package se.vgregion.glasogonbidrag.flow.state;
 
+import se.vgregion.glasogonbidrag.flow.AddGrantFlowState;
 import se.vgregion.glasogonbidrag.flow.CreateInvoiceAddGrantPidFlow;
 
-public class AddGrantAmountAfterAgeState extends CreateInvoiceAddGrantPidFlow {
+public class AddGrantContactLensesState extends CreateInvoiceAddGrantPidFlow {
 
     @Override
     public boolean getShowIdentificationOutput() {
@@ -25,23 +26,12 @@ public class AddGrantAmountAfterAgeState extends CreateInvoiceAddGrantPidFlow {
     }
 
     @Override
-    public boolean getShowContactLensesOutput() {
-        return true;
-    }
-
-    @Override
-    public boolean getShowPrescriptionDateOutput() {
-        return true;
-    }
-
-    @Override
-    public boolean getShowAmountInput() {
+    public boolean getShowContactLensesInput() {
         return true;
     }
 
     @Override
     public CreateInvoiceAddGrantPidFlow nextState() {
-        // Final state, next state will be null state.
-        return null;
+        return AddGrantFlowState.ENTER_PRESCRIPTION_DATE.getState();
     }
 }

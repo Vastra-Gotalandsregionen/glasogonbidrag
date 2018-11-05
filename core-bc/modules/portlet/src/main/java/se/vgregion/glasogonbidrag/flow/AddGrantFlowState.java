@@ -6,6 +6,7 @@ public enum AddGrantFlowState {
     ENTER_IDENTIFICATION(new AddGrantIdentificationState()),
     ENTER_DELIVERY_DATE(new AddGrantDeliveryDateState()),
     SELECT_GRANT_TYPE(new AddGrantGrantTypeState()),
+    ENTER_CONTACT_LENSES_PRESCRIPTION(new AddGrantContactLensesState()),
     ENTER_PRESCRIPTION_DATE(new AddGrantPrescriptionDateState()),
     ENTER_GRANT_STATE_OTHER_TYPE(new AddGrantOtherTypeState()),
     ENTER_GRANT_STATE_OTHER_DATE(new AddGrantOtherDateState()),
