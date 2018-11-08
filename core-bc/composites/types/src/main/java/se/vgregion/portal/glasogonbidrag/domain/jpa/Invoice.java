@@ -363,22 +363,23 @@ public class Invoice {
 
     @Override
     public String toString() {
+        String grantString;
         try {
-            return "Invoice{" +
-                    "id=" + id +
-                    ", companyId=" + companyId +
-                    ", groupId=" + groupId +
-                    ", userId=" + userId +
-                    ", verificationNumber='" + verificationNumber + '\'' +
-                    ", invoiceNumber='" + invoiceNumber + '\'' +
-                    ", amount=" + amount +
-                    ", grants=" + grants +
-                    ", supplier=" + supplier +
-                    '}';
+            grantString = ", grants=" + grants;
         } catch (Exception e) {
-            e.printStackTrace();
+            grantString = ", grants=notloaded";
         }
-        return "";
+
+        return "Invoice{" + "id=" + id +
+                ", userId=" + userId +
+                ", groupId=" + groupId +
+                ", companyId=" + companyId +
+                ", verificationNumber='" + verificationNumber + '\'' +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", amount=" + amount +
+                ", supplier=" + supplier +
+                grantString +
+            '}';
     }
 
     // Helper methods

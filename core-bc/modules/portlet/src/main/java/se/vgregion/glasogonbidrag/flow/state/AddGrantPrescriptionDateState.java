@@ -26,6 +26,11 @@ public class AddGrantPrescriptionDateState extends CreateInvoiceAddGrantPidFlow 
     }
 
     @Override
+    public boolean getShowContactLensesOutput() {
+        return true;
+    }
+
+    @Override
     public boolean getShowPrescriptionDateInput() {
         return true;
     }

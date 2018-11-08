@@ -66,6 +66,10 @@ public abstract class CreateInvoiceAddGrantPidFlow {
         return false;
     }
 
+    public boolean getShowContactLensesInput() { return false; }
+
+    public boolean getShowContactLensesOutput() { return false; }
+
     public boolean getShowPrescriptionDateOutput() {
         return false;
     }

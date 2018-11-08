@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb">
+
+    <h:head />
+
+    <h:body>
+
+        <c:set var="invoice" value="#{manageInvoiceViewBackingBean.invoice}" scope="request" />
+
+        <div class="row-fluid">
+            <div class="gb-invoice-hd">
+
+                <div class="gb-invoice-hd-left">
+                    <div class="gb-invoice-hd-item">
+                        #{bundle['invoice']} <strong>#{invoice.verificationNumber}</strong>
+                    </div>
+                    <div class="gb-invoice-hd-item">
+                        #{invoice.supplier.name}
+                    </div>
+                    <div class="gb-invoice-hd-item">
+                        #{bundle[invoice.status]}
+                    </div>
+                    <ui:fragment rendered="#{not empty invoice.supplier.emailInvoice}">
+                        <div class="gb-invoice-hd-item">
+                            <a href="mailto:#{invoice.supplier.emailInvoice}" class="link-icon link-icon-email">
+                                <span>#{bundle['email']}</span>
+                            </a>
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{not empty invoice.supplier.phone}">
+                        <div class="gb-invoice-hd-item">
+                            #{bundle["phone-short"]}: #{invoice.supplier.phone}
+                        </div>
+                    </ui:fragment>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+
+            <div class="span3">
+                <div class="dummy hide"></div>
+            </div>
+
+
+            <div class="span6">
+                <gb:box title="" collapsible="false" collapsed="false">
+                    <h:form id="manageInvoice">
+                        <div class="msg-wrap">
+                            <h:messages showSummary="true" showDetail="false" />
+                        </div>
+
+                        <div class="field-row field-row-2">
+                            <div class="field-element">
+                                <h:outputLabel for="invoiceVerificationNumber" value="#{bundle['verification-number']}:" />
+                                <h:inputText id="invoiceVerificationNumber"
+                                             value="#{manageInvoiceViewBackingBean.verificationNumber}"
+                                             required="true">
+                                </h:inputText>
+                            </div>
+
+                            <div class="field-element">
+                                <h:outputLabel for="invoiceSupplier" value="#{bundle['supplier']}:" />
+                                <h:selectOneMenu id="invoiceSupplier"
+                                                 name="world"
+                                                 styleClass="js-select-replace"
+                                                 value="#{manageInvoiceViewBackingBean.supplier}"
+                                                 required="true"
+                                                 requiredMessage="#{bundle['reg-invoice-error-choose-supplier']}"
+                                                 pt:data-placeholder="#{bundle['select-supplier']}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="#{bundle['select-supplier']}" />
+                                    <f:selectItems value="#{manageInvoiceViewBackingBean.suppliers}" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="field-row field-row-2">
+                            <div class="field-element">
+                                <h:outputLabel for="invoiceInvoiceNumber" value="#{bundle['invoice-number-short']}:" />
+                                <h:inputText id="invoiceInvoiceNumber"
+                                             value="#{manageInvoiceViewBackingBean.invoiceNumber}"
+                                             required="true">
+                                </h:inputText>
+                            </div>
+
+                            <div class="field-element">
+                                <h:outputLabel for="invoiceAmount" value="#{bundle['amount']}:" />
+                                <h:inputText id="invoiceAmount"
+                                             value="#{manageInvoiceViewBackingBean.amount}"
+                                             required="true">
+                                    <f:converter converterId="javax.faces.BigDecimal" />
+                                </h:inputText>
+                            </div>
+                        </div>
+
+                        <div class="button-row">
+                            <h:commandLink styleClass="link-btn primary"
+                                           value="#{bundle['save']}"
+                                           action="#{manageInvoiceViewBackingBean.save()}" />
+
+
+                            <h:commandLink styleClass="link-btn primary"
+                                           value="#{bundle['cancel']}"
+                                           immediate="true"
+                                           action="#{manageInvoiceViewBackingBean.cancel()}" />
+                        </div>
+                    </h:form>
+                </gb:box>
+            </div>
+
+
+            <div class="span3">
+                <div class="dummy hide"></div>
+            </div>
+
+        </div>
+
+    </h:body>
+</f:view>
