@@ -488,6 +488,11 @@ public class CreateInvoiceAddGrantBackingBean {
         }
     }
 
+    public void contactLensesListener() {
+        // Set grantFlow
+        grantFlow = grantFlow.nextState();
+    }
+
     public void prescriptionDateListener() {
 
         // TODO: grantableAmount should return default amount (or max amount this beneficiary may get if less than default amount). Code below, however, does not work.
