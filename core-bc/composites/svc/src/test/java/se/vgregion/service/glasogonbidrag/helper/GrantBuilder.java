@@ -14,11 +14,16 @@ import java.util.GregorianCalendar;
  */
 public class GrantBuilder {
     private Date deliveryDate;
+    private boolean contactLenses;
     private BigDecimal krona;
     private String county;
     private String municipality;
     private Beneficiary beneficiary;
     private Prescription prescription;
+
+    GrantBuilder() {
+        contactLenses = false;
+    }
 
     public GrantBuilder delivery(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
@@ -28,6 +33,11 @@ public class GrantBuilder {
     public GrantBuilder delivery(int year, int month, int dayOfMonth) {
         this.deliveryDate =
                 new GregorianCalendar(year, month, dayOfMonth).getTime();
+        return this;
+    }
+
+    public GrantBuilder contactLenses() {
+        this.contactLenses = true;
         return this;
     }
 
@@ -73,6 +83,7 @@ public class GrantBuilder {
         grant.setModifiedDate(cur);
 
         grant.setDeliveryDate(deliveryDate);
+        grant.setContactLenses(contactLenses);
         grant.setAmountAsKrona(krona);
         grant.setCounty(county);
         grant.setMunicipality(municipality);

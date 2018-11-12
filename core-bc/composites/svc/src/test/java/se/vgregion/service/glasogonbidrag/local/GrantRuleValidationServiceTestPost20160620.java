@@ -57,14 +57,14 @@ public class GrantRuleValidationServiceTestPost20160620 {
                 .amount(new BigDecimal("2000"))
                 .area("14", "96")
                 .beneficiary()
-                .fullName("Sven Larsson")
-                .identification("200001013431")
+                    .fullName("Sven Larsson")
+                    .identification("200001013431")
                 .end()
                 .prescription()
-                .comment("")
-                .date(2016, JULY, 18)
-                .diagnose(new None())
-                .prescriber("")
+                    .comment("")
+                    .date(2016, JULY, 18)
+                    .diagnose(new None())
+                    .prescriber("")
                 .end()
                 .build();
 
@@ -173,6 +173,94 @@ public class GrantRuleValidationServiceTestPost20160620 {
                 child16UnderAmount, new HashSet<Grant>());
         Assert.assertFalse(result4.hasWarnings());
         Assert.assertFalse(result4.hasViolations());
+    }
+
+    /**
+     * If a beneficiary would ordinate contact lenses, then the prescription
+     * is valid more than one year.
+     */
+    @Test
+    public void children0to19ContactLenses() {
+        // Testing when a beneficiary of age 16 receives 1600 kr on a recipe
+        // that is within one year.
+        // This should produce no warnings nor any errors.
+
+        Grant child16AmountWithin = GrantFactory.newGrant()
+                .delivery(2016, AUGUST, 3)
+                .amount(new BigDecimal("1600"))
+                .area("14", "96")
+                .contactLenses()
+                .beneficiary()
+                .fullName("Göran Andersson")
+                .identification("200001013431")
+                .end()
+                .prescription()
+                    .comment("")
+                    .date(2016, JULY, 18)
+                    .diagnose(new None())
+                    .prescriber("")
+                .end()
+                .build();
+
+        GrantRuleResult result1 = validationService.test(
+                child16AmountWithin, new HashSet<Grant>());
+        Assert.assertFalse(result1.hasWarnings());
+        Assert.assertFalse(result1.hasViolations());
+
+        // When the prescription date is more than one year old this should
+        // work only when one have contact lenses.
+
+        Grant child16OlderPrescription = GrantFactory.newGrant()
+                .delivery(2016, AUGUST, 3)
+                .amount(new BigDecimal("1600"))
+                .area("14", "96")
+                .contactLenses()
+                .beneficiary()
+                .fullName("Göran Andersson")
+                .identification("200001013431")
+                .end()
+                .prescription()
+                    .comment("")
+                    .date(2014, JULY, 18)
+                    .diagnose(new None())
+                    .prescriber("")
+                .end()
+                .build();
+
+        GrantRuleResult result2 = validationService.test(
+                child16OlderPrescription, new HashSet<Grant>());
+        Assert.assertFalse(result2.hasWarnings());
+        Assert.assertFalse(result2.hasViolations());
+
+        // But one without contact lenses should recieve an error.
+
+        Grant child16OlderPrescriptionNoContactLenses = GrantFactory.newGrant()
+                .delivery(2016, AUGUST, 3)
+                .amount(new BigDecimal("1600"))
+                .area("14", "96")
+                .beneficiary()
+                .fullName("Göran Andersson")
+                .identification("200001013431")
+                .end()
+                .prescription()
+                    .comment("")
+                    .date(2014, JULY, 18)
+                    .diagnose(new None())
+                    .prescriber("")
+                .end()
+                .build();
+
+        GrantRuleResult result3 = validationService.test(
+                child16OlderPrescriptionNoContactLenses, new HashSet<Grant>());
+        Assert.assertFalse(result3.hasWarnings());
+        Assert.assertTrue(result3.hasViolations());
+        Assert.assertEquals(1, result3.violations());
+        Assert.assertTrue(result3.getViolations().contains(
+                new GrantRuleViolation(
+                        "violation-" +
+                                "delivery-date-is-12-month-" +
+                                "after-recipe-date")));
+
     }
 
     // Tests for Keratokonus --------------------------------------------------

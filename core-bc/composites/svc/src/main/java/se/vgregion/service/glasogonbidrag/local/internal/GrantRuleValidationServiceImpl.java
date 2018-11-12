@@ -28,6 +28,7 @@ import java.util.Set;
  * @author Martin Lind - Monator Technologies AB
  */
 @Service
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "WeakerAccess"})
 public class GrantRuleValidationServiceImpl
         implements GrantRuleValidationService {
 
@@ -124,9 +125,12 @@ public class GrantRuleValidationServiceImpl
             // When a don't have a special kind of diagnosis this
             // block will validate this.
 
-            // The beneficiary may use the recipe for at most 12 months.
+            // The beneficiary may use the recipe for at most 12 months,
+            // if the  beneficiary have a grant with contact lenses, the recipe
+            // is valid forever.
             if (testDeliveryDateIs12MonthsAfterRecipeDate(
-                    deliveryDate, recipeDate)) {
+                    deliveryDate, recipeDate) &&
+                        !testContactLensesForGrant(grant)) {
                 result.add(new GrantRuleViolation(
                         "violation-" +
                                 "delivery-date-is-12-month-" +
@@ -399,6 +403,10 @@ public class GrantRuleValidationServiceImpl
                 .lookupResponsibility(municipalityName);
 
         return responsibilityCode != 0;
+    }
+
+    private boolean testContactLensesForGrant(Grant grant) {
+        return grant.isContactLenses();
     }
 
 //    // PART OF "check recipe in age intervals" BLOCK.
