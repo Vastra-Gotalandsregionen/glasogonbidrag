@@ -18,15 +18,15 @@
 
             <h1>#{bundle['manage-beneficiaries']}</h1>
 
-            <div class="row-fluid">
+            <div class="row">
 
-                <div class="span6">
+                <div class="col-md-6">
                     <h:panelGroup id="listPanel" layout="block">
                         <ui:include src="fragment_view_beneficiaries.xhtml" />
                     </h:panelGroup>
                 </div>
 
-                <div class="span6">
+                <div class="col-md-6">
                     <h:panelGroup id="detailsPanel" layout="block">
                         <ui:fragment rendered="#{not empty selectedBeneficiary}">
                             <ui:include src="fragment_view_beneficiary_info.xhtml" />

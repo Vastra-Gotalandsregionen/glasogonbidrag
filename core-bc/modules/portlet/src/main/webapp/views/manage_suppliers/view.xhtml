@@ -27,15 +27,15 @@
                 <h:outputText value="#{bundle['manage-suppliers']}" />
             </h1>
 
-            <div class="row-fluid">
+            <div class="row">
 
-                <div class="span7">
+                <div class="col-md-7">
                     <h:panelGroup id="listPanel" layout="block">
                         <ui:include src="fragment_view_suppliers.xhtml" />
                     </h:panelGroup>
                 </div>
 
-                <div class="span5">
+                <div class="col-md-5">
                     <h:panelGroup id="detailsPanel" layout="block">
                         <ui:fragment rendered="#{not empty selectedSupplier and not viewEditSupplier}">
                             <ui:include src="fragment_view_supplier_info.xhtml" />

@@ -106,11 +106,11 @@ public class StatisticsDashboardViewBackingBean {
             String dateString = format.format(date);
             daysOfWeekJSON.put(dateString);
 
-            // Grants counts of week days
+        // Grants counts of week days
             int count = (int)grantService.countByDate(date);
             countOfWeekDaysJSON.put(count);
 
-            // Progress of week
+        // Progress of week
             long dateProgressRaw = grantService.currentProgressByDate(date);
             BigDecimal dateProgress = currency.calculatePartsAsKrona(dateProgressRaw);
             progressOfWeekJSON.put(dateProgress.intValueExact());
@@ -119,5 +119,5 @@ public class StatisticsDashboardViewBackingBean {
         daysOfWeekJSONString = daysOfWeekJSON.toString();
         grantsCountOfWeekDaysJSONString = countOfWeekDaysJSON.toString();
         progressOfWeekJSONString = progressOfWeekJSON.toString();
-    }
+        }
 }

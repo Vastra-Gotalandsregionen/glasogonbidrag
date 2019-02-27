@@ -1,7 +1,7 @@
 package se.vgregion.glasogonbidrag.util;
 
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import org.primefaces.component.datatable.DataTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
