@@ -28,7 +28,7 @@ import java.util.Set;
  * @author Martin Lind - Monator Technologies AB
  */
 @Service
-@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "WeakerAccess"})
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "WeakerAccess", "Duplicates"})
 public class GrantRuleValidationServiceImpl
         implements GrantRuleValidationService {
 
@@ -251,25 +251,86 @@ public class GrantRuleValidationServiceImpl
                     }
                 }
             }
-        } else if (diagnose.getType() == DiagnoseType.APHAKIA
-                || diagnose.getType() == DiagnoseType.SPECIAL) {
+        }
 
+        else if (diagnose.getType() == DiagnoseType.APHAKIA) {
+
+            Aphakia aphakia = (Aphakia)diagnose;
+            VisualLaterality laterality = aphakia.getLaterality();
+
+            // Beneficiaries with Aphakia or Special glasses or lens needs
+            // may be granted 2000kr maximum or for the new new system
+            // 2400kr per eye (this is split over two grants).
+            if (deliveryDate.before(PRE_20160620)) {
+
+                if (grants.size() > 2) {
+                    result.add(new GrantRuleViolation(
+                            "violation-too-many-grants-for-aphakia"));
+                }
+
+                if (VisualLaterality.LEFT.equals(laterality) ||
+                        VisualLaterality.RIGHT.equals(laterality)) {
+
+                    if (!testAmountLessThanOrEqual2000(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-2000-" +
+                                        "for-aphakia-" +
+                                        "one-eye-pre-20160620"));
+                    }
+                } else if (VisualLaterality.BILATERAL.equals(laterality)) {
+
+                    if (!testAmountLessThanOrEqual4000(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-4000-" +
+                                        "for-aphakia-" +
+                                        "both-eyes-pre-20160620"));
+                    }
+                }
+//                if (!testAmountLessThanOrEqual2000(totalAmount)) {
+//                    result.add(new GrantRuleViolation(
+//                            "violation-amount-greater-than-2000-" +
+//                                    "for-aphakia-and-special-" +
+//                                    "pre-20160620"));
+//                }
+            } else {
+                if (VisualLaterality.LEFT.equals(laterality) ||
+                        VisualLaterality.RIGHT.equals(laterality)) {
+
+                    if (grants.size() > 2) {
+                        result.add(new GrantRuleViolation(
+                                "violation-too-many-grants-for-aphakia"));
+                    }
+
+                    if (!testAmountLessThanOrEqual2400(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-2400-" +
+                                        "for-aphakia-" +
+                                        "one-eye-post-20160620"));
+                    }
+                } else if (VisualLaterality.BILATERAL.equals(laterality)) {
+
+                    if (grants.size() > 4) {
+                        result.add(new GrantRuleViolation(
+                                "violation-too-many-grants-for-aphakia"));
+                    }
+
+                    if (!testAmountLessThanOrEqual4800(totalAmount)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-4800-" +
+                                        "for-aphakia-" +
+                                        "both-eyes-post-20160620"));
+                    }
+                }
+            }
+        }
+        else if (diagnose.getType() == DiagnoseType.SPECIAL){
             if (grants.size() > 2) {
                 result.add(new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special"));
+                        "violation-too-many-grants-for-special"));
             }
 
-            VisualLaterality laterality;
-            if (diagnose.getType() == DiagnoseType.APHAKIA) {
-                Aphakia aphakia = (Aphakia)diagnose;
-                laterality = aphakia.getLaterality();
-            } else if (diagnose.getType() == DiagnoseType.SPECIAL){
-                Special special = (Special) diagnose;
-                laterality = special.getLaterality();
-            } else {
-                throw new IllegalStateException(
-                        "Illegal state, diagnose is set to wrong type!");
-            }
+            Special special = (Special) diagnose;
+            VisualLaterality laterality = special.getLaterality();
 
             // Beneficiaries with Aphakia or Special glasses or lens needs
             // may be granted 2000kr maximum or for the new new system
@@ -280,14 +341,14 @@ public class GrantRuleValidationServiceImpl
                     if (!testAmountLessThanOrEqual2000(totalAmount)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-2000-" +
-                                        "for-aphakia-or-special-" +
+                                        "for-special-" +
                                         "one-eye-pre-20160620"));
                     }
                 } else if (VisualLaterality.BILATERAL.equals(laterality)) {
                     if (!testAmountLessThanOrEqual4000(totalAmount)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-4000-" +
-                                        "for-aphakia-or-special-" +
+                                        "for-special-" +
                                         "both-eyes-pre-20160620"));
                     }
                 }
@@ -303,19 +364,20 @@ public class GrantRuleValidationServiceImpl
                     if (!testAmountLessThanOrEqual2400(totalAmount)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-2400-" +
-                                        "for-aphakia-or-special-" +
+                                        "for-special-" +
                                         "one-eye-post-20160620"));
                     }
                 } else if (VisualLaterality.BILATERAL.equals(laterality)) {
                     if (!testAmountLessThanOrEqual4800(totalAmount)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-4800-" +
-                                        "for-aphakia-or-special-" +
+                                        "for-special-" +
                                         "both-eyes-post-20160620"));
                     }
                 }
             }
-        } else if (diagnose.getType() == DiagnoseType.KERATOCONUS) {
+        }
+        else if (diagnose.getType() == DiagnoseType.KERATOCONUS) {
             // Beneficiaries with Keratoconus may be granted 1200kr per eye.
             // After 2016-06-20 the new grantable amount per eye is 1500kr.
             VisualLaterality laterality =
@@ -372,7 +434,11 @@ public class GrantRuleValidationServiceImpl
                                             "post-20160620"));
                     }
                 }
-             }
+            }
+        }
+        else {
+            throw new IllegalStateException(
+                    "Illegal state, diagnose is set to wrong type!");
         }
 
         return result;
