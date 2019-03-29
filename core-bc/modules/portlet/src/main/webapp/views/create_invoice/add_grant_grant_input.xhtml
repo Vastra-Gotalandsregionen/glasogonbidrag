@@ -123,6 +123,54 @@
         />
 
         <!-- Grant Type 0-15 or 0-19 -->
+
+        <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showContactLensesInput}">
+
+            <div class="field-row">
+                <div class="field-element">
+                    <h:outputLabel for="prescriptionContactLensesCheckbox" value="#{bundle['contact-lenses']}:"/>
+                    <h:selectBooleanCheckbox id="prescriptionContactLensesCheckbox"
+                                             value="#{grant.contactLenses}"
+                                             pt:autofocus="true"
+                                             pt:data-triggeronenter="#{portletNamespace}:addGrantForm:contactLensesSubmit" />
+                </div>
+            </div>
+
+            <div class="button-row">
+                <h:commandLink id="contactLensesSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
+                    <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.contactLensesListener}"
+                            render=":addGrantForm:grantAddPanel"
+                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                </h:commandLink>
+                <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
+                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
+                </h:link>
+            </div>
+
+        </ui:fragment>
+
+        <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showContactLensesOutput}">
+            <div class="grant-section">
+                <div class="grant-section-output">
+                    <span class="grant-section-label">
+                        <h:outputText value="#{bundle['contact-lenses']}" />
+                    </span>
+                    <span class="grant-section-data">
+                        <h:outputText value="#{bundle['yes']}" rendered="#{grant.contactLenses}" />
+                        <h:outputText value="#{bundle['no']}" rendered="#{not grant.contactLenses}" />
+                    </span>
+
+                    <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                            <f:param name="showSection" value="ENTER_CONTACT_LENSES_PRESCRIPTION" />
+                        <span class="hide-accessible">#{bundle['go-back']}</span>
+                    </h:commandLink>
+                </div>
+            </div>
+        </ui:fragment>
+
         <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showPrescriptionDateInput}">
             <div class="grant-section">
 
@@ -625,9 +673,6 @@
 
             </div>
         </ui:fragment>
-
-
-
 
     </h:body>
 </f:view>

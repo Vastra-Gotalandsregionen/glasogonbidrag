@@ -123,6 +123,9 @@ public class Grant {
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
 
+    @Column(name = "contact_lenses")
+    private boolean contactLenses;
+
     private long amount;
 
     private String county;
@@ -210,6 +213,14 @@ public class Grant {
 
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
+    }
+
+    public boolean isContactLenses() {
+        return contactLenses;
+    }
+
+    public void setContactLenses(boolean contactLenses) {
+        this.contactLenses = contactLenses;
     }
 
     public long getAmount() {

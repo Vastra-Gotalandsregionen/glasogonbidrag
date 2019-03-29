@@ -700,7 +700,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-2000-" +
-                        "for-aphakia-or-special-one-eye-pre-20160620")));
+                        "for-aphakia-one-eye-pre-20160620")));
     }
 
     @Test
@@ -752,7 +752,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-2000-" +
-                        "for-aphakia-or-special-one-eye-pre-20160620")));
+                        "for-aphakia-one-eye-pre-20160620")));
     }
 
     @Test
@@ -801,7 +801,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-4000-" +
-                        "for-aphakia-or-special-both-eyes-pre-20160620")));
+                        "for-aphakia-both-eyes-pre-20160620")));
     }
 
     @Test
@@ -860,7 +860,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-aphakia")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -936,7 +936,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-aphakia")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1012,7 +1012,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-aphakia")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1083,7 +1083,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-2000-" +
-                        "for-aphakia-or-special-one-eye-pre-20160620")));
+                        "for-special-one-eye-pre-20160620")));
     }
 
     @Test
@@ -1135,7 +1135,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-2000-" +
-                        "for-aphakia-or-special-one-eye-pre-20160620")));
+                        "for-special-one-eye-pre-20160620")));
     }
 
     @Test
@@ -1184,7 +1184,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
                         "violation-amount-greater-than-4000-" +
-                        "for-aphakia-or-special-both-eyes-pre-20160620")));
+                        "for-special-both-eyes-pre-20160620")));
     }
 
     @Test
@@ -1243,7 +1243,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1319,7 +1319,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
@@ -1395,7 +1395,7 @@ public class GrantRuleValidationServiceTestPre20160620 {
         Assert.assertTrue(result2.hasViolations());
         Assert.assertTrue(result2.getViolations().contains(
                 new GrantRuleViolation(
-                        "violation-too-many-grants-for-aphakia-or-special")));
+                        "violation-too-many-grants-for-special")));
 
         // More than two and above grantable amount. is not ok.
         Grant grant4 = GrantFactory.newGrant()
