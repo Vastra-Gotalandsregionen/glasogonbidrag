@@ -85,16 +85,33 @@
             <artifactId>poi</artifactId>
             <version>3.10.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.10.1</version>
+            <exclusions>
+              <exclusion>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>stax</groupId>
+                <artifactId>stax-api</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
+            <exclusions>
+              <exclusion>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
