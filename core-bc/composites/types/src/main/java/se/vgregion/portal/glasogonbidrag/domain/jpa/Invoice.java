@@ -1,8 +1,10 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
+import org.hibernate.annotations.Type;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -155,6 +158,12 @@ public class Invoice {
     @Column(name = "case_worker")
     private String caseWorker;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Basic(fetch=FetchType.EAGER, optional=true)
+    @Column(name = "invoice_notes", columnDefinition = "text")
+    private String notes;
+
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "invoice")
@@ -261,6 +270,14 @@ public class Invoice {
 
     public void setCaseWorker(String caseWorker) {
         this.caseWorker = caseWorker;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public Set<Grant> getGrants() {
