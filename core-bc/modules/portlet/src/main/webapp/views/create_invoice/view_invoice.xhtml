@@ -14,6 +14,7 @@
 
         <c:set var="invoice" value="#{createInvoiceViewInvoiceBackingBean.invoice}" scope="request" />
         <c:set var="locale" value="#{portletBackingBean.locale}" scope="request" />
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
 
         <c:set var="mayNewGrantsBeAdded" value="#{invoiceBackingBean.checkMayNewGrantsBeAdded(invoice)}" scope="request" />
         <c:set var="mayInvoiceBeMarkedCompleted" value="#{invoiceBackingBean.checkMayInvoiceBeMarkedCompleted(invoice)}" scope="request" />
@@ -23,6 +24,7 @@
                 <div class="gb-invoice-hd">
 
                     <div class="gb-invoice-hd-left">
+
                         <div class="gb-invoice-hd-item">
                             #{bundle['invoice']} <strong>#{invoice.verificationNumber}</strong>
                         </div>
@@ -87,7 +89,6 @@
                                     <f:param name="invoiceId" value="${invoice.id}" />
                                 </h:link>
 
-
                             </div>
                         </h:form>
 
@@ -101,7 +102,6 @@
         <div class="row">
 
             <div class="col-md-6">
-
 
                 <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['registered-grants']}">
                     <ui:fragment rendered="#{not empty invoice.grants}">
@@ -222,10 +222,71 @@
                     </table>
                 </gb:box>
 
+                <gb:box collapsible="true" collapsed="#{empty invoiceBackingBean.note}" styleClass="" title="#{bundle['comment']}">
+                    <h:form id="invoiceNotesForm">
+                        <ui:fragment rendered="#{empty invoiceBackingBean.note and not invoiceBackingBean.noteEditing}">
+
+                            <div class="alert alert-info">#{bundle['there-is-no-comment-on-the-invoice']}.</div>
+
+                            <div class="button-row">
+                                <h:commandLink value="#{bundle['add-comment']}"
+                                               styleClass="link-btn primary">
+                                    <f:ajax execute="@form" render="@form"
+                                            listener="#{invoiceBackingBean.startEditNoteListener}"
+                                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                    <f:param name="invoiceId" value="${invoice.id}" />
+                                </h:commandLink>
+                            </div>
+
+                        </ui:fragment>
+                        <ui:fragment rendered="#{not empty invoiceBackingBean.note and not invoiceBackingBean.noteEditing}">
+
+                            <div class="field-element">
+                                <h:outputText value="#{invoiceBackingBean.htmlNote}" escape="false" />
+
+                                <div class="button-row">
+                                    <h:commandLink value="#{bundle['edit']}"
+                                                   styleClass="link-btn primary">
+                                        <f:ajax execute="@form" render="@form"
+                                                listener="#{invoiceBackingBean.startEditNoteListener}"
+                                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                        <f:param name="invoiceId" value="${invoice.id}" />
+                                    </h:commandLink>
+                                </div>
+                            </div>
+
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{invoiceBackingBean.noteEditing}">
+                            <div class="field-element">
+                                <h:inputTextarea id="invoiceNotes" value="#{invoiceBackingBean.note}"
+                                                 pt:maxlength="1000"
+                                                 style="width: 100%; height: 140px" />
+
+                                <div class="button-row">
+                                    <h:commandLink value="#{bundle['cancel']}"
+                                                   styleClass="link-btn">
+                                        <f:ajax execute="@form" render="@form"
+                                                listener="#{invoiceBackingBean.stopEditNoteListener}"
+                                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                        <f:param name="invoiceId" value="${invoice.id}" />
+                                    </h:commandLink>
+                                    <h:commandLink value="#{bundle['save']}"
+                                                   styleClass="link-btn primary">
+                                        <f:ajax execute="@form" render="@form"
+                                                listener="#{invoiceBackingBean.saveInvoiceNoteListener}"
+                                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                                        <f:param name="invoiceId" value="${invoice.id}" />
+                                    </h:commandLink>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                    </h:form>
+                </gb:box>
+
             </div>
 
             <div class="col-md-6">
-
 
                 <gb:box collapsible="true" collapsed="false" styleClass="" title="#{bundle['accounting-proposal']}">
 

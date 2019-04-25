@@ -1,5 +1,6 @@
 package se.vgregion.glasogonbidrag.backingbean;
 
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class InvoiceBackingBean {
     // Main objects
     private Invoice invoice;
 
+    // Editable fields
+    private boolean noteEditing;
+    private String note;
+
     // Getter and Setters for Main objects
     public Invoice getInvoice() {
         return invoice;
@@ -40,6 +45,30 @@ public class InvoiceBackingBean {
 
     public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getHtmlNote() {
+        return note.replaceAll("\\n", "<br>");
+    }
+
+    public void setHtmlNote(String note) {
+        this.note = note.replaceAll("<br>", "\n");
+    }
+
+    public boolean isNoteEditing() {
+        return noteEditing;
+    }
+
+    public void setNoteEditing(boolean noteEditing) {
+        this.noteEditing = noteEditing;
     }
 
     public boolean checkMayNewGrantsBeAdded(Invoice curInvoice) {
@@ -74,6 +103,30 @@ public class InvoiceBackingBean {
         return mayInvoiceBeMarkedCompleted;
     }
 
+    // Ajax listeners
+
+    public void startEditNoteListener() {
+        note = invoice.getNotes();
+
+        noteEditing = true;
+    }
+
+    public void stopEditNoteListener() {
+        note = invoice.getNotes();
+
+        noteEditing = false;
+    }
+
+    public void saveInvoiceNoteListener() {
+        invoice.setNotes(note);
+
+        noteEditing = false;
+
+        ThemeDisplay themeDisplay = facesUtil.getThemeDisplay();
+        String caseWorker = themeDisplay.getUser().getScreenName();
+
+        invoiceService.update(caseWorker, invoice);
+    }
 
     // Initializer
 
@@ -81,6 +134,9 @@ public class InvoiceBackingBean {
     public void init() {
         long invoiceId = facesUtil.fetchId("invoiceId");
         invoice = invoiceService.findWithParts(invoiceId);
+
+        noteEditing = false;
+        note = invoice.getNotes();
     }
 
 }
