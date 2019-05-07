@@ -124,7 +124,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <ui:repeat value="#{invoice.grants.toArray()}" var="grant">
+                            <ui:repeat value="#{invoice.orderedGrants}" var="grant">
                                 <tr>
                                     <td>
                                         <h:link outcome="add_grant">
