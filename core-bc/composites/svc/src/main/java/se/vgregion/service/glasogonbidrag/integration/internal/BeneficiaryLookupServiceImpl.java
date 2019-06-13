@@ -1,6 +1,7 @@
 package se.vgregion.service.glasogonbidrag.integration.internal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import se.riv.population.residentmaster.extended.v1.AdministrativIndelningType;
 import se.riv.population.residentmaster.extended.v1.ExtendedResidentType;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 /**
  * @author Martin Lind - Monator Technologies AB
  */
+@Primary
 @Service
 public class BeneficiaryLookupServiceImpl implements BeneficiaryLookupService {
 

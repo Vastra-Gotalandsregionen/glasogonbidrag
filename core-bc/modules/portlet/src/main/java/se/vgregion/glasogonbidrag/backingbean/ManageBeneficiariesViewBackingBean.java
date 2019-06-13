@@ -20,7 +20,7 @@ import javax.annotation.PostConstruct;
  * @author Martin Lind - Monator Technologies AB
  */
 @Component(value = "manageBeneficiariesViewBackingBean")
-@Scope(value = "request")
+@Scope(value = "view")
 public class ManageBeneficiariesViewBackingBean {
 
     private static final Logger LOGGER =
@@ -52,6 +52,13 @@ public class ManageBeneficiariesViewBackingBean {
 
     public void onRowDeselect(UnselectEvent event) {
         selectedBeneficiary = null;
+    }
+
+    public String removeBeneficiary() {
+        beneficiaryService.delete(selectedBeneficiary.getBeneficiary().getId(), true);
+        selectedBeneficiary = null;
+
+        return "view?faces-redirect=true";
     }
 
     @PostConstruct

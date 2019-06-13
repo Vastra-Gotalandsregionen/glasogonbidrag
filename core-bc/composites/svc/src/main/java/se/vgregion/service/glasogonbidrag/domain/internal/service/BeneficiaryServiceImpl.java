@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.vgregion.portal.glasogonbidrag.domain.dto.BeneficiaryDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Beneficiary;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
+import se.vgregion.portal.glasogonbidrag.domain.jpa.Prescription;
 import se.vgregion.service.glasogonbidrag.domain.api.service.BeneficiaryService;
 import se.vgregion.service.glasogonbidrag.domain.exception.NoIdentificationException;
 import se.vgregion.service.glasogonbidrag.types.BeneficiaryIdentificationTuple;
@@ -21,8 +22,8 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Martin Lind - Monator Technologies AB
@@ -62,6 +63,34 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     }
 
     @Transactional(rollbackFor = { NoIdentificationException.class })
+    public void create(Beneficiary beneficiary, Prescription prescription,
+                       long userId,
+                       long groupId,
+                       long companyId,
+                       Date date)
+            throws NoIdentificationException {
+        this.create(beneficiary);
+
+        // Set user, group and company id of new prescription.
+        prescription.setUserId(userId);
+        prescription.setGroupId(groupId);
+        prescription.setCompanyId(companyId);
+
+        // Update creation date and modification date of new prescription.
+        prescription.setCreateDate(date);
+        prescription.setModifiedDate(date);
+
+        LOGGER.debug(
+                "Map prescription to beneficiary. Persisting prescription: {}",
+                prescription);
+        // Map prescription to beneficiary and store it
+        beneficiary.getPrescriptionHistory().add(prescription);
+        prescription.setBeneficiary(beneficiary);
+
+        em.persist(prescription);
+    }
+
+    @Transactional(rollbackFor = { NoIdentificationException.class })
     public BeneficiaryIdentificationTuple update(Beneficiary beneficiary)
             throws NoIdentificationException {
         // Require that identification is set.
@@ -90,6 +119,32 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     @Transactional
     public void delete(Long id) {
         Beneficiary beneficiary = em.find(Beneficiary.class, id);
+
+        Identification identification = beneficiary.getIdentification();
+
+        LOGGER.debug("Deleting beneficiary: {}", beneficiary);
+        em.remove(beneficiary);
+
+        LOGGER.debug("Deleting identification: {}", identification);
+        em.remove(identification);
+    }
+
+    @Transactional
+    public void delete(Long id, boolean removeAll) {
+        Beneficiary beneficiary = findWithParts(id);
+
+        if (beneficiary.getGrants().size() > 0) {
+            throw new IllegalArgumentException(
+                    "May not remove beneficiary with assigned grants.");
+        }
+
+        Set<Prescription> prescriptions =
+                beneficiary.getPrescriptionHistory();
+
+        for (Prescription prescription : prescriptions) {
+            LOGGER.debug("Deleting prescription: {}", prescription);
+            em.remove(prescription);
+        }
 
         Identification identification = beneficiary.getIdentification();
 
