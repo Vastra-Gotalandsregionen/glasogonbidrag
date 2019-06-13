@@ -33,16 +33,14 @@
                             <ui:include src="fragment_view_beneficiary_grants.xhtml" />
                         </ui:fragment>
                         <ui:fragment rendered="#{empty selectedBeneficiary}">
-
+                            <ui:include src="fragment_add_beneficiary.xhtml" />
                         </ui:fragment>
-
                     </h:panelGroup>
                 </div>
 
             </div>
 
         </h:form>
-
 
     </h:body>
 </f:view>

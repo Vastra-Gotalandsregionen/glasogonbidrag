@@ -1,0 +1,25 @@
+
+.gb-add-beneficiary-input-pid {
+    margin-bottom: 20px;
+}
+
+.gb-add-beneficiary-input-pid .field-element.gb-add-beneficiary-fetch {
+    margin-top: 0;
+}
+
+.gb-add-beneficiary-choose-diagnose .form-check input {
+    margin-right: 5px;
+}
+
+.gb-add-beneficiary-choose-diagnose .gb-diagnose-label {
+    font-weight: bold;
+}
+
+.field-row.field-row-1 > .field-element {
+    width: 100%;
+}
+
+.field-row.field-row-1 > .field-element textarea {
+    width: 95%;
+    height: 120px;
+}

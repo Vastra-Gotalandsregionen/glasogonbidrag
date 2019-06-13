@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--suppress HtmlFormInputWithoutLabel -->
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:jsf="http://xmlns.jcp.org/jsf"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:bridge="http://liferay.com/faces/bridge"
+        xmlns:gb="http://java.sun.com/jsf/composite/gb"
+>
+
+    <h:head>
+        <h:outputStylesheet library="css" name="beneficiary_styles.css" />
+    </h:head>
+
+    <h:body>
+        <c:set var="portletNamespace" value="#{portletBackingBean.portletNamespace}" scope="request" />
+
+        <c:set var="diagnoseAphakia" value="#{manageBeneficiaryBackingBean.diagnoseAphakia}" />
+        <c:set var="diagnoseKeratoconus" value="#{manageBeneficiaryBackingBean.diagnoseKeratoconus}" />
+        <c:set var="diagnoseSpecial" value="#{manageBeneficiaryBackingBean.diagnoseSpecial}" />
+
+        <gb:box id="newBeneficiaryBox" title="#{bundle['add-beneficiary']}" collapsible="true" collapsed="true">
+
+            <div class="msg-wrap">
+                <h:messages showSummary="true" showDetail="false" />
+            </div>
+
+            <h:panelGroup id="inputPersonalNumberSection" styleClass="gb-add-beneficiary-input-pid">
+                <div class="field-row">
+                    <div class="field-element">
+                        <h:outputLabel styleClass="" for="personalNumber" value="#{bundle['identification-type-personal']}" />
+                        <h:inputText id="personalNumber" styleClass="form-control"
+                                     value="#{manageBeneficiaryBackingBean.personalNumber}"
+                                     a:placeholder="#{bundle['personal-number-placeholder']}" />
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-element gb-add-beneficiary-fetch">
+                        <h:commandButton styleClass="btn" value="#{bundle['fetch']}">
+                            <f:ajax listener="#{manageBeneficiaryBackingBean.lookupListener}"
+                                    execute=":manageBeneficiariesForm:newBeneficiaryBox:inputPersonalNumberSection"
+                                    render="@form" />
+                        </h:commandButton>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+            <ui:fragment rendered="#{not manageBeneficiaryBackingBean.fetchedData}">
+                <div class="alert alert-primary">
+                    <h:outputText value="#{bundle['fetch-identification-note']}" />
+                </div>
+            </ui:fragment>
+            <ui:fragment rendered="#{manageBeneficiaryBackingBean.fetchedData}">
+                <div class="field-row field-row-2">
+                    <div class="field-element">
+                        <h:outputLabel value="#{bundle['name']}:" />
+                        <h:outputText value="#{manageBeneficiaryBackingBean.fullName}" />
+                    </div>
+                    <div class="field-element">
+                        <h:outputLabel value="#{bundle['gender']}:" />
+                        <h:outputText value="#{bundle[manageBeneficiaryBackingBean.sex.key]}" />
+                    </div>
+                </div>
+
+                <div class="field-row field-row-2">
+                    <div class="field-element">
+                        <h:outputLabel value="#{bundle['birth-year']}:" />
+                        <h:outputText value="#{manageBeneficiaryBackingBean.birthYear}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>
+                    </div>
+                    <div class="field-element">
+                        <h:outputLabel value="#{bundle['county']} / #{bundle['municipality']}:" />
+                        <h:outputText value="#{manageBeneficiaryBackingBean.county} / #{manageBeneficiaryBackingBean.municipality}" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <h:panelGroup id="addBeneficaryChooseDiagnose">
+
+                <div class="field-row gb-add-beneficiary-choose-diagnose">
+                    <h:outputLabel styleClass="gb-diagnose-label" value="Diagnos:" />
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input"
+                               value="APHAKIA" jsf:id="newDiagnoseAphakia"
+                               a:name="#{hiddenNewDiagnoseType.clientId}"
+                               a:checked="#{manageBeneficiaryBackingBean.diagnoseName eq 'APHAKIA' ? 'checked' : null}">
+                            <f:ajax listener="#{manageBeneficiaryBackingBean.diagnoseListener}"
+                                    execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                    render="@form" />
+                        </input>
+                        <h:outputLabel for="newDiagnoseAphakia" styleClass="form-check-label" value="#{bundle['diagnose-type-aphakia']}" />
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input"
+                               value="KERATOCONUS" jsf:id="newDiagnoseKeratoconus"
+                               a:name="#{hiddenNewDiagnoseType.clientId}"
+                               a:checked="#{manageBeneficiaryBackingBean.diagnoseName eq 'KERATOCONUS' ? 'checked' : null}">
+                            <f:ajax listener="#{manageBeneficiaryBackingBean.diagnoseListener}"
+                                    execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                    render="@form" />
+                        </input>
+                        <h:outputLabel for="newDiagnoseKeratoconus" styleClass="form-check-label" value="#{bundle['diagnose-type-keratoconus']}" />
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input"
+                               value="SPECIAL" jsf:id="newDiagnoseSpecial"
+                               a:name="#{hiddenNewDiagnoseType.clientId}"
+                               a:checked="#{manageBeneficiaryBackingBean.diagnoseName eq 'SPECIAL' ? 'checked' : null}">
+                            <f:ajax listener="#{manageBeneficiaryBackingBean.diagnoseListener}"
+                                    execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                    render="@form" />
+                        </input>
+                        <h:outputLabel for="newDiagnoseSpecial" styleClass="form-check-label" value="#{bundle['special-weak-eye-sight']}" />
+                    </div>
+                    <h:inputHidden id="selectedNewDiagnoseType"
+                                   binding="#{hiddenNewDiagnoseType}"
+                                   value="#{manageBeneficiaryBackingBean.diagnoseType}"
+                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                        <f:converter converterId="se.vgregion.DiagnoseType" />
+                    </h:inputHidden>
+                </div>
+
+                <div class="field-row">
+                    <ui:fragment rendered="#{manageBeneficiaryBackingBean.diagnoseName eq 'APHAKIA'}">
+                        <gb:box title="" collapsible="false" collapsed="false">
+                            <div class="prescription-section">
+                                <div class="prescription-section-fields">
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityAphakiaBilateral"
+                                                   a:name="#{hiddenAphakiaLaterality.clientId}"
+                                                   value="BILATERAL"
+                                                   a:checked="#{diagnoseAphakia.laterality eq 'BILATERAL' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralityAphakiaBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityAphakiaLeft"
+                                                   a:name="#{hiddenAphakiaLaterality.clientId}"
+                                                   value="LEFT"
+                                                   a:checked="#{diagnoseAphakia.laterality eq 'LEFT' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralityAphakiaLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityAphakiaRight"
+                                                   a:name="#{hiddenAphakiaLaterality.clientId}"
+                                                   value="RIGHT"
+                                                   a:checked="#{diagnoseAphakia.laterality eq 'RIGHT' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralityAphakiaRight" value="#{bundle['visual-laterality-right-short']}" />
+                                        </div>
+
+                                        <h:inputHidden id="selectedHiddenAphakiaLaterality" binding="#{hiddenAphakiaLaterality}" value="#{diagnoseAphakia.laterality}"
+                                                       rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                            <f:converter converterId="se.vgregion.VisualLaterality" />
+                                        </h:inputHidden>
+                                    </div>
+                                </div>
+                            </div>
+                        </gb:box>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{manageBeneficiaryBackingBean.diagnoseName eq 'KERATOCONUS'}">
+                        <gb:box id="beneficiaryKeratoconusForm" title="" collapsible="false" collapsed="false">
+                            <div class="prescription-section">
+                                <div class="prescription-section-fields">
+                                    <div class="prescription-section-fieldset">
+
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityKeratokonusBilateral" value="BILATERAL"
+                                                   a:name="#{hiddenKeratokonusLaterality.clientId}"
+                                                   a:checked="#{diagnoseKeratoconus.laterality eq 'BILATERAL' ? 'checked' : null}">
+                                                <f:ajax listener="#{manageBeneficiaryBackingBean.changeVisualLateralityListener}"
+                                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
+                                                        execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                                        render=":manageBeneficiariesForm:newBeneficiaryBox" />
+
+                                            </input>
+                                            <h:outputLabel for="lateralityKeratokonusBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityKeratokonusRight" value="RIGHT"
+                                                   a:name="#{hiddenKeratokonusLaterality.clientId}"
+                                                   a:checked="#{diagnoseKeratoconus.laterality eq 'RIGHT' ? 'checked' : null}">
+                                                <f:ajax listener="#{manageBeneficiaryBackingBean.changeVisualLateralityListener}"
+                                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
+                                                        execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                                        render=":manageBeneficiariesForm:newBeneficiaryBox" />
+
+                                            </input>
+                                            <h:outputLabel for="lateralityKeratokonusRight" value="#{bundle['visual-laterality-right-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralityKeratokonusLeft" value="LEFT"
+                                                   a:name="#{hiddenKeratokonusLaterality.clientId}"
+                                                   a:checked="#{diagnoseKeratoconus.laterality eq 'LEFT' ? 'checked' : null}">
+                                                <f:ajax listener="#{manageBeneficiaryBackingBean.changeVisualLateralityListener}"
+                                                        onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}"
+                                                        execute=":manageBeneficiariesForm:newBeneficiaryBox:addBeneficaryChooseDiagnose"
+                                                        render=":manageBeneficiariesForm:newBeneficiaryBox" />
+
+                                            </input>
+                                            <h:outputLabel for="lateralityKeratokonusLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                        </div>
+
+                                        <h:inputHidden id="selectedHiddenKeratokonusLaterality"
+                                                       binding="#{hiddenKeratokonusLaterality}" value="#{diagnoseKeratoconus.laterality}"
+                                                       rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                            <f:converter converterId="se.vgregion.VisualLaterality" />
+                                        </h:inputHidden>
+                                    </div>
+
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <h:outputLabel for="keratokonusVisualAcuityRight" value="#{bundle['visual-laterality-right-short']}" />
+                                            <h:inputText id="keratokonusVisualAcuityRight"
+                                                         value="#{diagnoseKeratoconus.visualAcuityRight}"
+                                                         disabled="#{diagnoseKeratoconus.laterality eq 'LEFT'}"
+                                                         a:placeholder=""
+                                                         styleClass="input-very-short">
+                                                <f:converter converterId="javax.faces.Float" />
+                                            </h:inputText>
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <h:outputLabel for="keratokonusVisualAcuityLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                            <h:inputText id="keratokonusVisualAcuityLeft"
+                                                         value="#{diagnoseKeratoconus.visualAcuityLeft}"
+                                                         disabled="#{diagnoseKeratoconus.laterality eq 'RIGHT'}"
+                                                         a:placeholder=""
+                                                         styleClass="input-very-short">
+                                                <f:converter converterId="javax.faces.Float" />
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                    <!-- -->
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="keratokonusNoGlasses" value="#{diagnoseKeratoconus.noGlasses}" />
+                                            <h:outputLabel for="keratokonusNoGlasses" value="#{bundle['no-glasses']}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </gb:box>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{manageBeneficiaryBackingBean.diagnoseName eq 'SPECIAL'}">
+                        <gb:box title="" collapsible="false" collapsed="false">
+                            <div class="prescription-section">
+                                <div class="prescription-section-fields">
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralitySpecialBilateral" value="BILATERAL"
+                                                   a:name="#{hiddenSpecialLaterality.clientId}"
+                                                   a:checked="#{diagnoseSpecial.laterality eq 'BILATERAL' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralitySpecialBilateral" value="#{bundle['visual-laterality-bilateral-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralitySpecialRight"
+                                                   value="BILATERAL"
+                                                   a:name="#{hiddenSpecialLaterality.clientId}"
+                                                   a:checked="#{diagnoseSpecial.laterality eq 'RIGHT' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralitySpecialRight" value="#{bundle['visual-laterality-right-short']}" />
+                                        </div>
+                                        <div class="prescription-section-field">
+                                            <input type="radio" class="gb-radio-input"
+                                                   jsf:id="lateralitySpecialLeft" value="BILATERAL"
+                                                   a:name="#{hiddenSpecialLaterality.clientId}"
+                                                   a:checked="#{diagnoseSpecial.laterality eq 'LEFT' ? 'checked' : null}">
+                                            </input>
+                                            <h:outputLabel for="lateralitySpecialLeft" value="#{bundle['visual-laterality-left-short']}" />
+                                        </div>
+
+                                        <h:inputHidden id="selectedHiddenSpecialLaterality"
+                                                       binding="#{hiddenSpecialLaterality}" value="#{diagnoseSpecial.laterality}"
+                                                       rendered="#{facesContext.currentPhaseId.ordinal ne 6}">
+                                            <f:converter converterId="se.vgregion.VisualLaterality" />
+                                        </h:inputHidden>
+                                    </div>
+                                    <div class="prescription-section-fieldset">
+                                        <div class="prescription-section-field">
+                                            <h:selectBooleanCheckbox id="specialWeakEyeSight" value="#{diagnoseSpecial.weakEyeSight}" />
+                                            <h:outputLabel for="specialWeakEyeSight" value="#{bundle['weak-eye-sight']}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </gb:box>
+                    </ui:fragment>
+                </div>
+
+            </h:panelGroup>
+
+            <div class="field-row field-row-2">
+                <div class="field-element">
+                    <h:outputLabel value="#{bundle['prescriber']}:" />
+                    <h:inputText value="#{manageBeneficiaryBackingBean.prescriber}"
+                                 a:placeholder="#{bundle['prescriber-placeholder']}">
+                    </h:inputText>
+                </div>
+
+                <div class="field-element">
+                    <h:outputLabel value="#{bundle['prescription-date']}" />
+                    <h:inputText value="#{manageBeneficiaryBackingBean.prescriptionDate}"
+                                 a:placeholder="#{bundle['prescription-date-placeholder']}">
+                        <f:converter converterId="se.vgregion.MultiDateConverter" />
+                        <f:attribute name="pattern1" value="yyyy-MM-dd" />
+                        <f:attribute name="pattern2" value="yyyyMMdd" />
+                        <f:attribute name="pattern3" value="yyMMdd" />
+                    </h:inputText>
+                </div>
+            </div>
+
+
+            <div class="field-row field-row-1">
+                <div class="field-element">
+                    <h:outputLabel for="prescriptionNote" value="#{bundle['notes']}" />
+                    <h:inputTextarea id="prescriptionNote" styleClass="form-control"
+                                     value="#{manageBeneficiaryBackingBean.notes}"
+                                     a:maxlength="250" />
+                </div>
+            </div>
+
+            <div class="button-row">
+                <h:commandLink styleClass="link-btn primary" value="#{bundle['add-beneficiary']}"
+                               action="#{manageBeneficiaryBackingBean.saveBeneficiary}" />
+            </div>
+        </gb:box>
+
+    </h:body>
+
+</f:view>
