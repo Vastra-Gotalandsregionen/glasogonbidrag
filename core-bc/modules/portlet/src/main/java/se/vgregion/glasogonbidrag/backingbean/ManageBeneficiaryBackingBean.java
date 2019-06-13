@@ -181,7 +181,8 @@ public class ManageBeneficiaryBackingBean {
         BeneficiaryTransport result;
 
         try {
-            result = this.beneficiaryLookupService.fetchNameAndAddress(personalNumber, new Date());
+            result = this.beneficiaryLookupService
+                    .fetchNameAndAddress(personalNumber, new Date());
         } catch (Exception e) {
             String localizedMessage = messageSource
                     .getMessage("connection-to-population-service-failed",
@@ -299,8 +300,6 @@ public class ManageBeneficiaryBackingBean {
                     .addMessage(null, message);
         }
 
-        LOGGER.info("Created beneficiary: {}", beneficiary);
-
         return "view?faces-redirect=true";
     }
 
@@ -308,8 +307,8 @@ public class ManageBeneficiaryBackingBean {
 
     @PostConstruct
     public void init() {
+        //FUTURE: Support editing.
         long beneficiaryId = facesUtil.fetchId("beneficiaryId");
-
 
         if (beneficiaryId > 0) {
             beneficiary = beneficiaryService.find(beneficiaryId);
@@ -325,7 +324,7 @@ public class ManageBeneficiaryBackingBean {
         if (fetchedData) {
             fullName = beneficiary.getFullName();
             sex = beneficiary.getSex();
-            //birthYear = beneficiary.getBirthYear(); //TODO: Convert
+            //birthYear = beneficiary.getBirthYear();
             county = prescription.getGrant().getCounty();
             municipality = prescription.getGrant().getMunicipality();
         } else {
