@@ -66,6 +66,10 @@ public class RegionResponsibilityLookupServiceImpl
     public String lookupRegion(String municipality) {
         String result = null;
 
+        if (municipality == null) {
+            return null;
+        }
+
         Iterator<String> regionIterator = regionLists.keySet().iterator();
 
         while (result == null && regionIterator.hasNext()) {

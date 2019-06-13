@@ -16,7 +16,7 @@
 
         <c:set var="selectedBeneficiary" value="#{manageBeneficiariesViewBackingBean.selectedBeneficiary}" scope="request" />
 
-        <gb:box title="#{selectedBeneficiary.fullName}" collapsible="true" collapsed="false">
+        <gb:box id="selectedBeneficiaryInfo" title="#{selectedBeneficiary.fullName}" collapsible="true" collapsed="false">
 
             <ul class="labeled-list">
                 <li>
@@ -41,6 +41,15 @@
                     </span>
                 </li>
             </ul>
+
+            <ui:fragment rendered="#{empty selectedBeneficiary.grants}">
+                <div class="button-row">
+                    <h:commandLink styleClass="link-btn primary" value="#{bundle['remove-beneficiary']}"
+                                   immediate="true"
+                                   action="#{manageBeneficiariesViewBackingBean.removeBeneficiary}">
+                    </h:commandLink>
+                </div>
+            </ui:fragment>
 
         </gb:box>
 

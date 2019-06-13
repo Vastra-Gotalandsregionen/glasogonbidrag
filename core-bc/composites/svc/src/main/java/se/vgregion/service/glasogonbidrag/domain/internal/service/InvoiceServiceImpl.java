@@ -183,7 +183,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Update creation date and modification date of new prescription.
         prescription.setCreateDate(date);
         prescription.setModifiedDate(date);
-
     }
 
     @Override
