@@ -374,7 +374,7 @@ public class Invoice {
                 String o2Number = o2.getBeneficiary().getIdentification().getNumber();
 
                 IdentificationType i1 = o1.getBeneficiary().getIdentification().getType();
-                IdentificationType i2 = o1.getBeneficiary().getIdentification().getType();
+                IdentificationType i2 = o2.getBeneficiary().getIdentification().getType();
 
                 if (i1.equals(i2)) {
                     return o1Number.compareToIgnoreCase(o2Number);
