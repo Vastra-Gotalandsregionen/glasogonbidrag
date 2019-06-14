@@ -4,7 +4,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -44,7 +43,6 @@ public class ManageBeneficiaryBackingBean {
     private PrescriptionService prescriptionService;
 
     @Autowired
-    @Qualifier("mock")
     private BeneficiaryLookupService beneficiaryLookupService;
 
     @Autowired
