@@ -1,6 +1,7 @@
 package se.vgregion.portal.glasogonbidrag.domain.jpa;
 
 import org.hibernate.annotations.Type;
+import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
 import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.internal.KronaCalculationUtil;
 
@@ -360,6 +361,30 @@ public class Invoice {
 
     public BigDecimal calculateInvoiceAmountAsKrona() {
         return currency.calculatePartsAsKrona(this.amount);
+    }
+
+    // Helper to sort grants in lists
+
+    public List<Grant> getOrderedGrants() {
+        List<Grant> grants = new ArrayList<>(this.grants);
+        Collections.sort(grants, new Comparator<Grant>() {
+            @Override
+            public int compare(Grant o1, Grant o2) {
+                String o1Number = o1.getBeneficiary().getIdentification().getNumber();
+                String o2Number = o2.getBeneficiary().getIdentification().getNumber();
+
+                IdentificationType i1 = o1.getBeneficiary().getIdentification().getType();
+                IdentificationType i2 = o2.getBeneficiary().getIdentification().getType();
+
+                if (i1.equals(i2)) {
+                    return o1Number.compareToIgnoreCase(o2Number);
+                }
+
+                return i1.compareTo(i2);
+            }
+        });
+
+        return grants;
     }
 
     @Override
