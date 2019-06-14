@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.vgregion.portal.glasogonbidrag.domain.DiagnoseType;
 import se.vgregion.portal.glasogonbidrag.domain.IdentificationType;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.VisualLaterality;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.*;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.diagnose.Aphakia;
@@ -598,10 +599,20 @@ public class GrantRuleValidationServiceImpl
 
             Date historicalPrescriptionDate = cal.getTime();
 
+            InvoiceStatus invoiceStatus = InvoiceStatus.IN_PROGRESS; // Default to this value.
+            if (g.getInvoice() != null) {
+                invoiceStatus = g.getInvoice().getStatus();
+            }
+
+            // Prescription date should match,
+            // Diagnose should match,
+            // The years should be the same year s this,
+            // grants from invoices which is marked canceled should be ignored
             if (historicalPrescriptionDate.equals(prescriptionDate) &&
                     g.getPrescription().getDiagnose().equals(
                             prescription.getDiagnose()) &&
-                    historicalYear == suppliedYear) {
+                    historicalYear == suppliedYear &&
+                    invoiceStatus != InvoiceStatus.CANCELED) {
                 calendarGrants.add(g);
             }
         }
