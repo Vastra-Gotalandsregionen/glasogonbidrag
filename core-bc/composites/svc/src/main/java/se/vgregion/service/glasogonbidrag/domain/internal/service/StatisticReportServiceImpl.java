@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.vgregion.portal.glasogonbidrag.domain.InvoiceStatus;
 import se.vgregion.portal.glasogonbidrag.domain.dto.StatisticReportDTO;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Diagnose;
 import se.vgregion.portal.glasogonbidrag.domain.jpa.Identification;
@@ -17,9 +18,9 @@ import se.vgregion.service.glasogonbidrag.types.query.AggregationSqlQueryBuilder
 import se.vgregion.service.glasogonbidrag.types.query.From;
 import se.vgregion.service.glasogonbidrag.types.query.conditions.BetweenWhereCondition;
 import se.vgregion.service.glasogonbidrag.types.query.conditions.EqualsWhereCondition;
+import se.vgregion.service.glasogonbidrag.types.query.conditions.NotEqualsWhereCondition;
 import se.vgregion.service.glasogonbidrag.types.query.join.LeftJoin;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,6 +40,7 @@ public class StatisticReportServiceImpl implements StatisticReportService {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(StatisticReportServiceImpl.class);
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private DataSource ds;
 
@@ -94,6 +96,10 @@ public class StatisticReportServiceImpl implements StatisticReportService {
                                 new EqualsWhereCondition(
                                         "g.beneficiary_id",
                                         "b.id")),
+                        new LeftJoin("invoice", "n",
+                                new EqualsWhereCondition(
+                                        "g.invoice_id",
+                                        "n.id")),
                         new LeftJoin("identification", "i",
                                 new EqualsWhereCondition(
                                         "b.identification_id",
@@ -170,6 +176,10 @@ public class StatisticReportServiceImpl implements StatisticReportService {
                 builder.groupBy("d.diagnose_type");
                 break;
         }
+
+        builder.where(new NotEqualsWhereCondition(
+                "n.status",
+                "'CANCELED'"));
 
         return builder.build();
     }
