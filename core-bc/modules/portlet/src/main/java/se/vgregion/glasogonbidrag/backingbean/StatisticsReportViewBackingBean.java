@@ -90,9 +90,9 @@ public class StatisticsReportViewBackingBean {
 
     private List<StatisticsVO> statisticsVOs;
 
-    private int grantCountTotal;
+    private long grantCountTotal;
 
-    private int grantSumTotal;
+    private long grantSumTotal;
 
     // Getters and Setters
 
@@ -201,19 +201,19 @@ public class StatisticsReportViewBackingBean {
         this.statisticsVOs = statisticsVOs;
     }
 
-    public int getGrantCountTotal() {
+    public long getGrantCountTotal() {
         return grantCountTotal;
     }
 
-    public void setGrantCountTotal(int grantCountTotal) {
+    public void setGrantCountTotal(long grantCountTotal) {
         this.grantCountTotal = grantCountTotal;
     }
 
-    public int getGrantSumTotal() {
+    public long getGrantSumTotal() {
         return grantSumTotal;
     }
 
-    public void setGrantSumTotal(int grantSumTotal) {
+    public void setGrantSumTotal(long grantSumTotal) {
         this.grantSumTotal = grantSumTotal;
     }
 
