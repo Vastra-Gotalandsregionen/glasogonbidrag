@@ -124,7 +124,10 @@ public class Grant {
     private Date deliveryDate;
 
     @Column(name = "contact_lenses")
-    private boolean contactLenses;
+    private Boolean contactLenses = false;
+
+    @Column(name = "aphakia_glasses")
+    private Boolean aphakiaGlasses = false;
 
     private long amount;
 
@@ -216,11 +219,29 @@ public class Grant {
     }
 
     public boolean isContactLenses() {
+        // Ensure that old grants before this field was introduced return false
+        if (contactLenses == null) {
+            contactLenses = false;
+        }
+
         return contactLenses;
     }
 
     public void setContactLenses(boolean contactLenses) {
         this.contactLenses = contactLenses;
+    }
+
+    public boolean isAphakiaGlasses() {
+        // Ensure that old grants before this field was introduced return false
+        if (aphakiaGlasses == null) {
+            aphakiaGlasses = false;
+        }
+
+        return aphakiaGlasses;
+    }
+
+    public void setAphakiaGlasses(boolean aphakiaGlasses) {
+        this.aphakiaGlasses = aphakiaGlasses;
     }
 
     public long getAmount() {

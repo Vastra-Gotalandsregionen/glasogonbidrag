@@ -124,53 +124,6 @@
 
         <!-- Grant Type 0-15 or 0-19 -->
 
-        <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showContactLensesInput}">
-
-            <div class="field-row">
-                <div class="field-element">
-                    <h:outputLabel for="prescriptionContactLensesCheckbox" value="#{bundle['contact-lenses']}:"/>
-                    <h:selectBooleanCheckbox id="prescriptionContactLensesCheckbox"
-                                             value="#{grant.contactLenses}"
-                                             pt:autofocus="true"
-                                             pt:data-triggeronenter="#{portletNamespace}:addGrantForm:contactLensesSubmit" />
-                </div>
-            </div>
-
-            <div class="button-row">
-                <h:commandLink id="contactLensesSubmit" styleClass="link-btn primary" value="#{bundle['continue']}">
-                    <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.contactLensesListener}"
-                            render=":addGrantForm:grantAddPanel"
-                            onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-                </h:commandLink>
-                <h:link styleClass="link-btn cancel" value="#{bundle['cancel-go-to-overiew']}" outcome="view_invoice" >
-                    <f:param name="invoiceId" value="#{createInvoiceAddGrantBackingBean.invoice.id}" />
-                </h:link>
-            </div>
-
-        </ui:fragment>
-
-        <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showContactLensesOutput}">
-            <div class="grant-section">
-                <div class="grant-section-output">
-                    <span class="grant-section-label">
-                        <h:outputText value="#{bundle['contact-lenses']}" />
-                    </span>
-                    <span class="grant-section-data">
-                        <h:outputText value="#{bundle['yes']}" rendered="#{grant.contactLenses}" />
-                        <h:outputText value="#{bundle['no']}" rendered="#{not grant.contactLenses}" />
-                    </span>
-
-                    <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
-                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
-                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
-                            <f:param name="showSection" value="ENTER_CONTACT_LENSES_PRESCRIPTION" />
-                        <span class="hide-accessible">#{bundle['go-back']}</span>
-                    </h:commandLink>
-                </div>
-            </div>
-        </ui:fragment>
-
         <ui:fragment rendered="#{grantFlow.showGrantTypeAgeSection and grantFlow.showPrescriptionDateInput}">
             <div class="grant-section">
 
@@ -603,7 +556,6 @@
 
         <!-- Input amount -->
         <ui:fragment rendered="#{grantFlow.showAmountInput}">
-
             <div class="grant-section">
 
                 <c:set var="submitAmountButtonId" value="amountWithVatSubmit" scope="request" />
@@ -611,16 +563,31 @@
                     <c:set var="submitAmountButtonId" value="amountWithVatIgnoreWarningSubmit" scope="request" />
                 </c:if>
 
-                <gb:grantSectionInput id="amount"
-                                      label="#{bundle['grant-sum']}"
-                                      value="#{createInvoiceAddGrantBackingBean.amount}"
-                                      valueType="amount"
-                                      autofocus="true"
-                                      placeholder="#{bundle['grant-sum-placeholder']}"
-                                      required="true"
-                                      requiredMessage="#{bundle['reg-grant-error-grant-sum-is-mandatory']}"
-                                      triggerOnEnter="#{portletNamespace}:addGrantForm:#{submitAmountButtonId}"
-                />
+
+                <div class="field-row field-row-2">
+                    <div class="field-element">
+                        <h:outputLabel for="amount" value="#{bundle['grant-sum']}" />
+                        <h:inputText id="amount"
+                                     styleClass="#{inputStyleClass}"
+                                     value="#{createInvoiceAddGrantBackingBean.amount}"
+                                     required="true"
+                                     requiredMessage="#{bundle['reg-grant-error-grant-sum-is-mandatory']}"
+                                     converterMessage="#{converterMessage}"
+                                     pt:placeholder="#{bundle['grant-sum-placeholder']}"
+                                     pt:autofocus="true"
+                                     pt:data-triggeronenter="#{portletNamespace}:addGrantForm:#{submitAmountButtonId}" />
+                    </div>
+                    <div class="field-element">
+                        <ui:fragment rendered="#{prescriptionVO.diagnoseAphakia}">
+                            <h:outputLabel for="diagnoseAphakiaGlases" value="#{bundle['glasses-for-aphakia']}" />
+                            <h:selectBooleanCheckbox id="diagnoseAphakiaGlases" value="#{grant.aphakiaGlasses}" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{prescriptionVO.diagnoseNone}">
+                            <h:outputLabel for="contactLenses" value="#{bundle['contact-lenses']}" />
+                            <h:selectBooleanCheckbox id="contactLenses" value="#{grant.contactLenses}" />
+                        </ui:fragment>
+                    </div>
+                </div>
 
                 <div class="button-row">
 
@@ -647,18 +614,46 @@
             </div>
         </ui:fragment>
 
-        <gb:grantSectionOutput rendered="${grantFlow.showAmountOutput}"
-                               label="#{bundle['grant-sum']}"
-                               value="#{grant.amountAsKrona}"
-                               valueType="currency"
-                               locale="#{locale}"
-                               backExecute=":addGrantForm"
-                               backListener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
-                               backRender=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
-                               backShowSection="#{grantFlow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}"
-                               mayInvoiceBeChanged="#{mayInvoiceBeChanged}"
-                               portletNamespace="#{portletNamespace}"
-        />
+        <ui:fragment rendered="#{grantFlow.showAmountOutput}">
+            <div class="grant-section">
+                <div class="grant-section-output">
+                    <div>
+                        <span class="grant-section-label">#{bundle['grant-sum']}</span>
+                        <span class="grant-section-data">
+                            <h:outputText value="#{grant.amountAsKrona}">
+                                <f:convertNumber groupingUsed="true" minFractionDigits="2" locale="sv_SE" />
+                            </h:outputText>
+                        </span>
+                    </div>
+
+                    <ui:fragment rendered="#{prescriptionVO.diagnoseNone}">
+                        <div>
+                            <span class="grant-section-label">#{bundle['contact-lenses']}</span>
+                            <span class="grant-section-data">
+                                <h:outputText value="#{grant.contactLenses ? bundle['yes'] : bundle['no']}" />
+                            </span>
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{prescriptionVO.diagnoseAphakia}">
+                        <div>
+                            <span class="grant-section-label">#{bundle['glasses-for-aphakia']}</span>
+                            <span class="grant-section-data">
+                                <h:outputText value="#{grant.aphakiaGlasses ? bundle['yes'] : bundle['no']}" />
+                            </span>
+                        </div>
+                    </ui:fragment>
+
+                    <h:commandLink styleClass="grant-section-back" immediate="true" rendered="#{mayInvoiceBeChanged}">
+                        <f:ajax execute=":addGrantForm" listener="#{createInvoiceAddGrantBackingBean.stepBackListener}"
+                                render=":addGrantForm:grantAddPanel :addGrantForm:grantHistory"
+                                onevent="function eventHandler(data) {jsfAjaxEventHandler(data, '#{portletNamespace}')}" />
+                        <f:param name="showSection" value="#{grantFlow.showGrantTypeAgeSection ? 'ENTER_AMOUNT_AFTER_AGE' : 'ENTER_AMOUNT_AFTER_OTHER'}" />
+                        <span class="hide-accessible">Tillbaka</span>
+                    </h:commandLink>
+                </div>
+            </div>
+        </ui:fragment>
 
         <ui:fragment rendered="${grantFlow.showAmountOutput}">
             <div class="button-row">

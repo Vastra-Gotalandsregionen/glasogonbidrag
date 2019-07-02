@@ -25,6 +25,11 @@ public class AddGrantAllDataAfterAgeState extends CreateInvoiceAddGrantPidFlow {
     }
 
     @Override
+    public boolean getShowContactLensesOutput() {
+        return true;
+    }
+
+    @Override
     public boolean getShowPrescriptionDateOutput() {
         return true;
     }

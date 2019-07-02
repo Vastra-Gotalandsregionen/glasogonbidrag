@@ -294,32 +294,54 @@ public class GrantRuleValidationServiceImpl
 //                                    "pre-20160620"));
 //                }
             } else {
+
+                // Sum number of grants with glasses
+                List<Grant> aphakiaContactLenses = filterContactLenses(grants);
+                // Sum number of grants without glasses
+                List<Grant> aphakiaGlasses = filterGlasses(grants);
+
+                long totalAmountAphakiaContactLenses = calculateAmount(aphakiaContactLenses);
+                long totalAmountAphakiaGlasses = calculateAmount(aphakiaGlasses);
+
                 if (VisualLaterality.LEFT.equals(laterality) ||
                         VisualLaterality.RIGHT.equals(laterality)) {
 
-                    if (grants.size() > 2) {
+                    if (aphakiaContactLenses.size() > 2 || aphakiaGlasses.size() > 1) {
                         result.add(new GrantRuleViolation(
                                 "violation-too-many-grants-for-aphakia"));
                     }
 
-                    if (!testAmountLessThanOrEqual2400(totalAmount)) {
+                    if (!testAmountLessThanOrEqual2400(totalAmountAphakiaContactLenses)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-2400-" +
                                         "for-aphakia-" +
                                         "one-eye-post-20160620"));
                     }
+
+                    if (!testAmountLessThanOrEqual1600(totalAmountAphakiaGlasses)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1600-" +
+                                        "for-aphakia-glasses-post-20160620"));
+                    }
+
                 } else if (VisualLaterality.BILATERAL.equals(laterality)) {
 
-                    if (grants.size() > 4) {
+                    if (aphakiaContactLenses.size() > 4 || aphakiaGlasses.size() > 1) {
                         result.add(new GrantRuleViolation(
                                 "violation-too-many-grants-for-aphakia"));
                     }
 
-                    if (!testAmountLessThanOrEqual4800(totalAmount)) {
+                    if (!testAmountLessThanOrEqual4800(totalAmountAphakiaContactLenses)) {
                         result.add(new GrantRuleViolation(
                                 "violation-amount-greater-than-4800-" +
                                         "for-aphakia-" +
                                         "both-eyes-post-20160620"));
+                    }
+
+                    if (!testAmountLessThanOrEqual1600(totalAmountAphakiaGlasses)) {
+                        result.add(new GrantRuleViolation(
+                                "violation-amount-greater-than-1600-" +
+                                        "for-aphakia-glasses-post-20160620"));
                     }
                 }
             }
@@ -443,6 +465,28 @@ public class GrantRuleValidationServiceImpl
         }
 
         return result;
+    }
+
+    private List<Grant> filterGlasses(List<Grant> grants) {
+        List<Grant> o = new ArrayList<>();
+        for (Grant grant : grants) {
+            if (grant.isAphakiaGlasses()) {
+                o.add(grant);
+            }
+        }
+
+        return o;
+    }
+
+    private List<Grant> filterContactLenses(List<Grant> grants) {
+        List<Grant> o = new ArrayList<>();
+        for (Grant grant : grants) {
+            if (!grant.isAphakiaGlasses()) {
+                o.add(grant);
+            }
+        }
+
+        return o;
     }
 
     // Tests

@@ -809,7 +809,7 @@ public class GrantRuleValidationServiceTestPost20160620 {
         // Two grants is okay.
         Prescription prescriptionAphakia = PrescriptionFactory.newPrescription()
                 .comment("Person with a name")
-                .date(new GregorianCalendar(2010, MARCH, 10).getTime())
+                .date(new GregorianCalendar(1995, MARCH, 10).getTime())
                 .diagnose(new Aphakia(VisualLaterality.BILATERAL))
                 .prescriber("The doctor")
                 .build();
@@ -823,7 +823,7 @@ public class GrantRuleValidationServiceTestPost20160620 {
 
         Beneficiary beneficiary = BeneficiaryFactory.newBeneficiary()
                 .fullName("Person with a name")
-                .identification("200103010385")
+                .identification("198603010383")
                 .build();
 
         // Create four contact lenses grant and one for glasses.
@@ -872,7 +872,8 @@ public class GrantRuleValidationServiceTestPost20160620 {
                 .delivery(new GregorianCalendar(2017, JUNE, 18).getTime())
                 .amount(new BigDecimal("1600"))
                 .area("14", "96")
-                .prescription(prescriptionGlasses)
+                .prescription(prescriptionAphakia)
+                .aphakiaGlasses()
                 .beneficiary(beneficiary)
                 .build();
 
@@ -910,9 +911,9 @@ public class GrantRuleValidationServiceTestPost20160620 {
 
         GrantRuleResult resultGlassesAlso =
                 validationService.test(grant6Glasses, grantHistory);
-        Assert.assertFalse(
-                "Shouldn't have warnings since glasses uses other prescription.",
-                resultGlassesAlso.hasWarnings());
+        Assert.assertTrue(
+                "Should have warnings since multiple grants have been assign.",
+                resultFiveLenses.hasWarnings());
         Assert.assertFalse(
                 "Shouldn't contain violations aphakia with extra glasses should be valid",
                 resultGlassesAlso.hasViolations());

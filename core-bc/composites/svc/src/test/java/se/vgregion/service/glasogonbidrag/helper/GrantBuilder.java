@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 public class GrantBuilder {
     private Date deliveryDate;
     private boolean contactLenses;
+    private boolean aphakiaGlasses;
     private BigDecimal krona;
     private String county;
     private String municipality;
@@ -23,6 +24,7 @@ public class GrantBuilder {
 
     GrantBuilder() {
         contactLenses = false;
+        aphakiaGlasses = false;
     }
 
     public GrantBuilder delivery(Date deliveryDate) {
@@ -38,6 +40,11 @@ public class GrantBuilder {
 
     public GrantBuilder contactLenses() {
         this.contactLenses = true;
+        return this;
+    }
+
+    public GrantBuilder aphakiaGlasses() {
+        this.aphakiaGlasses = true;
         return this;
     }
 
@@ -84,6 +91,7 @@ public class GrantBuilder {
 
         grant.setDeliveryDate(deliveryDate);
         grant.setContactLenses(contactLenses);
+        grant.setAphakiaGlasses(aphakiaGlasses);
         grant.setAmountAsKrona(krona);
         grant.setCounty(county);
         grant.setMunicipality(municipality);

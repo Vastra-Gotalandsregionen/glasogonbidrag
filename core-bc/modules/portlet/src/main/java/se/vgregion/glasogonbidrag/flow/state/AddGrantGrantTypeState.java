@@ -31,7 +31,7 @@ public class AddGrantGrantTypeState extends CreateInvoiceAddGrantPidFlow {
     public CreateInvoiceAddGrantPidFlow nextState(AddGrantAction action) {
         if (action == AddGrantAction.AGE_0_TO_15 || action == AddGrantAction.AGE_0_TO_19) {
 //            return new AddGrantPrescriptionDateState();
-            return AddGrantFlowState.ENTER_CONTACT_LENSES_PRESCRIPTION.getState();
+            return AddGrantFlowState.ENTER_PRESCRIPTION_DATE.getState();
         } else if(action == AddGrantAction.OTHER) {
 //            return new AddGrantOtherTypeState();
             return AddGrantFlowState.ENTER_GRANT_STATE_OTHER_TYPE.getState();
