@@ -35,7 +35,9 @@
                         <h:outputLabel styleClass="" for="personalNumber" value="#{bundle['identification-type-personal']}" />
                         <h:inputText id="personalNumber" styleClass="form-control"
                                      value="#{manageBeneficiaryBackingBean.personalNumber}"
-                                     a:placeholder="#{bundle['personal-number-placeholder']}" />
+                                     a:placeholder="#{bundle['personal-number-placeholder']}">
+                            <f:converter converterId="se.vgregion.PersonNumberConverter" />
+                        </h:inputText>
                     </div>
                 </div>
 
