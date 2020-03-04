@@ -46,7 +46,6 @@ Template version: 1.5
             <groupId>com.liferay.portal</groupId>
             <artifactId>com.liferay.portal.kernel</artifactId>
             <scope>provided</scope>
-            <version>4.33.1</version>
         </dependency>
 
         <!-- Spring and Servlet dependencies -->
@@ -127,9 +126,6 @@ Template version: 1.5
 
         <dependency>
             <groupId>com.liferay.faces</groupId>
-            <!--
-            <artifactId>liferay-faces-alloy</artifactId>
-            -->
             <artifactId>com.liferay.faces.alloy</artifactId>
             <version>3.0.1</version>
         </dependency>
