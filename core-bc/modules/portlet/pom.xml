@@ -117,50 +117,43 @@ Template version: 1.5
     			<scope>provided</scope>
     		</dependency>
 
+        <!--
         <dependency>
           <groupId>org.glassfish</groupId>
           <artifactId>javax.faces</artifactId>
           <version>2.2.14</version>
           <scope>runtime</scope>
         </dependency>
-
+        -->
 
         <dependency>
             <groupId>com.liferay.faces</groupId>
-            <!--
-            <artifactId>liferay-faces-alloy</artifactId>
-            -->
             <artifactId>com.liferay.faces.alloy</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
         </dependency>
 
         <dependency>
-          <groupId>com.liferay.faces</groupId>
-          <artifactId>com.liferay.faces.bridge.api</artifactId>
-          <version>4.1.0</version>
+            <groupId>com.liferay.faces</groupId>
+            <artifactId>com.liferay.faces.bridge.api</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liferay.faces</groupId>
+            <artifactId>com.liferay.faces.bridge.impl</artifactId>
+            <version>4.2.0</version>
         </dependency>
 
         <dependency>
           <groupId>com.liferay.faces</groupId>
           <artifactId>com.liferay.faces.bridge.ext</artifactId>
-          <version>5.0.3</version>
+          <version>5.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.liferay.faces</groupId>
-            <!--
-            <artifactId>liferay-faces-bridge-impl</artifactId>
-            -->
-            <artifactId>com.liferay.faces.bridge.impl</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.faces</groupId>
-            <!--
-            <artifactId>liferay-faces-portal</artifactId>
-            -->
             <artifactId>com.liferay.faces.portal</artifactId>
-            <version>3.0.3</version>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- Prime Faces -->
