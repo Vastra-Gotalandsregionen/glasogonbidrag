@@ -34,7 +34,7 @@
         <compileTarget>1.7</compileTarget>
 
         <spring.fw.version>3.2.9.RELEASE</spring.fw.version>
-        <jsf.version>2.2.8</jsf.version>
+        <jsf.version>2.2.20</jsf.version>
         <liferay.version>7.0.0</liferay.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
 
