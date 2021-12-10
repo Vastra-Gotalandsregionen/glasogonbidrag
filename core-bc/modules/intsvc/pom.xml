@@ -53,17 +53,17 @@ Template version: 1.5
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${spring.fw.version}</version>
+            <version>4.2.20.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring.fw.version}</version>
+            <version>4.2.20.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring.fw.version}</version>
+            <version>4.2.20.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -72,7 +72,7 @@ Template version: 1.5
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>3.1.6</version>
+            <version>${apache.cxf.version}</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
