@@ -46,7 +46,6 @@ Template version: 1.5
             <groupId>com.liferay.portal</groupId>
             <artifactId>com.liferay.portal.kernel</artifactId>
             <scope>provided</scope>
-            <version>3.26.0</version>
         </dependency>
 
         <!-- Spring and Servlet dependencies -->
