@@ -83,7 +83,7 @@ Template version: 1.5
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.2</version>
+            <version>1.5</version>
         </dependency>
 
         <!-- Error like: org.springframework.beans.factory.BeanDefinitionStoreException: Unexpected exception parsing XML document from URL....nested exception is javax.xml.parsers.FactoryConfigurationError: Provider for javax.xml.parsers.DocumentBuilderFactory cannot be found -->
